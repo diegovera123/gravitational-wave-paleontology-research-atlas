@@ -18,7 +18,7 @@
   <h2>Knowledge Graph</h2>
 
   <div id="graph"></div>
-
+  <div id="details"></div>
 
 <script>
   fetch("knowledge-graph/concepts.json")
@@ -26,12 +26,22 @@
     .then(data => {
       const graph = document.getElementById("graph");
 
-      data.concepts.forEach(concept => {
-        const item = document.createElement("p");
-        item.textContent = concept.title;
-        graph.appendChild(item);
-      });
+ 
+data.concepts.forEach(concept => {
+  const item = document.createElement("button");
+
+  item.textContent = concept.title;
+
+  item.addEventListener("click", () => {
+    const details = document.getElementById("details");
+
+    details.textContent = concept.learningObjectives.join(" • ");
+  });
+
+  graph.appendChild(item);
+});
     });
+  
 </script>
 
 
