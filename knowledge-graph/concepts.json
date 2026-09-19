@@ -1,6 +1,20 @@
 
 {
   "concepts": [
+{
+  "id": "limits",
+  "title": "Limits",
+  "domain": "Mathematics",
+  "unit": "Single-Variable Calculus",
+  "prerequisites": [],
+  "learningObjectives": [
+    "Explain the intuitive meaning of a limit.",
+    "Evaluate limits using algebraic techniques.",
+    "Explain how limits are used to define derivatives."
+  ],
+  "masteryAssessment": "Evaluate a limit and explain how it relates to the definition of a derivative.",
+  "resource": "curriculum/mathematics/single-variable-calculus.md"
+},
     {
       "id": "derivatives",
       "title": "Derivatives",
@@ -14,7 +28,23 @@
       ],
       "masteryAssessment": "Given a position function, derive its velocity and acceleration.",
       "resource": "curriculum/mathematics/single-variable-calculus.md"
-    }
+    },
+    
+    {
+  "id": "velocity-acceleration",
+  "title": "Velocity and Acceleration",
+  "domain": "Physics",
+  "unit": "Classical Mechanics",
+  "prerequisites": ["derivatives"],
+  "learningObjectives": [
+    "Distinguish position, displacement, velocity, and acceleration.",
+    "Derive velocity and acceleration from a position function.",
+    "Interpret velocity and acceleration as vectors.",
+    "Apply derivatives to analyze the motion of a physical system."
+  ],
+  "masteryAssessment": "Given the position of a particle as a function of time, calculate and interpret its velocity and acceleration.",
+  "resource": "curriculum/mathematics/single-variable-calculus.md"
+}
   ]
 }
   
