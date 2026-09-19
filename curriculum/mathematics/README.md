@@ -6,7 +6,7 @@ Mathematical foundations for gravitational-wave astrophysics and independent res
 ## Units
 
 ### 1. Calculus
-- Single-variable calculus
+- - [Single-variable calculus](single-variable-calculus.md)
 - Multivariable calculus
 - Vector calculus
 
