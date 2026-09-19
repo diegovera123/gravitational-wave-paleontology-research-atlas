@@ -1,0 +1,20 @@
+
+{
+  "concepts": [
+    {
+      "id": "derivatives",
+      "title": "Derivatives",
+      "domain": "Mathematics",
+      "unit": "Single-Variable Calculus",
+      "prerequisites": ["limits"],
+      "learningObjectives": [
+        "Explain the derivative as an instantaneous rate of change.",
+        "Calculate derivatives using differentiation rules.",
+        "Apply derivatives to calculate velocity and acceleration."
+      ],
+      "masteryAssessment": "Given a position function, derive its velocity and acceleration.",
+      "resource": "curriculum/mathematics/single-variable-calculus.md"
+    }
+  ]
+}
+  
