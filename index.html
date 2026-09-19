@@ -19,6 +19,22 @@
 
   <div id="graph"></div>
 
+
+<script>
+  fetch("knowledge-graph/concepts.json")
+    .then(response => response.json())
+    .then(data => {
+      const graph = document.getElementById("graph");
+
+      data.concepts.forEach(concept => {
+        const item = document.createElement("p");
+        item.textContent = concept.title;
+        graph.appendChild(item);
+      });
+    });
+</script>
+
+
 </body>
 
 </html>
