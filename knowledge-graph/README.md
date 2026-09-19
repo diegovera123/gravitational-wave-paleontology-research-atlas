@@ -7,7 +7,12 @@
 flowchart TD
     A["Limits"] --> B["Derivatives"]
     B --> C["Velocity and Acceleration"]
+    
+click B "../curriculum/mathematics/single-variable-calculus.md" "Open learning unit"
+  
 ```
+
+
 
 ## How to read this graph
 
