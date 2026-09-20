@@ -90,22 +90,26 @@ function showConcept(concept) {
   details.appendChild(objectives);
 }
  
-data.concepts.forEach(concept => {
-  const item = document.createElement("button");
 
-  item.textContent = concept.title;
+const graph3D = ForceGraph3D()(graph)
+  .graphData({
+    nodes: nodes,
+    links: links
+  })
+  .nodeLabel("name")
+  .nodeAutoColorBy("domain")
+  .linkDirectionalArrowLength(4)
+  .linkDirectionalArrowRelPos(1)
+  .backgroundColor("#050a14")
+  .width(graph.clientWidth)
+  .height(600)
+  .onNodeClick(node => {
+    const concept = data.concepts.find(
+      c => c.id === node.id
+    );
 
-
-
-item.addEventListener("click", () => {
-  showConcept(concept);
-});
-
-
-
-
-  graph.appendChild(item);
-});
+    showConcept(concept);
+  });
     });
   
 </script>
