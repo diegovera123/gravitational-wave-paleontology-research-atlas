@@ -37,6 +37,19 @@
     .then(response => response.json())
     .then(data => {
       const graph = document.getElementById("graph");
+      
+const nodes = data.concepts.map(concept => ({
+  id: concept.id,
+  name: concept.title,
+  domain: concept.domain
+}));
+
+const links = data.concepts.flatMap(concept =>
+  concept.prerequisites.map(prerequisiteId => ({
+    source: prerequisiteId,
+    target: concept.id
+  }))
+);
 
 function showConcept(concept) {
   const details = document.getElementById("details");
