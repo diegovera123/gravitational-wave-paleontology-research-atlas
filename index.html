@@ -71,14 +71,10 @@ data.concepts.forEach(concept => {
   item.textContent = concept.title;
 
 
+
 item.addEventListener("click", () => {
-  const details = document.getElementById("details");
-
-  const prerequisites = concept.prerequisites.map(id => {
-    const prerequisite = data.concepts.find(c => c.id === id);
-
-    return prerequisite.title;
-  });
+  showConcept(concept);
+});
 
   details.innerHTML = "";
 
