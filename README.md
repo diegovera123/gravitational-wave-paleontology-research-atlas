@@ -14,7 +14,7 @@ Then open <http://localhost:8000>.
 
 ## Architecture
 
-- `index.html` contains the accessible page structure and loads pinned versions of the graph and 3D-label libraries.
+- `index.html` contains the accessible page structure and loads the graph library from a pinned CDN version.
 - `style.css` defines the responsive visual system, graph workspace, search, and concept-detail presentation.
 - `app.js` transforms the curriculum into graph nodes and directed prerequisite links, controls the 3D camera, and renders search and detail interactions.
 - `knowledge-graph/concepts.json` is the curriculum's source of truth. The interface is generated from this file rather than hard-coded concept markup.

@@ -10,35 +10,46 @@ const searchInput = document.querySelector("#concept-search");
 const searchResults = document.querySelector("#search-results");
 let graph;
 let concepts = [];
-let hasFramedGraph = false;
+let selectedId = null;
 
 const colorFor = domain => DOMAIN_COLORS[domain] || "#9aa9c7";
 
 function makeNodeObject(node) {
-  // The ForceGraph3D standalone bundle intentionally does not expose THREE as
-  // a browser global. SpriteText provides a supported Three.js object without
-  // coupling this application to the graph bundle's private Three.js instance.
-  const label = new SpriteText(node.name);
-  label.color = "#eef3ff";
-  label.textHeight = 5.2;
-  label.backgroundColor = "rgba(5, 8, 16, .82)";
-  label.padding = 2.4;
-  label.borderRadius = 3;
-  label.position.y = -11;
-  label.material.depthTest = false;
-  label.renderOrder = 10;
-  return label;
-}
+  const group = new THREE.Group();
+  const color = colorFor(node.domain);
+  const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(5.5, 20, 20),
+    new THREE.MeshLambertMaterial({ color, transparent: true, opacity: .95 })
+  );
+  const halo = new THREE.Mesh(
+    new THREE.SphereGeometry(8.5, 16, 16),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: .09 })
+  );
+  group.add(halo, sphere);
 
-function showGraphError(title, error) {
-  const message = error instanceof Error ? error.message : String(error || "Unknown error");
-  console.error(`[Research Atlas] ${title}`, error);
-  graphElement.innerHTML = `
-    <div class="graph-error" role="alert">
-      <strong>${title}</strong>
-      <span>${message}</span>
-      <small>Reload the page, check your connection, and confirm that WebGL is enabled.</small>
-    </div>`;
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  context.font = `600 ${13 * pixelRatio}px DM Sans, sans-serif`;
+  const textWidth = context.measureText(node.name).width;
+  canvas.width = Math.ceil(textWidth + 22 * pixelRatio);
+  canvas.height = 32 * pixelRatio;
+  context.font = `600 ${13 * pixelRatio}px DM Sans, sans-serif`;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillStyle = "rgba(5, 8, 16, .8)";
+  context.roundRect(0, 0, canvas.width, canvas.height, 7 * pixelRatio);
+  context.fill();
+  context.fillStyle = "#eef3ff";
+  context.fillText(node.name, canvas.width / 2, canvas.height / 2);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearFilter;
+  const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
+  label.position.set(0, -13, 0);
+  label.scale.set(canvas.width / (4.5 * pixelRatio), canvas.height / (4.5 * pixelRatio), 1);
+  label.renderOrder = 10;
+  group.add(label);
+  return group;
 }
 
 function relationButton(concept) {
@@ -47,6 +58,7 @@ function relationButton(concept) {
 
 function showConcept(concept, focus = true) {
   if (!concept) return;
+  selectedId = concept.id;
   const prerequisites = concept.prerequisites.map(id => concepts.find(item => item.id === id)).filter(Boolean);
   const dependents = concepts.filter(item => item.prerequisites.includes(concept.id));
   const index = concepts.findIndex(item => item.id === concept.id) + 1;
@@ -87,23 +99,12 @@ function showConcept(concept, focus = true) {
 }
 
 function focusNode(id) {
-  if (!graph) return;
   const node = graph.graphData().nodes.find(item => item.id === id);
   if (!node || !Number.isFinite(node.x)) return;
   const distance = 95;
-  const currentCamera = graph.cameraPosition();
-  const offset = {
-    x: currentCamera.x - node.x,
-    y: currentCamera.y - node.y,
-    z: currentCamera.z - node.z
-  };
-  const magnitude = Math.hypot(offset.x, offset.y, offset.z) || 1;
+  const magnitude = Math.hypot(node.x, node.y, node.z) || 1;
   graph.cameraPosition(
-    {
-      x: node.x + distance * offset.x / magnitude,
-      y: node.y + distance * offset.y / magnitude,
-      z: node.z + distance * offset.z / magnitude
-    },
+    { x: node.x + distance * node.x / magnitude, y: node.y + distance * node.y / magnitude, z: node.z + distance * node.z / magnitude },
     node,
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1100
   );
@@ -132,24 +133,9 @@ function renderSearch(query) {
 
 async function initialise() {
   try {
-    if (typeof ForceGraph3D !== "function") {
-      throw new Error("The 3D graph library did not load.");
-    }
-    if (typeof SpriteText !== "function") {
-      throw new Error("The 3D label library did not load.");
-    }
-    const width = graphElement.clientWidth;
-    const height = graphElement.clientHeight;
-    if (!width || !height) {
-      throw new Error(`The graph container has invalid dimensions (${width} × ${height}).`);
-    }
-
     const response = await fetch("knowledge-graph/concepts.json");
     if (!response.ok) throw new Error(`Curriculum request failed (${response.status})`);
     const data = await response.json();
-    if (!Array.isArray(data.concepts) || data.concepts.length === 0) {
-      throw new Error("The curriculum contains no concepts to render.");
-    }
     concepts = data.concepts;
     const nodes = concepts.map(concept => ({ id: concept.id, name: concept.title, domain: concept.domain }));
     const links = concepts.flatMap(concept => concept.prerequisites.map(source => ({ source, target: concept.id })));
@@ -160,11 +146,9 @@ async function initialise() {
       .backgroundColor("rgba(0,0,0,0)")
       .width(graphElement.clientWidth)
       .height(graphElement.clientHeight)
-      .nodeColor(node => colorFor(node.domain))
       .nodeThreeObject(makeNodeObject)
-      .nodeThreeObjectExtend(true)
-      .nodeLabel("name")
-      .nodeVal(6)
+      .nodeLabel(() => "")
+      .nodeVal(5)
       .linkColor(() => "rgba(132, 158, 211, .43)")
       .linkWidth(1)
       .linkDirectionalArrowLength(5)
@@ -175,29 +159,16 @@ async function initialise() {
       .linkDirectionalParticleSpeed(.003)
       .linkDirectionalParticleColor(() => "#9dbbff")
       .onNodeClick(node => selectConcept(node.id))
-      .onNodeHover(node => { graphElement.style.cursor = node ? "pointer" : "grab"; })
-      .onEngineStop(() => {
-        if (!hasFramedGraph) {
-          hasFramedGraph = true;
-          graph.zoomToFit(700, 75);
-        }
-      });
+      .onNodeHover(node => { graphElement.style.cursor = node ? "pointer" : "grab"; });
     graph.d3Force("charge").strength(-170);
     graph.d3Force("link").distance(78);
     graph.cameraPosition({ x: 0, y: 0, z: 220 });
-
-    const canvas = graphElement.querySelector("canvas");
-    if (!canvas) throw new Error("The WebGL renderer did not create a canvas.");
-    console.info(`[Research Atlas] Rendered ${nodes.length} concepts and ${links.length} prerequisite links.`, {
-      canvas: `${canvas.width} × ${canvas.height}`,
-      container: `${width} × ${height}`
-    });
 
     const domains = [...new Set(concepts.map(concept => concept.domain))];
     document.querySelector("#legend").innerHTML = domains.map(domain => `<span style="color:${colorFor(domain)}"><i></i>${domain}</span>`).join("");
     showConcept(concepts[0], false);
   } catch (error) {
-    showGraphError("Unable to render the knowledge graph.", error);
+    graphElement.innerHTML = `<div class="loading">Unable to load the curriculum.<br>${error.message}</div>`;
   }
 }
 
@@ -212,9 +183,7 @@ document.addEventListener("keydown", event => {
 document.addEventListener("click", event => {
   if (!event.target.closest(".graph-toolbar")) searchResults.hidden = true;
 });
-document.querySelector("#reset-view").addEventListener("click", () => {
-  if (graph) graph.zoomToFit(900, 75);
-});
+document.querySelector("#reset-view").addEventListener("click", () => graph?.zoomToFit(900, 60));
 window.addEventListener("resize", () => {
   if (graph) graph.width(graphElement.clientWidth).height(graphElement.clientHeight);
 });
