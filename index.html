@@ -16,10 +16,20 @@
     An interconnected curriculum for gravitational-wave research.
   </p>
 
-  <h2>Knowledge Graph</h2>
+  
+<main class="workspace">
 
-  <div id="graph"></div>
-  <div id="details"></div>
+  <section class="graph-panel">
+    <h2>Knowledge Graph</h2>
+    <div id="graph"></div>
+  </section>
+
+  <aside id="details">
+    <h2>Concept Details</h2>
+    <p>Select a concept to explore its prerequisites and learning objectives.</p>
+  </aside>
+
+</main>
 
 <script>
   fetch("knowledge-graph/concepts.json")
