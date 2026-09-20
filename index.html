@@ -32,11 +32,32 @@ data.concepts.forEach(concept => {
 
   item.textContent = concept.title;
 
-  item.addEventListener("click", () => {
-    const details = document.getElementById("details");
 
-    details.textContent = concept.learningObjectives.join(" • ");
+item.addEventListener("click", () => {
+  const details = document.getElementById("details");
+
+  const prerequisites = concept.prerequisites.map(id => {
+    const prerequisite = data.concepts.find(c => c.id === id);
+
+    return prerequisite.title;
   });
+
+  details.innerHTML = "";
+
+  const title = document.createElement("h3");
+  title.textContent = concept.title;
+
+  const prerequisiteText = document.createElement("p");
+  prerequisiteText.textContent =
+    "Prerequisites: " + (prerequisites.join(", ") || "None");
+
+  const objectives = document.createElement("p");
+  objectives.textContent = concept.learningObjectives.join(" • ");
+
+  details.appendChild(title);
+  details.appendChild(prerequisiteText);
+  details.appendChild(objectives);
+});
 
   graph.appendChild(item);
 });
