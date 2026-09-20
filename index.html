@@ -26,6 +26,44 @@
     .then(data => {
       const graph = document.getElementById("graph");
 
+function showConcept(concept) {
+  const details = document.getElementById("details");
+
+  details.innerHTML = "";
+
+  const title = document.createElement("h3");
+  title.textContent = concept.title;
+  details.appendChild(title);
+
+  const heading = document.createElement("h4");
+  heading.textContent = "Prerequisites";
+  details.appendChild(heading);
+
+  concept.prerequisites.forEach(id => {
+    const prerequisite = data.concepts.find(c => c.id === id);
+
+    const button = document.createElement("button");
+    button.textContent = prerequisite.title;
+
+    button.addEventListener("click", () => {
+      showConcept(prerequisite);
+    });
+
+    details.appendChild(button);
+  });
+
+  if (concept.prerequisites.length === 0) {
+    const message = document.createElement("p");
+    message.textContent = "No prerequisites in the current graph.";
+    details.appendChild(message);
+  }
+
+  const objectives = document.createElement("p");
+  objectives.textContent =
+    concept.learningObjectives.join(" • ");
+
+  details.appendChild(objectives);
+}
  
 data.concepts.forEach(concept => {
   const item = document.createElement("button");
