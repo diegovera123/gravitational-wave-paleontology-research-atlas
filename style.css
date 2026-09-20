@@ -79,3 +79,12 @@ button:hover {
     padding: 20px;
   }
 }
+
+
+#graph {
+  height: 600px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #050a14;
+}
