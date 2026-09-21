@@ -187,3 +187,28 @@ for unit in units:
         assert len(mapped) >= 3, f"Insufficient adaptive practice: {unit['id']} / {objective['id']}"
 print(f"Validated {len(bank)} adaptive practice items across {len(units)} pilot units, "
       "with objective coverage and author-defined difficulty labels.")
+
+
+# Concept-discovery diagnostic checks: one sparse conceptual item per selected concept.
+diagnostic = json.loads((ROOT / "knowledge-graph/diagnostic-questions.json").read_text())
+assert diagnostic.get("schemaVersion") == 1, "Diagnostic question bank must use schema version 1"
+diagnostic_questions = diagnostic["questions"]
+diagnostic_ids = [question["id"] for question in diagnostic_questions]
+assert len(diagnostic_ids) == len(set(diagnostic_ids)), "Diagnostic question IDs must be unique"
+diagnostic_concept_ids = [question["conceptId"] for question in diagnostic_questions]
+assert len(diagnostic_concept_ids) == len(set(diagnostic_concept_ids)), (
+    "The current sparse diagnostic should have at most one conceptual check per concept"
+)
+for question in diagnostic_questions:
+    assert question["conceptId"] in concept_ids, f"Unknown diagnostic concept {question['conceptId']}"
+    assert question["prompt"] and question["feedback"], f"Incomplete diagnostic check {question['id']}"
+    assert len(question["choices"]) >= 3 and len(set(question["choices"])) == len(question["choices"]), (
+        f"Invalid diagnostic options in {question['id']}"
+    )
+    assert type(question["correctIndex"]) is int and 0 <= question["correctIndex"] < len(question["choices"]), (
+        f"Invalid diagnostic answer key in {question['id']}"
+    )
+    assert question.get("sourceType") == "original Atlas conceptual check", (
+        f"Diagnostic provenance should be explicit in {question['id']}"
+    )
+print(f"Validated {len(diagnostic_questions)} sparse concept-discovery checks mapped to real Atlas concepts.")

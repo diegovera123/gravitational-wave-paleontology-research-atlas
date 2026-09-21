@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
   <script defer src="adaptive.js"></script>
+  <script defer src="diagnostic.js"></script>
+  <script defer src="diagnostic-ui.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -35,11 +37,18 @@
 
     <nav id="atlas-tabs" class="atlas-primary-nav" aria-label="Main sections" role="tablist">
       <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Overview</button>
+      <button type="button" role="tab" id="tab-diagnostic" aria-controls="diagnostic-panel" aria-selected="false" data-atlas-tab="diagnostic" tabindex="-1">My starting point</button>
       <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research pathways</button>
       <button type="button" role="tab" id="tab-learn" aria-controls="learn-panel" aria-selected="false" data-atlas-tab="learn" tabindex="-1">Learn &amp; practice</button>
       <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge atlas</button>
       <button type="button" role="tab" id="tab-library" aria-controls="library-panel" aria-selected="false" data-atlas-tab="library" tabindex="-1">Resources</button>
     </nav>
+
+    <section id="diagnostic-panel" class="atlas-tab-panel diagnostic-shell" role="tabpanel" aria-labelledby="tab-diagnostic" hidden>
+      <div id="diagnostic-root" class="diagnostic-root" aria-live="polite">
+        <p class="dashboard-loading">Preparing your concept-based diagnostic…</p>
+      </div>
+    </section>
 
     <section id="dashboard" class="dashboard" aria-label="Research workspace">
       <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
@@ -53,6 +62,10 @@
           <span id="practice-due-summary" class="practice-due-summary">Adaptive practice · 3 pilot lessons</span>
           <p>Follow necessary prerequisites to reveal recommended next steps. Progress is self-reported, not a verified mastery assessment.</p></div>
         <button id="resume-learning" type="button" class="learning-resume" disabled>Find my next step ↗</button>
+      </section>
+      <section id="diagnostic-overview" class="diagnostic-overview" aria-label="Concept-based starting point diagnostic">
+        <div><p class="eyebrow">Find your starting point</p><h3>What do you already know?</h3><p>Rate relevant concepts and try optional conceptual checks.</p></div>
+        <button type="button" id="diagnostic-launch" class="diagnostic-main-action">Start concept discovery ↗</button>
       </section>
       <section class="dashboard-network" aria-labelledby="dashboard-network-title">
         <div class="network-heading">

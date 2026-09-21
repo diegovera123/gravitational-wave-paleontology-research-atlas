@@ -17,7 +17,7 @@ let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
-let activeView="home";
+let activeView="home", diagnosticController=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
 let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
@@ -33,6 +33,15 @@ const REGION_DESCRIPTIONS = {
   "research-practice":"Find evidence, reproduce results, and develop defensible research."
 };
 const colorFor = domain => DOMAIN_COLORS[domain] || "#9aa9c7";
+const diagnosticColorFor = node => {
+  if(node.id===selectedId)return "#ffffff";
+  if(node.type!=="concept"||!diagnosticController)return colorFor(node.domain);
+  const state=diagnosticController.status(node.id);
+  if(["review","review-confident","self-reported-gap"].includes(state))return "#e2a260";
+  if(state==="supported")return "#6bd6ad";
+  if(state==="supported-uncertain")return "#9fb6ff";
+  return colorFor(node.domain);
+};
 const byId = id => concepts.find(concept => concept.id === id);
 const html = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => (
   {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]
@@ -130,7 +139,7 @@ function scrollToExplorer() {
   $("#explorer")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 
-const TAB_NAMES=["home","paths","learn","explore","library"];
+const TAB_NAMES=["home","diagnostic","paths","learn","explore","library"];
 function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
@@ -264,11 +273,13 @@ function renderNetworkPreview(){
   atlas.macros.forEach((m,i)=>{
     const pos=positions.get(m.id),leafIds=atlas.topics.filter(t=>t.macroId===m.id).flatMap(t=>t.conceptIds);
     const known=currentStudyCount([m.id,...leafIds]),total=leafIds.length+1;
+    const profile=diagnosticController?.snapshot();
+    const rated=[m.id,...leafIds].filter(id=>profile?.ratings?.[id]).length;
     const b=button("",()=>{enterMacro(m.id);scrollToExplorer();},"network-region");
     b.style.setProperty("--region-color",colorFor(m.domain));
     b.style.left=(pos.x/10)+"%";b.style.top=(pos.y/420*100)+"%";
     b.innerHTML='<span class="network-region-icon" aria-hidden="true"></span><span class="network-region-title">'+html(m.title)+'</span>'+
-      '<span class="network-region-progress">'+known+" / "+total+' understood</span>';
+      '<span class="network-region-progress">'+known+" / "+total+' understood'+(rated?' · '+rated+' assessed':'')+'</span>';
     surface.appendChild(b);
   });
 }
@@ -459,6 +470,7 @@ function renderDashboard() {
     '<span><strong>'+atlas.macros.length+'</strong> regions</span>'+
     '<span><strong>'+researchQuestions.length+'</strong> research pathways</span>';
   updateLearningStats();
+  diagnosticController?.renderOverview();
   renderNetworkPreview();
   domainCardsElement.replaceChildren();
   atlas.macros.forEach((macro,i)=>{
@@ -519,6 +531,16 @@ function renderMap(scene) {
       :{eyebrow:"03 / Topic explorer",title:activeTopic().title,text:"Select a concept to inspect its prerequisites, learning objectives, and research links."};
   lead.innerHTML='<p class="eyebrow">'+html(summary.eyebrow)+'</p><h3>'+html(summary.title)+'</h3><p>'+html(summary.text)+'</p>';
   mapElement.appendChild(lead);
+  if(diagnosticController?.hasRatings()){
+    const legend=document.createElement("div");legend.className="diagnostic-map-legend";
+    legend.innerHTML='<span><i class="supported"></i> Conceptual check supported</span>'+
+      '<span><i class="uncertain"></i> Correct but uncertain</span>'+
+      '<span><i class="review"></i> Review suggested</span>'+
+      '<span><i class="unassessed"></i> Unassessed / self-rated only</span>'+
+      '<button type="button" id="diagnostic-map-update">Update my starting point ↗</button>';
+    mapElement.appendChild(legend);
+    legend.querySelector("#diagnostic-map-update").addEventListener("click",()=>diagnosticController.open());
+  }
   renderLearningPathway(mapElement);
   const container=document.createElement("div");
   container.className="structured-map-grid "+(level==="global"?"macro-grid":"");
@@ -533,11 +555,13 @@ function renderMap(scene) {
     const footer=node.type==="macro"?count+" topics · "+currentStudyCount([node.id,...atlas.topics.filter(t=>t.macroId===node.id).flatMap(t=>t.conceptIds)])+" studied · Enter region":
       node.type==="topic"?count+" concepts · "+currentStudyCount(activeTopicFor(node.id).conceptIds)+" studied · Open topic":
       learningStateLabel(concept)+" · "+missingRequirements(concept).length+" unfulfilled prerequisites";
+    const dStatus=node.type==="concept"?diagnosticController?.status(node.id):"unassessed";
+    const dLabel=dStatus&&dStatus!=="unassessed"?" · "+diagnosticController.labelFor(node.id):"";
     container.appendChild(makeCard(node.name,description,
       node.type==="macro"?"KNOWLEDGE REGION "+String(i+1).padStart(2,"0"):
       node.type==="topic"?"TOPIC "+String(i+1).padStart(2,"0"):"CONCEPT "+String(i+1).padStart(2,"0"),
-      footer,()=>handleNodeClick(node),colorFor(node.domain),
-      "map-card "+(node.id===selectedId?"selected ":"")+(node.type==="concept"?"is-"+learningState(concept):"")));
+      footer+dLabel,()=>handleNodeClick(node),colorFor(node.domain),
+      "map-card "+(node.id===selectedId?"selected ":"")+(node.type==="concept"?"is-"+learningState(concept)+" diag-"+(dStatus||"unassessed"):"")));
   });
   mapElement.appendChild(container);
 }
@@ -566,6 +590,7 @@ function openQuestion(id) {
 function showQuestionDetails(q) {
   detailsElement.innerHTML='<div class="research-detail"><span class="question-eyebrow">'+html(q.eyebrow)+'</span>'+
     '<h2>'+html(q.title)+'</h2><p class="question-summary">'+html(q.summary)+'</p>'+
+    (diagnosticController?'<button type="button" id="diagnostic-on-question" class="diag-inline-cta">Find my starting point for this question ↗</button>':'')+
     '<div class="why"><h3>Try investigating</h3><p>'+html(q.activity)+'</p></div>'+
     '<h3 class="question-section-title">Explore the connected concepts</h3>'+
     '<div class="question-concept-list">'+q.conceptIds.map((id,i)=>{
@@ -580,6 +605,7 @@ function showQuestionDetails(q) {
     '<p class="research-disclaimer">These are independent exploratory learning prompts, not claims about the lab’s active research agenda. Listed resources provide background, not a predetermined answer.</p></div>';
   detailsElement.querySelectorAll("[data-question-concept]").forEach(b=>
     b.addEventListener("click",()=>openConcept(b.dataset.questionConcept,true)));
+  if(diagnosticController)$("#diagnostic-on-question").addEventListener("click",()=>diagnosticController.open("q:"+q.id));
 }
 
 function draw({frame=true}={}) {
@@ -640,13 +666,18 @@ function showConceptDetails(concept) {
   const readyStep=nextReadyRequirement(concept);
   const badge=state==="studied"?"✓ Self-marked understood":state==="ready"?"◇ Ready for guided study":"🔒 Guided path: "+missing.length+" prerequisites to mark understood";
   const action=state==="studied"?"Undo self-mark":state==="locked"?"I already know this (skip prerequisites)":"Mark as understood";
+  const diagnosticState=diagnosticController?.status(concept.id)||"unassessed";
+  const diagnosticNote='<div class="concept-diagnostic" data-state="'+html(diagnosticState)+'">'+
+    '<span>Concept discovery: '+html(diagnosticController?.labelFor(concept.id)||"Not yet assessed")+'</span>'+
+    (diagnosticController?'<button id="assess-current-concept" type="button">Reassess this concept ↗</button>':'')+
+    '<small>Self-ratings and single conceptual checks never certify mastery or imply that all prerequisites are understood.</small></div>';
   const lessonStatus='<div class="lesson-progress is-'+html(state)+'"><div class="lesson-progress-row"><span class="lesson-progress-badge">'+html(badge)+'</span><button class="lesson-mark" id="mark-understood" type="button">'+html(action)+'</button></div>'+
     '<p>'+(state==="locked"?"You can preview this concept now; the guided path recommends its necessary prerequisites first.":state==="studied"?"This is your own study marker, not a graded or verified mastery certificate.":"The necessary prerequisites have been self-marked. Explore the objectives and assess your understanding.")+'</p>'+
     (readyStep?'<button id="next-required" class="next-required" type="button">Go to next recommended prerequisite: '+html(readyStep.title)+' ↗</button>':'')+
     '<small>Progress is stored in this browser only. This self-report does not verify mastery.</small></div>';
   detailsElement.innerHTML=(activeQuestionId?'<button id="back-to-question" class="back-to-question" type="button">← Back to research question</button>':'')+'<div class="detail-top"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span><span class="scale-badge '+html(concept.scale)+'">'+html(concept.scale)+' scale</span></div>'+
     '<h2>'+html(concept.title)+'</h2><p class="unit">'+html(concept.unit)+'</p>'+
-    lessonStatus+
+    diagnosticNote+lessonStatus+
     (learningUnits.has(concept.id)?'<button type="button" id="open-learning-unit" class="lesson-entry">Open full learning unit · Explanations, worked example, practice ↗</button>':'<p class="lesson-coming">Full lesson in development. The curriculum map and external resources remain available.</p>')+
     '<div class="why"><h3>Why this matters</h3><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p></div>'+
     detailGroup("Necessary prerequisites",required,"No necessary prerequisites are mapped.",true)+
@@ -659,6 +690,7 @@ function showConceptDetails(concept) {
     '<div class="source-list">'+refs.map(s=>s.url?'<a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener"><span>'+html(s.citation)+'</span><small>'+html(s.title)+'</small></a>':'<div><span>'+html(s.citation)+'</span><small>'+html(s.verificationNote)+'</small></div>').join("")+'</div></details>';
   detailsElement.querySelectorAll("[data-concept]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.concept,true)));
   $("#mark-understood").addEventListener("click",()=>markUnderstood(concept.id));
+  if(diagnosticController)$("#assess-current-concept").addEventListener("click",()=>diagnosticController.open("c:"+concept.id));
   if(learningUnits.has(concept.id))$("#open-learning-unit").addEventListener("click",()=>openLearningUnit(concept.id));
   if(readyStep)$("#next-required").addEventListener("click",()=>openConcept(readyStep.id,true));
   if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>openQuestion(activeQuestionId));
@@ -744,10 +776,11 @@ async function initialise() {
       fetch("knowledge-graph/navigation.json"),
       fetch("knowledge-graph/research-questions.json"),
       fetch("knowledge-graph/learning-units.json"),
-      fetch("knowledge-graph/adaptive-items.json")
+      fetch("knowledge-graph/adaptive-items.json"),
+      fetch("knowledge-graph/diagnostic-questions.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
@@ -765,7 +798,27 @@ async function initialise() {
     }
     macroById=new Map(atlas.macros.map(m=>[m.id,m]));
     topicById=new Map(atlas.topics.map(t=>[t.id,t]));
-    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();renderFeaturedUnits();updateReviewBadge();setActiveView("home",{scroll:false});
+    locationByConcept=new Map();validateNavigation();loadLearningProgress();
+    if(window.AtlasDiagnostic && window.AtlasDiagnosticUI){
+      diagnosticController=window.AtlasDiagnosticUI.mount({
+        host:$("#diagnostic-root"),overview:$("#diagnostic-overview"),
+        concepts,questions:diagnosticData.questions,questionPaths:researchQuestions,
+        macros:atlas.macros,topics:atlas.topics,engine:window.AtlasDiagnostic,
+        navigate:view=>setActiveView(view),
+        openConcept:id=>{openConcept(id,true);scrollToExplorer();},
+        openLearningUnit:id=>openLearningUnit(id),
+        onProfileChange:()=>{
+          renderDashboard();
+          if(atlas)draw({frame:false});
+          if(selectedId)showConceptDetails(byId(selectedId));
+        }
+      });
+    }else{
+      console.warn("[Research Atlas] Diagnostic module unavailable; the rest of the Atlas remains usable.");
+      $("#diagnostic-root").textContent="The diagnostic is temporarily unavailable. You can still explore the knowledge atlas.";
+      $("#tab-diagnostic").disabled=true;
+    }
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();setActiveView("home",{scroll:false});
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
@@ -776,7 +829,7 @@ async function initialise() {
     graphElement.replaceChildren();
     graph=ForceGraph3D()(graphElement)
       .width(graphElement.clientWidth).height(graphElement.clientHeight).backgroundColor("rgba(0,0,0,0)")
-      .nodeColor(n=>n.id===selectedId?"#ffffff":colorFor(n.domain))
+      .nodeColor(diagnosticColorFor)
       .nodeVal(n=>n.type==="macro"?64:n.type==="topic"?26:9).nodeLabel(n=>n.name)
       .linkColor(l=>l.type==="containment"?"rgba(132,156,201,.26)":l.type==="useful"?"rgba(165,135,255,.55)":"rgba(105,168,255,.85)")
       .linkWidth(l=>l.type==="containment"?.7:l.type==="useful"?1:1.5)
