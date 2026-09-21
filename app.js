@@ -156,6 +156,18 @@ function learningStateLabel(concept) {
   const state=learningState(concept);
   return state==="studied"?"✓ Self-marked understood":state==="ready"?"◇ Ready to explore":"🔒 Guided path: prerequisites first";
 }
+// Find the earliest unstudied necessary dependency, rather than sending someone to a locked node.
+function nextReadyRequirement(concept,seen=new Set()){
+  if(!concept || seen.has(concept.id))return null;
+  seen.add(concept.id);
+  for(const edge of missingRequirements(concept)){
+    const prerequisite=byId(edge.id);
+    const earlier=nextReadyRequirement(prerequisite,seen);
+    if(earlier)return earlier;
+    if(prerequisite && learningState(prerequisite)==="ready")return prerequisite;
+  }
+  return null;
+}
 function currentStudyCount(ids){
   return ids.filter(id=>studiedIds.has(id)).length;
 }
@@ -172,7 +184,8 @@ function markUnderstood(id){
   persistProgress();
   updateLearningStats();
   renderDashboard();
-  if(selectedId===id)showConceptDetails(byId(id));
+  const detailShown=detailsElement.querySelector("#mark-understood");
+  if(selectedId===id || detailShown)showConceptDetails(byId(id));
   draw({frame:false});
 }
 function renderNetworkPreview(){
@@ -368,8 +381,17 @@ function showConceptDetails(concept) {
   const next=concepts.flatMap(c=>c.prerequisites.filter(e=>e.id===concept.id).map(edge=>({concept:c,edge})));
   const refs=concept.researchReferences.map(id=>researchSources.find(s=>s.id===id)).filter(Boolean);
   const resource=safeLink(concept.resource);
+  const state=learningState(concept),missing=missingRequirements(concept);
+  const readyStep=nextReadyRequirement(concept);
+  const badge=state==="studied"?"✓ Self-marked understood":state==="ready"?"◇ Ready for guided study":"🔒 Guided path: "+missing.length+" prerequisites to mark understood";
+  const action=state==="studied"?"Undo self-mark":state==="locked"?"I already know this (skip prerequisites)":"Mark as understood";
+  const lessonStatus='<div class="lesson-progress is-'+html(state)+'"><div class="lesson-progress-row"><span class="lesson-progress-badge">'+html(badge)+'</span><button class="lesson-mark" id="mark-understood" type="button">'+html(action)+'</button></div>'+
+    '<p>'+(state==="locked"?"You can preview this concept now; the guided path recommends its necessary prerequisites first.":state==="studied"?"This is your own study marker, not a graded or verified mastery certificate.":"The necessary prerequisites have been self-marked. Explore the objectives and assess your understanding.")+'</p>'+
+    (readyStep?'<button id="next-required" class="next-required" type="button">Go to next recommended prerequisite: '+html(readyStep.title)+' ↗</button>':'')+
+    '<small>Progress is stored in this browser only. This self-report does not verify mastery.</small></div>';
   detailsElement.innerHTML=(activeQuestionId?'<button id="back-to-question" class="back-to-question" type="button">← Back to research question</button>':'')+'<div class="detail-top"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span><span class="scale-badge '+html(concept.scale)+'">'+html(concept.scale)+' scale</span></div>'+
     '<h2>'+html(concept.title)+'</h2><p class="unit">'+html(concept.unit)+'</p>'+
+    lessonStatus+
     '<div class="why"><h3>Why this matters</h3><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p></div>'+
     detailGroup("Necessary prerequisites",required,"No necessary prerequisites are mapped.",true)+
     detailGroup("Useful supporting knowledge",useful,"No useful connections are mapped.")+
@@ -380,6 +402,8 @@ function showConceptDetails(concept) {
     (resource==="#"?'<p class="none">No public resource link available.</p>':'<a class="resource-link" href="'+html(resource)+'" target="_blank" rel="noopener">Open learning resource ↗</a>')+
     '<div class="source-list">'+refs.map(s=>s.url?'<a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener"><span>'+html(s.citation)+'</span><small>'+html(s.title)+'</small></a>':'<div><span>'+html(s.citation)+'</span><small>'+html(s.verificationNote)+'</small></div>').join("")+'</div></details>';
   detailsElement.querySelectorAll("[data-concept]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.concept,true)));
+  $("#mark-understood").addEventListener("click",()=>markUnderstood(concept.id));
+  if(readyStep)$("#next-required").addEventListener("click",()=>openConcept(readyStep.id,true));
   if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>openQuestion(activeQuestionId));
 }
 function openConcept(id,record=false) {
