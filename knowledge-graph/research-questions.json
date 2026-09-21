@@ -103,6 +103,23 @@
         "compas-demos"
       ],
       "activity": "Choose a public example, list required inputs, and define what would count as a successful reproduction."
+    },
+    {
+      "id": "binary-evolution-visualization",
+      "eyebrow": "RESEARCH VISUALIZATION",
+      "title": "What can an evolving binary animation reveal that a static snapshot cannot?",
+      "summary": "Explore which physical transitions become easier to inspect when simulation outputs are converted into a continuous visual history.",
+      "conceptIds": [
+        "simulation-outputs",
+        "temporal-sampling",
+        "interpolation",
+        "scientific-visualization",
+        "vimes-visualization-pathway"
+      ],
+      "sourceIds": [
+        "compas-demos"
+      ],
+      "activity": "Choose a public simulation example, compare its phase-by-phase snapshots with a time-resolved visualization, and note what can and cannot be inferred."
     }
   ]
 }
