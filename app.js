@@ -92,13 +92,7 @@ function showConcept(concept, focus = true) {
     <p class="unit">${concept.unit}</p>
     <section class="detail-section">
       <h3>Prerequisites</h3>
-      <p class="relationship-key necessary">Necessary for the stated learning level</p>
-      <div class="relationship-list">${prerequisites.length ? prerequisites.map(item => relationCard(item, concept.prerequisiteNotes[item.id], "necessary")).join("") : '<span class="none">Start here — no necessary prerequisites</span>'}</div>
-    </section>
-    <section class="detail-section">
-      <h3>Supporting knowledge</h3>
-      <p class="relationship-key useful">Useful, but does not block progression</p>
-      <div class="relationship-list">${useful.length ? useful.map(item => relationCard(item.concept, item.note, "useful")).join("") : '<span class="none">No optional supporting connections listed</span>'}</div>
+      <div class="concept-links">${prerequisites.length ? prerequisites.map(relationButton).join("") : '<span class="none">Start here — no prerequisites</span>'}</div>
     </section>
     <section class="detail-section">
       <h3>Learning objectives</h3>
