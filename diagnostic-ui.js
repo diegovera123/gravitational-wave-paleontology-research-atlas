@@ -21,7 +21,7 @@ const statusNames={
   "review":"Review suggested · check incorrect",
   "review-confident":"Review suggested · high-confidence error"
 };
-function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,navigate,openConcept,openLearningUnit}){
+function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,onComplete,navigate,openConcept,openLearningUnit}){
   if(!host||!overview)throw Error("Diagnostic interface missing.");
   engine.validateQuestions({schemaVersion:1,questions},concepts);
   const m=new Map(concepts.map(c=>[c.id,c])),qMap=new Map(questions.map(q=>[q.conceptId,q]));
@@ -222,6 +222,8 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     }
     session.finished=true;session.currentId=null;stage="results";
     profile.completedAt=Date.now();save();render();
+    // A complete diagnostic flows directly to the personalized map. Results remain accessible via the diagnostic tab.
+    onComplete?.();
   }
   function renderResults(){
     const stats=engine.summary(session,concepts);
@@ -242,10 +244,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
       '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
-    host.querySelector("#diag-open-map").addEventListener("click",()=>{
-      const choice=stats.recommendations[0];
-      if(choice)openConcept(choice.id);else navigate("explore");
-    });
+    host.querySelector("#diag-open-map").addEventListener("click",()=>navigate("home"));
     host.querySelector("#diag-repeat").addEventListener("click",()=>{stage="choose";session=null;render();});
     host.querySelector("#diag-clear").addEventListener("click",()=>{
       if(typeof root.confirm==="function"&&!root.confirm("Clear all saved diagnostic ratings and conceptual checks on this browser?"))return;
