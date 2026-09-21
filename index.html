@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
+  <script defer src="adaptive.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -32,7 +33,16 @@
     </section>
 
 
-    <section id="dashboard" class="dashboard" aria-labelledby="dashboard-title">
+    <nav id="atlas-tabs" class="atlas-primary-nav" aria-label="Main sections" role="tablist">
+      <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Overview</button>
+      <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research pathways</button>
+      <button type="button" role="tab" id="tab-learn" aria-controls="learn-panel" aria-selected="false" data-atlas-tab="learn" tabindex="-1">Learn &amp; practice</button>
+      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge atlas</button>
+      <button type="button" role="tab" id="tab-library" aria-controls="library-panel" aria-selected="false" data-atlas-tab="library" tabindex="-1">Resources</button>
+    </nav>
+
+    <section id="dashboard" class="dashboard" aria-label="Research workspace">
+      <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
       <div class="dashboard-heading">
         <div><p class="eyebrow">Your research workspace</p><h2 id="dashboard-title">Start with the bigger picture.</h2>
           <p>Follow a question into the science, or enter a knowledge region. The structured map is your guide; the 3D constellation is there when you want to explore.</p></div>
@@ -40,6 +50,7 @@
       </div>
       <section class="learning-progress-strip" aria-label="Your guided learning progress">
         <div><p class="eyebrow">Guided learning · Your journey</p><strong id="learning-progress">Preparing your learning path…</strong>
+          <span id="practice-due-summary" class="practice-due-summary">Adaptive practice · 3 pilot lessons</span>
           <p>Follow necessary prerequisites to reveal recommended next steps. Progress is self-reported, not a verified mastery assessment.</p></div>
         <button id="resume-learning" type="button" class="learning-resume" disabled>Find my next step ↗</button>
       </section>
@@ -56,6 +67,14 @@
           <p class="dashboard-loading">Loading the knowledge graph…</p>
         </div>
       </section>
+      <section class="pilot-gallery" aria-labelledby="pilot-gallery-title">
+        <div class="dashboard-section-heading"><div><p class="eyebrow">04 / Learn the science</p><h3 id="pilot-gallery-title">Featured learning units</h3></div>
+          <span class="pilot-note">Three original instructional pilots · More lessons in development</span></div>
+        <div id="pilot-cards" class="pilot-cards"><p class="dashboard-loading">Loading learning units…</p></div>
+      </section>
+      </div>
+      <div id="paths-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-paths" hidden>
+        <header class="tab-panel-header"><p class="eyebrow">Research pathways</p><h2>Start with a question or a field.</h2><p>Select an investigation to reveal the concepts behind it, or enter a knowledge region to browse its topics.</p></header>
       <div class="dashboard-columns">
         <div class="dashboard-main">
           <div class="dashboard-section-heading"><div><p class="eyebrow">01 / The landscape</p><h3>Explore a knowledge region</h3></div><a href="#explorer" class="subtle-link">Open map ↗</a></div>
@@ -67,6 +86,9 @@
           <div id="question-cards" class="dashboard-questions"><p class="dashboard-loading">Loading research pathways…</p></div>
         </aside>
       </div>
+      </div>
+      <div id="library-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-library" hidden>
+        <header class="tab-panel-header"><p class="eyebrow">Research library</p><h2>Public resources, in one place.</h2><p>Original learning units link to their sources. These public starting points offer a broader view.</p></header>
       <div class="dashboard-reading" aria-labelledby="reading-room-heading">
         <div><p class="eyebrow">03 / The reading room</p><h3 id="reading-room-heading">Public starting points</h3>
           <p>Connect the conceptual map to scientific explanations, published research, and the tools used to investigate them. Private lab material is not included.</p></div>
@@ -77,13 +99,10 @@
           <a href="https://github.com/layabinu/VIMES_VIsualization_of_Massive_Evolving_Stars" target="_blank" rel="noopener noreferrer" class="reading-tile"><span class="reading-label">PUBLIC CODE · VISUALIZATION</span><strong>VIMES</strong><small>Explore the public binary-evolution visualization project ↗</small></a>
         </div>
       </div>
-      <section class="pilot-gallery" aria-labelledby="pilot-gallery-title">
-        <div class="dashboard-section-heading"><div><p class="eyebrow">04 / Learn the science</p><h3 id="pilot-gallery-title">Featured learning units</h3></div>
-          <span class="pilot-note">Three original instructional pilots · More lessons in development</span></div>
-        <div id="pilot-cards" class="pilot-cards"><p class="dashboard-loading">Loading learning units…</p></div>
-      </section>
+      </div>
     </section>
 
+    <section id="explore-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-explore" hidden>
     <section id="explorer" class="workspace" aria-label="Knowledge graph explorer">
       <div class="graph-panel">
         <div class="graph-toolbar">
@@ -128,12 +147,21 @@
         </div>
       </aside>
     </section>
+    </section>
+    <section id="learn-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-learn" hidden>
+      <div id="learn-hub" class="learn-hub">
+        <p class="eyebrow">Learning Studio</p><h2>Learn a concept, then check your understanding.</h2>
+        <p>Choose an original learning unit. Adaptive practice responds to your answers and recommends review. These pilot questions provide formative evidence, not a calibrated mastery score.</p>
+        <div id="learn-hub-cards" class="pilot-cards"></div>
+        <div id="due-practice" class="due-practice" aria-live="polite"></div>
+      </div>
     <section id="learning-studio" class="learning-studio" aria-labelledby="learning-studio-title" hidden tabindex="-1">
       <div class="studio-top"><div><p class="eyebrow">Learning unit · Original Atlas instruction</p>
         <h2 id="learning-studio-title">Explore a concept in depth</h2></div>
         <button id="close-learning-studio" type="button" class="view-button">← Return to Atlas</button>
       </div>
       <div id="lesson-content" class="lesson-content" aria-live="polite"></div>
+    </section>
     </section>
   </main>
 
