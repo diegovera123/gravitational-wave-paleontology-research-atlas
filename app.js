@@ -17,8 +17,10 @@ let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
+let diagnosticItems=[], diagnosticProfile=null, diagnosticSession=null, diagnosticStorageAvailable=true;
 let activeView="home";
 const PROGRESS_KEY="research-atlas-studied-v1";
+const DIAGNOSTIC_KEY="research-atlas-concept-diagnostic-v1";
 let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
   calculus:"The mathematical language behind change, models, and uncertainty.",
@@ -454,12 +456,180 @@ function renderLearningUnit(){
   $("#lesson-concept-back").addEventListener("click",returnFromLearningToGraph);
 }
 
+
+function loadDiagnosticProfile(){
+  try{
+    const raw=window.localStorage?.getItem(DIAGNOSTIC_KEY);
+    diagnosticProfile=raw?JSON.parse(raw):null;
+    if(diagnosticProfile && (!diagnosticProfile.ratings || !diagnosticProfile.goalConceptIds))diagnosticProfile=null;
+  }catch(error){diagnosticStorageAvailable=false;diagnosticProfile=null;console.warn("[Atlas] Diagnostic profile will last only this session.",error);}
+}
+function saveDiagnosticProfile(){
+  if(!diagnosticProfile)return;
+  diagnosticProfile.updatedAt=Date.now();
+  if(!diagnosticStorageAvailable)return;
+  try{window.localStorage?.setItem(DIAGNOSTIC_KEY,JSON.stringify(diagnosticProfile));}
+  catch(error){diagnosticStorageAvailable=false;console.warn("[Atlas] Could not save diagnostic profile.",error);}
+}
+function diagnosticGoals(){
+  return [
+    {id:"broad-foundations",eyebrow:"BROAD FOUNDATIONS",title:"Build broad foundations for gravitational-wave paleontology",
+      summary:"Sample mathematics, mechanics, stellar astrophysics, computing and probability before choosing a narrower route.",
+      conceptIds:["derivatives","vector-algebra","probability-distributions","newtonian-gravitation","stellar-evolution","python-fundamentals"]},
+    ...researchQuestions.map(q=>({id:q.id,eyebrow:q.eyebrow,title:q.title,summary:q.summary,conceptIds:q.conceptIds}))
+  ];
+}
+function openDiagnostic(){
+  setActiveView("home",{scroll:false});
+  $("#diagnostic-workspace").hidden=false;
+  $("#diagnostic-workspace").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+  $("#diagnostic-workspace").focus?.();
+  if(diagnosticSession)renderDiagnostic();
+  else renderDiagnosticGoals();
+}
+function closeDiagnostic(){
+  $("#diagnostic-workspace").hidden=true;
+  diagnosticSession=null;
+}
+function renderDiagnosticGoals(){
+  const host=$("#diagnostic-content");
+  const previous=diagnosticProfile?'<div class="diagnostic-previous"><strong>Previous map available</strong><span>'+Object.keys(diagnosticProfile.ratings||{}).length+' concepts rated · '+html(diagnosticProfile.goalTitle||"Saved diagnostic")+'</span><button id="diagnostic-show-saved" type="button" class="view-button">View saved map</button></div>':"";
+  host.innerHTML=previous+'<div class="diagnostic-intro-copy"><span class="lesson-kicker">STEP 1 · CHOOSE A GOAL</span><h4>What are you trying to understand?</h4>'+
+    '<p>The Atlas will sample concepts relevant to this goal and adapt which prerequisite it surfaces next. You can stop at any time.</p></div>'+
+    '<div class="diagnostic-goals">'+diagnosticGoals().map(goal=>'<button type="button" class="diagnostic-goal" data-diagnostic-goal="'+html(goal.id)+'"><span>'+html(goal.eyebrow)+'</span><strong>'+html(goal.title)+'</strong><small>'+html(goal.summary)+'</small></button>').join("")+'</div>'+
+    '<p class="diagnostic-caveat">This diagnostic combines self-report with a few basic conceptual checks. It produces a provisional learning map, not a mastery score or credential.</p>';
+  host.querySelectorAll("[data-diagnostic-goal]").forEach(b=>b.addEventListener("click",()=>startDiagnosticGoal(b.dataset.diagnosticGoal)));
+  if(diagnosticProfile)$("#diagnostic-show-saved").addEventListener("click",()=>{diagnosticSession={phase:"results",profile:diagnosticProfile};renderDiagnostic();});
+}
+function startDiagnosticGoal(goalId){
+  const goal=diagnosticGoals().find(g=>g.id===goalId);if(!goal)return;
+  const relevantIds=window.AtlasDiagnostic.prerequisiteClosure(goal.conceptIds,concepts);
+  const profile={version:1,goalId:goal.id,goalTitle:goal.title,goalConceptIds:[...goal.conceptIds],
+    relevantIds,ratings:{},verifications:{},createdAt:Date.now(),updatedAt:Date.now()};
+  diagnosticProfile=profile;
+  diagnosticSession={phase:"rating",profile,maxRatings:10,queue:window.AtlasDiagnostic.initialQueue(goal.conceptIds,concepts),
+    priorityIds:[],sequence:[],currentId:null,rating:null,confidence:null,verificationItems:[],verificationIndex:0,
+    answer:null,answerConfidence:null};
+  chooseNextDiagnosticConcept();
+  saveDiagnosticProfile();renderDiagnostic();
+}
+function chooseNextDiagnosticConcept(){
+  const s=diagnosticSession;if(!s)return;
+  s.profile.ratings=s.profile.ratings||{};
+  const state={ratings:s.profile.ratings,relevantIds:s.profile.relevantIds,queue:s.queue,priorityIds:s.priorityIds};
+  s.currentId=window.AtlasDiagnostic.nextConcept(state,concepts);
+  if(!s.currentId || Object.keys(s.profile.ratings).length>=s.maxRatings)beginDiagnosticVerification();
+}
+function recordDiagnosticRating(){
+  const s=diagnosticSession;if(!s||!s.currentId||!Number.isInteger(s.rating)||!Number.isInteger(s.confidence))return;
+  const state={ratings:s.profile.ratings,relevantIds:s.profile.relevantIds,queue:s.queue,priorityIds:s.priorityIds,sequence:s.sequence};
+  const updated=window.AtlasDiagnostic.recordRating(state,concepts,s.currentId,s.rating,s.confidence);
+  s.profile.ratings=updated.ratings;s.queue=updated.queue;s.priorityIds=updated.priorityIds;s.sequence=updated.sequence;
+  saveDiagnosticProfile();s.rating=null;s.confidence=null;
+  chooseNextDiagnosticConcept();renderDiagnostic();
+}
+function beginDiagnosticVerification(){
+  const s=diagnosticSession;if(!s)return;
+  s.verificationItems=window.AtlasDiagnostic.chooseVerification(s.profile.ratings,diagnosticItems,3);
+  s.verificationIndex=0;s.answer=null;s.answerConfidence=null;
+  s.phase=s.verificationItems.length?"verify":"results";
+  if(s.phase==="results")finishDiagnostic();
+}
+function submitDiagnosticVerification(){
+  const s=diagnosticSession,item=s?.verificationItems?.[s.verificationIndex];
+  if(!s||!item||!Number.isInteger(s.answer)||!Number.isInteger(s.answerConfidence))return;
+  s.profile.verifications[item.conceptId]={itemId:item.id,answer:s.answer,correct:s.answer===item.correctIndex,
+    confidence:s.answerConfidence,at:Date.now()};
+  saveDiagnosticProfile();s.verificationIndex++;s.answer=null;s.answerConfidence=null;
+  if(s.verificationIndex>=s.verificationItems.length)finishDiagnostic();
+  renderDiagnostic();
+}
+function finishDiagnostic(){
+  const s=diagnosticSession;if(!s)return;
+  s.phase="results";diagnosticProfile=s.profile;saveDiagnosticProfile();updateDiagnosticEntry();
+  renderDashboard();draw({frame:false});
+}
+function diagnosticStatus(id){
+  if(!diagnosticProfile?.ratings?.[id])return null;
+  return window.AtlasDiagnostic.classifyEvidence(diagnosticProfile.ratings[id],diagnosticProfile.verifications?.[id]);
+}
+function diagnosticStatusLabel(id){
+  const labels={supported:"Supported by sample check","supported-low-confidence":"Correct, low confidence",
+    "calibration-gap":"Review: high-confidence mismatch",review:"Review recommended",developing:"Developing understanding",
+    "self-rated-high":"High self-rating · not verified"};
+  return labels[diagnosticStatus(id)]||null;
+}
+function updateDiagnosticEntry(){
+  const start=$("#start-diagnostic"),view=$("#view-diagnostic-profile");
+  if(!start||!view)return;
+  start.textContent=diagnosticProfile?"Run a new diagnostic ↗":"Start diagnostic ↗";
+  view.hidden=!diagnosticProfile;
+}
+function renderDiagnostic(){
+  const s=diagnosticSession;if(!s)return;
+  const host=$("#diagnostic-content"),profile=s.profile;
+  if(s.phase==="rating"){
+    const concept=byId(s.currentId),count=Object.keys(profile.ratings).length;
+    host.innerHTML='<div class="diagnostic-progress"><span>CONCEPT '+(count+1)+' / up to '+s.maxRatings+'</span><i style="width:'+Math.min(100,(count/s.maxRatings)*100)+'%"></i></div>'+
+      '<div class="diagnostic-concept"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span>'+
+      '<h4>'+html(concept.title)+'</h4><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p>'+
+      '<small>Goal: '+html(profile.goalTitle)+'</small></div>'+
+      '<div class="diagnostic-question-block"><h5>How would you rate your current understanding?</h5>'+
+      '<div class="diagnostic-rating">'+[
+        [0,"New to me"],[1,"I recognize it"],[2,"I can explain the basics"],[3,"I can apply it"],[4,"I could teach / derive it"]
+      ].map(([v,l])=>'<button type="button" data-diag-rating="'+v+'" class="'+(s.rating===v?"selected":"")+'">'+html(l)+'</button>').join("")+'</div>'+
+      '<h5>How confident are you in that rating?</h5><div class="diagnostic-confidence">'+[
+        [1,"Low"],[2,"Medium"],[3,"High"]
+      ].map(([v,l])=>'<button type="button" data-diag-confidence="'+v+'" class="'+(s.confidence===v?"selected":"")+'">'+l+'</button>').join("")+'</div>'+
+      '<div class="diagnostic-actions"><button id="diagnostic-next" type="button" class="lesson-submit" '+(!(Number.isInteger(s.rating)&&Number.isInteger(s.confidence))?"disabled":"")+'>Continue →</button>'+
+      '<button id="diagnostic-finish-early" type="button" class="lesson-back">Finish with what I have</button></div></div>'+
+      '<p class="diagnostic-caveat">A high self-rating is not treated as proof. The Atlas may sample a prerequisite or ask a basic concept check later.</p>';
+    host.querySelectorAll("[data-diag-rating]").forEach(b=>b.addEventListener("click",()=>{s.rating=Number(b.dataset.diagRating);renderDiagnostic();}));
+    host.querySelectorAll("[data-diag-confidence]").forEach(b=>b.addEventListener("click",()=>{s.confidence=Number(b.dataset.diagConfidence);renderDiagnostic();}));
+    $("#diagnostic-next").addEventListener("click",recordDiagnosticRating);
+    $("#diagnostic-finish-early").addEventListener("click",()=>{beginDiagnosticVerification();renderDiagnostic();});
+  } else if(s.phase==="verify"){
+    const item=s.verificationItems[s.verificationIndex],concept=byId(item.conceptId);
+    host.innerHTML='<div class="diagnostic-progress"><span>CONCEPT CHECK '+(s.verificationIndex+1)+' / '+s.verificationItems.length+'</span><i style="width:'+((s.verificationIndex/s.verificationItems.length)*100)+'%"></i></div>'+
+      '<div class="diagnostic-concept verification"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span>'+
+      '<h4>'+html(concept.title)+'</h4><p>'+html(item.prompt)+'</p></div>'+
+      '<div class="diagnostic-options">'+item.choices.map((choice,i)=>'<button type="button" data-diag-answer="'+i+'" class="'+(s.answer===i?"selected":"")+'">'+html(choice)+'</button>').join("")+'</div>'+
+      '<div class="diagnostic-question-block"><h5>How confident are you in this answer?</h5><div class="diagnostic-confidence">'+
+      [[1,"Low"],[2,"Medium"],[3,"High"]].map(([v,l])=>'<button type="button" data-diag-answer-confidence="'+v+'" class="'+(s.answerConfidence===v?"selected":"")+'">'+l+'</button>').join("")+'</div>'+
+      '<button id="diagnostic-submit-check" type="button" class="lesson-submit" '+(!(Number.isInteger(s.answer)&&Number.isInteger(s.answerConfidence))?"disabled":"")+'>Submit answer →</button></div>'+
+      '<p class="diagnostic-caveat">You will see the calibration summary at the end rather than answer-by-answer grading, reducing cueing between sampled checks.</p>';
+    host.querySelectorAll("[data-diag-answer]").forEach(b=>b.addEventListener("click",()=>{s.answer=Number(b.dataset.diagAnswer);renderDiagnostic();}));
+    host.querySelectorAll("[data-diag-answer-confidence]").forEach(b=>b.addEventListener("click",()=>{s.answerConfidence=Number(b.dataset.diagAnswerConfidence);renderDiagnostic();}));
+    $("#diagnostic-submit-check").addEventListener("click",submitDiagnosticVerification);
+  } else {
+    const summary=window.AtlasDiagnostic.summarize(profile),recommended=window.AtlasDiagnostic.recommendedConcepts(profile,concepts,5);
+    const sampled=Object.keys(profile.ratings).map(id=>({concept:byId(id),status:diagnosticStatus(id)}));
+    host.innerHTML='<div class="diagnostic-results-head"><span class="lesson-kicker">YOUR PROVISIONAL KNOWLEDGE MAP</span><h4>'+html(profile.goalTitle)+'</h4>'+
+      '<p>'+sampled.length+' concepts sampled · '+Object.keys(profile.verifications||{}).length+' conceptual checks completed.</p></div>'+
+      '<div class="diagnostic-result-metrics"><div><strong>'+summary.supported+'</strong><span>Supported by sample check</span></div>'+
+      '<div><strong>'+(summary["calibration-gap"]+summary.review)+'</strong><span>Review recommended</span></div>'+
+      '<div><strong>'+summary["supported-low-confidence"]+'</strong><span>Correct but low confidence</span></div>'+
+      '<div><strong>'+(summary["self-rated-high"]+summary.developing)+'</strong><span>Self-report / developing</span></div></div>'+
+      '<div class="diagnostic-results-grid"><section><h5>Concept profile</h5><div class="diagnostic-profile-list">'+sampled.map(x=>
+        '<button type="button" data-diagnostic-open="'+html(x.concept.id)+'" class="diagnostic-profile-item status-'+html(x.status)+'"><span>'+html(x.concept.title)+'</span><small>'+html(diagnosticStatusLabel(x.concept.id)||"Self-rated")+'</small></button>').join("")+'</div></section>'+
+      '<section><h5>Recommended next concepts</h5><p>These suggestions use your selected research goal, necessary prerequisites, self-ratings and sampled checks. They are not a proof of readiness.</p>'+
+      '<div class="diagnostic-recommendations">'+recommended.map(id=>'<button type="button" data-diagnostic-open="'+html(id)+'">'+html(byId(id).title)+' <span>↗</span></button>').join("")+'</div></section></div>'+
+      '<div class="diagnostic-actions"><button id="diagnostic-open-map" class="lesson-submit" type="button">Open personalized knowledge map →</button>'+
+      '<button id="diagnostic-retake" class="lesson-back" type="button">Run a new diagnostic</button></div>'+
+      '<p class="diagnostic-caveat">Interpretation: “supported” means one basic sampled question agreed with a positive self-rating. It is not demonstrated mastery. Incorrect answers can reflect slips as well as knowledge gaps.</p>';
+    host.querySelectorAll("[data-diagnostic-open]").forEach(b=>b.addEventListener("click",()=>{closeDiagnostic();openConcept(b.dataset.diagnosticOpen,true);scrollToExplorer();}));
+    $("#diagnostic-open-map").addEventListener("click",()=>{closeDiagnostic();scrollToExplorer();});
+    $("#diagnostic-retake").addEventListener("click",()=>{diagnosticSession=null;renderDiagnosticGoals();});
+  }
+}
+
 function renderDashboard() {
   statsElement.innerHTML='<span><strong>'+concepts.length+'</strong> concepts</span>'+
     '<span><strong>'+atlas.macros.length+'</strong> regions</span>'+
     '<span><strong>'+researchQuestions.length+'</strong> research pathways</span>';
   updateLearningStats();
   renderNetworkPreview();
+  updateDiagnosticEntry();
   domainCardsElement.replaceChildren();
   atlas.macros.forEach((macro,i)=>{
     const count=atlas.topics.filter(t=>t.macroId===macro.id).length;
@@ -532,12 +702,13 @@ function renderMap(scene) {
       concept.whyItMatters||concept.researchApplication||"Explore this scientific concept.";
     const footer=node.type==="macro"?count+" topics · "+currentStudyCount([node.id,...atlas.topics.filter(t=>t.macroId===node.id).flatMap(t=>t.conceptIds)])+" studied · Enter region":
       node.type==="topic"?count+" concepts · "+currentStudyCount(activeTopicFor(node.id).conceptIds)+" studied · Open topic":
-      learningStateLabel(concept)+" · "+missingRequirements(concept).length+" unfulfilled prerequisites";
+      learningStateLabel(concept)+" · "+missingRequirements(concept).length+" unfulfilled prerequisites"+
+      (diagnosticStatusLabel(concept.id)?" · Diagnostic: "+diagnosticStatusLabel(concept.id):"");
     container.appendChild(makeCard(node.name,description,
       node.type==="macro"?"KNOWLEDGE REGION "+String(i+1).padStart(2,"0"):
       node.type==="topic"?"TOPIC "+String(i+1).padStart(2,"0"):"CONCEPT "+String(i+1).padStart(2,"0"),
       footer,()=>handleNodeClick(node),colorFor(node.domain),
-      "map-card "+(node.id===selectedId?"selected ":"")+(node.type==="concept"?"is-"+learningState(concept):"")));
+      "map-card "+(node.id===selectedId?"selected ":"")+(node.type==="concept"?"is-"+learningState(concept)+(diagnosticStatus(concept.id)?" diag-"+diagnosticStatus(concept.id):""):"")));
   });
   mapElement.appendChild(container);
 }
@@ -644,8 +815,10 @@ function showConceptDetails(concept) {
     '<p>'+(state==="locked"?"You can preview this concept now; the guided path recommends its necessary prerequisites first.":state==="studied"?"This is your own study marker, not a graded or verified mastery certificate.":"The necessary prerequisites have been self-marked. Explore the objectives and assess your understanding.")+'</p>'+
     (readyStep?'<button id="next-required" class="next-required" type="button">Go to next recommended prerequisite: '+html(readyStep.title)+' ↗</button>':'')+
     '<small>Progress is stored in this browser only. This self-report does not verify mastery.</small></div>';
+  const diagLabel=diagnosticStatusLabel(concept.id);
   detailsElement.innerHTML=(activeQuestionId?'<button id="back-to-question" class="back-to-question" type="button">← Back to research question</button>':'')+'<div class="detail-top"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span><span class="scale-badge '+html(concept.scale)+'">'+html(concept.scale)+' scale</span></div>'+
     '<h2>'+html(concept.title)+'</h2><p class="unit">'+html(concept.unit)+'</p>'+
+    (diagLabel?'<div class="concept-diagnostic-note"><strong>Diagnostic profile</strong><span>'+html(diagLabel)+'</span></div>':'')+
     lessonStatus+
     (learningUnits.has(concept.id)?'<button type="button" id="open-learning-unit" class="lesson-entry">Open full learning unit · Explanations, worked example, practice ↗</button>':'<p class="lesson-coming">Full lesson in development. The curriculum map and external resources remain available.</p>')+
     '<div class="why"><h3>Why this matters</h3><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p></div>'+
@@ -744,10 +917,11 @@ async function initialise() {
       fetch("knowledge-graph/navigation.json"),
       fetch("knowledge-graph/research-questions.json"),
       fetch("knowledge-graph/learning-units.json"),
-      fetch("knowledge-graph/adaptive-items.json")
+      fetch("knowledge-graph/adaptive-items.json"),
+      fetch("knowledge-graph/diagnostic-items.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
@@ -758,6 +932,11 @@ async function initialise() {
     window.AtlasAdaptive.validateBank(adaptiveData,unitsData.units);
     adaptiveItems=adaptiveData.items;
     loadAdaptiveHistory();
+    if(!window.AtlasDiagnostic||diagnosticData.schemaVersion!==1||!Array.isArray(diagnosticData.items))throw Error("The concept diagnostic module did not load.");
+    diagnosticItems=diagnosticData.items;
+    if(diagnosticItems.some(item=>!concepts.some(c=>c.id===item.conceptId)||!item.choices?.length||item.correctIndex<0||item.correctIndex>=item.choices.length))
+      throw Error("Invalid concept diagnostic item bank.");
+    loadDiagnosticProfile();
     const conceptIds=new Set(concepts.map(c=>c.id)),sourceIds=new Set(researchSources.map(s=>s.id));
     for(const q of researchQuestions) {
       if(!q.title || !q.conceptIds.length || q.conceptIds.some(id=>!conceptIds.has(id)) ||
@@ -810,6 +989,9 @@ $("#resume-learning").addEventListener("click",()=>{
   if(next){openConcept(next.id,true);scrollToExplorer();}
 });
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
+$("#start-diagnostic").addEventListener("click",()=>{diagnosticSession=null;openDiagnostic();});
+$("#view-diagnostic-profile").addEventListener("click",()=>{if(diagnosticProfile){diagnosticSession={phase:"results",profile:diagnosticProfile};openDiagnostic();}});
+$("#close-diagnostic").addEventListener("click",closeDiagnostic);
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
 $("#reset-view").addEventListener("click",()=>{if(displayMode==="3d")graph?.zoomToFit(lowerMotion()?0:700,72);});
