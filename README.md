@@ -105,3 +105,13 @@ Necessary/useful prerequisite links **do not imply containment**. Clicking a cro
 The optional three-spritetext CDN was removed from the critical rendering path. The graph uses the library's default sphere nodes, hover labels, and an always-readable HTML concept/topic navigation strip.
 
 To check changes locally, run `python3 scripts/validate_curriculum.py` and `node scripts/test_app.mjs`, then visually test the actual 3D canvas in a browser. The Node smoke test uses a mocked graph and cannot prove WebGL rendering.
+
+## Research dashboard and exploratory questions
+
+The landing page presents a **structured research dashboard**: knowledge-region cards, six curated research questions, and public introductory resources. The structured card map is the default navigation surface; the existing 3D constellation remains available via the *3D constellation* switch. Both views share the same explicit macro → topic → concept containment and cross-domain prerequisite navigation. Hiding the 3D view does not remove the graph or change its underlying scientific relationships.
+
+The questions in \`knowledge-graph/research-questions.json\` are **independently authored educational prompts**, not a claim about Floor Broekgaarden's or any laboratory's current research agenda. Each question links to existing concept IDs and public background sources from \`research-sources.json\`. A question opens in the detail pane; selecting a linked concept jumps directly to its containing topic, with a *Back to research question* button. Do not add unpublished paper drafts, private recordings, or unapproved lab material to the public dashboard.
+
+The reading room includes public links provided for onboarding: an introductory video, a public research overview, and COMPAS documentation. Verify video-specific timestamps and individual paper sections before advertising them as precise instructional annotations.
+
+After changing research questions, run \`python3 scripts/validate_curriculum.py\`. Navigation logic and dashboard rendering have mocked-DOM checks in \`node scripts/test_app.mjs\`; test actual 3D/WebGL rendering and mobile responsiveness in a browser before presenting the prototype to others.
