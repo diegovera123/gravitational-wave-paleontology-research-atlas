@@ -136,13 +136,15 @@ function makeCard(title,description,eyebrow,footer,action,color,kind="") {
 
 function loadLearningProgress(){
   try{
-    const saved=window.localStorage?.getItem(PROGRESS_KEY);
+    if(!window.localStorage){progressAvailable=false;studiedIds=new Set();return;}
+    const saved=window.localStorage.getItem(PROGRESS_KEY);
     const items=saved?JSON.parse(saved):[];
     studiedIds=new Set(Array.isArray(items)?items.filter(id=>typeof id==="string"&&byId(id)):[]);
   }catch(error){progressAvailable=false;studiedIds=new Set();console.warn("[Research Atlas] Progress is session-only.",error);}
 }
 function persistProgress(){
-  try{window.localStorage?.setItem(PROGRESS_KEY,JSON.stringify([...studiedIds]));}
+  if(!progressAvailable)return;
+  try{window.localStorage.setItem(PROGRESS_KEY,JSON.stringify([...studiedIds]));}
   catch(error){progressAvailable=false;console.warn("[Research Atlas] Could not save learning progress.",error);}
 }
 function missingRequirements(concept){
