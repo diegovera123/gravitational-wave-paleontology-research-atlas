@@ -756,3 +756,14 @@ body:not(.onboarding-first) #tab-diagnostic{display:none;}
   .home-map-heading{align-items:flex-start;flex-direction:column;}
   .home-next-actions{grid-template-columns:1fr;}
 }
+
+
+/* Keep returning visits compact: navigation and the graph should appear above the fold. */
+body:not(.onboarding-first) .intro{padding:25px 0 19px;align-items:center;}
+body:not(.onboarding-first) .intro h1{font-size:clamp(27px,3vw,42px);line-height:1.05;}
+body:not(.onboarding-first) .intro .lede{max-width:480px;font-size:12px;line-height:1.6;}
+body:not(.onboarding-first) .atlas-primary-nav{margin-bottom:14px;}
+@media(max-width:760px){
+  body:not(.onboarding-first) .intro{padding:18px 0 14px;display:block;}
+  body:not(.onboarding-first) .intro .lede{margin-top:12px;}
+}
