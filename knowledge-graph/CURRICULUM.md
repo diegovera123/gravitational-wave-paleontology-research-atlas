@@ -2,15 +2,21 @@
 
 ## Scope
 
-The Atlas contains 116 concepts spanning seven connected domains: mathematical foundations, orbital mechanics, stellar astrophysics, binary stellar evolution, general relativity and gravitational waves, scientific computing, and population synthesis/paleontology. It is an independently authored educational map, not an official VIMES, Rakiura, COMPAS, or collaboration product.
+The Atlas contains 133 concepts spanning eight connected domains: mathematical foundations, orbital mechanics, stellar astrophysics, binary stellar evolution, general relativity and gravitational waves, scientific computing, population synthesis/paleontology, and research practice. It is an independently authored educational map, not an official VIMES, Rakiura, COMPAS, or collaboration product.
 
 The main pathway progresses from quantitative foundations through isolated binary dynamics, massive-star and interacting-binary evolution, compact-object formation, gravitational-wave sources, population synthesis, selection-aware inference, and gravitational-wave paleontology. Parallel computing concepts join this path at numerical evolution, population post-processing, and visualization.
 
 ## Necessary versus useful
 
-A **necessary** edge means that the source concept is required to meet at least one named learning objective at the target concept's intended depth. It is stored in `prerequisites`; its explanation, applicable objective, and provenance are stored in `prerequisiteNotes`. Necessary edges form the directed learning pathways and are validated as an acyclic graph.
+A **necessary** edge means that the source concept is required to meet at least one named learning objective at the target concept's intended depth. It is stored in `prerequisites` as `{ id, kind: "necessary", note }`, with optional objective and provenance metadata. Necessary edges form the directed learning pathways and are validated as an acyclic graph.
 
-A **useful** edge supplies intuition, context, comparison, or a route to deeper study without blocking the target objective. It is stored as a structured object in `usefulConnections`. For example, the general three-body problem contextualizes limitations of an isolated Newtonian two-body model but is not required to solve that model.
+A **useful** edge supplies intuition, context, comparison, or a route to deeper study without blocking the target objective. It uses the same `prerequisites` collection with `kind: "useful"`. For example, the general three-body problem contextualizes limitations of an isolated Newtonian two-body model but is not required to solve that model.
+
+## Concept scale and research practice
+
+`scale` distinguishes broad **macro** regions, **meso** modules, and focused **micro** techniques. Stable macro anchors organize each domain spatially; Overview mode suppresses micro nodes, while Full detail and Neighborhood make them available on demand.
+
+The Research Practice region makes the transition from learning to contribution explicit. Its pathway covers finding and reading literature, formulating questions, mapping knowledge, building computational workflows, reproducing results, analyzing evidence, validating assumptions, writing, presenting, and ethical open practice. Connections to population synthesis, inference, visualization, and paleontology are useful relationships rather than artificial technical blockers.
 
 Dependencies marked `proposed-educational-dependency` or `proposed-educational-connection` are curricular judgments by the Atlas, not claims made by cited authors. `researchReferences` separately records which literature motivated or supports a concept's research relevance. Indirect dependencies are not copied transitively into a concept.
 
@@ -51,4 +57,4 @@ Run:
 python3 scripts/validate_curriculum.py
 ```
 
-The validator checks required fields, unique concept IDs, resolved necessary and useful references, matching prerequisite notes, valid research-source IDs, relationship explanations, provenance labels, and absence of cycles among necessary prerequisites. Useful links are intentionally excluded from progression-cycle checks.
+The validator checks schema version 3, required fields, valid scales and relationship kinds, unique concept IDs, resolved necessary and useful references, valid research-source IDs, relationship notes, and absence of cycles among necessary prerequisites. Useful links are intentionally excluded from progression-cycle checks.
