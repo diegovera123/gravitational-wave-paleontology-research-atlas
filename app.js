@@ -426,7 +426,7 @@ function renderAdaptivePanel(){
 
 function renderLearningUnit(){
   const unit=learningUnits.get(openUnitId);if(!unit)return;
-  const host=$("#lesson-content"),concept=byId(unit.id),answers=lessonAnswers.get(unit.id)||{},submitted=lessonSubmitted.has(unit.id);
+  const host=$("#lesson-content"),concept=byId(unit.id);
   $("#learning-studio-title").textContent=concept.title;
   const para=text=>'<p>'+html(text)+'</p>';
   const objectives=unit.objectives.map((obj,i)=>'<div class="lesson-objective"><b>'+String(i+1).padStart(2,"0")+' · '+html(obj.title)+'</b>'+para("Evidence: "+obj.evidence)+
