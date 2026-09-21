@@ -95,10 +95,10 @@
       "researchConnection": "In computational stellar and orbital evolution, compare derivatives predicted by smooth models with finite-difference estimates from sampled simulation outputs.",
       "sources": [
         {
-          "title": "Calculus Volume 1, §3.1: Defining the Derivative",
+          "title": "OpenStax Calculus Volume 1, §3.1: Defining the Derivative",
           "url": "https://openstax.org/books/calculus-volume-1/pages/3-1-defining-the-derivative",
-          "role": "External conceptual reference; original Atlas text was independently authored, not adapted or ingested from this textbook.",
-          "license": "External reference only. OpenStax's current use conditions include AI-ingestion and noncommercial restrictions; do not copy or repurpose the source text."
+          "role": "Public reference supporting the derivative as a limit of a difference quotient, instantaneous rate of change, and velocity as the derivative of position. Atlas explanations and examples are independently written.",
+          "license": "External reference only in this prototype; no source text, figures, or exercises are republished."
         }
       ]
     },
@@ -195,10 +195,16 @@
       "researchConnection": "Population-synthesis models specify a distribution or prescription for kick magnitudes and directions; compare resulting binary outcomes while holding other modeling assumptions fixed.",
       "sources": [
         {
-          "title": "Wagg et al. (2025), Stellar ejection velocities from the binary supernova scenario",
-          "url": "https://doi.org/10.33232/001c.141718",
-          "role": "Public peer-reviewed discussion of binary-supernova dynamics and the importance of kick implementations; the worked numerical example here is independently invented.",
-          "license": "Read and cite the original; no figures or extended text copied."
+          "title": "Igoshev et al. (2021), Combined analysis of neutron star natal kicks using proper motions and parallax measurements",
+          "url": "https://arxiv.org/abs/2109.10362",
+          "role": "Public research reference supporting the importance of natal-kick prescriptions for binary survival and disruption, and the use of population-synthesis models to test kick distributions.",
+          "license": "External research reference; the Atlas explanation and numerical examples are independently written."
+        },
+        {
+          "title": "Michaely, Ginzburg & Perets (2016), Neutron star natal kicks and binary outcomes",
+          "url": "https://arxiv.org/abs/1610.00593",
+          "role": "Public research reference discussing how natal kicks together with supernova mass loss can disrupt binaries or substantially alter orbital properties.",
+          "license": "External research reference; no paper text, figures, or data are republished."
         }
       ]
     },
@@ -297,14 +303,20 @@
         {
           "title": "COMPAS: Basic COMPAS data analysis",
           "url": "https://compas.readthedocs.io/en/latest/pages/User%20guide/Post-processing/notebooks/DataAnalysis.html",
-          "role": "Public official documentation establishing example event categories and inspection workflow.",
-          "license": "Link to official public documentation. No notebook text, plots, or datasets redistributed."
+          "role": "Official public documentation supporting the example HDF5 event groups, inspection workflow, event histories, slicing, and visualization of simulation output.",
+          "license": "Linked official documentation; no notebook text, plots, or datasets are redistributed."
         },
         {
           "title": "COMPAS: Running detailed output",
           "url": "https://compas.readthedocs.io/en/latest/pages/User%20guide/Running%20COMPAS/running-detailed-output.html",
-          "role": "Public documentation for detailed binary-evolution output and run metadata.",
-          "license": "External reference only."
+          "role": "Official public documentation supporting detailed binary time-evolution output, Run_Details metadata, and example detailed-output plotting.",
+          "license": "Linked official documentation; Atlas examples use invented toy records rather than downloaded simulation data."
+        },
+        {
+          "title": "COMPAS: BSE detailed output record specification",
+          "url": "https://compas.readthedocs.io/en/latest/pages/User%20guide/COMPAS%20output/standard-logfiles-default-record-specifications-BSE-detailed-output.html",
+          "role": "Official public documentation supporting the presence of binary properties such as time, semi-major axis, eccentricity, masses, radii, and Roche-lobe radii in detailed output.",
+          "license": "Linked official documentation; field names are referenced for orientation, not republished as a substitute for the documentation."
         }
       ]
     }
