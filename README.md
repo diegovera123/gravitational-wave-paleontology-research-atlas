@@ -93,3 +93,15 @@ Useful prerequisites use the same collection:
 ```
 
 The Atlas automatically creates hierarchy links, prerequisite arrows, search navigation, breadcrumbs, and details. Every referenced ID must match another concept's `id`. `parentId` must reference a concept in the same domain and must never be inferred from a prerequisite. Arrows point from a necessary prerequisite toward the concept it supports. Run `python3 scripts/validate_curriculum.py` after editing to check the schema, containment forest, references, and necessary-pathway acyclicity.
+
+## Progressive navigation
+
+The live explorer now uses `knowledge-graph/navigation.json` as its **explicit navigation containment index**. The initial 3D scene shows only 10 macro knowledge regions. Select one to reveal its curated topic groups; select a topic to reveal only its own concepts. The navigation strip beneath the 3D canvas gives equivalent keyboard-accessible labels, so unavailable optional 3D text does not hide the curriculum.
+
+The navigation index covers every existing concept exactly once: 10 macro anchors have their own learning-unit buttons and 123 other concepts belong to exactly one of 36 topic groups. A concept's `scale` still describes its educational granularity, which is independent of its depth in the navigation UI. Macro topic groups are navigation containers, not invented scientific prerequisites.
+
+Necessary/useful prerequisite links **do not imply containment**. Clicking a cross-domain prerequisite or a global search result opens its containing macro and topic automatically and shows its learning panel; *Previous concept* returns to the earlier location, while *Parent* goes up exactly one level. Existing schema-v4 `parentId` fields remain as legacy conceptual annotations but do not override the new curated navigation membership. Changes to concept IDs or the topic map should update `navigation.json` and pass `python3 scripts/validate_curriculum.py`.
+
+The optional three-spritetext CDN was removed from the critical rendering path. The graph uses the library's default sphere nodes, hover labels, and an always-readable HTML concept/topic navigation strip.
+
+To check changes locally, run `python3 scripts/validate_curriculum.py` and `node scripts/test_app.mjs`, then visually test the actual 3D canvas in a browser. The Node smoke test uses a mocked graph and cannot prove WebGL rendering.
