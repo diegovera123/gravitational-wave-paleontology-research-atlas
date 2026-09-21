@@ -33,6 +33,15 @@ const REGION_DESCRIPTIONS = {
   "research-practice":"Find evidence, reproduce results, and develop defensible research."
 };
 const colorFor = domain => DOMAIN_COLORS[domain] || "#9aa9c7";
+const diagnosticColorFor = node => {
+  if(node.id===selectedId)return "#ffffff";
+  if(node.type!=="concept"||!diagnosticController)return colorFor(node.domain);
+  const state=diagnosticController.status(node.id);
+  if(["review","review-confident","self-reported-gap"].includes(state))return "#e2a260";
+  if(state==="supported")return "#6bd6ad";
+  if(state==="supported-uncertain")return "#9fb6ff";
+  return colorFor(node.domain);
+};
 const byId = id => concepts.find(concept => concept.id === id);
 const html = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => (
   {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]
@@ -522,6 +531,16 @@ function renderMap(scene) {
       :{eyebrow:"03 / Topic explorer",title:activeTopic().title,text:"Select a concept to inspect its prerequisites, learning objectives, and research links."};
   lead.innerHTML='<p class="eyebrow">'+html(summary.eyebrow)+'</p><h3>'+html(summary.title)+'</h3><p>'+html(summary.text)+'</p>';
   mapElement.appendChild(lead);
+  if(diagnosticController?.hasRatings()){
+    const legend=document.createElement("div");legend.className="diagnostic-map-legend";
+    legend.innerHTML='<span><i class="supported"></i> Conceptual check supported</span>'+
+      '<span><i class="uncertain"></i> Correct but uncertain</span>'+
+      '<span><i class="review"></i> Review suggested</span>'+
+      '<span><i class="unassessed"></i> Unassessed / self-rated only</span>'+
+      '<button type="button" id="diagnostic-map-update">Update my starting point ↗</button>';
+    mapElement.appendChild(legend);
+    legend.querySelector("#diagnostic-map-update").addEventListener("click",()=>diagnosticController.open());
+  }
   renderLearningPathway(mapElement);
   const container=document.createElement("div");
   container.className="structured-map-grid "+(level==="global"?"macro-grid":"");
@@ -810,7 +829,7 @@ async function initialise() {
     graphElement.replaceChildren();
     graph=ForceGraph3D()(graphElement)
       .width(graphElement.clientWidth).height(graphElement.clientHeight).backgroundColor("rgba(0,0,0,0)")
-      .nodeColor(n=>n.id===selectedId?"#ffffff":colorFor(n.domain))
+      .nodeColor(diagnosticColorFor)
       .nodeVal(n=>n.type==="macro"?64:n.type==="topic"?26:9).nodeLabel(n=>n.name)
       .linkColor(l=>l.type==="containment"?"rgba(132,156,201,.26)":l.type==="useful"?"rgba(165,135,255,.55)":"rgba(105,168,255,.85)")
       .linkWidth(l=>l.type==="containment"?.7:l.type==="useful"?1:1.5)
