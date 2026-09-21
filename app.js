@@ -139,6 +139,97 @@ function scrollToExplorer() {
   $("#explorer")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 
+
+const ONBOARDING_KEY="research-atlas-onboarding-v1";
+let onboardingDismissed=false;
+function needsFirstVisitQuiz(){
+  if(onboardingDismissed||diagnosticController?.snapshot()?.completedAt)return false;
+  try{return window.localStorage?.getItem(ONBOARDING_KEY)!=="skipped";}
+  catch(error){return true;}
+}
+function revealAtlasHome(){
+  onboardingDismissed=true;
+  $("#atlas-tabs").hidden=false;
+  $("#quiz-first-banner").hidden=true;
+  $("#site-intro").hidden=true;
+  setActiveView("home",{scroll:false});
+  $("#dashboard-title").textContent=diagnosticController?.snapshot()?.completedAt?"Your personalized research map":"Explore the research map";
+  renderDashboard();
+  $("#dashboard").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+}
+function showFirstVisitExperience(){
+  $("#site-intro").hidden=true; // no oversized marketing header between quiz and map
+  const needsQuiz=needsFirstVisitQuiz();
+  $("#atlas-tabs").hidden=needsQuiz;
+  $("#quiz-first-banner").hidden=!needsQuiz;
+  if(needsQuiz){
+    setActiveView("diagnostic",{scroll:false});
+    diagnosticController?.open(); // goal picker is the first interactive screen, not the overwhelming dashboard
+  }else{
+    setActiveView("home",{scroll:false});
+    renderDashboard();
+  }
+}
+function skipFirstVisitQuiz(){
+  try{window.localStorage?.setItem(ONBOARDING_KEY,"skipped");}
+  catch(error){console.warn("[Atlas] Skip choice is session-only because browser storage is unavailable.",error);}
+  revealAtlasHome();
+}
+function routeStatusText(status){
+  return ({
+    "review-confident":"Review this idea · high-confidence error",
+    "review":"Review this idea · missed check",
+    "self-reported-gap":"Self-reported gap · start here",
+    "supported-uncertain":"Correct check · uncertain",
+    "supported":"One check correct · explore further",
+    "self-reported":"Self-rated only · explore further",
+    "unassessed":"Not yet assessed · explore this concept"
+  })[status]||"Explore concept";
+}
+function renderGuidedRoute(){
+  const host=$("#guided-route-cards"),note=$("#guided-route-note");
+  if(!host||!note)return;
+  host.replaceChildren();
+  const profile=diagnosticController?.snapshot();
+  const rated=Object.entries(profile?.ratings||{}).filter(([id,r])=>byId(id)&&Number.isInteger(r.rating)&&!r.skipped);
+  const goal=profile?.goal?.goalId&&byId(profile.goal.goalId)?profile.goal.goalId:null;
+  const scoped=goal&&window.AtlasDiagnostic?
+    new Set(window.AtlasDiagnostic.buildScope(concepts,goal,[]).scope):new Set(rated.map(([id])=>id));
+  const relevant=rated.filter(([id])=>scoped.has(id));
+  const rank=([id,r])=>{
+    const check=profile?.checks?.[id];
+    if(check?.correct===false)return check.answerConfidence===3?0:1;
+    if(r.rating<=1)return 2;
+    if(r.rating===2)return 3;
+    if(check?.correct&&check.answerConfidence===1)return 4;
+    return 7;
+  };
+  const flagged=[...relevant].filter(x=>rank(x)<7).sort((a,b)=>rank(a)-rank(b));
+  const mustLearn=goal?[...scoped].filter(id=>byId(id)&&id!==goal&&!profile?.ratings?.[id]):[];
+  const suggested=[...flagged.map(x=>x[0]),...mustLearn,goal].filter((id,i,ids)=>id&&byId(id)&&ids.indexOf(id)===i).slice(0,4);
+  if(!profile?.completedAt){
+    note.textContent="The complete map is open. You can explore freely, or take the optional concept quiz to reveal suggested starting points.";
+    const entry=button("Take the short concept quiz ↗",()=>diagnosticController?.open(),"guided-empty-action");
+    host.appendChild(entry);
+    return;
+  }
+  note.textContent="For "+(profile.goal?.label||"your research goal")+
+    ": follow these provisional starting points. A short quiz cannot establish mastery, and no concept is locked.";
+  for(const [i,id] of suggested.entries()){
+    const concept=byId(id),status=diagnosticController.status(id);
+    const card=button("",()=>{openConcept(id,true);scrollToExplorer();},"guided-route-card");
+    card.style.setProperty("--route-color",status.startsWith("review")||status==="self-reported-gap"?"#e2a260":
+      status.startsWith("supported")?"#83d6b8":"#8ab7ef");
+    card.innerHTML='<span class="guided-card-index">'+String(i+1).padStart(2,"0")+'</span>'+
+      '<span class="guided-card-copy"><strong>'+html(concept.title)+'</strong><small>'+html(routeStatusText(status))+'</small></span>'+
+      '<span aria-hidden="true">↗</span>';
+    host.appendChild(card);
+  }
+  if(!suggested.length){
+    host.appendChild(button("Explore the full knowledge map ↗",()=>scrollToExplorer(),"guided-empty-action"));
+  }
+}
+
 const TAB_NAMES=["home","diagnostic","paths","learn","explore","library"];
 function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
@@ -472,6 +563,7 @@ function renderDashboard() {
   updateLearningStats();
   diagnosticController?.renderOverview();
   renderNetworkPreview();
+  renderGuidedRoute();
   domainCardsElement.replaceChildren();
   atlas.macros.forEach((macro,i)=>{
     const count=atlas.topics.filter(t=>t.macroId===macro.id).length;
@@ -807,6 +899,7 @@ async function initialise() {
         navigate:view=>setActiveView(view),
         openConcept:id=>{openConcept(id,true);scrollToExplorer();},
         openLearningUnit:id=>openLearningUnit(id),
+        onComplete:()=>revealAtlasHome(),
         onProfileChange:()=>{
           renderDashboard();
           if(atlas)draw({frame:false});
@@ -818,10 +911,10 @@ async function initialise() {
       $("#diagnostic-root").textContent="The diagnostic is temporarily unavailable. You can still explore the knowledge atlas.";
       $("#tab-diagnostic").disabled=true;
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();setActiveView("home",{scroll:false});
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();showFirstVisitExperience();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
-      $("#view-3d").disabled=true;enterGlobal();return;
+      $("#view-3d").disabled=true;enterGlobal();showFirstVisitExperience();return;
     }
     // Measure the real canvas only after its tab is visible; a hidden panel reports 0 × 0.
     setActiveView("explore",{scroll:false});
@@ -840,7 +933,7 @@ async function initialise() {
     // No custom Three.js objects or optional CDN labels; readable HTML topic buttons remain available.
     graph.d3Force("charge").strength(0);
     enterGlobal();
-    setActiveView("home",{scroll:false});
+    showFirstVisitExperience();
     console.info("[Research Atlas] Loaded "+concepts.length+" concepts across "+atlas.macros.length+" regions and "+atlas.topics.length+" curated topics.");
   }catch(error){showGraphError("Unable to render the knowledge graph.",error);}
 }
@@ -857,6 +950,9 @@ document.addEventListener("click",event=>{if(!event.target.closest(".graph-toolb
 $("#global-view").addEventListener("click",enterGlobal);
 $("#parent-view").addEventListener("click",goParent);
 $("#history-view").addEventListener("click",()=>{const prior=previousLocations.pop();if(prior)restoreLocation(prior);});
+$("#open-full-map").addEventListener("click",()=>scrollToExplorer());
+$("#retake-diagnostic").addEventListener("click",()=>diagnosticController?.open());
+$("#skip-onboarding").addEventListener("click",skipFirstVisitQuiz);
 $("#open-full-3d").addEventListener("click",()=>{scrollToExplorer();setDisplayMode("3d");});
 $("#resume-learning").addEventListener("click",()=>{
   const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
