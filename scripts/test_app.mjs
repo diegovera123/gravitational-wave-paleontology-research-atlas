@@ -8,6 +8,7 @@ const curriculum = JSON.parse(await fs.readFile("knowledge-graph/concepts.json",
 const sources = JSON.parse(await fs.readFile("knowledge-graph/research-sources.json","utf8"));
 const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json","utf8"));
 const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questions.json","utf8"));
+const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-units.json","utf8"));
 
 class ElementStub {
   constructor() {
@@ -30,7 +31,8 @@ const selectors=[
   "#graph","#details","#concept-search","#search-results","#atlas-crumbs","#atlas-choices",
   "#global-view","#parent-view","#history-view","#reset-view","#study-macro",
   "#graph-map","#domain-cards","#question-cards","#atlas-stats","#view-map","#view-3d","#explorer","#explorer-title","#back-to-question",
-  "#dashboard-network-map","#open-full-3d","#learning-progress","#resume-learning","#mark-understood","#next-required"
+  "#dashboard-network-map","#open-full-3d","#learning-progress","#resume-learning","#mark-understood","#next-required",
+  "#pilot-cards","#learning-studio","#learning-studio-title","#lesson-content","#close-learning-studio","#open-learning-unit","#lesson-submit","#lesson-concept-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 const document={
@@ -53,7 +55,8 @@ const responseData={
   "knowledge-graph/concepts.json":curriculum,
   "knowledge-graph/research-sources.json":sources,
   "knowledge-graph/navigation.json":navigation,
-  "knowledge-graph/research-questions.json":questions
+  "knowledge-graph/research-questions.json":questions,
+  "knowledge-graph/learning-units.json":learningUnits
 };
 const stored=new Map();
 const context=vm.createContext({
@@ -87,6 +90,15 @@ run('markUnderstood("limits")');
 assert.ok(stored.get("research-atlas-studied-v1").includes("limits"),"Self-reported completed concept is persisted");
 
 assert.equal(elements.get("#question-cards").children.length,questions.questions.length,"Dashboard renders research questions");
+assert.equal(elements.get("#pilot-cards").children.length,3,"Dashboard renders three source-linked pilot learning units");
+run('openConcept("derivatives",true)');
+assert.match(elements.get("#details").innerHTML,/Open full learning unit/,"Pilot concept offers a full lesson");
+run('openLearningUnit("derivatives")');
+assert.equal(elements.get("#learning-studio").hidden,false,"Learning studio opens");
+assert.match(elements.get("#lesson-content").innerHTML,/From position to velocity/,"Worked example is rendered");
+assert.match(elements.get("#lesson-content").innerHTML,/Defining the Derivative/,"Source and provenance are displayed");
+run('closeLearningUnit()');
+assert.equal(elements.get("#learning-studio").hidden,true,"Learning studio closes without removing atlas");
 run('openQuestion("binary-survival")');
 assert.match(elements.get("#details").innerHTML,/What determines whether a massive binary survives/);
 run('openConcept("supernova-kicks",true)');
@@ -123,4 +135,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: dashboard graph, saved guided prerequisites, research-question pathways, map/3D toggle, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");
+console.log("Passed: three learning units, lesson open/close, worked example and provenance, dashboard graph, saved guided prerequisites, research-question pathways, map/3D toggle, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");
