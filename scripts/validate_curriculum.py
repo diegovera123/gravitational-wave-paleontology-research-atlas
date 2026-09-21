@@ -187,3 +187,23 @@ for unit in units:
         assert len(mapped) >= 3, f"Insufficient adaptive practice: {unit['id']} / {objective['id']}"
 print(f"Validated {len(bank)} adaptive practice items across {len(units)} pilot units, "
       "with objective coverage and author-defined difficulty labels.")
+
+
+# Broad concept-discovery checks: one lightweight conceptual item per sampled concept.
+diagnostic = json.loads((ROOT / "knowledge-graph/diagnostic-items.json").read_text())
+assert diagnostic.get("schemaVersion") == 1, "Diagnostic item bank must use schema version 1"
+diagnostic_items = diagnostic["items"]
+diagnostic_ids = [item["id"] for item in diagnostic_items]
+assert len(diagnostic_ids) == len(set(diagnostic_ids)), "Diagnostic item IDs must be unique"
+diagnostic_concepts = [item["conceptId"] for item in diagnostic_items]
+assert len(diagnostic_concepts) == len(set(diagnostic_concepts)), "Only one pilot concept check per concept is expected"
+for item in diagnostic_items:
+    assert item["conceptId"] in concept_ids, f"Unknown diagnostic concept {item['conceptId']}"
+    assert len(item["choices"]) >= 3 and len(set(item["choices"])) == len(item["choices"]), (
+        f"Invalid diagnostic options in {item['id']}"
+    )
+    assert type(item["correctIndex"]) is int and 0 <= item["correctIndex"] < len(item["choices"]), (
+        f"Invalid diagnostic answer key in {item['id']}"
+    )
+    assert item["prompt"] and item["feedback"], f"Incomplete diagnostic item {item['id']}"
+print(f"Validated {len(diagnostic_items)} concept-level diagnostic checks across the prerequisite graph.")
