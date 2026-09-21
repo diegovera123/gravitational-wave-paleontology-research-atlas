@@ -143,9 +143,9 @@ function setActiveView(view,options={}){
   $("#dashboard").hidden=!["home","paths","library"].includes(view);
   if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
   if(options.focus)$("#tab-"+view).focus();
-  if(view==="explore" && graph){
+  if(view==="explore" && graph && displayMode==="3d"){
     graph.width(graphElement.clientWidth).height(graphElement.clientHeight);
-    draw({frame:displayMode==="3d"});
+    draw({frame:true});
   }
 }
 function setActiveViewFromTab(event){
@@ -769,6 +769,8 @@ async function initialise() {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
     }
+    // Measure the real canvas only after its tab is visible; a hidden panel reports 0 × 0.
+    setActiveView("explore",{scroll:false});
     if(!graphElement.clientWidth||!graphElement.clientHeight)throw Error("The graph container has no size.");
     graphElement.replaceChildren();
     graph=ForceGraph3D()(graphElement)
@@ -784,6 +786,7 @@ async function initialise() {
     // No custom Three.js objects or optional CDN labels; readable HTML topic buttons remain available.
     graph.d3Force("charge").strength(0);
     enterGlobal();
+    setActiveView("home",{scroll:false});
     console.info("[Research Atlas] Loaded "+concepts.length+" concepts across "+atlas.macros.length+" regions and "+atlas.topics.length+" curated topics.");
   }catch(error){showGraphError("Unable to render the knowledge graph.",error);}
 }
@@ -800,7 +803,7 @@ document.addEventListener("click",event=>{if(!event.target.closest(".graph-toolb
 $("#global-view").addEventListener("click",enterGlobal);
 $("#parent-view").addEventListener("click",goParent);
 $("#history-view").addEventListener("click",()=>{const prior=previousLocations.pop();if(prior)restoreLocation(prior);});
-$("#open-full-3d").addEventListener("click",()=>{setDisplayMode("3d");scrollToExplorer();});
+$("#open-full-3d").addEventListener("click",()=>{scrollToExplorer();setDisplayMode("3d");});
 $("#resume-learning").addEventListener("click",()=>{
   const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
   if(next){openConcept(next.id,true);scrollToExplorer();}
