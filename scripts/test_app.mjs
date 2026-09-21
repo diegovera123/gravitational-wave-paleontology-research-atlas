@@ -63,7 +63,7 @@ const responseData={
   "knowledge-graph/learning-units.json":learningUnits,
   "knowledge-graph/adaptive-items.json":adaptiveBank
 };
-const stored=new Map();
+const stored=new Map([["research-atlas-onboarding-v1","skipped"]]); // Returning/opted-out visitor: retain existing Atlas smoke checks.
 const context=vm.createContext({
   document,URL,console,
   window:{location:{href:"https://example.org/research-atlas/"},matchMedia:()=>({matches:true}),addEventListener(){},
