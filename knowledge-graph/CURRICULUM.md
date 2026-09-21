@@ -70,3 +70,13 @@ python3 scripts/validate_curriculum.py
 ```
 
 The validator checks schema version 4, required fields, valid scales and relationship kinds, unique IDs, resolved same-domain parents, containment cycles, necessary/useful references, valid research-source IDs, relationship notes, and cycles among necessary prerequisites. Useful links are intentionally excluded from progression-cycle checks.
+
+## Curated macro → topic → concept navigation
+
+The user-facing Atlas intentionally reveals only one navigational level at a time. The ten existing macro curriculum concepts serve as global entry points; each opens curated meso topic containers, and each topic opens its own concepts. The 36 topic containers are explicit groups in `navigation.json`, not additional scientific concepts or prerequisites. All 123 non-macro curriculum concepts belong to exactly one group; each macro concept has an accessible learning unit from its region view.
+
+This UI navigation containment index is independent of both the typed prerequisite graph and the schema-v4 `parentId` field retained for previous conceptual containment annotations. A concept can have `scale: "meso"` while appearing as a learnable child in a topic view: conceptual granularity and navigation depth are different dimensions. In particular, the Atlas does not infer a necessary prerequisite merely because two concepts belong to the same topic.
+
+Cross-domain prerequisite cards and search can jump directly to a target's curated containing region/topic without displaying unrelated concepts. The previous-concept control returns to the earlier research context, and the parent control climbs exactly one navigation level.
+
+When adding a curriculum concept, assign it to one topic in `navigation.json` and run the validator. Do not create arbitrary dependencies to fill a topic or force every content concept to have three levels of physical containment.

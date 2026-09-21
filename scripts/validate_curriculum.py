@@ -75,3 +75,33 @@ necessary_count = sum(sum(edge["kind"] == "necessary" for edge in concept["prere
 useful_count = sum(sum(edge["kind"] == "useful" for edge in concept["prerequisites"]) for concept in concepts)
 print(f"Validated {len(concepts)} concepts, {necessary_count} necessary relationships, "
       f"{useful_count} useful relationships, an acyclic necessary graph, and an acyclic containment hierarchy.")
+
+
+# The UI navigation hierarchy is a curated, independent containment index.
+navigation = json.loads((ROOT / "knowledge-graph/navigation.json").read_text())
+assert navigation.get("schemaVersion") == 1, "Navigation must use schema version 1"
+macro_ids = [macro["id"] for macro in navigation["macros"]]
+topic_ids = [topic["id"] for topic in navigation["topics"]]
+assert len(macro_ids) == len(set(macro_ids)), "Duplicate macro navigation IDs"
+assert len(topic_ids) == len(set(topic_ids)), "Duplicate topic navigation IDs"
+assert set(macro_ids) <= concept_ids, "Macro navigation IDs must reference real concepts"
+concept_lookup = {concept["id"]: concept for concept in concepts}
+for macro_id in macro_ids:
+    assert concept_lookup[macro_id]["scale"] == "macro", f"Navigation macro {macro_id} lacks macro scale"
+seen_members = set()
+for topic in navigation["topics"]:
+    assert topic["macroId"] in macro_ids, f"Topic {topic['id']} has no containing macro"
+    assert topic["conceptIds"], f"Topic {topic['id']} has no concept children"
+    for concept_id in topic["conceptIds"]:
+        assert concept_id in concept_ids, f"Unknown navigation concept {concept_id}"
+        assert concept_id not in macro_ids, f"Macro {concept_id} cannot also be a topic leaf"
+        assert concept_id not in seen_members, f"Concept {concept_id} appears in multiple topics"
+        seen_members.add(concept_id)
+        assert concept_lookup[concept_id]["domain"] == concept_lookup[topic["macroId"]]["domain"], (
+            f"Concept {concept_id} has a parent in another domain"
+        )
+assert seen_members == (concept_ids - set(macro_ids)), (
+    f"Missing concept navigation paths: {sorted((concept_ids - set(macro_ids)) - seen_members)}"
+)
+print(f"Validated navigation: {len(macro_ids)} macro regions, {len(topic_ids)} topics, "
+      f"{len(seen_members)} uniquely accessible concept leaves.")
