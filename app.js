@@ -19,6 +19,7 @@ const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
 let activeView="home", diagnosticController=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
+const ONBOARDING_KEY="research-atlas-onboarding-seen-v1";
 let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
   calculus:"The mathematical language behind change, models, and uncertainty.",
@@ -140,6 +141,26 @@ function scrollToExplorer() {
 }
 
 const TAB_NAMES=["home","diagnostic","paths","learn","explore","library"];
+
+function onboardingSeen(){
+  try{return window.localStorage?.getItem(ONBOARDING_KEY)==="1";}catch{return false;}
+}
+function markOnboardingSeen(){
+  try{window.localStorage?.setItem(ONBOARDING_KEY,"1");}catch{}
+  document.body?.classList?.remove("onboarding-first");
+}
+function firstRunLanding(){
+  const done=diagnosticController?.hasCompleted?.()||diagnosticController?.hasRatings?.()||onboardingSeen();
+  if(done){
+    markOnboardingSeen();
+    setActiveView("home",{scroll:false});
+    return;
+  }
+  document.body?.classList?.add("onboarding-first");
+  setActiveView("diagnostic",{scroll:false});
+  diagnosticController?.open();
+}
+
 function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
@@ -811,14 +832,16 @@ async function initialise() {
           renderDashboard();
           if(atlas)draw({frame:false});
           if(selectedId)showConceptDetails(byId(selectedId));
-        }
+        },
+        onOnboardingComplete:()=>markOnboardingSeen(),
+        onSkipOnboarding:()=>markOnboardingSeen()
       });
     }else{
       console.warn("[Research Atlas] Diagnostic module unavailable; the rest of the Atlas remains usable.");
       $("#diagnostic-root").textContent="The diagnostic is temporarily unavailable. You can still explore the knowledge atlas.";
       $("#tab-diagnostic").disabled=true;
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();setActiveView("home",{scroll:false});
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
@@ -840,7 +863,7 @@ async function initialise() {
     // No custom Three.js objects or optional CDN labels; readable HTML topic buttons remain available.
     graph.d3Force("charge").strength(0);
     enterGlobal();
-    setActiveView("home",{scroll:false});
+    firstRunLanding();
     console.info("[Research Atlas] Loaded "+concepts.length+" concepts across "+atlas.macros.length+" regions and "+atlas.topics.length+" curated topics.");
   }catch(error){showGraphError("Unable to render the knowledge graph.",error);}
 }
