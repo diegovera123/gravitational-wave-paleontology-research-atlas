@@ -290,7 +290,7 @@ function showConceptDetails(concept) {
     (resource==="#"?'<p class="none">No public resource link available.</p>':'<a class="resource-link" href="'+html(resource)+'" target="_blank" rel="noopener">Open learning resource ↗</a>')+
     '<div class="source-list">'+refs.map(s=>s.url?'<a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener"><span>'+html(s.citation)+'</span><small>'+html(s.title)+'</small></a>':'<div><span>'+html(s.citation)+'</span><small>'+html(s.verificationNote)+'</small></div>').join("")+'</div></details>';
   detailsElement.querySelectorAll("[data-concept]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.concept,true)));
-  if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>showQuestionDetails(researchQuestions.find(q=>q.id===activeQuestionId)));
+  if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>openQuestion(activeQuestionId));
 }
 function openConcept(id,record=false) {
   const concept=byId(id);if(!concept)return;
