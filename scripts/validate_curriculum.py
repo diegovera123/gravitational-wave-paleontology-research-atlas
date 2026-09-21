@@ -158,3 +158,32 @@ for u in units:
         assert source["title"] and source["role"] and source["license"], f"Lesson {u['id']} lacks source provenance"
 print(f"Validated {len(units)} original pilot learning units with linked objectives, "
       "worked examples, formative assessments, and public references.")
+
+
+# Author-tagged adaptive practice bank: small formative pilot, not a calibrated psychometric model.
+adaptive = json.loads((ROOT / "knowledge-graph/adaptive-items.json").read_text())
+assert adaptive.get("schemaVersion") == 1, "Adaptive item bank must use schema version 1"
+bank = adaptive["items"]
+item_ids = [item["id"] for item in bank]
+assert len(item_ids) == len(set(item_ids)), "Adaptive item IDs must be unique"
+units_by_id = {unit["id"]: unit for unit in units}
+for item in bank:
+    assert item["unitId"] in units_by_id, f"Unknown adaptive unit {item['unitId']}"
+    objectives_by_id = {o["id"]: o for o in units_by_id[item["unitId"]]["objectives"]}
+    assert item["objectiveId"] in objectives_by_id, f"Unknown adaptive objective in {item['id']}"
+    assert type(item["difficulty"]) is int and 1 <= item["difficulty"] <= 3, (
+        f"Author difficulty must be 1–3 in {item['id']}"
+    )
+    assert len(item["choices"]) >= 3 and len(set(item["choices"])) == len(item["choices"]), (
+        f"Duplicate/insufficient options in {item['id']}"
+    )
+    assert type(item["correctIndex"]) is int and 0 <= item["correctIndex"] < len(item["choices"]), (
+        f"Invalid answer key in {item['id']}"
+    )
+    assert item["prompt"] and item["hint"] and item["feedback"], f"Incomplete item {item['id']}"
+for unit in units:
+    for objective in unit["objectives"]:
+        mapped = [q for q in bank if q["unitId"] == unit["id"] and q["objectiveId"] == objective["id"]]
+        assert len(mapped) >= 3, f"Insufficient adaptive practice: {unit['id']} / {objective['id']}"
+print(f"Validated {len(bank)} adaptive practice items across {len(units)} pilot units, "
+      "with objective coverage and author-defined difficulty labels.")
