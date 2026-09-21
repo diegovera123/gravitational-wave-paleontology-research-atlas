@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "description": "Original authored formative item bank for adaptive routing. Difficulty labels are author-defined, not empirically calibrated item-response parameters. This small pilot does not certify mastery.",
+  "items": [
+    {
+      "unitId": "derivatives",
+      "id": "d-rate-1",
+      "objectiveId": "instant-rate",
+      "difficulty": 1,
+      "prompt": "A position changes by 12 m in 3 s. What is its average velocity over that interval?",
+      "choices": [
+        "4 m/s",
+        "36 m/s",
+        "4 m"
+      ],
+      "correctIndex": 0,
+      "hint": "Average rate = displacement divided by elapsed time.",
+      "feedback": "12 m / 3 s = 4 m/s; this is an interval average, not a particular instantaneous rate."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-rate-2",
+      "objectiveId": "instant-rate",
+      "difficulty": 2,
+      "prompt": "Which expression gives the instantaneous velocity at time t, when the limit exists?",
+      "choices": [
+        "lim(h→0) [x(t+h)−x(t)]/h",
+        "x(t)/t for every t",
+        "x(t+h)−x(t) without dividing by h"
+      ],
+      "correctIndex": 0,
+      "hint": "Start from displacement over a short nonzero interval, then shrink that interval.",
+      "feedback": "A derivative is the limit of average velocity as the interval shrinks toward zero."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-rate-3",
+      "objectiveId": "instant-rate",
+      "difficulty": 2,
+      "prompt": "A position-time graph has a horizontal tangent at t=2 s. Which statement is supported?",
+      "choices": [
+        "Instantaneous velocity at 2 s is zero",
+        "The object never moves",
+        "Acceleration at 2 s must be zero"
+      ],
+      "correctIndex": 0,
+      "hint": "Velocity equals the slope of the tangent to position versus time.",
+      "feedback": "The derivative at t=2 s is zero; motion at other times and acceleration are not determined."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-rate-4",
+      "objectiveId": "instant-rate",
+      "difficulty": 3,
+      "prompt": "For x(t)=t² m and t in s, average velocity over [2, 2+h] s is 4+h m/s. What happens as h→0?",
+      "choices": [
+        "It approaches 4 m/s",
+        "It approaches 0 m/s",
+        "It diverges"
+      ],
+      "correctIndex": 0,
+      "hint": "Take the limit of 4+h as h tends to zero.",
+      "feedback": "The finite-interval average converges to instantaneous velocity 4 m/s."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-compute-1",
+      "objectiveId": "compute-derivative",
+      "difficulty": 1,
+      "prompt": "For x(t)=5t m (t in s), what is dx/dt?",
+      "choices": [
+        "5 m/s",
+        "5t m/s",
+        "0 m/s"
+      ],
+      "correctIndex": 0,
+      "hint": "A linear position model has constant slope.",
+      "feedback": "The derivative of 5t is 5; the units are m/s."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-compute-2",
+      "objectiveId": "compute-derivative",
+      "difficulty": 2,
+      "prompt": "For x(t)=2t² m and t in s, what is v(3 s)?",
+      "choices": [
+        "12 m/s",
+        "6 m/s",
+        "12 m"
+      ],
+      "correctIndex": 0,
+      "hint": "Differentiate first: d(2t²)/dt = 4t.",
+      "feedback": "v(t)=4t m/s, so at t=3 s, v=12 m/s."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-compute-3",
+      "objectiveId": "compute-derivative",
+      "difficulty": 2,
+      "prompt": "If position is measured in kilometres and time in hours, what are the units of its derivative?",
+      "choices": [
+        "km/h",
+        "km·h",
+        "km/h²"
+      ],
+      "correctIndex": 0,
+      "hint": "Divide the units of the dependent variable by the units of the input.",
+      "feedback": "A first derivative of position with respect to time has units of distance/time."
+    },
+    {
+      "unitId": "derivatives",
+      "id": "d-compute-4",
+      "objectiveId": "compute-derivative",
+      "difficulty": 3,
+      "prompt": "For x(t)=t³−2t m with t in s (coefficients have the implied units), what is v(2 s)?",
+      "choices": [
+        "10 m/s",
+        "8 m/s",
+        "6 m/s"
+      ],
+      "correctIndex": 0,
+      "hint": "Differentiate term by term: v(t)=3t²−2.",
+      "feedback": "v(2)=3·4−2=10 m/s; the derivative is evaluated at t=2."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-interpret-1",
+      "objectiveId": "interpret-kick",
+      "difficulty": 1,
+      "prompt": "What is a natal kick?",
+      "choices": [
+        "An additional velocity imparted to a newly formed compact remnant",
+        "The binary's orbital period before a supernova",
+        "The total mass lost by the companion star"
+      ],
+      "correctIndex": 0,
+      "hint": "Think of the remnant's motion at formation.",
+      "feedback": "A kick is modeled as a velocity change, not as an orbital period or a mass-loss quantity."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-interpret-2",
+      "objectiveId": "interpret-kick",
+      "difficulty": 2,
+      "prompt": "Two initially identical binaries receive equal-magnitude natal kicks in different directions. Must their post-supernova orbits be identical?",
+      "choices": [
+        "No; direction changes the relative velocity and orbital response",
+        "Yes; only kick magnitude matters",
+        "Yes; supernova mass loss fixes the full orbit"
+      ],
+      "correctIndex": 0,
+      "hint": "A velocity is a vector, not just a speed.",
+      "feedback": "Different directions produce different relative velocities; mass loss and orbital configuration also matter."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-interpret-3",
+      "objectiveId": "interpret-kick",
+      "difficulty": 2,
+      "prompt": "Which information is needed, beyond the newborn remnant's speed, to assess whether a post-supernova binary remains bound?",
+      "choices": [
+        "Component masses, separation, and relative orbital velocity",
+        "Only the natal-kick magnitude",
+        "Only the remnant's temperature"
+      ],
+      "correctIndex": 0,
+      "hint": "Bound versus unbound depends on the post-event orbital energy.",
+      "feedback": "The post-event relative orbital energy depends on masses, separation, and relative velocity."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-interpret-4",
+      "objectiveId": "interpret-kick",
+      "difficulty": 3,
+      "prompt": "A model changes its natal-kick prescription but holds all other assumptions fixed. What is a scientifically appropriate comparison?",
+      "choices": [
+        "Compare the predicted distributions of surviving systems under the two prescriptions",
+        "Assume the higher-kick model always gives zero survivors",
+        "Infer observed birth-kick physics directly from a single synthetic binary"
+      ],
+      "correctIndex": 0,
+      "hint": "A model comparison evaluates ensembles and assumptions.",
+      "feedback": "The sensible investigation compares modeled outcomes while holding other inputs fixed; a single result cannot establish a kick distribution."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-vector-1",
+      "objectiveId": "compose-velocity",
+      "difficulty": 1,
+      "prompt": "A remnant has velocity (+30,0) km/s and receives kick (+10,0) km/s. What is its new velocity?",
+      "choices": [
+        "(+40,0) km/s",
+        "(+20,0) km/s",
+        "(+300,0) km/s"
+      ],
+      "correctIndex": 0,
+      "hint": "Add components of the velocity vectors.",
+      "feedback": "(30,0)+(10,0)=(40,0) km/s."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-vector-2",
+      "objectiveId": "compose-velocity",
+      "difficulty": 2,
+      "prompt": "An initial velocity is (+80,0) km/s and a kick is (0,+60) km/s. What is the resulting speed?",
+      "choices": [
+        "100 km/s",
+        "140 km/s",
+        "20 km/s"
+      ],
+      "correctIndex": 0,
+      "hint": "Use the Pythagorean theorem after adding components.",
+      "feedback": "The final vector is (80,60) km/s and speed is sqrt(80²+60²)=100 km/s."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-vector-3",
+      "objectiveId": "compose-velocity",
+      "difficulty": 2,
+      "prompt": "Initial velocity is (+100,0) km/s and a kick is (−40,0) km/s. What is the resulting velocity?",
+      "choices": [
+        "(+60,0) km/s",
+        "(+140,0) km/s",
+        "(−60,0) km/s"
+      ],
+      "correctIndex": 0,
+      "hint": "An opposite-directed kick subtracts the x component.",
+      "feedback": "100−40=60 km/s along the positive x direction."
+    },
+    {
+      "unitId": "supernova-kicks",
+      "id": "k-vector-4",
+      "objectiveId": "compose-velocity",
+      "difficulty": 3,
+      "prompt": "The initial remnant velocity is (−30,+40) km/s and its kick is (+30,−40) km/s. Which conclusion follows?",
+      "choices": [
+        "Its final remnant velocity in this frame is zero, but binary survival is undetermined",
+        "The binary must survive",
+        "The binary must disrupt"
+      ],
+      "correctIndex": 0,
+      "hint": "Add vectors; then distinguish one object's speed from orbital binding.",
+      "feedback": "The vectors cancel, but masses, companion velocity, and separation are required for a binary-survival conclusion."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-events-1",
+      "objectiveId": "identify-events",
+      "difficulty": 1,
+      "prompt": "Which output would you inspect to find an individual binary's supernova-event records?",
+      "choices": [
+        "A supernova-event log/group",
+        "Only the site's documentation index",
+        "A plot of cosmological star-formation rate"
+      ],
+      "correctIndex": 0,
+      "hint": "Look for output organized by event type.",
+      "feedback": "An event log/group records supernova events; its exact name and columns depend on the output specification."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-events-2",
+      "objectiveId": "identify-events",
+      "difficulty": 2,
+      "prompt": "A binary's masses and orbital separation are needed at many time steps. Which type of output best fits that question?",
+      "choices": [
+        "Detailed binary-evolution time-series output",
+        "Only a final-population summary",
+        "Only an initial-conditions header"
+      ],
+      "correctIndex": 0,
+      "hint": "Repeated time samples require a time-series record.",
+      "feedback": "Detailed output allows you to examine how variables change across sampled evolution."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-events-3",
+      "objectiveId": "identify-events",
+      "difficulty": 2,
+      "prompt": "Why might a simulation provide both event logs and detailed evolutionary output?",
+      "choices": [
+        "Event logs summarize selected transitions, while detailed output samples variables over time",
+        "They must contain identical rows in the same order",
+        "Event logs are always more precise than detailed output"
+      ],
+      "correctIndex": 0,
+      "hint": "Think discrete events versus time-resolved data.",
+      "feedback": "Different output types serve different analysis questions and must be matched by identifiers and schema."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-events-4",
+      "objectiveId": "identify-events",
+      "difficulty": 3,
+      "prompt": "You need to check whether a binary's eccentricity changed near a supernova. Which approach is most defensible?",
+      "choices": [
+        "Locate the system in supernova records and align its documented identifier with relevant orbital samples",
+        "Assume the rows in two output tables have matching positions",
+        "Infer eccentricity directly from total row counts"
+      ],
+      "correctIndex": 0,
+      "hint": "Never assume tables share row order.",
+      "feedback": "Align by the documented binary identifier and event/time metadata, then inspect eccentricity around the event."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-count-1",
+      "objectiveId": "avoid-double-counting",
+      "difficulty": 1,
+      "prompt": "A supernova-event table has binary IDs 11, 11, 24, 30. How many event rows does it contain?",
+      "choices": [
+        "4",
+        "3",
+        "2"
+      ],
+      "correctIndex": 0,
+      "hint": "Rows count events, not necessarily distinct systems.",
+      "feedback": "There are four rows, including two with identifier 11."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-count-2",
+      "objectiveId": "avoid-double-counting",
+      "difficulty": 2,
+      "prompt": "The same event table has IDs 11, 11, 24, 30. How many distinct binary IDs appear?",
+      "choices": [
+        "3",
+        "4",
+        "2"
+      ],
+      "correctIndex": 0,
+      "hint": "Count unique identifiers.",
+      "feedback": "The distinct identifiers are 11, 24, and 30, so there are three systems if the ID uniquely labels systems."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-count-3",
+      "objectiveId": "avoid-double-counting",
+      "difficulty": 2,
+      "prompt": "You want the fraction of simulated binaries with at least one supernova event. What should be counted in the numerator?",
+      "choices": [
+        "Distinct binary identifiers with at least one such event",
+        "Every supernova-event row",
+        "Every row in detailed time-series output"
+      ],
+      "correctIndex": 0,
+      "hint": "The unit in the numerator must match the denominator's unit: binaries.",
+      "feedback": "Counting distinct binary identifiers avoids counting a binary twice when it has multiple event rows."
+    },
+    {
+      "unitId": "simulation-outputs",
+      "id": "s-count-4",
+      "objectiveId": "avoid-double-counting",
+      "difficulty": 3,
+      "prompt": "A dataset contains two event rows for one binary. A researcher treats them as two distinct binaries when estimating a binary-level outcome rate. What is the main problem?",
+      "choices": [
+        "The counting unit changed from binaries to events",
+        "The computer cannot store repeated identifiers",
+        "The orbital energy must be negative"
+      ],
+      "correctIndex": 0,
+      "hint": "Compare the estimand (per-binary outcome) to the rows being counted.",
+      "feedback": "The analysis double-counts a system because an event-level table was used without deduplicating binary identifiers."
+    }
+  ]
+}
