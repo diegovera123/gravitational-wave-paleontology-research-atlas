@@ -150,7 +150,7 @@ function markOnboardingSeen(){
   document.body?.classList?.remove("onboarding-first");
 }
 function firstRunLanding(){
-  const done=diagnosticController?.hasCompleted?.()||diagnosticController?.hasRatings?.()||onboardingSeen();
+  const done=diagnosticController?.hasCompleted?.()||onboardingSeen();
   if(done){
     markOnboardingSeen();
     setActiveView("home",{scroll:false});
