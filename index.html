@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
   <script defer src="adaptive.js"></script>
+  <script defer src="diagnostic.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -53,6 +54,24 @@
           <span id="practice-due-summary" class="practice-due-summary">Adaptive practice · 3 pilot lessons</span>
           <p>Follow necessary prerequisites to reveal recommended next steps. Progress is self-reported, not a verified mastery assessment.</p></div>
         <button id="resume-learning" type="button" class="learning-resume" disabled>Find my next step ↗</button>
+      </section>
+      <section class="diagnostic-launch" aria-labelledby="diagnostic-launch-title">
+        <div>
+          <p class="eyebrow">Concept Discovery Diagnostic</p>
+          <h3 id="diagnostic-launch-title">Map what you already know before choosing where to start.</h3>
+          <p>Rate surfaced concepts one at a time. The Atlas moves through the prerequisite graph based on your answers, then samples a few basic conceptual checks to compare self-assessment with demonstrated performance.</p>
+        </div>
+        <div class="diagnostic-launch-actions">
+          <button id="start-diagnostic" type="button" class="learning-resume">Start diagnostic ↗</button>
+          <button id="view-diagnostic-profile" type="button" class="view-button" hidden>View my knowledge map</button>
+        </div>
+      </section>
+      <section id="diagnostic-workspace" class="diagnostic-workspace" aria-labelledby="diagnostic-title" hidden tabindex="-1">
+        <div class="diagnostic-topbar">
+          <div><p class="eyebrow">Personalized knowledge discovery</p><h3 id="diagnostic-title">Build a provisional map of your current understanding.</h3></div>
+          <button id="close-diagnostic" type="button" class="view-button">Close</button>
+        </div>
+        <div id="diagnostic-content" class="diagnostic-content" aria-live="polite"></div>
       </section>
       <section class="dashboard-network" aria-labelledby="dashboard-network-title">
         <div class="network-heading">
