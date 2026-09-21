@@ -176,3 +176,16 @@ The structured Atlas and 3D concept nodes can show this evidence as a lightweigh
 Ratings and conceptual-check records are stored in browser-local storage under \`research-atlas-concept-profile-v1\` when available. There is no account or server-side learner profile. Users can clear the saved diagnostic from the results screen.
 
 Relevant implementation files: \`diagnostic.js\`, \`diagnostic-ui.js\`, and \`knowledge-graph/diagnostic-questions.json\`. Run \`node scripts/test_diagnostic.mjs\` and \`python3 scripts/validate_curriculum.py\` after modifying the diagnostic. Browser accessibility, mobile behavior and actual WebGL coloring still require manual visual QA.
+
+## Diagnostic-first navigation
+
+The default first-visit flow is now intentionally linear:
+
+1. **Starting-point diagnostic first.** A new visitor is taken directly into Concept Discovery without seeing the dashboard, graph controls, tabs, or footer. They can complete the diagnostic or explicitly skip it.
+2. **Knowledge map second.** The diagnostic results screen has a primary **Continue to my knowledge map** action. The returning-user home screen also puts the labeled macro knowledge graph before lessons, progress, or resources.
+3. **Three obvious next actions.** From Home, a learner can continue a recommended concept, open Learn & Practice, or open Research. Detailed maps, resources, and 3D exploration remain available but are no longer competing for attention on first entry.
+4. **Returning visits stay compact.** The large hero is reduced, the diagnostic tab is hidden from the normal top navigation (it remains accessible through the Home starting-point card, research questions, and concept panels), and the main graph appears higher on the page.
+
+A first-run completion/skip marker is saved locally as \`research-atlas-onboarding-seen-v1\`. The diagnostic evidence itself remains separate under \`research-atlas-concept-profile-v1\`. If local storage is unavailable, skipping/completing still exits onboarding for the current page session, but that preference cannot persist across reloads. An incomplete diagnostic is shown again on the next visit unless the learner explicitly skipped.
+
+This is a navigation change only: it does not alter the scientific curriculum, necessary/useful prerequisite judgments, diagnostic interpretation, adaptive-practice logic, or claims about mastery.
