@@ -420,3 +420,27 @@ noscript { display: block; padding: 20px; text-align: center; color: #fff; }
   .network-region-title{font-size:12px;}
 }
 @media(prefers-reduced-motion:reduce){.network-region{transition:none;}}
+
+
+/* Prerequisite route within the structured map: a navigable dependency graph. */
+.map-pathway{padding:14px 15px 16px;margin:3px 0 18px;border:1px solid rgba(116,158,217,.28);
+  border-radius:12px;background:linear-gradient(130deg,rgba(28,44,74,.64),rgba(11,22,39,.79));}
+.map-pathway-heading h4{font:500 16px/1.3 var(--font-display);margin:5px 0;}
+.map-pathway-heading p:last-child{color:#8b9bb8;font-size:10px;line-height:1.6;margin:0 0 14px;}
+.map-pathway-stages{display:grid;grid-template-columns:minmax(0,1fr) 19px minmax(0,1fr) 19px minmax(0,1fr);
+  align-items:center;gap:7px;}
+.map-path-column{min-width:0;display:grid;gap:7px;align-self:start;}
+.map-path-label{font-size:9px;letter-spacing:.13em;color:#8eabda;font-weight:600;}
+.map-path-arrow{font-size:20px;color:#94aee0;text-align:center;}
+.map-path-node{border:1px solid rgba(127,151,192,.34);border-left:2px solid var(--choice-color);
+  background:rgba(25,39,64,.84);color:#e8f1ff;border-radius:7px;cursor:pointer;
+  font-size:10px;text-align:left;line-height:1.5;padding:10px 9px;white-space:normal;}
+.map-path-node:hover,.map-path-node:focus-visible{border-color:var(--choice-color);background:rgba(43,63,98,.78);}
+.map-path-node.is-locked{color:#8e9cba;}
+.map-path-node.is-studied{color:#a4ead1;border-color:rgba(86,198,156,.44);}
+.map-path-node.current{background:rgba(60,94,145,.31);box-shadow:0 0 0 1px rgba(127,169,242,.2);}
+.map-path-empty{color:#8395ad;font-size:10px;line-height:1.5;margin:3px 0;}
+@media(max-width:760px){
+  .map-pathway-stages{grid-template-columns:1fr;gap:8px;}
+  .map-path-arrow{transform:rotate(90deg);line-height:1;}
+}
