@@ -15,7 +15,9 @@ let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locatio
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
-const lessonAnswers=new Map(), lessonSubmitted=new Set();
+const quizSessions=new Map();
+let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
+let activeView="home";
 const PROGRESS_KEY="research-atlas-studied-v1";
 let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
@@ -124,8 +126,43 @@ function updateChoices(scene) {
 }
 
 function scrollToExplorer() {
+  setActiveView("explore",{scroll:false});
   $("#explorer")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
+
+const TAB_NAMES=["home","paths","learn","explore","library"];
+function setActiveView(view,options={}){
+  if(!TAB_NAMES.includes(view))return;
+  activeView=view;
+  for(const name of TAB_NAMES){
+    const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
+    panel.hidden=name!==view;
+    tab.setAttribute("aria-selected",String(name===view));
+    tab.tabIndex=name===view?0:-1;
+  }
+  $("#dashboard").hidden=!["home","paths","library"].includes(view);
+  if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
+  if(options.focus)$("#tab-"+view).focus();
+  if(view==="explore" && graph){
+    graph.width(graphElement.clientWidth).height(graphElement.clientHeight);
+    draw({frame:displayMode==="3d"});
+  }
+}
+function setActiveViewFromTab(event){
+  const target=event.target?.closest?.("[data-atlas-tab]");
+  if(target)setActiveView(target.dataset.atlasTab,{focus:true});
+}
+function tabKeyboard(event){
+  if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
+  event.preventDefault();
+  const index=TAB_NAMES.indexOf(activeView);
+  const next=event.key==="Home"?0:event.key==="End"?TAB_NAMES.length-1:
+    (index+(event.key==="ArrowRight"?1:-1)+TAB_NAMES.length)%TAB_NAMES.length;
+  setActiveView(TAB_NAMES[next],{focus:true});
+}
+$("#atlas-tabs").addEventListener("click",setActiveViewFromTab);
+$("#atlas-tabs").addEventListener("keydown",tabKeyboard);
+
 function makeCard(title,description,eyebrow,footer,action,color,kind="") {
   const card=button("",action,"explorer-card "+kind);
   card.style.setProperty("--choice-color",color);
@@ -238,23 +275,34 @@ function renderNetworkPreview(){
 
 
 function renderFeaturedUnits(){
-  const host=$("#pilot-cards");host.replaceChildren();
-  for(const unit of learningUnits.values()){
-    const concept=byId(unit.id);
-    host.appendChild(makeCard(concept.title,unit.summary,unit.level,unit.duration+" · Read, practice, investigate",
-      ()=>openLearningUnit(unit.id),colorFor(concept.domain),"pilot-card"));
+  for(const selector of ["#pilot-cards","#learn-hub-cards"]){
+    const host=$(selector);host.replaceChildren();
+    for(const unit of learningUnits.values()){
+      const concept=byId(unit.id);
+      host.appendChild(makeCard(concept.title,unit.summary,unit.level,unit.duration+" · Read, practise, review",
+        ()=>openLearningUnit(unit.id),colorFor(concept.domain),"pilot-card"));
+    }
   }
 }
 function openLearningUnit(id){
   if(!learningUnits.has(id))return;
-  openUnitId=id;openConcept(id,true);renderLearningUnit();
+  openUnitId=id;openConcept(id,true);
+  setActiveView("learn",{scroll:false});
+  $("#learn-hub").hidden=true;
   const area=$("#learning-studio");area.hidden=false;
+  renderLearningUnit();
   area.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
   area.focus?.();
 }
 function closeLearningUnit(){
   openUnitId=null;$("#learning-studio").hidden=true;
-  $("#explorer").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+  $("#learn-hub").hidden=false;
+  setActiveView("learn");
+}
+function returnFromLearningToGraph(){
+  openUnitId=null;$("#learning-studio").hidden=true;
+  $("#learn-hub").hidden=false;
+  scrollToExplorer();
 }
 function renderLearningUnit(){
   const unit=learningUnits.get(openUnitId);if(!unit)return;
