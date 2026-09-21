@@ -104,19 +104,19 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   function renderChoose(){
     const completed=Object.keys(profile.ratings).length;
     host.innerHTML='<div class="diag-heading"><p class="eyebrow">01 / Define your direction</p>'+
-      '<h2>Find your place in the research landscape.</h2>'+
-      '<p>Choose a question or scientific region. The Atlas will surface up to ten relevant concepts, then move toward necessary prerequisites when you report a possible gap. This is self-assessment, not a placement verdict.</p></div>'+
+      '<h2>What would you like to understand?</h2>'+
+      '<p>Choose a research interest to begin. We will show you concepts one at a time, let you rate your understanding, and offer a few optional conceptual questions. Your map appears when you finish.</p></div>'+
       '<div class="diag-goal-grid"><div><label class="diag-label" for="diagnostic-goal-select">My research interest</label>'+
       '<select id="diagnostic-goal-select" class="diag-select"><optgroup label="Explore a research question">'+
       questionPaths.map(q=>'<option value="q:'+esc(q.id)+'">'+esc(q.title)+'</option>').join("")+
       '</optgroup><optgroup label="Explore a scientific region">'+macros.map(x=>'<option value="m:'+esc(x.id)+'">'+esc(x.title)+'</option>').join("")+
-      '</optgroup></select><button type="button" id="diagnostic-begin" class="diag-primary">Begin concept discovery →</button></div>'+
-      '<div class="diag-support"><strong>Prefer a particular concept?</strong><p>Search for any of the '+concepts.length+' Atlas concepts and assess it directly.</p>'+
+      '</optgroup></select><button type="button" id="diagnostic-begin" class="diag-primary">Start my concept quiz →</button></div>'+
+      '<details class="diag-support"><summary>Advanced: choose a particular concept instead</summary><p>Search for any of the '+concepts.length+' Atlas concepts and assess it directly.</p>'+
       '<label class="diag-label" for="diagnostic-concept-search">Concept name</label><input id="diagnostic-concept-search" list="diagnostic-concept-options" placeholder="e.g. Probability Distributions" autocomplete="off"/>'+
       '<datalist id="diagnostic-concept-options">'+concepts.map(c=>'<option value="'+esc(c.title)+'"></option>').join("")+'</datalist>'+
-      '<button id="diagnostic-start-concept" type="button" class="diag-secondary">Assess this concept →</button><p id="diagnostic-search-feedback" role="status"></p></div></div>'+
+      '<button id="diagnostic-start-concept" type="button" class="diag-secondary">Assess this concept →</button><p id="diagnostic-search-feedback" role="status"></p></details></div>'+
       (completed?'<p class="diag-saved">'+completed+' previous self-ratings are saved in this browser. A new diagnostic updates only the concepts you reassess.</p>':'')+
-      '<p class="diag-privacy">Optional · about 8–12 concept ratings · at most five short conceptual checks · skip or end early anytime. No sign-in or server profile.</p>';
+      '<p class="diag-privacy">Optional · up to ten concept ratings and five short conceptual checks. Skip or finish early whenever you like. Your answers stay in this browser.</p>';
     const select=host.querySelector("#diagnostic-goal-select");
     if(goalKey&&researchGoal(goalKey))select.value=goalKey;
     host.querySelector("#diagnostic-begin").addEventListener("click",()=>begin(select.value));
