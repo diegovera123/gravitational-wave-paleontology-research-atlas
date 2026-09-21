@@ -149,3 +149,17 @@ The Atlas now separates five tasks so that the landing page is not one enormous 
 For the evidence informing this pilot, design tradeoffs, implementation and evaluation requirements, see [Adaptive learning design](docs/adaptive-learning-design.md).
 
 After modifying the bank or lesson schema, run \`python3 scripts/validate_curriculum.py\`, \`node scripts/test_adaptive.mjs\`, and \`node scripts/test_app.mjs\`. Real-browser accessibility, mobile layout, review controls and WebGL still need visual inspection.
+
+## Concept Discovery Diagnostic
+
+The Overview now includes a **Concept Discovery Diagnostic** that maps a learner's provisional starting point toward a selected research goal.
+
+The diagnostic surfaces concepts one at a time from the existing prerequisite graph and asks for two separate judgments: current understanding (from *new to me* through *could teach / derive it*) and confidence in that self-assessment. Low ratings descend toward necessary prerequisites; stronger ratings allow the diagnostic to stay closer to the chosen research goal while still sampling prerequisite knowledge instead of assuming an entire chain is known.
+
+After up to ten ratings, the Atlas samples up to three basic conceptual checks from \`knowledge-graph/diagnostic-items.json\` and asks for answer confidence separately. The result is a personalized map with labels such as **supported by sample check**, **correct but low confidence**, **review recommended**, and **high self-rating — not verified**. No single answer or self-rating is called mastery.
+
+The saved profile can decorate sampled concepts in the structured Knowledge Atlas and generate provisional next-concept recommendations constrained to the selected goal's prerequisite closure. The scientific graph itself is not rewritten by personalization.
+
+The pilot contains 24 broad concept checks and stores the selected goal, self-ratings, confidence judgments, sampled-check results and timestamps locally in the learner's browser under \`research-atlas-concept-diagnostic-v1\` when storage is available. There is no account backend or cross-device profile.
+
+See [Concept diagnostic design](docs/concept-diagnostic-design.md) for routing, calibration labels, privacy notes and interpretation limits. Validate changes with \`python3 scripts/validate_curriculum.py\`, \`node scripts/test_diagnostic.mjs\`, and \`node scripts/test_app.mjs\`.
