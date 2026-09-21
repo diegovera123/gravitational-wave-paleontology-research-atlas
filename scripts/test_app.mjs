@@ -76,7 +76,9 @@ assert.equal(elements.get("#domain-cards").children.length,navigation.macros.len
 assert.equal(elements.get("#dashboard-network-map").children.length,navigation.macros.length+1,"Visible graph includes directional edge layer and macro nodes");
 assert.ok(elements.get("#learning-progress").textContent.includes("0 / "+curriculum.concepts.length),"Initial self-reported progress is empty");
 run('openConcept("limits",true)');
+assert.equal(elements.get("#graph-map").children.length,3,"Selected concept displays a prerequisite → concept → downstream learning path");
 assert.match(elements.get("#details").innerHTML,/Guided path:/,"Necessary prerequisites lock the guided path without hiding content");
+assert.match(elements.get("#details").innerHTML,/Go to next recommended prerequisite/,"Locked concept links to a ready prerequisite");
 run('markUnderstood("functions")');
 assert.ok(stored.get("research-atlas-studied-v1").includes("functions"),"Study markers are saved locally");
 run('openConcept("limits",true)');
