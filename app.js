@@ -33,22 +33,6 @@ function safeLink(value) {
   }
 }
 
-function makeNodeObject(node) {
-  // The ForceGraph3D standalone bundle intentionally does not expose THREE as
-  // a browser global. SpriteText provides a supported Three.js object without
-  // coupling this application to the graph bundle's private Three.js instance.
-  const label = new SpriteText(node.name);
-  label.color = "#eef3ff";
-  label.textHeight = 5.2;
-  label.backgroundColor = "rgba(5, 8, 16, .82)";
-  label.padding = 2.4;
-  label.borderRadius = 3;
-  label.position.y = -11;
-  label.material.depthTest = false;
-  label.renderOrder = 10;
-  return label;
-}
-
 function showGraphError(title, error) {
   const message = error instanceof Error ? error.message : String(error || "Unknown error");
   console.error(`[Research Atlas] ${title}`, error);
@@ -92,7 +76,7 @@ function showConcept(concept, focus = true) {
     <p class="unit">${concept.unit}</p>
     <section class="detail-section">
       <h3>Prerequisites</h3>
-      <div class="concept-links">${prerequisites.length ? prerequisites.map(relationButton).join("") : '<span class="none">Start here — no prerequisites</span>'}</div>
+      <div class="relationship-list">${prerequisites.length ? prerequisites.map(item => relationCard(item, concept.prerequisiteNotes[item.id], "necessary")).join("") : '<span class="none">Start here — no prerequisites</span>'}</div>
     </section>
     <section class="detail-section">
       <h3>Learning objectives</h3>
@@ -221,9 +205,6 @@ async function initialise() {
     if (typeof ForceGraph3D !== "function") {
       throw new Error("The 3D graph library did not load.");
     }
-    if (typeof SpriteText !== "function") {
-      throw new Error("The 3D label library did not load.");
-    }
     const width = graphElement.clientWidth;
     const height = graphElement.clientHeight;
     if (!width || !height) {
@@ -255,8 +236,6 @@ async function initialise() {
       .width(graphElement.clientWidth)
       .height(graphElement.clientHeight)
       .nodeColor(node => colorFor(node.domain))
-      .nodeThreeObject(makeNodeObject)
-      .nodeThreeObjectExtend(true)
       .nodeLabel("name")
       .nodeVal(6)
       .linkColor(link => link.type === "useful" ? "rgba(165, 135, 255, .68)" : "rgba(105, 168, 255, .34)")
