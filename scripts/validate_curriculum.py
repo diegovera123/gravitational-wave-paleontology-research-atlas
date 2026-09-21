@@ -105,3 +105,25 @@ assert seen_members == (concept_ids - set(macro_ids)), (
 )
 print(f"Validated navigation: {len(macro_ids)} macro regions, {len(topic_ids)} topics, "
       f"{len(seen_members)} uniquely accessible concept leaves.")
+
+
+# Exploratory research pathways are independent teaching prompts, not official lab projects.
+questions_data = json.loads((ROOT / "knowledge-graph/research-questions.json").read_text())
+assert questions_data.get("schemaVersion") == 1, "Research questions must use schema version 1"
+questions = questions_data["questions"]
+question_ids = [question["id"] for question in questions]
+assert len(question_ids) == len(set(question_ids)), "Research question IDs must be unique"
+for question in questions:
+    assert question["title"] and question["summary"] and question["activity"], (
+        f"{question['id']} needs a title, explanation, and learning activity"
+    )
+    assert question["conceptIds"], f"{question['id']} must map to learning concepts"
+    assert len(question["conceptIds"]) == len(set(question["conceptIds"])), (
+        f"{question['id']} repeats a linked concept"
+    )
+    assert set(question["conceptIds"]) <= concept_ids, f"{question['id']} references missing concepts"
+    assert set(question["sourceIds"]) <= source_ids, f"{question['id']} references missing sources"
+    for source_id in question["sourceIds"]:
+        source = next(s for s in sources_data["sources"] if s["id"] == source_id)
+        assert source.get("url"), f"{question['id']} references a nonpublic/unverified source {source_id}"
+print(f"Validated {len(questions)} curated educational research questions and their public source links.")

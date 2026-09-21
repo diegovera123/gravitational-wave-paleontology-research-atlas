@@ -7,6 +7,7 @@ import vm from "node:vm";
 const curriculum = JSON.parse(await fs.readFile("knowledge-graph/concepts.json","utf8"));
 const sources = JSON.parse(await fs.readFile("knowledge-graph/research-sources.json","utf8"));
 const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json","utf8"));
+const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questions.json","utf8"));
 
 class ElementStub {
   constructor() {
@@ -23,10 +24,12 @@ class ElementStub {
   querySelector(){return null;}
   closest(){return null;}
   focus(){}
+  scrollIntoView(){}
 }
 const selectors=[
   "#graph","#details","#concept-search","#search-results","#atlas-crumbs","#atlas-choices",
-  "#global-view","#parent-view","#history-view","#reset-view","#study-macro"
+  "#global-view","#parent-view","#history-view","#reset-view","#study-macro",
+  "#graph-map","#domain-cards","#question-cards","#atlas-stats","#view-map","#view-3d","#explorer","#explorer-title","#back-to-question"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 const document={
@@ -47,7 +50,8 @@ const graph=new Proxy({
 const responseData={
   "knowledge-graph/concepts.json":curriculum,
   "knowledge-graph/research-sources.json":sources,
-  "knowledge-graph/navigation.json":navigation
+  "knowledge-graph/navigation.json":navigation,
+  "knowledge-graph/research-questions.json":questions
 };
 const context=vm.createContext({
   document,URL,console,
@@ -62,6 +66,18 @@ const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
 assert.ok(scene.nodes.every(node=>node.type==="macro"),"No meso/micro content leaks into global view");
+assert.equal(elements.get("#graph").hidden,true,"Structured map is displayed by default");
+assert.equal(elements.get("#graph-map").hidden,false,"Structured map is available");
+assert.equal(elements.get("#domain-cards").children.length,navigation.macros.length,"Dashboard renders region cards");
+assert.equal(elements.get("#question-cards").children.length,questions.questions.length,"Dashboard renders research questions");
+run('openQuestion("binary-survival")');
+assert.match(elements.get("#details").innerHTML,/What determines whether a massive binary survives/);
+run('openConcept("supernova-kicks",true)');
+assert.match(elements.get("#details").innerHTML,/Back to research question/);
+run('setDisplayMode("3d")');
+assert.equal(elements.get("#graph").hidden,false,"3D mode is available on demand");
+assert.equal(elements.get("#graph-map").hidden,true,"Map is hidden when switching to 3D");
+
 
 run('enterMacro("calculus")');
 assert.equal(scene.nodes[0].type,"macro");
@@ -85,6 +101,9 @@ assert.equal(run('snapshot().selectedId'),"supernova-kicks");
 run("goParent()");
 assert.equal(run("snapshot().selectedId"),null);
 assert.equal(run("snapshot().level"),"meso");
-assert.ok(cameraFits>0,"The view-framing function was invoked");
+run('setDisplayMode("map")');
+assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hides 3D");
+assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
+assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: curated hierarchy, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");
+console.log("Passed: dashboard cards, research-question pathways, map/3D toggle, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");

@@ -28,15 +28,45 @@
         <p class="eyebrow">Explore the science across deep time</p>
         <h1 id="page-title">Trace the ideas behind<br><em>gravitational waves.</em></h1>
       </div>
-      <p class="lede">Navigate an interconnected map of the mathematics, physics, and astrophysics that let us read the universe's oldest signals.</p>
+      <p class="lede">Choose a research question, explore its scientific foundations, and follow the concepts that connect stellar histories to gravitational-wave observations.</p>
     </section>
 
-    <section class="workspace" aria-label="Knowledge graph explorer">
+
+    <section id="dashboard" class="dashboard" aria-labelledby="dashboard-title">
+      <div class="dashboard-heading">
+        <div><p class="eyebrow">Your research workspace</p><h2 id="dashboard-title">Start with the bigger picture.</h2>
+          <p>Follow a question into the science, or enter a knowledge region. The structured map is your guide; the 3D constellation is there when you want to explore.</p></div>
+        <div class="dashboard-metrics" id="atlas-stats" aria-live="polite"><span>Preparing the Atlas…</span></div>
+      </div>
+      <div class="dashboard-columns">
+        <div class="dashboard-main">
+          <div class="dashboard-section-heading"><div><p class="eyebrow">01 / The landscape</p><h3>Explore a knowledge region</h3></div><a href="#explorer" class="subtle-link">Open map ↗</a></div>
+          <div class="dashboard-domains" id="domain-cards"><p class="dashboard-loading">Loading knowledge regions…</p></div>
+        </div>
+        <aside class="dashboard-research" aria-labelledby="research-heading">
+          <div class="dashboard-section-heading"><div><p class="eyebrow">02 / Investigate</p><h3 id="research-heading">Questions worth exploring</h3></div></div>
+          <p class="dashboard-note">Independent educational prompts for exploring published science, not an official lab research agenda.</p>
+          <div id="question-cards" class="dashboard-questions"><p class="dashboard-loading">Loading research pathways…</p></div>
+        </aside>
+      </div>
+      <div class="dashboard-reading" aria-labelledby="reading-room-heading">
+        <div><p class="eyebrow">03 / The reading room</p><h3 id="reading-room-heading">Public starting points</h3>
+          <p>Connect the conceptual map to scientific explanations, published research, and the tools used to investigate them. Private lab material is not included.</p></div>
+        <div class="dashboard-reading-grid">
+          <a href="https://youtu.be/cJj191cJSPg?t=2480" target="_blank" rel="noopener noreferrer" class="reading-tile"><span class="reading-label">VIDEO · INTRODUCTION</span><strong>Gravitational-wave paleontology</strong><small>Open the introductory video shared in the onboarding resources ↗</small></a>
+          <a href="https://floorbroekgaarden.github.io/research/" target="_blank" rel="noopener noreferrer" class="reading-tile"><span class="reading-label">PUBLIC RESEARCH</span><strong>Research overview</strong><small>Explore Floor Broekgaarden's public research page ↗</small></a>
+          <a href="https://compas.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer" class="reading-tile"><span class="reading-label">DOCUMENTATION</span><strong>COMPAS</strong><small>Explore public population-synthesis documentation ↗</small></a>
+          <a href="https://github.com/layabinu/VIMES_VIsualization_of_Massive_Evolving_Stars" target="_blank" rel="noopener noreferrer" class="reading-tile"><span class="reading-label">PUBLIC CODE · VISUALIZATION</span><strong>VIMES</strong><small>Explore the public binary-evolution visualization project ↗</small></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="explorer" class="workspace" aria-label="Knowledge graph explorer">
       <div class="graph-panel">
         <div class="graph-toolbar">
           <div>
-            <p class="eyebrow">Knowledge graph</p>
-            <h2>Concept constellation</h2>
+            <p class="eyebrow">Explore the atlas</p>
+            <h2 id="explorer-title">Knowledge landscape</h2>
           </div>
           <label class="search">
             <span class="sr-only">Search concepts</span>
@@ -48,6 +78,8 @@
         </div>
 
         <nav id="atlas-crumbs" class="atlas-breadcrumbs" aria-label="Knowledge hierarchy"></nav>
+        <div class="map-switch" role="group" aria-label="Map display mode"><button id="view-map" class="view-button current" type="button" aria-pressed="true">Structured map</button><button id="view-3d" class="view-button" type="button" aria-pressed="false">3D constellation</button><span class="map-switch-hint">Choose a region, then explore its topics and concepts.</span></div>
+        <div id="graph-map" class="graph-map" aria-label="Navigable knowledge map" hidden></div>
         <div id="graph" aria-label="Interactive 3D knowledge hierarchy">
           <div class="loading"><span></span>Mapping concepts…</div>
         </div>

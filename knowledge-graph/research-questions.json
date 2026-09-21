@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "disclaimer": "These are independently authored exploratory learning questions, not statements of the lab's active research agenda or claims of novel findings.",
+  "questions": [
+    {
+      "id": "binary-survival",
+      "eyebrow": "BINARY EVOLUTION",
+      "title": "What determines whether a massive binary survives a supernova?",
+      "summary": "Trace compact-remnant formation, natal kicks, and orbital changes to understand which systems stay bound.",
+      "conceptIds": [
+        "core-collapse-supernovae",
+        "supernova-kicks",
+        "binary-disruption",
+        "compact-binary-formation"
+      ],
+      "sourceIds": [
+        "marchant-bodensteiner-2024"
+      ],
+      "activity": "Sketch two contrasting post-supernova outcomes and identify which physical assumptions drive the difference."
+    },
+    {
+      "id": "formation-channels",
+      "eyebrow": "COMPACT-BINARY FORMATION",
+      "title": "Which stellar histories can produce merging black-hole binaries?",
+      "summary": "Compare mass transfer, common-envelope evolution, and alternative formation channels without assuming one universal pathway.",
+      "conceptIds": [
+        "mass-transfer",
+        "common-envelope",
+        "compact-binary-formation",
+        "formation-channels"
+      ],
+      "sourceIds": [
+        "marchant-bodensteiner-2024",
+        "mandel-broekgaarden-2022"
+      ],
+      "activity": "Compare two modeled formation channels and record the assumptions that change their predicted outcomes."
+    },
+    {
+      "id": "metallicity-winds",
+      "eyebrow": "MASSIVE STARS",
+      "title": "How might metallicity and stellar winds influence black-hole populations?",
+      "summary": "Follow how initial composition can affect mass loss, massive-star evolution, and the masses of compact remnants.",
+      "conceptIds": [
+        "metallicity",
+        "stellar-winds",
+        "massive-star-evolution",
+        "compact-remnants"
+      ],
+      "sourceIds": [
+        "marchant-bodensteiner-2024"
+      ],
+      "activity": "Make a qualitative prediction for how changing wind strength might affect a model population, then identify what you would need to simulate."
+    },
+    {
+      "id": "simulations-to-rates",
+      "eyebrow": "POPULATION SYNTHESIS",
+      "title": "How do simulated binaries become predictions for cosmic merger rates?",
+      "summary": "Connect population-synthesis outputs, statistical weights, delay times, and cosmic star formation.",
+      "conceptIds": [
+        "binary-population-synthesis",
+        "simulation-outputs",
+        "population-weights",
+        "delay-time-distributions",
+        "cosmic-merger-rates"
+      ],
+      "sourceIds": [
+        "han-2020",
+        "mandel-broekgaarden-2022",
+        "compas-demos"
+      ],
+      "activity": "Outline the input quantities and transformations needed to estimate a merger-rate history from a synthetic population."
+    },
+    {
+      "id": "selection-inference",
+      "eyebrow": "GRAVITATIONAL-WAVE INFERENCE",
+      "title": "How does detector selection change what we infer about black-hole populations?",
+      "summary": "Contrast the intrinsic distribution of sources with the subset detected, then examine how population inference accounts for that difference.",
+      "conceptIds": [
+        "detector-selection-effects",
+        "observational-bias",
+        "population-inference",
+        "model-comparison"
+      ],
+      "sourceIds": [
+        "abbott-2016",
+        "mandel-broekgaarden-2022"
+      ],
+      "activity": "Draw a hypothetical intrinsic and detected population, and explain where selection enters the inference."
+    },
+    {
+      "id": "reproducibility",
+      "eyebrow": "RESEARCH PRACTICE",
+      "title": "What would it take to reproduce a population-synthesis result?",
+      "summary": "Work backward from a reported plot to simulation outputs, parameter choices, code, and reproducibility checks.",
+      "conceptIds": [
+        "literature-search",
+        "reading-scientific-papers",
+        "reproducing-a-result",
+        "simulation-outputs",
+        "model-validation"
+      ],
+      "sourceIds": [
+        "compas-demos"
+      ],
+      "activity": "Choose a public example, list required inputs, and define what would count as a successful reproduction."
+    },
+    {
+      "id": "binary-evolution-visualization",
+      "eyebrow": "RESEARCH VISUALIZATION",
+      "title": "What can an evolving binary animation reveal that a static snapshot cannot?",
+      "summary": "Explore which physical transitions become easier to inspect when simulation outputs are converted into a continuous visual history.",
+      "conceptIds": [
+        "simulation-outputs",
+        "temporal-sampling",
+        "interpolation",
+        "scientific-visualization",
+        "vimes-visualization-pathway"
+      ],
+      "sourceIds": [
+        "compas-demos"
+      ],
+      "activity": "Choose a public simulation example, compare its phase-by-phase snapshots with a time-resolved visualization, and note what can and cannot be inferred."
+    }
+  ]
+}
