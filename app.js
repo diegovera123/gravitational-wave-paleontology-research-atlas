@@ -304,6 +304,126 @@ function returnFromLearningToGraph(){
   $("#learn-hub").hidden=false;
   scrollToExplorer();
 }
+
+const ADAPTIVE_KEY="research-atlas-adaptive-evidence-v1";
+function loadAdaptiveHistory(){
+  try{
+    const raw=window.localStorage?.getItem(ADAPTIVE_KEY);
+    adaptiveHistory=window.AtlasAdaptive.safeHistory(raw?JSON.parse(raw):[]);
+  }catch(error){adaptiveStorageAvailable=false;adaptiveHistory=[];console.warn("[Atlas] Adaptive practice history will last only this session.",error);}
+}
+function saveAdaptiveHistory(){
+  adaptiveHistory=window.AtlasAdaptive.safeHistory(adaptiveHistory);
+  if(!adaptiveStorageAvailable)return;
+  try{window.localStorage?.setItem(ADAPTIVE_KEY,JSON.stringify(adaptiveHistory));}
+  catch(error){adaptiveStorageAvailable=false;console.warn("[Atlas] Could not save local practice history.",error);}
+}
+function updateReviewBadge(){
+  const all=[...learningUnits.values()];
+  const due=window.AtlasAdaptive.dueObjectives(all,adaptiveHistory);
+  const host=$("#due-practice");host.replaceChildren();
+  const p=document.createElement("p");
+  p.className="adaptive-due-info";
+  p.textContent=due.length?due.length+" learning objective"+(due.length===1?" is":"s are")+" ready for another review.":"No reviews due right now. Try a learning unit to get started.";
+  host.appendChild(p);
+  const shown=new Set();
+  for(const x of due){
+    if(shown.has(x.unitId))continue;shown.add(x.unitId);
+    const b=button("Review "+byId(x.unitId).title+" ↗",()=>{
+      openLearningUnit(x.unitId);startAdaptiveQuiz("review");
+    },"adaptive-due-button");
+    host.appendChild(b);
+  }
+  const hint=$("#practice-due-summary");
+  if(hint)hint.textContent=due.length?due.length+" objective"+(due.length===1?"":"s")+" due for review":"Adaptive practice · 3 pilot lessons";
+}
+function startAdaptiveQuiz(mode="practice"){
+  const unit=learningUnits.get(openUnitId);if(!unit)return;
+  const session={unitId:unit.id,mode,results:[],current:null,choice:null,answered:false,done:false};
+  quizSessions.set(unit.id,session);
+  advanceAdaptiveQuiz();
+  renderAdaptivePanel();
+}
+function advanceAdaptiveQuiz(){
+  const unit=learningUnits.get(openUnitId),session=quizSessions.get(openUnitId);
+  if(!session||!unit)return;
+  if(session.results.length>=5){session.done=true;session.current=null;return;}
+  // Each result is already in the lifetime history. Exclude this session's records before
+  // passing them separately to the selector, avoiding double-counted evidence.
+  const lifetime=adaptiveHistory.filter(r=>!session.results.includes(r));
+  session.current=window.AtlasAdaptive.chooseNext(adaptiveItems,unit,lifetime,session.results);
+  session.choice=null;session.answered=false;
+  if(!session.current)session.done=true;
+}
+function answerAdaptiveQuiz(choice){
+  const s=quizSessions.get(openUnitId);
+  if(!s||!s.current||s.answered||!Number.isInteger(choice)||choice<0||choice>=s.current.choices.length)return;
+  s.choice=choice;s.answered=true;
+  const item=s.current;
+  const record={unitId:s.unitId,itemId:item.id,objectiveId:item.objectiveId,difficulty:item.difficulty,
+    correct:choice===item.correctIndex,at:Date.now()};
+  s.results.push(record);adaptiveHistory.push(record);
+  saveAdaptiveHistory();updateReviewBadge();renderAdaptivePanel();
+}
+function renderAdaptivePanel(){
+  const host=$("#adaptive-panel");if(!host||!openUnitId)return;
+  const unit=learningUnits.get(openUnitId),session=quizSessions.get(openUnitId);
+  const due=unit.objectives.map(o=>({objective:o,...window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory)}));
+  if(!session){
+    host.innerHTML='<span class="lesson-kicker">PERSONALIZED PRACTICE · PILOT</span>'+
+      '<h3>Check your understanding, one question at a time.</h3>'+
+      '<p>A short five-question session adjusts its objective and authored difficulty based on your previous answers. Hints and explanatory feedback are available; no calibrated mastery score or certificate is issued.</p>'+
+      '<p class="practice-readiness">'+due.map(x=>html(x.objective.title)+': '+x.attempts+" past responses"+(x.due?" · review due":"")).join(" · ")+'</p>'+
+      '<button id="practice-start" type="button" class="lesson-submit">Start adaptive practice →</button>'+
+      (due.some(x=>x.due)?'<button id="practice-review" type="button" class="lesson-back">Review due objectives →</button>':'')+
+      '<small class="practice-privacy">Answers remain in this browser when local storage is available. No account, server analysis, or automated grading of written work.</small>';
+    $("#practice-start").addEventListener("click",()=>startAdaptiveQuiz("practice"));
+    if(due.some(x=>x.due))$("#practice-review").addEventListener("click",()=>startAdaptiveQuiz("review"));
+    return;
+  }
+  if(session.done){
+    const correct=session.results.filter(r=>r.correct).length;
+    const summary=unit.objectives.map(o=>{
+      const rows=session.results.filter(r=>r.objectiveId===o.id);
+      return '<li>'+html(o.title)+': '+rows.filter(r=>r.correct).length+' / '+rows.length+' correct in this session</li>';
+    }).join("");
+    host.innerHTML='<span class="lesson-kicker">SESSION COMPLETE · FORMATIVE EVIDENCE</span>'+
+      '<h3>'+correct+" / "+session.results.length+' questions answered correctly</h3>'+
+      '<p>This brief check describes this attempt only. It does not certify proficiency or automatically unlock a level. Review the worked example before retrying if needed.</p>'+
+      '<ul class="practice-outcomes">'+summary+'</ul>'+
+      '<button id="practice-again" type="button" class="lesson-submit">Practise again with a new route →</button>'+
+      '<button id="practice-back" type="button" class="lesson-back">Back to learning units</button>';
+    $("#practice-again").addEventListener("click",()=>startAdaptiveQuiz("practice"));
+    $("#practice-back").addEventListener("click",closeLearningUnit);
+    return;
+  }
+  const item=session.current;
+  const objective=unit.objectives.find(o=>o.id===item.objectiveId);
+  const progress=session.results.length+(session.answered?0:1);
+  const options=item.choices.map((choice,index)=>{
+    const selected=session.choice===index;
+    const css=session.answered?(index===item.correctIndex?" correct":selected?" incorrect":""):"";
+    return '<button type="button" class="lesson-option'+css+(selected?" selected":"")+
+      '" data-adaptive-choice="'+index+'" '+(session.answered?"disabled":"")+' aria-pressed="'+selected+'">'+html(choice)+'</button>';
+  }).join("");
+  const feedback=session.answered?'<div class="practice-feedback" role="status"><strong>'+
+    (session.choice===item.correctIndex?"Correct.":"Review this distinction.")+'</strong><p>'+html(item.feedback)+'</p>'+
+    '<p>Answer: '+html(item.choices[item.correctIndex])+'</p></div>':"";
+  host.innerHTML='<span class="lesson-kicker">'+(session.mode==="review"?"REVIEW SESSION":"ADAPTIVE PRACTICE")+' · '+progress+' / 5</span>'+
+    '<div class="practice-progress-track"><span style="width:'+(Math.min(progress,5)/5*100)+'%"></span></div>'+
+    '<p class="practice-objective">Objective: '+html(objective.title)+' · Authored difficulty '+item.difficulty+' / 3</p>'+
+    '<h3>'+html(item.prompt)+'</h3><div class="practice-choices">'+options+'</div>'+
+    (session.answered?feedback:'<details class="practice-hint"><summary>Need a hint?</summary><p>'+html(item.hint)+'</p></details>')+
+    (session.answered?'<button id="practice-next" class="lesson-submit" type="button">'+
+       (session.results.length>=5?"Finish this session":"Next question →")+'</button>':'')+
+    '<p class="practice-privacy">The next item is selected using objective coverage, recent answers and author-set difficulty; it is not a calibrated ability estimate.</p>';
+  if(session.answered){
+    $("#practice-next").addEventListener("click",()=>{advanceAdaptiveQuiz();renderAdaptivePanel();});
+  }else{
+    host.querySelectorAll("[data-adaptive-choice]").forEach(b=>b.addEventListener("click",()=>answerAdaptiveQuiz(Number(b.dataset.adaptiveChoice))));
+  }
+}
+
 function renderLearningUnit(){
   const unit=learningUnits.get(openUnitId);if(!unit)return;
   const host=$("#lesson-content"),concept=byId(unit.id),answers=lessonAnswers.get(unit.id)||{},submitted=lessonSubmitted.has(unit.id);
@@ -319,43 +439,18 @@ function renderLearningUnit(){
   const activity='<section class="lesson-worked"><span class="lesson-kicker">TRY IT YOURSELF</span><h3>Predict before checking</h3>'+
     para(unit.activity.prompt)+'<details><summary>Show a hint</summary>'+para(unit.activity.hint)+'</details>'+
     '<details><summary>Show the worked solution</summary>'+para(unit.activity.solution)+'</details></section>';
-  const questions=unit.assessment.map((q,i)=>{
-    const selected=answers[q.id];
-    return '<fieldset class="lesson-question"><legend>'+String(i+1).padStart(2,"0")+' · '+html(q.prompt)+'</legend>'+
-      q.choices.map((choice,j)=>'<button type="button" class="lesson-option'+(selected===j?" selected":"")+
-        (submitted&&selected===j?(j===q.correctIndex?" correct":" incorrect"):"")+
-        '" aria-pressed="'+String(selected===j)+'" data-lesson-question="'+html(q.id)+'" data-lesson-choice="'+j+'">'+html(choice)+'</button>').join("")+
-      (submitted?'<p class="lesson-feedback">'+(selected===q.correctIndex?"Correct. ":"Not quite. ")+html(q.feedback)+'</p>':"")+'</fieldset>';
-  }).join("");
-  const ready=unit.assessment.every(q=>Number.isInteger(answers[q.id]));
-  const score=unit.assessment.filter(q=>answers[q.id]===q.correctIndex).length;
-  const result=submitted?'<p class="lesson-result" role="status">'+score+" / "+unit.assessment.length+
-    ' correct on this formative attempt. '+(score===unit.assessment.length?"These checks were answered correctly; no verified mastery is awarded.":"Review the explanations and try again.")+'</p>':"";
   const refs=unit.sources.map(s=>'<li><a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener noreferrer">'+html(s.title)+' ↗</a>'+
     para(s.role)+'<small>'+html(s.license)+'</small></li>').join("");
   host.innerHTML='<div class="lesson-intro"><span class="lesson-kicker">'+html(unit.level)+' · '+html(unit.duration)+'</span><h3>'+html(unit.summary)+'</h3>'+
     '<p>Original Atlas explanations and illustrative examples. Public sources are linked for further verification; external textbook and paper texts are not reproduced.</p>'+
     '<button type="button" id="lesson-concept-back" class="lesson-back">View this concept in the graph ↗</button></div>'+
     '<div class="lesson-grid"><div><section class="lesson-objectives"><span class="lesson-kicker">LEARNING OBJECTIVES</span>'+objectives+'</section>'+
-    sections+worked+activity+'<section class="lesson-assessment"><span class="lesson-kicker">FORMATIVE CHECK</span><h3>Check your understanding</h3>'+
-    '<p>Choose an answer to each question and review the feedback.</p>'+questions+
-    '<button type="button" id="lesson-submit" class="lesson-submit" '+(!ready?"disabled":"")+'>'+
-    (submitted?"Reset practice":"Check answers")+'</button>'+result+'</section></div>'+
+    sections+worked+activity+'<section class="lesson-assessment" id="adaptive-panel"><p>Preparing practice…</p></section></div>'+
     '<aside class="lesson-research"><section><span class="lesson-kicker">RESEARCH APPLICATION</span>'+para(unit.researchConnection)+'</section>'+
     '<section><span class="lesson-kicker">PUBLIC SOURCES & PROVENANCE</span><ul>'+refs+'</ul></section>'+
-    '<section><span class="lesson-kicker">ABOUT YOUR PROGRESS</span><p>These two practice checks provide formative feedback only. They never automatically change your separate self-reported understanding marker or certify mastery.</p></section></aside></div>';
-  host.querySelectorAll("[data-lesson-question]").forEach(b=>b.addEventListener("click",()=>{
-    const current=lessonAnswers.get(unit.id)||{};
-    current[b.dataset.lessonQuestion]=Number(b.dataset.lessonChoice);
-    lessonAnswers.set(unit.id,current);lessonSubmitted.delete(unit.id);renderLearningUnit();
-  }));
-  $("#lesson-submit").addEventListener("click",()=>{
-    if(!unit.assessment.every(q=>Number.isInteger((lessonAnswers.get(unit.id)||{})[q.id])))return;
-    if(lessonSubmitted.has(unit.id)){lessonSubmitted.delete(unit.id);lessonAnswers.set(unit.id,{});}
-    else lessonSubmitted.add(unit.id);
-    renderLearningUnit();
-  });
-  $("#lesson-concept-back").addEventListener("click",closeLearningUnit);
+    '<section><span class="lesson-kicker">ABOUT YOUR PROGRESS</span><p>Adaptive practice provides formative evidence and suggested review, not a verified proficiency estimate. Your self-reported understanding marker stays separate from practice history.</p></section></aside></div>';
+  renderAdaptivePanel();
+  $("#lesson-concept-back").addEventListener("click",returnFromLearningToGraph);
 }
 
 function renderDashboard() {
@@ -647,16 +742,21 @@ async function initialise() {
       fetch("knowledge-graph/research-sources.json"),
       fetch("knowledge-graph/navigation.json"),
       fetch("knowledge-graph/research-questions.json"),
-      fetch("knowledge-graph/learning-units.json")
+      fetch("knowledge-graph/learning-units.json"),
+      fetch("knowledge-graph/adaptive-items.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
     researchQuestions=questionsData.questions;
     if(unitsData.schemaVersion!==1||!Array.isArray(unitsData.units))throw Error("Unsupported learning units.");
     learningUnits=new Map(unitsData.units.map(unit=>[unit.id,unit]));
+    if(!window.AtlasAdaptive)throw Error("The adaptive-practice module did not load.");
+    window.AtlasAdaptive.validateBank(adaptiveData,unitsData.units);
+    adaptiveItems=adaptiveData.items;
+    loadAdaptiveHistory();
     const conceptIds=new Set(concepts.map(c=>c.id)),sourceIds=new Set(researchSources.map(s=>s.id));
     for(const q of researchQuestions) {
       if(!q.title || !q.conceptIds.length || q.conceptIds.some(id=>!conceptIds.has(id)) ||
@@ -664,7 +764,7 @@ async function initialise() {
     }
     macroById=new Map(atlas.macros.map(m=>[m.id,m]));
     topicById=new Map(atlas.topics.map(t=>[t.id,t]));
-    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();renderFeaturedUnits();
+    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();renderFeaturedUnits();updateReviewBadge();setActiveView("home",{scroll:false});
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
