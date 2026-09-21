@@ -1,121 +1,87 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Gravitational-Wave Paleontology Research Atlas</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive curriculum for gravitational-wave paleontology.">
+  <title>Gravitational-Wave Paleontology · Research Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three-spritetext@1.10.0/dist/three-spritetext.min.js"></script>
+  <script defer src="app.js"></script>
 </head>
-
 <body>
+  <div class="star-field" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Research Atlas home">
+      <span class="brand-mark" aria-hidden="true"><i></i></span>
+      <span><strong>Research Atlas</strong><small>Gravitational-wave paleontology</small></span>
+    </a>
+    <div class="status"><span></span> Interactive curriculum</div>
+  </header>
 
-  <h1>Gravitational-Wave Research Atlas</h1>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Explore the science across deep time</p>
+        <h1 id="page-title">Trace the ideas behind<br><em>gravitational waves.</em></h1>
+      </div>
+      <p class="lede">Navigate an interconnected map of the mathematics, physics, and astrophysics that let us read the universe's oldest signals.</p>
+    </section>
 
-  <p>
-    An interconnected curriculum for gravitational-wave research.
-  </p>
+    <section class="workspace" aria-label="Knowledge graph explorer">
+      <div class="graph-panel">
+        <div class="graph-toolbar">
+          <div>
+            <p class="eyebrow">Knowledge graph</p>
+            <h2>Concept constellation</h2>
+          </div>
+          <label class="search">
+            <span class="sr-only">Search concepts</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+            <input id="concept-search" type="search" placeholder="Search concepts…" autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+          <div id="search-results" class="search-results" role="listbox" aria-label="Search results" hidden></div>
+        </div>
 
-  
-<main class="workspace">
+        <div id="graph" aria-label="Interactive 3D prerequisite graph">
+          <div class="loading"><span></span>Mapping concepts…</div>
+        </div>
+        <div class="graph-footer">
+          <div class="level-controls" aria-label="Navigation level">
+            <button id="global-view" class="view-button" type="button" aria-pressed="true">Global</button>
+            <button id="domain-view" class="view-button" type="button" aria-pressed="false" disabled>Domain</button>
+            <button id="concept-view" class="view-button" type="button" aria-pressed="false" disabled>Concept</button>
+          </div>
+          <div class="graph-actions">
+            <button id="parent-view" class="view-button" type="button" disabled>Parent</button>
+            <button id="expand-view" class="view-button" type="button" disabled>Expand depth 1</button>
+            <button id="detail-view" class="view-button" type="button" aria-pressed="false">Full detail</button>
+            <button id="reset-view" class="icon-button" type="button" title="Reset graph view" aria-label="Reset graph view">↗</button>
+          </div>
+        </div>
+      </div>
 
-  <section class="graph-panel">
-    <h2>Knowledge Graph</h2>
-    <div id="graph"></div>
-  </section>
+      <aside id="details" class="details" aria-live="polite">
+        <div class="empty-state">
+          <div class="orbit-icon" aria-hidden="true"><i></i></div>
+          <p class="eyebrow">Field notes</p>
+          <h2>Select a concept</h2>
+          <p>Choose a node in the constellation to inspect its place in the learning path.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
 
-  <aside id="details">
-    <h2>Concept Details</h2>
-    <p>Select a concept to explore its prerequisites and learning objectives.</p>
-  </aside>
+  <footer>
+    <p>Open curriculum · Built for curious minds</p>
+    <p>Every connection is a path forward.</p>
+  </footer>
 
-</main>
-
-<script>
-  fetch("knowledge-graph/concepts.json")
-    .then(response => response.json())
-    .then(data => {
-      const graph = document.getElementById("graph");
-      
-const nodes = data.concepts.map(concept => ({
-  id: concept.id,
-  name: concept.title,
-  domain: concept.domain
-}));
-
-const links = data.concepts.flatMap(concept =>
-  concept.prerequisites.map(prerequisiteId => ({
-    source: prerequisiteId,
-    target: concept.id
-  }))
-);
-
-function showConcept(concept) {
-  const details = document.getElementById("details");
-
-  details.innerHTML = "";
-
-  const title = document.createElement("h3");
-  title.textContent = concept.title;
-  details.appendChild(title);
-
-  const heading = document.createElement("h4");
-  heading.textContent = "Prerequisites";
-  details.appendChild(heading);
-
-  concept.prerequisites.forEach(id => {
-    const prerequisite = data.concepts.find(c => c.id === id);
-
-    const button = document.createElement("button");
-    button.textContent = prerequisite.title;
-
-    button.addEventListener("click", () => {
-      showConcept(prerequisite);
-    });
-
-    details.appendChild(button);
-  });
-
-  if (concept.prerequisites.length === 0) {
-    const message = document.createElement("p");
-    message.textContent = "No prerequisites in the current graph.";
-    details.appendChild(message);
-  }
-
-  const objectives = document.createElement("p");
-  objectives.textContent =
-    concept.learningObjectives.join(" • ");
-
-  details.appendChild(objectives);
-}
- 
-
-const graph3D = ForceGraph3D()(graph)
-  .graphData({
-    nodes: nodes,
-    links: links
-  })
-  .nodeLabel("name")
-  .nodeAutoColorBy("domain")
-  .linkDirectionalArrowLength(4)
-  .linkDirectionalArrowRelPos(1)
-  .backgroundColor("#050a14")
-  .width(graph.clientWidth)
-  .height(600)
-  .onNodeClick(node => {
-    const concept = data.concepts.find(
-      c => c.id === node.id
-    );
-
-    showConcept(concept);
-  });
-    });
-  
-</script>
-
-
+  <noscript>This interactive atlas requires JavaScript to render the knowledge graph.</noscript>
 </body>
-
 </html>
-  
