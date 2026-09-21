@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/three-spritetext@1.10.0/dist/three-spritetext.min.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -48,20 +47,19 @@
           <div id="search-results" class="search-results" role="listbox" aria-label="Search results" hidden></div>
         </div>
 
-        <div id="graph" aria-label="Interactive 3D prerequisite graph">
+        <nav id="atlas-crumbs" class="atlas-breadcrumbs" aria-label="Knowledge hierarchy"></nav>
+        <div id="graph" aria-label="Interactive 3D knowledge hierarchy">
           <div class="loading"><span></span>Mapping concepts…</div>
         </div>
+        <div id="atlas-choices" class="atlas-choices" aria-label="Concept navigation"></div>
         <div class="graph-footer">
-          <div class="level-controls" aria-label="Navigation level">
-            <button id="global-view" class="view-button" type="button" aria-pressed="true">Global</button>
-            <button id="domain-view" class="view-button" type="button" aria-pressed="false" disabled>Domain</button>
-            <button id="concept-view" class="view-button" type="button" aria-pressed="false" disabled>Concept</button>
+          <div class="level-controls" aria-label="Navigation">
+            <button id="global-view" class="view-button" type="button" aria-pressed="true">All regions</button>
+            <button id="parent-view" class="view-button" type="button" disabled>← Parent</button>
+            <button id="history-view" class="view-button" type="button" disabled>↶ Previous concept</button>
           </div>
-          <div class="graph-actions">
-            <button id="parent-view" class="view-button" type="button" disabled>Parent</button>
-            <button id="expand-view" class="view-button" type="button" disabled>Expand depth 1</button>
-            <button id="detail-view" class="view-button" type="button" aria-pressed="false">Full detail</button>
-            <button id="reset-view" class="icon-button" type="button" title="Reset graph view" aria-label="Reset graph view">↗</button>
+          <div class="graph-actions"><span>Drag to rotate · Scroll to zoom</span>
+            <button id="reset-view" class="icon-button" type="button" title="Reset camera" aria-label="Reset camera">↗</button>
           </div>
         </div>
       </div>
