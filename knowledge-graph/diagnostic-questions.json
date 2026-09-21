@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "description": "Original introductory single-item conceptual checks for selected concepts. They sample understanding but do not establish mastery. No check exists for every concept.",
+  "questions": [
+    {
+      "id": "diag-functions",
+      "conceptId": "functions",
+      "prompt": "A function assigns each allowed input…",
+      "choices": [
+        "exactly one output",
+        "at least two different outputs",
+        "one output only when the input is positive"
+      ],
+      "correctIndex": 0,
+      "feedback": "A function can map different inputs to the same value, but each input in its domain has exactly one assigned output.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-limits",
+      "conceptId": "limits",
+      "prompt": "What does lim(x→a) f(x)=L say?",
+      "choices": [
+        "Values of f(x) approach L as x approaches a; f(a) need not equal L",
+        "f(a) must be defined and equal L",
+        "f(x) is constant near a"
+      ],
+      "correctIndex": 0,
+      "feedback": "A limit describes nearby behavior and does not alone establish the value at the point.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-derivatives",
+      "conceptId": "derivatives",
+      "prompt": "On a position–time graph, instantaneous velocity at a time is…",
+      "choices": [
+        "the slope of the tangent at that time",
+        "the height of the graph at that time",
+        "the average position over the full journey"
+      ],
+      "correctIndex": 0,
+      "feedback": "When the position is differentiable, velocity is its derivative, represented by the tangent slope.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-vector-algebra",
+      "conceptId": "vector-algebra",
+      "prompt": "Two perpendicular velocity components are 3 m/s and 4 m/s. What is the resulting speed?",
+      "choices": [
+        "5 m/s",
+        "7 m/s",
+        "1 m/s"
+      ],
+      "correctIndex": 0,
+      "feedback": "Perpendicular components combine by the Pythagorean theorem: √(3²+4²)=5 m/s.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-linear-momentum",
+      "conceptId": "linear-momentum",
+      "prompt": "If the total external force on a system is zero, its total linear momentum…",
+      "choices": [
+        "remains constant",
+        "must be zero",
+        "necessarily increases"
+      ],
+      "correctIndex": 0,
+      "feedback": "With zero net external force, the time derivative of total momentum vanishes; the momentum can be nonzero.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-probability-foundations",
+      "conceptId": "probability-foundations",
+      "prompt": "Two mutually exclusive events A and B each have probability 0.2. What is P(A or B)?",
+      "choices": [
+        "0.4",
+        "0.04",
+        "0.2"
+      ],
+      "correctIndex": 0,
+      "feedback": "For mutually exclusive events the overlap has probability zero, so their probabilities add.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-probability-distributions",
+      "conceptId": "probability-distributions",
+      "prompt": "For a continuous random variable, the probability at one exact value is generally…",
+      "choices": [
+        "zero even when its probability density there is positive",
+        "equal to its density at that point",
+        "always one"
+      ],
+      "correctIndex": 0,
+      "feedback": "A continuous variable has probability determined by area over an interval. Density is not itself point probability.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-monte-carlo-methods",
+      "conceptId": "monte-carlo-methods",
+      "prompt": "What is a typical purpose of Monte Carlo simulation?",
+      "choices": [
+        "Estimate quantities using random samples from a specified model",
+        "Prove that every sampled outcome must occur in nature",
+        "Replace all model assumptions with observed facts"
+      ],
+      "correctIndex": 0,
+      "feedback": "Monte Carlo draws samples from a chosen stochastic model to estimate quantities; the results depend on that model.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-newtons-laws",
+      "conceptId": "newtons-laws",
+      "prompt": "A body with zero net force can…",
+      "choices": [
+        "move at constant nonzero velocity",
+        "only remain at rest",
+        "accelerate continuously"
+      ],
+      "correctIndex": 0,
+      "feedback": "Zero net force implies zero acceleration in an inertial frame; constant nonzero velocity is possible.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-two-body-problem",
+      "conceptId": "two-body-problem",
+      "prompt": "In the ideal isolated Newtonian two-body problem, what produces the bodies' mutual accelerations?",
+      "choices": [
+        "their gravitational interaction",
+        "a third body's required gravitational pull",
+        "the orbital path itself without any force"
+      ],
+      "correctIndex": 0,
+      "feedback": "The two bodies accelerate under their mutual gravitational attraction; a third body is not required.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-stellar-evolution",
+      "conceptId": "stellar-evolution",
+      "prompt": "A star's main-sequence phase is primarily associated with…",
+      "choices": [
+        "hydrogen fusion in its core",
+        "all nuclear fusion stopping",
+        "the formation of a neutron star"
+      ],
+      "correctIndex": 0,
+      "feedback": "A main-sequence star is characterized by core hydrogen burning, with details depending on mass and composition.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-core-collapse-supernovae",
+      "conceptId": "core-collapse-supernovae",
+      "prompt": "A core-collapse supernova typically involves…",
+      "choices": [
+        "the gravitational collapse of a massive star's core",
+        "two ordinary stars merely passing each other",
+        "a main-sequence star having no nuclear reactions"
+      ],
+      "correctIndex": 0,
+      "feedback": "Core collapse occurs when the core of a sufficiently evolved massive star loses support; not every collapse yields an identical explosion.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-supernova-kicks",
+      "conceptId": "supernova-kicks",
+      "prompt": "Why can the direction of a natal kick matter for a surviving binary?",
+      "choices": [
+        "It changes the remnant's velocity vector relative to its companion",
+        "Direction cannot affect orbital energy",
+        "It changes the companion's mass by definition"
+      ],
+      "correctIndex": 0,
+      "feedback": "The kick adds a velocity vector to the remnant; its direction relative to prior orbital motion can influence binding and orbital shape.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-binary-population-synthesis",
+      "conceptId": "binary-population-synthesis",
+      "prompt": "A binary population-synthesis model primarily…",
+      "choices": [
+        "evolves a set of modeled binary systems under selected physical assumptions",
+        "directly observes every binary in the universe",
+        "eliminates uncertainty about binary evolution"
+      ],
+      "correctIndex": 0,
+      "feedback": "Population synthesis predicts outcomes for assumed initial populations and evolutionary prescriptions; it does not directly observe all systems.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-simulation-outputs",
+      "conceptId": "simulation-outputs",
+      "prompt": "An event table shows binary identifiers 8, 8, and 15. How many distinct binaries appear?",
+      "choices": [
+        "2",
+        "3",
+        "1"
+      ],
+      "correctIndex": 0,
+      "feedback": "There are three event rows but only two unique identifiers: 8 and 15.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-data-tables",
+      "conceptId": "data-tables",
+      "prompt": "What distinguishes a row from a column in a typical scientific data table?",
+      "choices": [
+        "A row represents one record and a column a recorded variable",
+        "A row is always one unique physical system",
+        "A column must contain only dates"
+      ],
+      "correctIndex": 0,
+      "feedback": "Rows are records and columns are variables. A single system may have many rows when events or time samples are recorded.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-detector-selection-effects",
+      "conceptId": "detector-selection-effects",
+      "prompt": "If a detector is more sensitive to some sources than others, the detected population…",
+      "choices": [
+        "may differ systematically from the underlying population",
+        "must have the same distribution as all sources",
+        "contains only systems with the smallest possible mass"
+      ],
+      "correctIndex": 0,
+      "feedback": "Detection efficiency can vary by source properties, so comparisons with model populations should account for selection.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-common-envelope",
+      "conceptId": "common-envelope",
+      "prompt": "A common-envelope episode in an interacting binary can…",
+      "choices": [
+        "remove a shared envelope and substantially shrink the orbit",
+        "guarantee the binary becomes unbound",
+        "occur only between isolated single stars"
+      ],
+      "correctIndex": 0,
+      "feedback": "The companion and stellar core may spiral inward within an envelope; whether the system ejects the envelope or merges depends on the model and conditions.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-population-weights",
+      "conceptId": "population-weights",
+      "prompt": "Why might simulated systems have different statistical weights?",
+      "choices": [
+        "Some simulated systems may represent different fractions of the underlying population",
+        "Physical masses must always equal weights",
+        "Weights guarantee every binary has the same formation history"
+      ],
+      "correctIndex": 0,
+      "feedback": "Weights can account for the simulated sampling procedure or the fraction of the model population represented by different systems.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-orbital-energy",
+      "conceptId": "orbital-energy",
+      "prompt": "In an isolated Newtonian two-body system, negative total orbital energy (relative to zero at infinite separation) indicates…",
+      "choices": [
+        "a bound orbit",
+        "a necessarily circular orbit",
+        "an unbound hyperbolic orbit"
+      ],
+      "correctIndex": 0,
+      "feedback": "Negative orbital energy implies a bound Keplerian orbit in this ideal model, but the eccentricity need not be zero.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-mass-transfer",
+      "conceptId": "mass-transfer",
+      "prompt": "Binary mass transfer can occur when…",
+      "choices": [
+        "one star's material flows toward its companion, for example through Roche-lobe overflow",
+        "the stars exchange only photons and no matter",
+        "the orbital separation is always infinite"
+      ],
+      "correctIndex": 0,
+      "feedback": "Matter can move from donor to accretor during binary interactions, with stability and outcomes depending on system properties.",
+      "sourceType": "original Atlas conceptual check"
+    },
+    {
+      "id": "diag-research-questions",
+      "conceptId": "research-questions",
+      "prompt": "A reproducible scientific research question should ideally…",
+      "choices": [
+        "specify an issue that can be investigated with identifiable methods and evidence",
+        "be immune to any possible evidence",
+        "guarantee the investigator's preferred answer"
+      ],
+      "correctIndex": 0,
+      "feedback": "Useful research questions identify a tractable uncertainty and a route to evaluate competing explanations or results.",
+      "sourceType": "original Atlas conceptual check"
+    }
+  ]
+}
