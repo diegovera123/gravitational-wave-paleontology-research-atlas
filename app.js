@@ -254,6 +254,38 @@ function renderDashboard() {
       },colorFor(byId(q.conceptIds[0]).domain),"question-card"));
   });
 }
+
+function renderLearningPathway(container){
+  if(!selectedId || level!=="meso")return;
+  const concept=byId(selectedId);if(!concept)return;
+  const required=concept.prerequisites.filter(e=>e.kind==="necessary").map(e=>byId(e.id)).filter(Boolean);
+  const downstream=concepts.filter(c=>c.prerequisites.some(e=>e.kind==="necessary"&&e.id===concept.id)).slice(0,4);
+  const pathway=document.createElement("section");pathway.className="map-pathway";
+  const heading=document.createElement("div");heading.className="map-pathway-heading";
+  heading.innerHTML='<p class="eyebrow">Guided path · '+html(learningStateLabel(concept))+'</p>'+
+    '<h4>Build on what you know.</h4><p>Arrows show necessary knowledge dependencies, not the topic containment hierarchy. Other subjects can appear as prerequisites.</p>';
+  pathway.appendChild(heading);
+  const stages=document.createElement("div");stages.className="map-pathway-stages";
+  const groups=[
+    {label:"LEARN FIRST",concepts:required,empty:"No direct necessary prerequisites"},
+    {label:"CURRENT LEVEL",concepts:[concept],empty:""},
+    {label:"UNLOCKS NEXT",concepts:downstream,empty:"No downstream concepts mapped"}
+  ];
+  groups.forEach((group,index)=>{
+    if(index){const arrow=document.createElement("span");arrow.className="map-path-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");stages.appendChild(arrow);}
+    const col=document.createElement("div");col.className="map-path-column";
+    const name=document.createElement("span");name.className="map-path-label";name.textContent=group.label;col.appendChild(name);
+    if(!group.concepts.length){const none=document.createElement("p");none.className="map-path-empty";none.textContent=group.empty;col.appendChild(none);}
+    group.concepts.forEach(target=>{
+      const b=button(target.title+" · "+learningStateLabel(target),()=>openConcept(target.id,true),
+        "map-path-node is-"+learningState(target)+(target.id===selectedId?" current":""));
+      b.style.setProperty("--choice-color",colorFor(target.domain));col.appendChild(b);
+    });
+    stages.appendChild(col);
+  });
+  pathway.appendChild(stages);container.appendChild(pathway);
+}
+
 function renderMap(scene) {
   mapElement.replaceChildren();
   const lead=document.createElement("div");
@@ -265,6 +297,7 @@ function renderMap(scene) {
       :{eyebrow:"03 / Topic explorer",title:activeTopic().title,text:"Select a concept to inspect its prerequisites, learning objectives, and research links."};
   lead.innerHTML='<p class="eyebrow">'+html(summary.eyebrow)+'</p><h3>'+html(summary.title)+'</h3><p>'+html(summary.text)+'</p>';
   mapElement.appendChild(lead);
+  renderLearningPathway(mapElement);
   const container=document.createElement("div");
   container.className="structured-map-grid "+(level==="global"?"macro-grid":"");
   const childNodes=scene.nodes.filter(n=>level==="global"||n.type!==(level==="macro"?"macro":"topic"));
