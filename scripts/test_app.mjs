@@ -1,60 +1,90 @@
 #!/usr/bin/env node
-// Logic-level integration checks. This does not claim real WebGL rendering coverage.
+// Logic-only smoke tests. A real WebGL/browser visual check is still required.
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import vm from "node:vm";
 
-const appSource = await fs.readFile("app.js", "utf8");
+const curriculum = JSON.parse(await fs.readFile("knowledge-graph/concepts.json","utf8"));
+const sources = JSON.parse(await fs.readFile("knowledge-graph/research-sources.json","utf8"));
+const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json","utf8"));
+
 class ElementStub {
-  constructor() { this.innerHTML = ""; this.clientWidth = 1100; this.clientHeight = 534; this.style = {}; this.dataset = {}; this.disabled = false; }
-  addEventListener() {}
-  setAttribute() {}
-  querySelector(selector) { return selector === "canvas" ? {} : null; }
-  querySelectorAll() { return []; }
-  closest() { return null; }
-  focus() {}
+  constructor() {
+    this.clientWidth=1100;this.clientHeight=500;this.innerHTML="";this.hidden=false;
+    this.value="";this.disabled=false;this.children=[];this.dataset={};this.handlers={};
+    this.style={setProperty() {}};
+  }
+  addEventListener(name,fn){this.handlers[name]=fn;}
+  setAttribute(name,value){this[name]=value;}
+  appendChild(child){this.children.push(child);return child;}
+  append(...children){this.children.push(...children);}
+  replaceChildren(...children){this.children=children;}
+  querySelectorAll(){return [];}
+  querySelector(){return null;}
+  closest(){return null;}
+  focus(){}
 }
+const selectors=[
+  "#graph","#details","#concept-search","#search-results","#atlas-crumbs","#atlas-choices",
+  "#global-view","#parent-view","#history-view","#reset-view","#study-macro"
+];
+const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
+const document={
+  activeElement:null,
+  querySelector:selector=>elements.get(selector)||new ElementStub(),
+  createElement:()=>new ElementStub(),
+  createTextNode:text=>({textContent:text}),
+  addEventListener(){}
+};
+let scene=null, clickNode=null, cameraFits=0;
+const charge={strength(){return charge;}};
+const graph=new Proxy({
+  graphData(value){if(value){scene=value;return graph;}return scene;},
+  d3Force(){return charge;},
+  onNodeClick(fn){clickNode=fn;return graph;},
+  zoomToFit(){cameraFits++;return graph;}
+},{get(target,key){return key in target?target[key]:()=>graph;}});
+const responseData={
+  "knowledge-graph/concepts.json":curriculum,
+  "knowledge-graph/research-sources.json":sources,
+  "knowledge-graph/navigation.json":navigation
+};
+const context=vm.createContext({
+  document,URL,console,
+  window:{location:{href:"https://example.org/research-atlas/"},matchMedia:()=>({matches:true}),addEventListener(){}},
+  ForceGraph3D:()=>()=>graph,
+  fetch:async path=>({ok:true,json:async()=>responseData[path]}),
+  setTimeout:fn=>fn()
+});
+vm.runInContext(await fs.readFile("app.js","utf8"),context);
+await new Promise(resolve=>setImmediate(resolve));
+const run=expression=>vm.runInContext(expression,context);
 
-async function runApp(withLabels) {
-  const selectors = ["#graph", "#details", "#concept-search", "#search-results", "#global-view", "#domain-view", "#concept-view", "#parent-view", "#expand-view", "#detail-view", "#reset-view"];
-  const elements = new Map(selectors.map(key => [key, new ElementStub()]));
-  let graphData = { nodes: [], links: [] };
-  let labelFactory;
-  let frameCount = 0;
-  const force = { strength() { return force; }, distance() { return force; } };
-  const graphTarget = {
-    graphData(value) { if (value) { graphData = value; return graph; } return graphData; },
-    nodeThreeObject(value) { if (value) { labelFactory = value; return graph; } return labelFactory; },
-    d3Force() { return force; }, zoomToFit() { frameCount += 1; return graph; }
-  };
-  const graph = new Proxy(graphTarget, { get(target, property) { return property in target ? target[property] : () => graph; } });
-  const document = { activeElement: null, querySelector: selector => elements.get(selector) || new ElementStub(), querySelectorAll: () => [], addEventListener() {} };
-  const context = vm.createContext({
-    console, document, window: { location: { href: "http://localhost:8000/" }, matchMedia: () => ({ matches: false }), addEventListener() {} },
-    ForceGraph3D: () => () => graph,
-    SpriteText: withLabels ? class { constructor(text) { this.text = text; this.material = {}; this.position = {}; } } : undefined,
-    fetch: async path => ({ ok: true, json: async () => JSON.parse(await fs.readFile(path, "utf8")) }),
-    requestAnimationFrame: callback => callback(), setTimeout: callback => callback(), URL
-  });
-  vm.runInContext(appSource, context);
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return { context, elements, getData: () => graphData, getFrames: () => frameCount };
-}
+assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
+assert.ok(scene.nodes.every(node=>node.type==="macro"),"No meso/micro content leaks into global view");
 
-const labelled = await runApp(true);
-assert.equal(labelled.getData().nodes.length, 8, "global overview should show eight domain anchors");
-assert.ok(labelled.getData().nodes.every(node => node.isDomain), "global overview should not be a concept cloud");
-vm.runInContext('enterDomain("Mathematics")', labelled.context);
-assert.ok(labelled.getData().nodes.some(node => node.id === "calculus"), "domain view should reveal topic anchors");
-assert.ok(labelled.getData().nodes.every(node => node.isDomain || node.domain === "Mathematics"), "domain view should remain in its region");
-vm.runInContext('showConcept(conceptById("chirp-mass"))', labelled.context);
-assert.match(labelled.elements.get("#details").innerHTML, /Chirp Mass/, "concept focus should update details");
-assert.ok(labelled.getData().nodes.some(node => node.id === "compact-binary-inspiral"), "focus should reveal the parent topic");
-const depthOneCount = labelled.getData().nodes.length;
-vm.runInContext('focusDepth = 2; renderCurrentView()', labelled.context);
-assert.ok(labelled.getData().nodes.length >= depthOneCount, "expanded depth should not hide the existing neighborhood");
-assert.ok(labelled.getFrames() > 0, "navigation should request camera framing");
+run('enterMacro("calculus")');
+assert.equal(scene.nodes[0].type,"macro");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="topic"),"Macro view contains only topic groups");
+const mathTopic=navigation.topics.find(t=>t.macroId==="calculus");
+run('enterTopic('+JSON.stringify(mathTopic.id)+')');
+assert.equal(scene.nodes[0].type,"topic");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="concept"),"Topic reveals only its immediate concepts");
 
-const fallback = await runApp(false);
-assert.equal(fallback.getData().nodes.length, 8, "missing optional labels must not prevent graph initialization");
-console.log("Hierarchy navigation smoke test passed with and without optional labels.");
+run('openConcept("supernova-kicks",true)');
+assert.equal(run('snapshot().macroId'),"binary-stellar-evolution");
+assert.ok(elements.get("#details").innerHTML.includes("Supernova Natal Kicks"));
+assert.ok(scene.nodes.every(node=>node.type!=="macro"),"Cross-domain concept jump does not expose global nodes");
+
+run('openConcept("linear-momentum",true)');
+assert.equal(run('snapshot().macroId'),"classical-mechanics");
+assert.ok(run('snapshot().topicId'));
+const prevTopic=navigation.topics.find(t=>t.conceptIds.includes("supernova-kicks")).id;
+run('restoreLocation({level:"meso",macroId:"binary-stellar-evolution",topicId:'+JSON.stringify(prevTopic)+',selectedId:"supernova-kicks"})');
+assert.equal(run('snapshot().selectedId'),"supernova-kicks");
+run("goParent()");
+assert.equal(run("snapshot().selectedId"),null);
+assert.equal(run("snapshot().level"),"meso");
+assert.ok(cameraFits>0,"The view-framing function was invoked");
+
+console.log("Passed: curated hierarchy, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");
