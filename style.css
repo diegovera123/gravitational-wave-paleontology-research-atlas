@@ -78,15 +78,24 @@ kbd { padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; color
 #graph canvas { display: block; }
 .loading { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; color: var(--muted); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .loading span { width: 25px; height: 25px; margin: auto; border: 1px solid var(--line-bright); border-top-color: var(--blue); border-radius: 50%; animation: spin 1s linear infinite; }
+.graph-error { position: absolute; inset: 0; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; color: var(--muted); text-align: center; }
+.graph-error strong { color: var(--text); font: 500 17px var(--font-display); }
+.graph-error span { color: #dd9ca8; font-size: 13px; }
+.graph-error small { max-width: 390px; margin-top: 5px; line-height: 1.5; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .graph-footer { min-height: 54px; padding: 0 18px 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); color: #69758e; font-size: 10px; letter-spacing: .03em; text-transform: uppercase; }
 .graph-footer p { margin: 0; }
 .legend { display: flex; flex-wrap: wrap; gap: 15px; }
-.legend span { white-space: nowrap; }
-.legend i { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; box-shadow: 0 0 7px currentColor; }
+.legend button { padding: 3px 5px; border: 0; border-radius: 4px; background: transparent; color: var(--legend-color); font-size: 9px; text-transform: uppercase; cursor: pointer; white-space: nowrap; opacity: .45; }
+.legend button[aria-pressed="true"] { opacity: 1; }
+.legend button:focus-visible { outline: 1px solid var(--line-bright); }
+.legend i { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 7px currentColor; }
 .mouse-icon { display: inline-block; width: 10px; height: 14px; margin-right: 5px; vertical-align: -3px; border: 1px solid currentColor; border-radius: 5px; }
 .icon-button { width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; transition: .2s; }
 .icon-button:hover { color: var(--blue); border-color: var(--line-bright); }
+.graph-actions { display: flex; align-items: center; gap: 7px; }
+.view-button { height: 30px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--muted); font-size: 9px; text-transform: uppercase; cursor: pointer; }
+.view-button[aria-pressed="true"] { border-color: var(--purple); color: #c8b9ff; background: rgba(165,135,255,.08); }
 
 .details { min-width: 0; padding: 30px; background: linear-gradient(160deg, rgba(17,25,43,.9), rgba(9,14,25,.92)); overflow-y: auto; }
 .empty-state { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -106,6 +115,22 @@ kbd { padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; color
 .concept-links { display: flex; flex-wrap: wrap; gap: 7px; }
 .concept-link { padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,255,255,.025); color: #c5d1e8; font-size: 11px; cursor: pointer; }
 .concept-link:hover { color: var(--blue); border-color: var(--line-bright); }
+.relationship-key { position: relative; margin: -5px 0 11px; padding-left: 13px; color: #748097; font-size: 10px; }
+.relationship-key::before { content: ""; position: absolute; left: 0; top: 6px; width: 7px; border-top: 1px solid var(--blue); }
+.relationship-key.useful::before { border-color: var(--purple); border-top-style: dashed; }
+.relationship-list { display: grid; gap: 7px; }
+.relationship-card { width: 100%; padding: 10px 11px; display: grid; gap: 5px; border: 1px solid var(--line); border-left: 2px solid var(--blue); border-radius: 7px; background: rgba(255,255,255,.025); color: #c5d1e8; cursor: pointer; text-align: left; }
+.relationship-card.useful { border-left-color: var(--purple); }
+.relationship-card:hover { border-color: var(--line-bright); background: rgba(105,168,255,.05); }
+.relationship-card span { font-size: 11px; font-weight: 600; }
+.relationship-card small { color: #8e9ab1; font-size: 10px; line-height: 1.4; }
+.relationship-card em { color: #647087; font-size: 9px; font-style: normal; }
+.relationship-card b { color: #68768f; font-size: 8px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.source-list { display: grid; gap: 7px; }
+.source-list a, .source-list > div { padding: 9px 11px; display: grid; gap: 3px; border: 1px solid var(--line); border-radius: 7px; color: #b9c8e3; text-decoration: none; }
+.source-list a:hover { color: var(--blue); border-color: var(--line-bright); }
+.source-list span { font-size: 10px; }
+.source-list small { color: #748097; font-size: 9px; line-height: 1.35; }
 .none { color: #68748a; font-size: 12px; }
 .objectives { margin: 0; padding: 0; list-style: none; }
 .objectives li { position: relative; padding: 0 0 11px 20px; color: #a8b2c7; font-size: 12px; line-height: 1.55; }
