@@ -699,3 +699,15 @@ noscript { display: block; padding: 20px; text-align: center; color: #fff; }
   .diag-actions .diag-primary,.diag-actions .diag-secondary{flex:1 1 140px;}
 }
 @media(prefers-reduced-motion:reduce){.diag-option,.diag-primary,.diag-secondary{transition:none;}}
+
+
+.diagnostic-map-legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 15px;padding:10px 12px;
+  border:1px solid var(--line);border-radius:9px;background:rgba(17,28,47,.74);font-size:9px;color:#8fa1bf;}
+.diagnostic-map-legend span{display:inline-flex;align-items:center;gap:6px;}
+.diagnostic-map-legend i{width:7px;height:7px;border-radius:50%;background:#7183a2;box-shadow:0 0 8px rgba(113,131,162,.25);}
+.diagnostic-map-legend i.supported{background:#6bd6ad;box-shadow:0 0 8px rgba(107,214,173,.5);}
+.diagnostic-map-legend i.uncertain{background:#9fb6ff;box-shadow:0 0 8px rgba(159,182,255,.45);}
+.diagnostic-map-legend i.review{background:#e2a260;box-shadow:0 0 8px rgba(226,162,96,.5);}
+.diagnostic-map-legend button{margin-left:auto;border:0;background:transparent;color:#a9c8f8;cursor:pointer;font-size:9px;}
+.diagnostic-map-legend button:hover{text-decoration:underline;}
+@media(max-width:700px){.diagnostic-map-legend button{margin-left:0;flex-basis:100%;text-align:left;padding:0;}}
