@@ -259,7 +259,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     if(stage==="feedback")return renderFeedback();
     renderResults();
   }
-  function snapshot(){return {goal:profile.goal,ratings:profile.ratings,checks:profile.checks,storageAvailable};}
+  function snapshot(){return {goal:profile.goal,ratings:profile.ratings,checks:profile.checks,completedAt:profile.completedAt,storageAvailable};}
   hydrate();
   return {open,begin,status,labelFor,snapshot,renderOverview,render,hasRatings:()=>Object.keys(profile.ratings).length>0,
     currentSession:()=>session};
