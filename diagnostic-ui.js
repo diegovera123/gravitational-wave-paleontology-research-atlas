@@ -21,7 +21,7 @@ const statusNames={
   "review":"Review suggested · check incorrect",
   "review-confident":"Review suggested · high-confidence error"
 };
-function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,navigate,openConcept,openLearningUnit}){
+function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,navigate,openConcept,openLearningUnit,onOnboardingComplete,onSkipOnboarding}){
   if(!host||!overview)throw Error("Diagnostic interface missing.");
   engine.validateQuestions({schemaVersion:1,questions},concepts);
   const m=new Map(concepts.map(c=>[c.id,c])),qMap=new Map(questions.map(q=>[q.conceptId,q]));
@@ -104,8 +104,8 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   function renderChoose(){
     const completed=Object.keys(profile.ratings).length;
     host.innerHTML='<div class="diag-heading"><p class="eyebrow">01 / Define your direction</p>'+
-      '<h2>Find your place in the research landscape.</h2>'+
-      '<p>Choose a question or scientific region. The Atlas will surface up to ten relevant concepts, then move toward necessary prerequisites when you report a possible gap. This is self-assessment, not a placement verdict.</p></div>'+
+      '<h2>Let’s find your starting point.</h2>'+
+      '<p>Pick what you want to understand. The Atlas will show you a few relevant concepts, let you rate them, and occasionally ask a basic conceptual question. Your answers shape the map you see next.</p></div>'+
       '<div class="diag-goal-grid"><div><label class="diag-label" for="diagnostic-goal-select">My research interest</label>'+
       '<select id="diagnostic-goal-select" class="diag-select"><optgroup label="Explore a research question">'+
       questionPaths.map(q=>'<option value="q:'+esc(q.id)+'">'+esc(q.title)+'</option>').join("")+
@@ -116,10 +116,14 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
       '<datalist id="diagnostic-concept-options">'+concepts.map(c=>'<option value="'+esc(c.title)+'"></option>').join("")+'</datalist>'+
       '<button id="diagnostic-start-concept" type="button" class="diag-secondary">Assess this concept →</button><p id="diagnostic-search-feedback" role="status"></p></div></div>'+
       (completed?'<p class="diag-saved">'+completed+' previous self-ratings are saved in this browser. A new diagnostic updates only the concepts you reassess.</p>':'')+
+      '<div class="diag-onboarding-exit"><button id="diagnostic-skip-onboarding" type="button" class="diag-text-action">Skip for now · Explore the Atlas</button></div>'+
       '<p class="diag-privacy">Optional · about 8–12 concept ratings · at most five short conceptual checks · skip or end early anytime. No sign-in or server profile.</p>';
     const select=host.querySelector("#diagnostic-goal-select");
     if(goalKey&&researchGoal(goalKey))select.value=goalKey;
     host.querySelector("#diagnostic-begin").addEventListener("click",()=>begin(select.value));
+    host.querySelector("#diagnostic-skip-onboarding").addEventListener("click",()=>{
+      onSkipOnboarding?.();navigate("explore");
+    });
     host.querySelector("#diagnostic-start-concept").addEventListener("click",()=>{
       const query=host.querySelector("#diagnostic-concept-search").value.trim().toLowerCase();
       const match=concepts.find(c=>c.title.toLowerCase()===query||c.id===query);
@@ -221,7 +225,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
       session.stepIds.push(session.currentId);
     }
     session.finished=true;session.currentId=null;stage="results";
-    profile.completedAt=Date.now();save();render();
+    profile.completedAt=Date.now();save();onOnboardingComplete?.();render();
   }
   function renderResults(){
     const stats=engine.summary(session,concepts);
@@ -238,7 +242,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
         '<small>'+esc(statusNames[item.status]||statusNames.unassessed)+'</small></span><span aria-hidden="true">↗</span></button>').join(""):
         '<p>Nothing is flagged in this short sample. Choose a goal in the Atlas, or assess more concepts to refine your starting point.</p>')+'</div>'+
       '<p class="diag-privacy">These are provisional, learner-controlled recommendations, not a calibrated score, a claim that you mastered untested prerequisites, or an official research-readiness assessment.</p>'+
-      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">View my personalized map →</button>'+
+      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Continue to my knowledge map →</button>'+
       '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
@@ -262,7 +266,9 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   }
   function snapshot(){return {goal:profile.goal,ratings:profile.ratings,checks:profile.checks,storageAvailable};}
   hydrate();
-  return {open,begin,status,labelFor,snapshot,renderOverview,render,hasRatings:()=>Object.keys(profile.ratings).length>0,
+  return {open,begin,status,labelFor,snapshot,renderOverview,render,
+    hasRatings:()=>Object.keys(profile.ratings).length>0,
+    hasCompleted:()=>!!profile.completedAt,
     currentSession:()=>session};
 }
 root.AtlasDiagnosticUI={mount};

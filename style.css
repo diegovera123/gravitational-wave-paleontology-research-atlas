@@ -711,3 +711,59 @@ noscript { display: block; padding: 20px; text-align: center; color: #fff; }
 .diagnostic-map-legend button{margin-left:auto;border:0;background:transparent;color:#a9c8f8;cursor:pointer;font-size:9px;}
 .diagnostic-map-legend button:hover{text-decoration:underline;}
 @media(max-width:700px){.diagnostic-map-legend button{margin-left:0;flex-basis:100%;text-align:left;padding:0;}}
+
+
+/* First-run flow: diagnostic first, then a map-first home screen. */
+body.onboarding-first .intro,
+body.onboarding-first #atlas-tabs,
+body.onboarding-first #dashboard,
+body.onboarding-first #explore-panel,
+body.onboarding-first #learn-panel,
+body.onboarding-first footer{display:none!important;}
+body.onboarding-first main{min-height:calc(100vh - 120px);display:grid;align-items:center;}
+body.onboarding-first #diagnostic-panel{display:block!important;width:min(980px,100%);margin:28px auto 64px;}
+body.onboarding-first .diagnostic-shell{padding:0;}
+body.onboarding-first .diagnostic-root{min-height:560px;padding:clamp(26px,5vw,56px);
+  border:1px solid rgba(126,169,242,.28);border-radius:22px;
+  background:linear-gradient(145deg,rgba(20,33,57,.98),rgba(7,14,27,.98));
+  box-shadow:0 28px 100px rgba(0,0,0,.34);}
+body.onboarding-first .diag-heading::before{content:"WELCOME · 5–10 MINUTES";display:block;margin-bottom:13px;
+  color:#8eb6f6;font-size:9px;letter-spacing:.16em;font-weight:600;}
+body.onboarding-first .diag-heading h2{font-size:clamp(30px,4.6vw,52px);max-width:780px;}
+body.onboarding-first .diag-heading>p{max-width:720px;font-size:13px;}
+.diag-onboarding-exit{margin-top:16px;}
+.home-map-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  padding:4px 0 19px;margin-bottom:18px;border-bottom:1px solid var(--line);}
+.home-map-heading h2{margin:5px 0 7px;font:600 clamp(23px,3vw,36px)/1.15 var(--font-display);}
+.home-map-heading p:not(.eyebrow){margin:0;color:#93a4bf;font-size:12px;line-height:1.6;}
+.home-primary-map{margin-bottom:14px;}
+.home-next-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 14px;}
+.home-next-actions button{display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:3px;align-items:start;
+  min-height:92px;padding:14px;border:1px solid var(--line);border-radius:10px;
+  background:rgba(20,31,52,.76);color:#e9f1ff;text-align:left;cursor:pointer;}
+.home-next-actions button:hover,.home-next-actions button:focus-visible{border-color:var(--line-bright);
+  background:rgba(36,52,82,.82);outline:none;}
+.home-next-actions span{grid-row:1 / span 2;color:#7faef3;font:600 10px/1.6 var(--font-display);}
+.home-next-actions strong{font:500 13px/1.35 var(--font-display);}
+.home-next-actions small{color:#8194b3;font-size:10px;line-height:1.5;}
+.compact-progress{margin-bottom:12px;}
+.compact-diagnostic{margin-bottom:22px;}
+body:not(.onboarding-first) #tab-diagnostic{display:none;}
+@media(max-width:780px){
+  body.onboarding-first main{display:block;min-height:auto;}
+  body.onboarding-first #diagnostic-panel{margin:18px auto 40px;}
+  body.onboarding-first .diagnostic-root{min-height:0;padding:20px 16px;border-radius:14px;}
+  .home-map-heading{align-items:flex-start;flex-direction:column;}
+  .home-next-actions{grid-template-columns:1fr;}
+}
+
+
+/* Keep returning visits compact: navigation and the graph should appear above the fold. */
+body:not(.onboarding-first) .intro{padding:25px 0 19px;align-items:center;}
+body:not(.onboarding-first) .intro h1{font-size:clamp(27px,3vw,42px);line-height:1.05;}
+body:not(.onboarding-first) .intro .lede{max-width:480px;font-size:12px;line-height:1.6;}
+body:not(.onboarding-first) .atlas-primary-nav{margin-bottom:14px;}
+@media(max-width:760px){
+  body:not(.onboarding-first) .intro{padding:18px 0 14px;display:block;}
+  body:not(.onboarding-first) .intro .lede{margin-top:12px;}
+}
