@@ -34,7 +34,8 @@ const selectors=[
   "#graph-map","#domain-cards","#question-cards","#atlas-stats","#view-map","#view-3d","#explorer","#explorer-title","#back-to-question",
   "#dashboard-network-map","#open-full-3d","#learning-progress","#resume-learning","#mark-understood","#next-required",
   "#pilot-cards","#learning-studio","#learning-studio-title","#lesson-content","#close-learning-studio","#open-learning-unit","#lesson-submit","#lesson-concept-back",
-  "#atlas-tabs","#dashboard","#home-panel","#paths-panel","#library-panel","#explore-panel","#learn-panel",
+  "#atlas-tabs","#dashboard","#home-panel","#diagnostic-panel","#paths-panel","#library-panel","#explore-panel","#learn-panel",
+  "#tab-diagnostic","#home-continue","#home-learn","#home-research",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
@@ -78,7 +79,13 @@ await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
-assert.equal(elements.get("#dashboard").hidden,false,"Overview is the starting view");
+// Exercise the first-run router independently of the module-unavailable fallback used by this mock.
+stored.delete("research-atlas-onboarding-seen-v1");
+run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false})};firstRunLanding()');
+assert.equal(elements.get("#diagnostic-panel").hidden,false,"A true first visit opens the starting-point diagnostic first");
+assert.equal(elements.get("#dashboard").hidden,true,"The main dashboard stays out of the way during first-run onboarding");
+run('markOnboardingSeen();setActiveView("home",{scroll:false})');
+assert.equal(elements.get("#dashboard").hidden,false,"Completing or skipping onboarding reveals the map-first home");
 assert.equal(elements.get("#paths-panel").hidden,true,"Non-active pathways remain hidden");
 run('setActiveView("paths",{scroll:false})');
 assert.equal(elements.get("#paths-panel").hidden,false,"Pathways tab opens");
@@ -163,4 +170,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: focused tab navigation, objective-responsive five-item practice, browser-local evidence, immediate feedback, three learning units, 3D and structured map, graph navigation, cross-domain jumps, and mocked camera framing.");
+console.log("Passed: diagnostic-first onboarding, map-first home, focused tabs, adaptive practice, graph navigation, cross-domain jumps, and mocked camera framing.");
