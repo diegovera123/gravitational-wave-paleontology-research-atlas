@@ -16,6 +16,8 @@ const base=1_700_000_000_000;
 const first=a.chooseNext(bank.items,unit,[],[],base);
 assert.equal(first.objectiveId,unit.objectives[0].id,"Start with an uncovered learning objective");
 assert.equal(first.difficulty,1,"Start from accessible author-defined difficulty");
+const focused=a.chooseNext(bank.items,unit,[],[],base,[unit.objectives[1].id]);
+assert.equal(focused.objectiveId,unit.objectives[1].id,"Review mode prioritizes explicitly due objectives");
 const firstResult={unitId:unit.id,itemId:first.id,objectiveId:first.objectiveId,
   correct:true,difficulty:first.difficulty,at:base};
 const second=a.chooseNext(bank.items,unit,[],[firstResult],base);
