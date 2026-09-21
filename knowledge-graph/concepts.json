@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "concepts": [
     {
       "id": "algebraic-equations",
@@ -16,7 +16,8 @@
       "resource": "https://openstax.org/details/books/precalculus-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Rearranging Kepler and energy relations."
+      "whyItMatters": "Rearranging Kepler and energy relations.",
+      "parentId": null
     },
     {
       "id": "functions",
@@ -27,7 +28,7 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to interpret domain, range, and composition.",
           "appliesTo": "Interpret domain, range, and composition.",
           "provenance": "proposed-educational-dependency"
         }
@@ -41,7 +42,8 @@
       "resource": "https://openstax.org/details/books/precalculus-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Reading stellar-evolution tracks."
+      "whyItMatters": "Reading stellar-evolution tracks.",
+      "parentId": null
     },
     {
       "id": "exponentials-logarithms",
@@ -52,7 +54,7 @@
         {
           "id": "functions",
           "kind": "necessary",
-          "note": "Functions and Graphs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Functions and Graphs is required to solve exponential and logarithmic equations.",
           "appliesTo": "Solve exponential and logarithmic equations.",
           "provenance": "proposed-educational-dependency"
         }
@@ -66,7 +68,8 @@
       "resource": "https://openstax.org/details/books/precalculus-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Initial-mass functions and decay times."
+      "whyItMatters": "Initial-mass functions and decay times.",
+      "parentId": null
     },
     {
       "id": "trigonometry",
@@ -77,14 +80,14 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to resolve quantities using sine and cosine.",
           "appliesTo": "Resolve quantities using sine and cosine.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "functions",
           "kind": "useful",
-          "note": "Functions and Graphs adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Functions and Graphs supports a deeper treatment of convert between angular representations, but is not required for the core objective.",
           "appliesTo": "Convert between angular representations.",
           "provenance": "proposed-educational-connection"
         }
@@ -98,7 +101,8 @@
       "resource": "https://openstax.org/details/books/precalculus-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Orbit projection and detector antenna patterns."
+      "whyItMatters": "Orbit projection and detector antenna patterns.",
+      "parentId": null
     },
     {
       "id": "coordinate-systems",
@@ -109,14 +113,14 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to transform points between Cartesian and polar coordinates.",
           "appliesTo": "Transform points between Cartesian and polar coordinates.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "trigonometry",
           "kind": "useful",
-          "note": "Trigonometry adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Trigonometry supports a deeper treatment of choose coordinates suited to a symmetry, but is not required for the core objective.",
           "appliesTo": "Choose coordinates suited to a symmetry.",
           "provenance": "proposed-educational-connection"
         }
@@ -130,7 +134,8 @@
       "resource": "https://openstax.org/details/books/precalculus-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Describing orbital geometry."
+      "whyItMatters": "Describing orbital geometry.",
+      "parentId": null
     },
     {
       "id": "limits",
@@ -141,7 +146,7 @@
         {
           "id": "functions",
           "kind": "necessary",
-          "note": "Functions and Graphs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Functions and Graphs is required to evaluate limits algebraically and graphically.",
           "appliesTo": "Evaluate limits algebraically and graphically.",
           "provenance": "proposed-educational-dependency"
         }
@@ -155,7 +160,8 @@
       "resource": "https://openstax.org/details/books/calculus-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Defining instantaneous orbital velocity."
+      "whyItMatters": "Defining instantaneous orbital velocity.",
+      "parentId": "derivatives"
     },
     {
       "id": "derivatives",
@@ -166,7 +172,7 @@
         {
           "id": "limits",
           "kind": "necessary",
-          "note": "Limits supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Limits is required to differentiate elementary functions.",
           "appliesTo": "Differentiate elementary functions.",
           "provenance": "proposed-educational-dependency"
         }
@@ -180,7 +186,8 @@
       "resource": "https://openstax.org/details/books/calculus-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Rates of orbital and stellar evolution."
+      "whyItMatters": "Rates of orbital and stellar evolution.",
+      "parentId": "calculus"
     },
     {
       "id": "integrals",
@@ -191,7 +198,7 @@
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to evaluate definite integrals.",
           "appliesTo": "Evaluate definite integrals.",
           "provenance": "proposed-educational-dependency"
         }
@@ -205,7 +212,8 @@
       "resource": "https://openstax.org/details/books/calculus-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Accumulating star-formation and merger rates."
+      "whyItMatters": "Accumulating star-formation and merger rates.",
+      "parentId": "calculus"
     },
     {
       "id": "multivariable-calculus",
@@ -216,21 +224,21 @@
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to compute partial derivatives of multivariable functions.",
           "appliesTo": "Compute partial derivatives of multivariable functions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "coordinate-systems",
           "kind": "necessary",
-          "note": "Coordinate Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Coordinate Systems is required to compute partial derivatives of multivariable functions.",
           "appliesTo": "Compute partial derivatives of multivariable functions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "useful",
-          "note": "Integrals adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Integrals supports a deeper treatment of interpret gradients and constrained changes, but is not required for the core objective.",
           "appliesTo": "Interpret gradients and constrained changes.",
           "provenance": "proposed-educational-connection"
         }
@@ -244,7 +252,8 @@
       "resource": "https://openstax.org/details/books/calculus-volume-3",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Sensitivity of simulations to mass and metallicity."
+      "whyItMatters": "Sensitivity of simulations to mass and metallicity.",
+      "parentId": "calculus"
     },
     {
       "id": "vector-algebra",
@@ -255,14 +264,14 @@
         {
           "id": "trigonometry",
           "kind": "necessary",
-          "note": "Trigonometry supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Trigonometry is required to compute dot and cross products.",
           "appliesTo": "Compute dot and cross products.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "coordinate-systems",
           "kind": "necessary",
-          "note": "Coordinate Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Coordinate Systems is required to compute dot and cross products.",
           "appliesTo": "Compute dot and cross products.",
           "provenance": "proposed-educational-dependency"
         }
@@ -276,7 +285,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Orbital angular momentum and kicks."
+      "whyItMatters": "Orbital angular momentum and kicks.",
+      "parentId": "vector-calculus"
     },
     {
       "id": "vector-calculus",
@@ -287,14 +297,14 @@
         {
           "id": "multivariable-calculus",
           "kind": "necessary",
-          "note": "Multivariable Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Multivariable Calculus is required to calculate gradient, divergence, and curl.",
           "appliesTo": "Calculate gradient, divergence, and curl.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to calculate gradient, divergence, and curl.",
           "appliesTo": "Calculate gradient, divergence, and curl.",
           "provenance": "proposed-educational-dependency"
         }
@@ -308,7 +318,8 @@
       "resource": "https://openstax.org/details/books/calculus-volume-3",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Gravitational fields and continuum equations."
+      "whyItMatters": "Gravitational fields and continuum equations.",
+      "parentId": "calculus"
     },
     {
       "id": "matrices",
@@ -319,7 +330,7 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to solve a linear system with matrices.",
           "appliesTo": "Solve a linear system with matrices.",
           "provenance": "proposed-educational-dependency"
         }
@@ -333,7 +344,8 @@
       "resource": "https://math.mit.edu/~gs/linearalgebra/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Coordinate transforms and numerical models."
+      "whyItMatters": "Coordinate transforms and numerical models.",
+      "parentId": null
     },
     {
       "id": "eigenvalues",
@@ -344,7 +356,7 @@
         {
           "id": "matrices",
           "kind": "necessary",
-          "note": "Matrices and Linear Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Matrices and Linear Systems is required to compute eigenpairs for a small matrix.",
           "appliesTo": "Compute eigenpairs for a small matrix.",
           "provenance": "proposed-educational-dependency"
         }
@@ -358,7 +370,8 @@
       "resource": "https://math.mit.edu/~gs/linearalgebra/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Oscillation modes and covariance analysis."
+      "whyItMatters": "Oscillation modes and covariance analysis.",
+      "parentId": null
     },
     {
       "id": "ordinary-differential-equations",
@@ -369,21 +382,21 @@
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to classify first- and second-order ODEs.",
           "appliesTo": "Classify first- and second-order ODEs.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to classify first- and second-order ODEs.",
           "appliesTo": "Classify first- and second-order ODEs.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "matrices",
           "kind": "useful",
-          "note": "Matrices and Linear Systems adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Matrices and Linear Systems supports a deeper treatment of verify a proposed solution from initial conditions, but is not required for the core objective.",
           "appliesTo": "Verify a proposed solution from initial conditions.",
           "provenance": "proposed-educational-connection"
         }
@@ -397,7 +410,8 @@
       "resource": "https://tutorial.math.lamar.edu/Classes/DE/DE.aspx",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Orbital and stellar time evolution."
+      "whyItMatters": "Orbital and stellar time evolution.",
+      "parentId": null
     },
     {
       "id": "coupled-odes",
@@ -408,21 +422,21 @@
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to formulate a coupled state-space model.",
           "appliesTo": "Formulate a coupled state-space model.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "matrices",
           "kind": "necessary",
-          "note": "Matrices and Linear Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Matrices and Linear Systems is required to formulate a coupled state-space model.",
           "appliesTo": "Formulate a coupled state-space model.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "eigenvalues",
           "kind": "useful",
-          "note": "Eigenvalues and Eigenvectors adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Eigenvalues and Eigenvectors supports a deeper treatment of analyze how coupled variables evolve, but is not required for the core objective.",
           "appliesTo": "Analyze how coupled variables evolve.",
           "provenance": "proposed-educational-connection"
         }
@@ -436,7 +450,8 @@
       "resource": "https://docs.scipy.org/doc/scipy/reference/integrate.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Coupled mass and orbital evolution."
+      "whyItMatters": "Coupled mass and orbital evolution.",
+      "parentId": null
     },
     {
       "id": "probability-foundations",
@@ -447,7 +462,7 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to calculate conditional probabilities.",
           "appliesTo": "Calculate conditional probabilities.",
           "provenance": "proposed-educational-dependency"
         }
@@ -461,7 +476,8 @@
       "resource": "https://www.openintro.org/book/os/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Formation probabilities and selection effects."
+      "whyItMatters": "Formation probabilities and selection effects.",
+      "parentId": "probability-distributions"
     },
     {
       "id": "probability-distributions",
@@ -472,14 +488,14 @@
         {
           "id": "probability-foundations",
           "kind": "necessary",
-          "note": "Probability Foundations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Foundations is required to normalize and summarize common distributions.",
           "appliesTo": "Normalize and summarize common distributions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to normalize and summarize common distributions.",
           "appliesTo": "Normalize and summarize common distributions.",
           "provenance": "proposed-educational-dependency"
         }
@@ -493,7 +509,8 @@
       "resource": "https://www.openintro.org/book/os/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Initial masses, kicks, and measurement noise."
+      "whyItMatters": "Initial masses, kicks, and measurement noise.",
+      "parentId": null
     },
     {
       "id": "statistical-estimation",
@@ -504,7 +521,7 @@
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to construct and maximize a likelihood.",
           "appliesTo": "Construct and maximize a likelihood.",
           "provenance": "proposed-educational-dependency"
         }
@@ -518,7 +535,8 @@
       "resource": "https://www.openintro.org/book/os/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Compact-object merger-rate estimates."
+      "whyItMatters": "Compact-object merger-rate estimates.",
+      "parentId": "bayesian-inference"
     },
     {
       "id": "bayesian-inference",
@@ -529,14 +547,14 @@
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to apply Bayes’ theorem to update parameters.",
           "appliesTo": "Apply Bayes’ theorem to update parameters.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "statistical-estimation",
           "kind": "useful",
-          "note": "Statistical Estimation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Statistical Estimation supports a deeper treatment of distinguish prior, likelihood, and posterior, but is not required for the core objective.",
           "appliesTo": "Distinguish prior, likelihood, and posterior.",
           "provenance": "proposed-educational-connection"
         }
@@ -550,7 +568,8 @@
       "resource": "https://www.statlect.com/fundamentals-of-statistics/Bayesian-inference",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Population-level gravitational-wave inference."
+      "whyItMatters": "Population-level gravitational-wave inference.",
+      "parentId": null
     },
     {
       "id": "hierarchical-models",
@@ -561,14 +580,14 @@
         {
           "id": "bayesian-inference",
           "kind": "necessary",
-          "note": "Bayesian Inference supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Bayesian Inference is required to write a hierarchical likelihood for population data.",
           "appliesTo": "Write a hierarchical likelihood for population data.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "statistical-estimation",
           "kind": "useful",
-          "note": "Statistical Estimation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Statistical Estimation supports a deeper treatment of explain hyperparameters and marginalization, but is not required for the core objective.",
           "appliesTo": "Explain hyperparameters and marginalization.",
           "provenance": "proposed-educational-connection"
         }
@@ -582,7 +601,8 @@
       "resource": "https://arxiv.org/abs/1809.02293",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Inferring formation populations from catalogs."
+      "whyItMatters": "Inferring formation populations from catalogs.",
+      "parentId": null
     },
     {
       "id": "uncertainty-propagation",
@@ -593,21 +613,21 @@
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to propagate independent uncertainties analytically.",
           "appliesTo": "Propagate independent uncertainties analytically.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to propagate independent uncertainties analytically.",
           "appliesTo": "Propagate independent uncertainties analytically.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "monte-carlo-methods",
           "kind": "useful",
-          "note": "Monte Carlo Methods adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Monte Carlo Methods supports a deeper treatment of compare linearized and sampled uncertainty estimates, but is not required for the core objective.",
           "appliesTo": "Compare linearized and sampled uncertainty estimates.",
           "provenance": "proposed-educational-connection"
         }
@@ -621,7 +641,8 @@
       "resource": "https://www.openintro.org/book/os/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Uncertainty in derived binary parameters."
+      "whyItMatters": "Uncertainty in derived binary parameters.",
+      "parentId": "bayesian-inference"
     },
     {
       "id": "dimensional-analysis",
@@ -632,7 +653,7 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to check dimensional consistency.",
           "appliesTo": "Check dimensional consistency.",
           "provenance": "proposed-educational-dependency"
         }
@@ -646,7 +667,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Validation of physical and numerical models."
+      "whyItMatters": "Validation of physical and numerical models.",
+      "parentId": null
     },
     {
       "id": "kinematics",
@@ -657,14 +679,14 @@
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to relate position, velocity, and acceleration vectors.",
           "appliesTo": "Relate position, velocity, and acceleration vectors.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to relate position, velocity, and acceleration vectors.",
           "appliesTo": "Relate position, velocity, and acceleration vectors.",
           "provenance": "proposed-educational-dependency"
         }
@@ -678,7 +700,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Following binary component motion."
+      "whyItMatters": "Following binary component motion.",
+      "parentId": "newtonian-gravitation"
     },
     {
       "id": "newtons-laws",
@@ -689,14 +712,14 @@
         {
           "id": "kinematics",
           "kind": "necessary",
-          "note": "Kinematics supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Kinematics is required to construct a free-body diagram.",
           "appliesTo": "Construct a free-body diagram.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to construct a free-body diagram.",
           "appliesTo": "Construct a free-body diagram.",
           "provenance": "proposed-educational-dependency"
         }
@@ -710,7 +733,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Dynamics of gravitating bodies."
+      "whyItMatters": "Dynamics of gravitating bodies.",
+      "parentId": "newtonian-gravitation"
     },
     {
       "id": "newtonian-gravitation",
@@ -721,21 +745,21 @@
         {
           "id": "newtons-laws",
           "kind": "necessary",
-          "note": "Newton’s Laws supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newton’s Laws is required to calculate gravitational force and potential.",
           "appliesTo": "Calculate gravitational force and potential.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to calculate gravitational force and potential.",
           "appliesTo": "Calculate gravitational force and potential.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "dimensional-analysis",
           "kind": "useful",
-          "note": "Dimensional Analysis adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Dimensional Analysis supports a deeper treatment of explain inverse-square gravitational fields, but is not required for the core objective.",
           "appliesTo": "Explain inverse-square gravitational fields.",
           "provenance": "proposed-educational-connection"
         }
@@ -749,7 +773,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Baseline model for isolated binaries."
+      "whyItMatters": "Baseline model for isolated binaries.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "work-energy",
@@ -760,14 +785,14 @@
         {
           "id": "newtons-laws",
           "kind": "necessary",
-          "note": "Newton’s Laws supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newton’s Laws is required to calculate work and mechanical energy.",
           "appliesTo": "Calculate work and mechanical energy.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to calculate work and mechanical energy.",
           "appliesTo": "Calculate work and mechanical energy.",
           "provenance": "proposed-educational-dependency"
         }
@@ -781,7 +806,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Classifying bound and unbound binaries."
+      "whyItMatters": "Classifying bound and unbound binaries.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "linear-momentum",
@@ -792,14 +818,14 @@
         {
           "id": "newtons-laws",
           "kind": "necessary",
-          "note": "Newton’s Laws supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newton’s Laws is required to apply momentum conservation.",
           "appliesTo": "Apply momentum conservation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to apply momentum conservation.",
           "appliesTo": "Apply momentum conservation.",
           "provenance": "proposed-educational-dependency"
         }
@@ -813,7 +839,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Supernova recoil and binary disruption."
+      "whyItMatters": "Supernova recoil and binary disruption.",
+      "parentId": "angular-momentum"
     },
     {
       "id": "angular-momentum",
@@ -824,14 +851,14 @@
         {
           "id": "linear-momentum",
           "kind": "necessary",
-          "note": "Linear Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Linear Momentum is required to calculate orbital angular momentum.",
           "appliesTo": "Calculate orbital angular momentum.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to calculate orbital angular momentum.",
           "appliesTo": "Calculate orbital angular momentum.",
           "provenance": "proposed-educational-dependency"
         }
@@ -845,7 +872,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Binary orbital evolution."
+      "whyItMatters": "Binary orbital evolution.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "centre-of-mass",
@@ -856,7 +884,7 @@
         {
           "id": "linear-momentum",
           "kind": "necessary",
-          "note": "Linear Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Linear Momentum is required to compute a system’s centre of mass.",
           "appliesTo": "Compute a system’s centre of mass.",
           "provenance": "proposed-educational-dependency"
         }
@@ -870,7 +898,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Reducing binary dynamics."
+      "whyItMatters": "Reducing binary dynamics.",
+      "parentId": "two-body-problem"
     },
     {
       "id": "two-body-problem",
@@ -881,28 +910,28 @@
         {
           "id": "newtonian-gravitation",
           "kind": "necessary",
-          "note": "Newtonian Gravitation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newtonian Gravitation is required to reduce two-body motion to relative motion.",
           "appliesTo": "Reduce two-body motion to relative motion.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "centre-of-mass",
           "kind": "necessary",
-          "note": "Centre-of-Mass Motion supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Centre-of-Mass Motion is required to reduce two-body motion to relative motion.",
           "appliesTo": "Reduce two-body motion to relative motion.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to reduce two-body motion to relative motion.",
           "appliesTo": "Reduce two-body motion to relative motion.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "three-body-problem",
           "kind": "useful",
-          "note": "General Three-Body Problem adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "General Three-Body Problem supports a deeper treatment of solve an isolated binary orbit from initial conditions, but is not required for the core objective.",
           "appliesTo": "Solve an isolated binary orbit from initial conditions.",
           "provenance": "proposed-educational-connection"
         }
@@ -916,7 +945,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Idealized binary-star or compact-binary motion."
+      "whyItMatters": "Idealized binary-star or compact-binary motion.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "keplerian-orbits",
@@ -927,14 +957,14 @@
         {
           "id": "two-body-problem",
           "kind": "necessary",
-          "note": "Newtonian Two-Body Problem supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newtonian Two-Body Problem is required to relate orbital elements to position and velocity.",
           "appliesTo": "Relate orbital elements to position and velocity.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "necessary",
-          "note": "Angular Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Angular Momentum is required to relate orbital elements to position and velocity.",
           "appliesTo": "Relate orbital elements to position and velocity.",
           "provenance": "proposed-educational-dependency"
         }
@@ -948,7 +978,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Parameterizing binary population outputs."
+      "whyItMatters": "Parameterizing binary population outputs.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "orbital-eccentricity",
@@ -959,14 +990,14 @@
         {
           "id": "keplerian-orbits",
           "kind": "necessary",
-          "note": "Keplerian Orbits supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Keplerian Orbits is required to interpret eccentricity geometrically and dynamically.",
           "appliesTo": "Interpret eccentricity geometrically and dynamically.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "trigonometry",
           "kind": "necessary",
-          "note": "Trigonometry supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Trigonometry is required to interpret eccentricity geometrically and dynamically.",
           "appliesTo": "Interpret eccentricity geometrically and dynamically.",
           "provenance": "proposed-educational-dependency"
         }
@@ -982,7 +1013,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Tracking eccentricity in VIMES-style animations."
+      "whyItMatters": "Tracking eccentricity in VIMES-style animations.",
+      "parentId": "keplerian-orbits"
     },
     {
       "id": "orbital-energy",
@@ -993,14 +1025,14 @@
         {
           "id": "keplerian-orbits",
           "kind": "necessary",
-          "note": "Keplerian Orbits supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Keplerian Orbits is required to derive the energy–semi-major-axis relation.",
           "appliesTo": "Derive the energy–semi-major-axis relation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "work-energy",
           "kind": "necessary",
-          "note": "Work and Energy supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Work and Energy is required to derive the energy–semi-major-axis relation.",
           "appliesTo": "Derive the energy–semi-major-axis relation.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1014,7 +1046,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Common-envelope energy estimates."
+      "whyItMatters": "Common-envelope energy estimates.",
+      "parentId": "keplerian-orbits"
     },
     {
       "id": "orbital-perturbations",
@@ -1025,21 +1058,21 @@
         {
           "id": "two-body-problem",
           "kind": "necessary",
-          "note": "Newtonian Two-Body Problem supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newtonian Two-Body Problem is required to estimate the response to a small perturbation.",
           "appliesTo": "Estimate the response to a small perturbation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "multivariable-calculus",
           "kind": "necessary",
-          "note": "Multivariable Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Multivariable Calculus is required to estimate the response to a small perturbation.",
           "appliesTo": "Estimate the response to a small perturbation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "three-body-problem",
           "kind": "useful",
-          "note": "General Three-Body Problem adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "General Three-Body Problem supports a deeper treatment of distinguish secular and impulsive changes, but is not required for the core objective.",
           "appliesTo": "Distinguish secular and impulsive changes.",
           "provenance": "proposed-educational-connection"
         }
@@ -1053,7 +1086,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Kicks, tides, and mass-transfer effects."
+      "whyItMatters": "Kicks, tides, and mass-transfer effects.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "three-body-problem",
@@ -1064,21 +1098,21 @@
         {
           "id": "newtonian-gravitation",
           "kind": "necessary",
-          "note": "Newtonian Gravitation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newtonian Gravitation is required to explain why generic three-body motion lacks a closed-form solution.",
           "appliesTo": "Explain why generic three-body motion lacks a closed-form solution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "coupled-odes",
           "kind": "necessary",
-          "note": "Coupled Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Coupled Differential Equations is required to explain why generic three-body motion lacks a closed-form solution.",
           "appliesTo": "Explain why generic three-body motion lacks a closed-form solution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "two-body-problem",
           "kind": "useful",
-          "note": "Newtonian Two-Body Problem adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Newtonian Two-Body Problem supports a deeper treatment of numerically integrate a simple three-body configuration, but is not required for the core objective.",
           "appliesTo": "Numerically integrate a simple three-body configuration.",
           "provenance": "proposed-educational-connection"
         }
@@ -1092,7 +1126,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Context for limitations of binary-only models."
+      "whyItMatters": "Context for limitations of binary-only models.",
+      "parentId": "orbital-perturbations"
     },
     {
       "id": "tidal-interactions",
@@ -1103,21 +1138,21 @@
         {
           "id": "newtonian-gravitation",
           "kind": "necessary",
-          "note": "Newtonian Gravitation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newtonian Gravitation is required to explain tidal synchronization and circularization.",
           "appliesTo": "Explain tidal synchronization and circularization.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "necessary",
-          "note": "Angular Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Angular Momentum is required to explain tidal synchronization and circularization.",
           "appliesTo": "Explain tidal synchronization and circularization.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-structure",
           "kind": "useful",
-          "note": "Stellar Structure Equations adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Stellar Structure Equations supports a deeper treatment of estimate competing tidal and orbital timescales, but is not required for the core objective.",
           "appliesTo": "Estimate competing tidal and orbital timescales.",
           "provenance": "proposed-educational-connection"
         }
@@ -1133,7 +1168,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "micro",
-      "whyItMatters": "Pre-interaction massive binaries."
+      "whyItMatters": "Pre-interaction massive binaries.",
+      "parentId": "binary-orbital-evolution"
     },
     {
       "id": "binary-orbital-evolution",
@@ -1144,21 +1180,21 @@
         {
           "id": "orbital-energy",
           "kind": "necessary",
-          "note": "Binary Orbital Energy supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Energy is required to predict how mass and angular-momentum changes affect separation.",
           "appliesTo": "Predict how mass and angular-momentum changes affect separation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "necessary",
-          "note": "Angular Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Angular Momentum is required to predict how mass and angular-momentum changes affect separation.",
           "appliesTo": "Predict how mass and angular-momentum changes affect separation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "tidal-interactions",
           "kind": "useful",
-          "note": "Tidal Interactions adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Tidal Interactions supports a deeper treatment of interpret separation and eccentricity histories, but is not required for the core objective.",
           "appliesTo": "Interpret separation and eccentricity histories.",
           "provenance": "proposed-educational-connection"
         }
@@ -1175,7 +1211,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Reading simulated massive-binary tracks."
+      "whyItMatters": "Reading simulated massive-binary tracks.",
+      "parentId": "classical-mechanics"
     },
     {
       "id": "radiation-and-spectra",
@@ -1186,14 +1223,14 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to relate wavelength, frequency, and photon energy.",
           "appliesTo": "Relate wavelength, frequency, and photon energy.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "useful",
-          "note": "Probability Distributions adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Probability Distributions supports a deeper treatment of interpret thermal spectra qualitatively, but is not required for the core objective.",
           "appliesTo": "Interpret thermal spectra qualitatively.",
           "provenance": "proposed-educational-connection"
         }
@@ -1207,7 +1244,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Observing massive stars."
+      "whyItMatters": "Observing massive stars.",
+      "parentId": "stellar-structure"
     },
     {
       "id": "hydrostatic-equilibrium",
@@ -1218,21 +1256,21 @@
         {
           "id": "newtons-laws",
           "kind": "necessary",
-          "note": "Newton’s Laws supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Newton’s Laws is required to balance pressure gradients against gravity.",
           "appliesTo": "Balance pressure gradients against gravity.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to balance pressure gradients against gravity.",
           "appliesTo": "Balance pressure gradients against gravity.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "newtonian-gravitation",
           "kind": "useful",
-          "note": "Newtonian Gravitation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Newtonian Gravitation supports a deeper treatment of estimate stellar central pressure by scaling, but is not required for the core objective.",
           "appliesTo": "Estimate stellar central pressure by scaling.",
           "provenance": "proposed-educational-connection"
         }
@@ -1246,7 +1284,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Foundation of stellar structure."
+      "whyItMatters": "Foundation of stellar structure.",
+      "parentId": "stellar-structure"
     },
     {
       "id": "thermodynamics",
@@ -1257,14 +1296,14 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to apply the first law to stellar matter.",
           "appliesTo": "Apply the first law to stellar matter.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "useful",
-          "note": "Probability Distributions adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Probability Distributions supports a deeper treatment of relate pressure, density, and temperature, but is not required for the core objective.",
           "appliesTo": "Relate pressure, density, and temperature.",
           "provenance": "proposed-educational-connection"
         }
@@ -1278,7 +1317,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Stellar structure and envelope response."
+      "whyItMatters": "Stellar structure and envelope response.",
+      "parentId": "stellar-structure"
     },
     {
       "id": "energy-transport",
@@ -1289,28 +1329,28 @@
         {
           "id": "hydrostatic-equilibrium",
           "kind": "necessary",
-          "note": "Hydrostatic Equilibrium supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Hydrostatic Equilibrium is required to compare radiative and convective transport.",
           "appliesTo": "Compare radiative and convective transport.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "thermodynamics",
           "kind": "necessary",
-          "note": "Stellar Thermodynamics supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Thermodynamics is required to compare radiative and convective transport.",
           "appliesTo": "Compare radiative and convective transport.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to compare radiative and convective transport.",
           "appliesTo": "Compare radiative and convective transport.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "radiation-and-spectra",
           "kind": "useful",
-          "note": "Radiation and Spectra adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Radiation and Spectra supports a deeper treatment of interpret a stellar temperature gradient, but is not required for the core objective.",
           "appliesTo": "Interpret a stellar temperature gradient.",
           "provenance": "proposed-educational-connection"
         }
@@ -1324,7 +1364,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Massive-star interiors."
+      "whyItMatters": "Massive-star interiors.",
+      "parentId": "stellar-structure"
     },
     {
       "id": "nuclear-burning",
@@ -1335,14 +1376,14 @@
         {
           "id": "thermodynamics",
           "kind": "necessary",
-          "note": "Stellar Thermodynamics supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Thermodynamics is required to identify principal stellar burning stages.",
           "appliesTo": "Identify principal stellar burning stages.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "exponentials-logarithms",
           "kind": "necessary",
-          "note": "Exponentials and Logarithms supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Exponentials and Logarithms is required to identify principal stellar burning stages.",
           "appliesTo": "Identify principal stellar burning stages.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1356,7 +1397,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Core evolution toward collapse."
+      "whyItMatters": "Core evolution toward collapse.",
+      "parentId": "stellar-evolution"
     },
     {
       "id": "stellar-structure",
@@ -1367,28 +1409,28 @@
         {
           "id": "hydrostatic-equilibrium",
           "kind": "necessary",
-          "note": "Hydrostatic Equilibrium supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Hydrostatic Equilibrium is required to identify the four stellar structure equations.",
           "appliesTo": "Identify the four stellar structure equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "energy-transport",
           "kind": "necessary",
-          "note": "Stellar Energy Transport supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Energy Transport is required to identify the four stellar structure equations.",
           "appliesTo": "Identify the four stellar structure equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "nuclear-burning",
           "kind": "necessary",
-          "note": "Nuclear Burning supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Nuclear Burning is required to identify the four stellar structure equations.",
           "appliesTo": "Identify the four stellar structure equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to identify the four stellar structure equations.",
           "appliesTo": "Identify the four stellar structure equations.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1402,7 +1444,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Evolution codes for massive stars."
+      "whyItMatters": "Evolution codes for massive stars.",
+      "parentId": "stellar-astrophysics"
     },
     {
       "id": "hertzsprung-russell-diagram",
@@ -1413,14 +1456,14 @@
         {
           "id": "radiation-and-spectra",
           "kind": "necessary",
-          "note": "Radiation and Spectra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Radiation and Spectra is required to locate evolutionary phases on an H–R diagram.",
           "appliesTo": "Locate evolutionary phases on an H–R diagram.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "functions",
           "kind": "necessary",
-          "note": "Functions and Graphs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Functions and Graphs is required to locate evolutionary phases on an H–R diagram.",
           "appliesTo": "Locate evolutionary phases on an H–R diagram.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1434,7 +1477,8 @@
       "resource": "https://openstax.org/details/books/astronomy-2e",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Comparing single and binary evolution."
+      "whyItMatters": "Comparing single and binary evolution.",
+      "parentId": "stellar-evolution"
     },
     {
       "id": "stellar-evolution",
@@ -1445,14 +1489,14 @@
         {
           "id": "stellar-structure",
           "kind": "necessary",
-          "note": "Stellar Structure Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Structure Equations is required to explain how nuclear fuel drives evolutionary stages.",
           "appliesTo": "Explain how nuclear fuel drives evolutionary stages.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "hertzsprung-russell-diagram",
           "kind": "necessary",
-          "note": "Hertzsprung–Russell Diagram supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Hertzsprung–Russell Diagram is required to explain how nuclear fuel drives evolutionary stages.",
           "appliesTo": "Explain how nuclear fuel drives evolutionary stages.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1468,7 +1512,8 @@
         "ekstrom-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Initial-to-final mass mapping."
+      "whyItMatters": "Initial-to-final mass mapping.",
+      "parentId": "stellar-astrophysics"
     },
     {
       "id": "initial-mass-function",
@@ -1479,14 +1524,14 @@
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to normalize a power-law initial-mass function.",
           "appliesTo": "Normalize a power-law initial-mass function.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to normalize a power-law initial-mass function.",
           "appliesTo": "Normalize a power-law initial-mass function.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1500,7 +1545,8 @@
       "resource": "https://ui.adsabs.harvard.edu/abs/2003PASP..115..763C/abstract",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Population synthesis initial conditions."
+      "whyItMatters": "Population synthesis initial conditions.",
+      "parentId": "massive-star-evolution"
     },
     {
       "id": "metallicity",
@@ -1511,14 +1557,14 @@
         {
           "id": "radiation-and-spectra",
           "kind": "necessary",
-          "note": "Radiation and Spectra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Radiation and Spectra is required to define abundance and metallicity measures.",
           "appliesTo": "Define abundance and metallicity measures.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-evolution",
           "kind": "useful",
-          "note": "Stellar Evolution adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Stellar Evolution supports a deeper treatment of explain how metallicity changes opacity and evolution, but is not required for the core objective.",
           "appliesTo": "Explain how metallicity changes opacity and evolution.",
           "provenance": "proposed-educational-connection"
         }
@@ -1535,7 +1581,8 @@
         "vink-2026"
       ],
       "scale": "micro",
-      "whyItMatters": "Metallicity-dependent winds and remnant masses."
+      "whyItMatters": "Metallicity-dependent winds and remnant masses.",
+      "parentId": "stellar-mass-loss"
     },
     {
       "id": "stellar-mass-loss",
@@ -1546,21 +1593,21 @@
         {
           "id": "stellar-evolution",
           "kind": "necessary",
-          "note": "Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Evolution is required to calculate mass lost from a prescribed rate.",
           "appliesTo": "Calculate mass lost from a prescribed rate.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to calculate mass lost from a prescribed rate.",
           "appliesTo": "Calculate mass lost from a prescribed rate.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "metallicity",
           "kind": "useful",
-          "note": "Stellar Metallicity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Stellar Metallicity supports a deeper treatment of explain how mass loss modifies stellar fate, but is not required for the core objective.",
           "appliesTo": "Explain how mass loss modifies stellar fate.",
           "provenance": "proposed-educational-connection"
         }
@@ -1577,7 +1624,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "meso",
-      "whyItMatters": "Massive-star final masses."
+      "whyItMatters": "Massive-star final masses.",
+      "parentId": "stellar-astrophysics"
     },
     {
       "id": "stellar-winds",
@@ -1588,21 +1636,21 @@
         {
           "id": "radiation-and-spectra",
           "kind": "necessary",
-          "note": "Radiation and Spectra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Radiation and Spectra is required to explain radiative line driving qualitatively.",
           "appliesTo": "Explain radiative line driving qualitatively.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-mass-loss",
           "kind": "necessary",
-          "note": "Stellar Mass Loss supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Mass Loss is required to explain radiative line driving qualitatively.",
           "appliesTo": "Explain radiative line driving qualitatively.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "metallicity",
           "kind": "useful",
-          "note": "Stellar Metallicity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Stellar Metallicity supports a deeper treatment of apply a mass-loss scaling relation, but is not required for the core objective.",
           "appliesTo": "Apply a mass-loss scaling relation.",
           "provenance": "proposed-educational-connection"
         }
@@ -1618,7 +1666,8 @@
         "vink-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Metallicity-dependent black-hole formation."
+      "whyItMatters": "Metallicity-dependent black-hole formation.",
+      "parentId": "stellar-mass-loss"
     },
     {
       "id": "massive-star-evolution",
@@ -1629,28 +1678,28 @@
         {
           "id": "stellar-evolution",
           "kind": "necessary",
-          "note": "Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Evolution is required to compare major evolutionary pathways of massive stars.",
           "appliesTo": "Compare major evolutionary pathways of massive stars.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-winds",
           "kind": "necessary",
-          "note": "Line-Driven Stellar Winds supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Line-Driven Stellar Winds is required to compare major evolutionary pathways of massive stars.",
           "appliesTo": "Compare major evolutionary pathways of massive stars.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "nuclear-burning",
           "kind": "necessary",
-          "note": "Nuclear Burning supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Nuclear Burning is required to compare major evolutionary pathways of massive stars.",
           "appliesTo": "Compare major evolutionary pathways of massive stars.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-stellar-evolution",
           "kind": "useful",
-          "note": "Binary Stellar Evolution adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Binary Stellar Evolution supports a deeper treatment of connect mass loss and mixing to final fate, but is not required for the core objective.",
           "appliesTo": "Connect mass loss and mixing to final fate.",
           "provenance": "proposed-educational-connection"
         }
@@ -1667,7 +1716,8 @@
         "ekstrom-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Progenitors of neutron stars and black holes."
+      "whyItMatters": "Progenitors of neutron stars and black holes.",
+      "parentId": "stellar-evolution"
     },
     {
       "id": "core-collapse-supernovae",
@@ -1678,14 +1728,14 @@
         {
           "id": "massive-star-evolution",
           "kind": "necessary",
-          "note": "Massive-Star Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Massive-Star Evolution is required to explain the conditions leading to core collapse.",
           "appliesTo": "Explain the conditions leading to core collapse.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "nuclear-burning",
           "kind": "necessary",
-          "note": "Nuclear Burning supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Nuclear Burning is required to explain the conditions leading to core collapse.",
           "appliesTo": "Explain the conditions leading to core collapse.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1701,7 +1751,8 @@
         "ekstrom-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Compact-object birth and natal kicks."
+      "whyItMatters": "Compact-object birth and natal kicks.",
+      "parentId": "massive-star-evolution"
     },
     {
       "id": "compact-remnants",
@@ -1712,14 +1763,14 @@
         {
           "id": "core-collapse-supernovae",
           "kind": "necessary",
-          "note": "Core-Collapse Supernovae supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Core-Collapse Supernovae is required to distinguish white dwarfs, neutron stars, and black holes.",
           "appliesTo": "Distinguish white dwarfs, neutron stars, and black holes.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "general-relativity",
           "kind": "useful",
-          "note": "General Relativity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "General Relativity supports a deeper treatment of relate progenitor evolution to remnant type, but is not required for the core objective.",
           "appliesTo": "Relate progenitor evolution to remnant type.",
           "provenance": "proposed-educational-connection"
         }
@@ -1735,7 +1786,8 @@
         "ekstrom-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Endpoints used in population synthesis."
+      "whyItMatters": "Endpoints used in population synthesis.",
+      "parentId": "core-collapse-supernovae"
     },
     {
       "id": "binary-star-observables",
@@ -1746,14 +1798,14 @@
         {
           "id": "keplerian-orbits",
           "kind": "necessary",
-          "note": "Keplerian Orbits supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Keplerian Orbits is required to infer binary properties from radial velocities and eclipses.",
           "appliesTo": "Infer binary properties from radial velocities and eclipses.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "radiation-and-spectra",
           "kind": "necessary",
-          "note": "Radiation and Spectra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Radiation and Spectra is required to infer binary properties from radial velocities and eclipses.",
           "appliesTo": "Infer binary properties from radial velocities and eclipses.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1769,7 +1821,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "micro",
-      "whyItMatters": "Constraining massive-binary populations."
+      "whyItMatters": "Constraining massive-binary populations.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "roche-potential",
@@ -1780,14 +1833,14 @@
         {
           "id": "binary-orbital-evolution",
           "kind": "necessary",
-          "note": "Binary Orbital Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Evolution is required to interpret effective potential surfaces in a rotating binary.",
           "appliesTo": "Interpret effective potential surfaces in a rotating binary.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "multivariable-calculus",
           "kind": "necessary",
-          "note": "Multivariable Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Multivariable Calculus is required to interpret effective potential surfaces in a rotating binary.",
           "appliesTo": "Interpret effective potential surfaces in a rotating binary.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1804,7 +1857,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Geometry of interacting binaries."
+      "whyItMatters": "Geometry of interacting binaries.",
+      "parentId": "roche-lobe"
     },
     {
       "id": "roche-lobe",
@@ -1815,7 +1869,7 @@
         {
           "id": "roche-potential",
           "kind": "necessary",
-          "note": "Roche Potential supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Roche Potential is required to estimate Roche-lobe size from mass ratio.",
           "appliesTo": "Estimate Roche-lobe size from mass ratio.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1832,7 +1886,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Triggering binary mass transfer."
+      "whyItMatters": "Triggering binary mass transfer.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "mass-transfer",
@@ -1843,21 +1898,21 @@
         {
           "id": "roche-lobe",
           "kind": "necessary",
-          "note": "Roche-Lobe Geometry supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Roche-Lobe Geometry is required to distinguish stable and unstable mass transfer.",
           "appliesTo": "Distinguish stable and unstable mass transfer.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-structure",
           "kind": "necessary",
-          "note": "Stellar Structure Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Structure Equations is required to distinguish stable and unstable mass transfer.",
           "appliesTo": "Distinguish stable and unstable mass transfer.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "useful",
-          "note": "Angular Momentum adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Angular Momentum supports a deeper treatment of calculate mass changes under a transfer prescription, but is not required for the core objective.",
           "appliesTo": "Calculate mass changes under a transfer prescription.",
           "provenance": "proposed-educational-connection"
         }
@@ -1874,7 +1929,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Animating simulated binary evolution."
+      "whyItMatters": "Animating simulated binary evolution.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "mass-transfer-stability",
@@ -1885,14 +1941,14 @@
         {
           "id": "mass-transfer",
           "kind": "necessary",
-          "note": "Binary Mass Transfer supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Mass Transfer is required to compare donor and Roche-lobe responses.",
           "appliesTo": "Compare donor and Roche-lobe responses.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-structure",
           "kind": "necessary",
-          "note": "Stellar Structure Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Structure Equations is required to compare donor and Roche-lobe responses.",
           "appliesTo": "Compare donor and Roche-lobe responses.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1908,7 +1964,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "micro",
-      "whyItMatters": "Branching formation channels."
+      "whyItMatters": "Branching formation channels.",
+      "parentId": "mass-transfer"
     },
     {
       "id": "conservative-transfer",
@@ -1919,14 +1976,14 @@
         {
           "id": "mass-transfer",
           "kind": "necessary",
-          "note": "Binary Mass Transfer supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Mass Transfer is required to track mass and angular momentum through transfer.",
           "appliesTo": "Track mass and angular momentum through transfer.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "necessary",
-          "note": "Angular Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Angular Momentum is required to track mass and angular momentum through transfer.",
           "appliesTo": "Track mass and angular momentum through transfer.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1942,7 +1999,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "micro",
-      "whyItMatters": "Binary population prescriptions."
+      "whyItMatters": "Binary population prescriptions.",
+      "parentId": "mass-transfer"
     },
     {
       "id": "common-envelope",
@@ -1953,14 +2011,14 @@
         {
           "id": "mass-transfer-stability",
           "kind": "necessary",
-          "note": "Mass-Transfer Stability supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Mass-Transfer Stability is required to describe entry and exit conditions for common-envelope evolution.",
           "appliesTo": "Describe entry and exit conditions for common-envelope evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "orbital-energy",
           "kind": "necessary",
-          "note": "Binary Orbital Energy supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Energy is required to describe entry and exit conditions for common-envelope evolution.",
           "appliesTo": "Describe entry and exit conditions for common-envelope evolution.",
           "provenance": "proposed-educational-dependency"
         }
@@ -1978,7 +2036,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Producing close compact binaries."
+      "whyItMatters": "Producing close compact binaries.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "orbital-shrinkage",
@@ -1989,14 +2048,14 @@
         {
           "id": "common-envelope",
           "kind": "necessary",
-          "note": "Common-Envelope Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Common-Envelope Evolution is required to quantify changes in separation and period.",
           "appliesTo": "Quantify changes in separation and period.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-orbital-evolution",
           "kind": "necessary",
-          "note": "Binary Orbital Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Evolution is required to quantify changes in separation and period.",
           "appliesTo": "Quantify changes in separation and period.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2010,7 +2069,8 @@
       "resource": "https://ui.adsabs.harvard.edu/abs/2024ARA%26A..62...21M/abstract",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Preparing binaries for gravitational-wave inspiral."
+      "whyItMatters": "Preparing binaries for gravitational-wave inspiral.",
+      "parentId": "common-envelope"
     },
     {
       "id": "supernova-kicks",
@@ -2021,21 +2081,21 @@
         {
           "id": "core-collapse-supernovae",
           "kind": "necessary",
-          "note": "Core-Collapse Supernovae supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Core-Collapse Supernovae is required to represent kick magnitudes and directions statistically.",
           "appliesTo": "Represent kick magnitudes and directions statistically.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "linear-momentum",
           "kind": "necessary",
-          "note": "Linear Momentum supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Linear Momentum is required to represent kick magnitudes and directions statistically.",
           "appliesTo": "Represent kick magnitudes and directions statistically.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to represent kick magnitudes and directions statistically.",
           "appliesTo": "Represent kick magnitudes and directions statistically.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2052,7 +2112,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Compact-binary survival and eccentricity."
+      "whyItMatters": "Compact-binary survival and eccentricity.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "binary-disruption",
@@ -2063,14 +2124,14 @@
         {
           "id": "supernova-kicks",
           "kind": "necessary",
-          "note": "Supernova Natal Kicks supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Supernova Natal Kicks is required to evaluate whether a post-supernova system remains bound.",
           "appliesTo": "Evaluate whether a post-supernova system remains bound.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "orbital-energy",
           "kind": "necessary",
-          "note": "Binary Orbital Energy supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Energy is required to evaluate whether a post-supernova system remains bound.",
           "appliesTo": "Evaluate whether a post-supernova system remains bound.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2086,7 +2147,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Runaway stars and disrupted progenitors."
+      "whyItMatters": "Runaway stars and disrupted progenitors.",
+      "parentId": "supernova-kicks"
     },
     {
       "id": "compact-binary-formation",
@@ -2097,21 +2159,21 @@
         {
           "id": "compact-remnants",
           "kind": "necessary",
-          "note": "Compact Remnants supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact Remnants is required to construct a plausible compact-binary formation sequence.",
           "appliesTo": "Construct a plausible compact-binary formation sequence.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "orbital-shrinkage",
           "kind": "necessary",
-          "note": "Orbital Shrinkage supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Orbital Shrinkage is required to construct a plausible compact-binary formation sequence.",
           "appliesTo": "Construct a plausible compact-binary formation sequence.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "supernova-kicks",
           "kind": "necessary",
-          "note": "Supernova Natal Kicks supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Supernova Natal Kicks is required to construct a plausible compact-binary formation sequence.",
           "appliesTo": "Construct a plausible compact-binary formation sequence.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2128,7 +2190,8 @@
         "han-2020"
       ],
       "scale": "meso",
-      "whyItMatters": "Sources of observable gravitational waves."
+      "whyItMatters": "Sources of observable gravitational waves.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "chemically-homogeneous-evolution",
@@ -2139,21 +2202,21 @@
         {
           "id": "massive-star-evolution",
           "kind": "necessary",
-          "note": "Massive-Star Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Massive-Star Evolution is required to explain rotational mixing in close massive binaries.",
           "appliesTo": "Explain rotational mixing in close massive binaries.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "tidal-interactions",
           "kind": "necessary",
-          "note": "Tidal Interactions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Tidal Interactions is required to explain rotational mixing in close massive binaries.",
           "appliesTo": "Explain rotational mixing in close massive binaries.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "metallicity",
           "kind": "useful",
-          "note": "Stellar Metallicity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Stellar Metallicity supports a deeper treatment of identify conditions favoring homogeneous evolution, but is not required for the core objective.",
           "appliesTo": "Identify conditions favoring homogeneous evolution.",
           "provenance": "proposed-educational-connection"
         }
@@ -2169,7 +2232,8 @@
         "marchant-bodensteiner-2024"
       ],
       "scale": "micro",
-      "whyItMatters": "Alternative binary-black-hole channel."
+      "whyItMatters": "Alternative binary-black-hole channel.",
+      "parentId": "formation-channels"
     },
     {
       "id": "binary-stellar-evolution",
@@ -2180,21 +2244,21 @@
         {
           "id": "massive-star-evolution",
           "kind": "necessary",
-          "note": "Massive-Star Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Massive-Star Evolution is required to integrate stellar and orbital changes into an evolutionary history.",
           "appliesTo": "Integrate stellar and orbital changes into an evolutionary history.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-orbital-evolution",
           "kind": "necessary",
-          "note": "Binary Orbital Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Evolution is required to integrate stellar and orbital changes into an evolutionary history.",
           "appliesTo": "Integrate stellar and orbital changes into an evolutionary history.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "mass-transfer",
           "kind": "necessary",
-          "note": "Binary Mass Transfer supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Mass Transfer is required to integrate stellar and orbital changes into an evolutionary history.",
           "appliesTo": "Integrate stellar and orbital changes into an evolutionary history.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2211,7 +2275,8 @@
         "vimes"
       ],
       "scale": "macro",
-      "whyItMatters": "Core scientific narrative for VIMES visualizations."
+      "whyItMatters": "Core scientific narrative for VIMES visualizations.",
+      "parentId": null
     },
     {
       "id": "formation-channels",
@@ -2222,21 +2287,21 @@
         {
           "id": "compact-binary-formation",
           "kind": "necessary",
-          "note": "Compact-Binary Formation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact-Binary Formation is required to compare isolated compact-binary channels.",
           "appliesTo": "Compare isolated compact-binary channels.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-stellar-evolution",
           "kind": "necessary",
-          "note": "Binary Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Stellar Evolution is required to compare isolated compact-binary channels.",
           "appliesTo": "Compare isolated compact-binary channels.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "dynamical-formation",
           "kind": "useful",
-          "note": "Dynamical Formation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Dynamical Formation supports a deeper treatment of link uncertain physics to observable outcomes, but is not required for the core objective.",
           "appliesTo": "Link uncertain physics to observable outcomes.",
           "provenance": "proposed-educational-connection"
         }
@@ -2253,7 +2318,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Interpreting population predictions."
+      "whyItMatters": "Interpreting population predictions.",
+      "parentId": "binary-stellar-evolution"
     },
     {
       "id": "special-relativity",
@@ -2264,14 +2330,14 @@
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to apply Lorentz transformations.",
           "appliesTo": "Apply Lorentz transformations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to apply Lorentz transformations.",
           "appliesTo": "Apply Lorentz transformations.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2285,7 +2351,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Foundation for relativistic gravity."
+      "whyItMatters": "Foundation for relativistic gravity.",
+      "parentId": "spacetime-geometry"
     },
     {
       "id": "tensors",
@@ -2296,21 +2363,21 @@
         {
           "id": "matrices",
           "kind": "necessary",
-          "note": "Matrices and Linear Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Matrices and Linear Systems is required to manipulate tensor components and indices.",
           "appliesTo": "Manipulate tensor components and indices.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "multivariable-calculus",
           "kind": "necessary",
-          "note": "Multivariable Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Multivariable Calculus is required to manipulate tensor components and indices.",
           "appliesTo": "Manipulate tensor components and indices.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "special-relativity",
           "kind": "useful",
-          "note": "Special Relativity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Special Relativity supports a deeper treatment of distinguish coordinate-dependent components from invariants, but is not required for the core objective.",
           "appliesTo": "Distinguish coordinate-dependent components from invariants.",
           "provenance": "proposed-educational-connection"
         }
@@ -2324,7 +2391,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Mathematical language of spacetime."
+      "whyItMatters": "Mathematical language of spacetime.",
+      "parentId": "spacetime-geometry"
     },
     {
       "id": "spacetime-geometry",
@@ -2335,14 +2403,14 @@
         {
           "id": "special-relativity",
           "kind": "necessary",
-          "note": "Special Relativity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Special Relativity is required to interpret a metric and proper time.",
           "appliesTo": "Interpret a metric and proper time.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "tensors",
           "kind": "necessary",
-          "note": "Tensor Foundations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Tensor Foundations is required to interpret a metric and proper time.",
           "appliesTo": "Interpret a metric and proper time.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2356,7 +2424,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Describing relativistic gravity."
+      "whyItMatters": "Describing relativistic gravity.",
+      "parentId": "general-relativity"
     },
     {
       "id": "geodesics",
@@ -2367,14 +2436,14 @@
         {
           "id": "spacetime-geometry",
           "kind": "necessary",
-          "note": "Spacetime Geometry supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Spacetime Geometry is required to explain free fall as geodesic motion.",
           "appliesTo": "Explain free fall as geodesic motion.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to explain free fall as geodesic motion.",
           "appliesTo": "Explain free fall as geodesic motion.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2388,7 +2457,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Relativistic compact-object motion."
+      "whyItMatters": "Relativistic compact-object motion.",
+      "parentId": "spacetime-geometry"
     },
     {
       "id": "einstein-field-equations",
@@ -2399,21 +2469,21 @@
         {
           "id": "spacetime-geometry",
           "kind": "necessary",
-          "note": "Spacetime Geometry supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Spacetime Geometry is required to interpret the geometric and matter sides of the field equations.",
           "appliesTo": "Interpret the geometric and matter sides of the field equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-calculus",
           "kind": "necessary",
-          "note": "Vector Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Calculus is required to interpret the geometric and matter sides of the field equations.",
           "appliesTo": "Interpret the geometric and matter sides of the field equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "tensors",
           "kind": "useful",
-          "note": "Tensor Foundations adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Tensor Foundations supports a deeper treatment of verify a simple limiting relation, but is not required for the core objective.",
           "appliesTo": "Verify a simple limiting relation.",
           "provenance": "proposed-educational-connection"
         }
@@ -2427,7 +2497,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Basis of relativistic source models."
+      "whyItMatters": "Basis of relativistic source models.",
+      "parentId": "general-relativity"
     },
     {
       "id": "general-relativity",
@@ -2438,21 +2509,21 @@
         {
           "id": "einstein-field-equations",
           "kind": "necessary",
-          "note": "Einstein Field Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Einstein Field Equations is required to contrast Newtonian and relativistic gravitation.",
           "appliesTo": "Contrast Newtonian and relativistic gravitation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "geodesics",
           "kind": "necessary",
-          "note": "Geodesic Motion supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Geodesic Motion is required to contrast Newtonian and relativistic gravitation.",
           "appliesTo": "Contrast Newtonian and relativistic gravitation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "newtonian-gravitation",
           "kind": "useful",
-          "note": "Newtonian Gravitation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Newtonian Gravitation supports a deeper treatment of identify regimes requiring relativistic treatment, but is not required for the core objective.",
           "appliesTo": "Identify regimes requiring relativistic treatment.",
           "provenance": "proposed-educational-connection"
         }
@@ -2466,7 +2537,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "macro",
-      "whyItMatters": "Compact objects and gravitational waves."
+      "whyItMatters": "Compact objects and gravitational waves.",
+      "parentId": null
     },
     {
       "id": "linearized-gravity",
@@ -2477,14 +2549,14 @@
         {
           "id": "general-relativity",
           "kind": "necessary",
-          "note": "General Relativity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding General Relativity is required to linearize a metric about flat spacetime.",
           "appliesTo": "Linearize a metric about flat spacetime.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "differential-wave-equation",
           "kind": "necessary",
-          "note": "Wave Equation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Wave Equation is required to linearize a metric about flat spacetime.",
           "appliesTo": "Linearize a metric about flat spacetime.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2498,7 +2570,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Weak gravitational waves far from sources."
+      "whyItMatters": "Weak gravitational waves far from sources.",
+      "parentId": "general-relativity"
     },
     {
       "id": "differential-wave-equation",
@@ -2509,21 +2582,21 @@
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to solve simple one-dimensional wave equations.",
           "appliesTo": "Solve simple one-dimensional wave equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "multivariable-calculus",
           "kind": "necessary",
-          "note": "Multivariable Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Multivariable Calculus is required to solve simple one-dimensional wave equations.",
           "appliesTo": "Solve simple one-dimensional wave equations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-calculus",
           "kind": "useful",
-          "note": "Vector Calculus adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Vector Calculus supports a deeper treatment of relate wavelength, frequency, and propagation speed, but is not required for the core objective.",
           "appliesTo": "Relate wavelength, frequency, and propagation speed.",
           "provenance": "proposed-educational-connection"
         }
@@ -2537,7 +2610,8 @@
       "resource": "https://openstax.org/details/books/university-physics-volume-1",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Mathematical foundation for wave propagation."
+      "whyItMatters": "Mathematical foundation for wave propagation.",
+      "parentId": "linearized-gravity"
     },
     {
       "id": "gw-polarizations",
@@ -2548,14 +2622,14 @@
         {
           "id": "linearized-gravity",
           "kind": "necessary",
-          "note": "Linearized Gravity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Linearized Gravity is required to distinguish plus and cross polarizations.",
           "appliesTo": "Distinguish plus and cross polarizations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "tensors",
           "kind": "necessary",
-          "note": "Tensor Foundations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Tensor Foundations is required to distinguish plus and cross polarizations.",
           "appliesTo": "Distinguish plus and cross polarizations.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2569,7 +2643,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Interpreting interferometer strain."
+      "whyItMatters": "Interpreting interferometer strain.",
+      "parentId": "linearized-gravity"
     },
     {
       "id": "quadrupole-radiation",
@@ -2580,21 +2655,21 @@
         {
           "id": "linearized-gravity",
           "kind": "necessary",
-          "note": "Linearized Gravity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Linearized Gravity is required to explain why the leading gravitational radiation is quadrupolar.",
           "appliesTo": "Explain why the leading gravitational radiation is quadrupolar.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to explain why the leading gravitational radiation is quadrupolar.",
           "appliesTo": "Explain why the leading gravitational radiation is quadrupolar.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "angular-momentum",
           "kind": "useful",
-          "note": "Angular Momentum adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Angular Momentum supports a deeper treatment of apply the quadrupole scaling to a binary, but is not required for the core objective.",
           "appliesTo": "Apply the quadrupole scaling to a binary.",
           "provenance": "proposed-educational-connection"
         }
@@ -2608,7 +2683,8 @@
       "resource": "https://www.einstein-online.info/en/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Gravitational-wave generation."
+      "whyItMatters": "Gravitational-wave generation.",
+      "parentId": "gravitational-wave-science"
     },
     {
       "id": "chirp-mass",
@@ -2619,14 +2695,14 @@
         {
           "id": "keplerian-orbits",
           "kind": "necessary",
-          "note": "Keplerian Orbits supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Keplerian Orbits is required to calculate chirp mass from component masses.",
           "appliesTo": "Calculate chirp mass from component masses.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "quadrupole-radiation",
           "kind": "necessary",
-          "note": "Quadrupole Radiation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Quadrupole Radiation is required to calculate chirp mass from component masses.",
           "appliesTo": "Calculate chirp mass from component masses.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2642,7 +2718,8 @@
         "abbott-2016"
       ],
       "scale": "micro",
-      "whyItMatters": "Precisely measured binary parameter."
+      "whyItMatters": "Precisely measured binary parameter.",
+      "parentId": "compact-binary-inspiral"
     },
     {
       "id": "compact-binary-inspiral",
@@ -2653,21 +2730,21 @@
         {
           "id": "quadrupole-radiation",
           "kind": "necessary",
-          "note": "Quadrupole Radiation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Quadrupole Radiation is required to relate energy loss to frequency evolution.",
           "appliesTo": "Relate energy loss to frequency evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "orbital-energy",
           "kind": "necessary",
-          "note": "Binary Orbital Energy supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Orbital Energy is required to relate energy loss to frequency evolution.",
           "appliesTo": "Relate energy loss to frequency evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "chirp-mass",
           "kind": "necessary",
-          "note": "Chirp Mass supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Chirp Mass is required to relate energy loss to frequency evolution.",
           "appliesTo": "Relate energy loss to frequency evolution.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2683,7 +2760,8 @@
         "abbott-2016"
       ],
       "scale": "meso",
-      "whyItMatters": "Merging compact-object sources."
+      "whyItMatters": "Merging compact-object sources.",
+      "parentId": "gravitational-wave-science"
     },
     {
       "id": "gravitational-waveforms",
@@ -2694,21 +2772,21 @@
         {
           "id": "compact-binary-inspiral",
           "kind": "necessary",
-          "note": "Compact-Binary Inspiral supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact-Binary Inspiral is required to interpret amplitude, phase, and frequency evolution.",
           "appliesTo": "Interpret amplitude, phase, and frequency evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "gw-polarizations",
           "kind": "necessary",
-          "note": "Gravitational-Wave Polarizations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Gravitational-Wave Polarizations is required to interpret amplitude, phase, and frequency evolution.",
           "appliesTo": "Interpret amplitude, phase, and frequency evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numerical-relativity",
           "kind": "useful",
-          "note": "Numerical Relativity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Numerical Relativity supports a deeper treatment of compare inspiral, merger, and ringdown regimes, but is not required for the core objective.",
           "appliesTo": "Compare inspiral, merger, and ringdown regimes.",
           "provenance": "proposed-educational-connection"
         }
@@ -2724,7 +2802,8 @@
         "abbott-2016"
       ],
       "scale": "meso",
-      "whyItMatters": "Connecting source dynamics to detector data."
+      "whyItMatters": "Connecting source dynamics to detector data.",
+      "parentId": "gravitational-wave-science"
     },
     {
       "id": "interferometric-detectors",
@@ -2735,14 +2814,14 @@
         {
           "id": "differential-wave-equation",
           "kind": "necessary",
-          "note": "Wave Equation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Wave Equation is required to explain differential-arm strain measurement.",
           "appliesTo": "Explain differential-arm strain measurement.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "gw-polarizations",
           "kind": "necessary",
-          "note": "Gravitational-Wave Polarizations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Gravitational-Wave Polarizations is required to explain differential-arm strain measurement.",
           "appliesTo": "Explain differential-arm strain measurement.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2758,7 +2837,8 @@
         "abbott-2016"
       ],
       "scale": "meso",
-      "whyItMatters": "LIGO/Virgo/KAGRA observations."
+      "whyItMatters": "LIGO/Virgo/KAGRA observations.",
+      "parentId": "gravitational-wave-science"
     },
     {
       "id": "gw150914",
@@ -2769,21 +2849,21 @@
         {
           "id": "gravitational-waveforms",
           "kind": "necessary",
-          "note": "Gravitational Waveforms supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Gravitational Waveforms is required to summarize the evidence for the first direct detection.",
           "appliesTo": "Summarize the evidence for the first direct detection.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "interferometric-detectors",
           "kind": "necessary",
-          "note": "Interferometric Detectors supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Interferometric Detectors is required to summarize the evidence for the first direct detection.",
           "appliesTo": "Summarize the evidence for the first direct detection.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "statistical-estimation",
           "kind": "necessary",
-          "note": "Statistical Estimation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Statistical Estimation is required to summarize the evidence for the first direct detection.",
           "appliesTo": "Summarize the evidence for the first direct detection.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2799,7 +2879,8 @@
         "abbott-2016"
       ],
       "scale": "micro",
-      "whyItMatters": "Benchmark gravitational-wave observation."
+      "whyItMatters": "Benchmark gravitational-wave observation.",
+      "parentId": "gravitational-waveforms"
     },
     {
       "id": "numerical-relativity",
@@ -2810,28 +2891,28 @@
         {
           "id": "general-relativity",
           "kind": "necessary",
-          "note": "General Relativity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding General Relativity is required to explain why merger requires numerical spacetime evolution.",
           "appliesTo": "Explain why merger requires numerical spacetime evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numerical-methods",
           "kind": "necessary",
-          "note": "Numerical Methods supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Methods is required to explain why merger requires numerical spacetime evolution.",
           "appliesTo": "Explain why merger requires numerical spacetime evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "partial-differential-equations",
           "kind": "necessary",
-          "note": "Partial Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Partial Differential Equations is required to explain why merger requires numerical spacetime evolution.",
           "appliesTo": "Explain why merger requires numerical spacetime evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "gravitational-waveforms",
           "kind": "useful",
-          "note": "Gravitational Waveforms adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Gravitational Waveforms supports a deeper treatment of identify discretization and constraint challenges, but is not required for the core objective.",
           "appliesTo": "Identify discretization and constraint challenges.",
           "provenance": "proposed-educational-connection"
         }
@@ -2845,7 +2926,8 @@
       "resource": "https://einstein-toolkit.org/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Modeling merger and ringdown."
+      "whyItMatters": "Modeling merger and ringdown.",
+      "parentId": "general-relativity"
     },
     {
       "id": "python-fundamentals",
@@ -2856,7 +2938,7 @@
         {
           "id": "algebraic-equations",
           "kind": "necessary",
-          "note": "Algebraic Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Algebraic Equations is required to write functions, loops, and conditionals.",
           "appliesTo": "Write functions, loops, and conditionals.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2870,7 +2952,8 @@
       "resource": "https://docs.python.org/3/tutorial/",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Automation of research workflows."
+      "whyItMatters": "Automation of research workflows.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "data-structures",
@@ -2881,7 +2964,7 @@
         {
           "id": "python-fundamentals",
           "kind": "necessary",
-          "note": "Python Fundamentals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Python Fundamentals is required to choose among arrays, tables, and mappings.",
           "appliesTo": "Choose among arrays, tables, and mappings.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2897,7 +2980,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Processing simulation output."
+      "whyItMatters": "Processing simulation output.",
+      "parentId": "python-fundamentals"
     },
     {
       "id": "numpy-arrays",
@@ -2908,21 +2992,21 @@
         {
           "id": "python-fundamentals",
           "kind": "necessary",
-          "note": "Python Fundamentals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Python Fundamentals is required to use vectorized array operations.",
           "appliesTo": "Use vectorized array operations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "vector-algebra",
           "kind": "necessary",
-          "note": "Vector Algebra supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Algebra is required to use vectorized array operations.",
           "appliesTo": "Use vectorized array operations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "data-structures",
           "kind": "useful",
-          "note": "Scientific Data Structures adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Scientific Data Structures supports a deeper treatment of diagnose shape and broadcasting errors, but is not required for the core objective.",
           "appliesTo": "Diagnose shape and broadcasting errors.",
           "provenance": "proposed-educational-connection"
         }
@@ -2938,7 +3022,8 @@
         "compas-demos"
       ],
       "scale": "micro",
-      "whyItMatters": "Efficient population synthesis post-processing."
+      "whyItMatters": "Efficient population synthesis post-processing.",
+      "parentId": "python-fundamentals"
     },
     {
       "id": "data-tables",
@@ -2949,14 +3034,14 @@
         {
           "id": "data-structures",
           "kind": "necessary",
-          "note": "Scientific Data Structures supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Scientific Data Structures is required to load, join, filter, and group tabular data.",
           "appliesTo": "Load, join, filter, and group tabular data.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numpy-arrays",
           "kind": "necessary",
-          "note": "NumPy Arrays supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding NumPy Arrays is required to load, join, filter, and group tabular data.",
           "appliesTo": "Load, join, filter, and group tabular data.",
           "provenance": "proposed-educational-dependency"
         }
@@ -2973,7 +3058,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "COMPAS simulation outputs."
+      "whyItMatters": "COMPAS simulation outputs.",
+      "parentId": "python-fundamentals"
     },
     {
       "id": "floating-point",
@@ -2984,14 +3070,14 @@
         {
           "id": "python-fundamentals",
           "kind": "necessary",
-          "note": "Python Fundamentals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Python Fundamentals is required to explain precision and rounding limitations.",
           "appliesTo": "Explain precision and rounding limitations.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "exponentials-logarithms",
           "kind": "necessary",
-          "note": "Exponentials and Logarithms supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Exponentials and Logarithms is required to explain precision and rounding limitations.",
           "appliesTo": "Explain precision and rounding limitations.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3005,7 +3091,8 @@
       "resource": "https://docs.python.org/3/tutorial/floatingpoint.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Reliable long-timescale calculations."
+      "whyItMatters": "Reliable long-timescale calculations.",
+      "parentId": "numerical-methods"
     },
     {
       "id": "numerical-methods",
@@ -3016,28 +3103,28 @@
         {
           "id": "python-fundamentals",
           "kind": "necessary",
-          "note": "Python Fundamentals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Python Fundamentals is required to compare discretization, convergence, and stability.",
           "appliesTo": "Compare discretization, convergence, and stability.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to compare discretization, convergence, and stability.",
           "appliesTo": "Compare discretization, convergence, and stability.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to compare discretization, convergence, and stability.",
           "appliesTo": "Compare discretization, convergence, and stability.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "floating-point",
           "kind": "useful",
-          "note": "Floating-Point Arithmetic adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Floating-Point Arithmetic supports a deeper treatment of validate a numerical result against a known solution, but is not required for the core objective.",
           "appliesTo": "Validate a numerical result against a known solution.",
           "provenance": "proposed-educational-connection"
         }
@@ -3051,7 +3138,8 @@
       "resource": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Foundation of simulation and analysis."
+      "whyItMatters": "Foundation of simulation and analysis.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "root-finding",
@@ -3062,14 +3150,14 @@
         {
           "id": "numerical-methods",
           "kind": "necessary",
-          "note": "Numerical Methods supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Methods is required to apply bracketing and Newton methods.",
           "appliesTo": "Apply bracketing and Newton methods.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "functions",
           "kind": "necessary",
-          "note": "Functions and Graphs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Functions and Graphs is required to apply bracketing and Newton methods.",
           "appliesTo": "Apply bracketing and Newton methods.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3083,7 +3171,8 @@
       "resource": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Locating events in evolution tracks."
+      "whyItMatters": "Locating events in evolution tracks.",
+      "parentId": "numerical-methods"
     },
     {
       "id": "numerical-integration",
@@ -3094,14 +3183,14 @@
         {
           "id": "numerical-methods",
           "kind": "necessary",
-          "note": "Numerical Methods supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Methods is required to apply quadrature to sampled functions.",
           "appliesTo": "Apply quadrature to sampled functions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to apply quadrature to sampled functions.",
           "appliesTo": "Apply quadrature to sampled functions.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3115,7 +3204,8 @@
       "resource": "https://docs.scipy.org/doc/scipy/reference/integrate.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Cosmic merger-rate calculations."
+      "whyItMatters": "Cosmic merger-rate calculations.",
+      "parentId": "numerical-methods"
     },
     {
       "id": "ode-solvers",
@@ -3126,14 +3216,14 @@
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to use adaptive ODE integration.",
           "appliesTo": "Use adaptive ODE integration.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numerical-methods",
           "kind": "necessary",
-          "note": "Numerical Methods supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Methods is required to use adaptive ODE integration.",
           "appliesTo": "Use adaptive ODE integration.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3147,7 +3237,8 @@
       "resource": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html",
       "researchReferences": [],
       "scale": "meso",
-      "whyItMatters": "Evolving physical systems."
+      "whyItMatters": "Evolving physical systems.",
+      "parentId": "numerical-methods"
     },
     {
       "id": "partial-differential-equations",
@@ -3158,21 +3249,21 @@
         {
           "id": "vector-calculus",
           "kind": "necessary",
-          "note": "Vector Calculus supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Vector Calculus is required to classify elementary PDEs.",
           "appliesTo": "Classify elementary PDEs.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "ordinary-differential-equations",
           "kind": "necessary",
-          "note": "Ordinary Differential Equations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Ordinary Differential Equations is required to classify elementary PDEs.",
           "appliesTo": "Classify elementary PDEs.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numerical-methods",
           "kind": "useful",
-          "note": "Numerical Methods adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Numerical Methods supports a deeper treatment of interpret initial and boundary conditions, but is not required for the core objective.",
           "appliesTo": "Interpret initial and boundary conditions.",
           "provenance": "proposed-educational-connection"
         }
@@ -3186,7 +3277,8 @@
       "resource": "https://mathworld.wolfram.com/PartialDifferentialEquation.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Wave propagation and stellar fluids."
+      "whyItMatters": "Wave propagation and stellar fluids.",
+      "parentId": "numerical-methods"
     },
     {
       "id": "interpolation",
@@ -3197,21 +3289,21 @@
         {
           "id": "functions",
           "kind": "necessary",
-          "note": "Functions and Graphs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Functions and Graphs is required to apply linear and spline interpolation.",
           "appliesTo": "Apply linear and spline interpolation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numpy-arrays",
           "kind": "necessary",
-          "note": "NumPy Arrays supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding NumPy Arrays is required to apply linear and spline interpolation.",
           "appliesTo": "Apply linear and spline interpolation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numerical-methods",
           "kind": "useful",
-          "note": "Numerical Methods adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Numerical Methods supports a deeper treatment of identify extrapolation and overshoot risks, but is not required for the core objective.",
           "appliesTo": "Identify extrapolation and overshoot risks.",
           "provenance": "proposed-educational-connection"
         }
@@ -3227,7 +3319,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Continuous VIMES-style animation from discrete output."
+      "whyItMatters": "Continuous VIMES-style animation from discrete output.",
+      "parentId": "scientific-visualization"
     },
     {
       "id": "temporal-sampling",
@@ -3238,14 +3331,14 @@
         {
           "id": "interpolation",
           "kind": "necessary",
-          "note": "Numerical Interpolation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Interpolation is required to choose sampling intervals for multiple timescales.",
           "appliesTo": "Choose sampling intervals for multiple timescales.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "derivatives",
           "kind": "necessary",
-          "note": "Derivatives supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Derivatives is required to choose sampling intervals for multiple timescales.",
           "appliesTo": "Choose sampling intervals for multiple timescales.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3261,7 +3354,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Faithful animation of binary evolution."
+      "whyItMatters": "Faithful animation of binary evolution.",
+      "parentId": "scientific-visualization"
     },
     {
       "id": "monte-carlo-methods",
@@ -3272,21 +3366,21 @@
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to generate reproducible random samples.",
           "appliesTo": "Generate reproducible random samples.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "numpy-arrays",
           "kind": "necessary",
-          "note": "NumPy Arrays supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding NumPy Arrays is required to generate reproducible random samples.",
           "appliesTo": "Generate reproducible random samples.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "uncertainty-propagation",
           "kind": "useful",
-          "note": "Uncertainty Propagation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Uncertainty Propagation supports a deeper treatment of estimate uncertainty from finite samples, but is not required for the core objective.",
           "appliesTo": "Estimate uncertainty from finite samples.",
           "provenance": "proposed-educational-connection"
         }
@@ -3303,7 +3397,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Population synthesis and selection modeling."
+      "whyItMatters": "Population synthesis and selection modeling.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "scientific-visualization",
@@ -3314,21 +3409,21 @@
         {
           "id": "numpy-arrays",
           "kind": "necessary",
-          "note": "NumPy Arrays supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding NumPy Arrays is required to map data variables to visual encodings.",
           "appliesTo": "Map data variables to visual encodings.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "coordinate-systems",
           "kind": "necessary",
-          "note": "Coordinate Systems supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Coordinate Systems is required to map data variables to visual encodings.",
           "appliesTo": "Map data variables to visual encodings.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "uncertainty-propagation",
           "kind": "useful",
-          "note": "Uncertainty Propagation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Uncertainty Propagation supports a deeper treatment of evaluate a visualization for accuracy and accessibility, but is not required for the core objective.",
           "appliesTo": "Evaluate a visualization for accuracy and accessibility.",
           "provenance": "proposed-educational-connection"
         }
@@ -3344,7 +3439,8 @@
         "vimes"
       ],
       "scale": "meso",
-      "whyItMatters": "Communicating simulation evolution."
+      "whyItMatters": "Communicating simulation evolution.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "animation",
@@ -3355,21 +3451,21 @@
         {
           "id": "scientific-visualization",
           "kind": "necessary",
-          "note": "Scientific Visualization supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Scientific Visualization is required to construct a time-consistent scientific animation.",
           "appliesTo": "Construct a time-consistent scientific animation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "temporal-sampling",
           "kind": "necessary",
-          "note": "Temporal Sampling supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Temporal Sampling is required to construct a time-consistent scientific animation.",
           "appliesTo": "Construct a time-consistent scientific animation.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "interpolation",
           "kind": "useful",
-          "note": "Numerical Interpolation adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Numerical Interpolation supports a deeper treatment of separate interpolated presentation from simulated values, but is not required for the core objective.",
           "appliesTo": "Separate interpolated presentation from simulated values.",
           "provenance": "proposed-educational-connection"
         }
@@ -3385,7 +3481,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "Educational visualization of massive binaries."
+      "whyItMatters": "Educational visualization of massive binaries.",
+      "parentId": "scientific-visualization"
     },
     {
       "id": "reproducible-workflows",
@@ -3396,14 +3493,14 @@
         {
           "id": "python-fundamentals",
           "kind": "necessary",
-          "note": "Python Fundamentals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Python Fundamentals is required to record software, parameters, and provenance.",
           "appliesTo": "Record software, parameters, and provenance.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "data-tables",
           "kind": "necessary",
-          "note": "Tabular Scientific Data supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Tabular Scientific Data is required to record software, parameters, and provenance.",
           "appliesTo": "Record software, parameters, and provenance.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3419,7 +3516,8 @@
         "compas-demos"
       ],
       "scale": "meso",
-      "whyItMatters": "Auditable population-synthesis post-processing."
+      "whyItMatters": "Auditable population-synthesis post-processing.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "binary-initial-conditions",
@@ -3430,21 +3528,21 @@
         {
           "id": "initial-mass-function",
           "kind": "necessary",
-          "note": "Initial Mass Function supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Initial Mass Function is required to construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "appliesTo": "Construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "appliesTo": "Construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-star-observables",
           "kind": "necessary",
-          "note": "Binary-Star Observables supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary-Star Observables is required to construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "appliesTo": "Construct distributions for initial mass, mass ratio, period, and eccentricity.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3461,7 +3559,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Inputs to binary population synthesis."
+      "whyItMatters": "Inputs to binary population synthesis.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "binary-population-synthesis",
@@ -3472,21 +3571,21 @@
         {
           "id": "binary-stellar-evolution",
           "kind": "necessary",
-          "note": "Binary Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Stellar Evolution is required to describe rapid population-synthesis workflow and assumptions.",
           "appliesTo": "Describe rapid population-synthesis workflow and assumptions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "monte-carlo-methods",
           "kind": "necessary",
-          "note": "Monte Carlo Methods supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Monte Carlo Methods is required to describe rapid population-synthesis workflow and assumptions.",
           "appliesTo": "Describe rapid population-synthesis workflow and assumptions.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-initial-conditions",
           "kind": "necessary",
-          "note": "Binary Initial Conditions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Initial Conditions is required to describe rapid population-synthesis workflow and assumptions.",
           "appliesTo": "Describe rapid population-synthesis workflow and assumptions.",
           "provenance": "proposed-educational-dependency"
         },
@@ -3510,7 +3609,8 @@
         "breivik-2026"
       ],
       "scale": "macro",
-      "whyItMatters": "Predicting gravitational-wave source populations."
+      "whyItMatters": "Predicting gravitational-wave source populations.",
+      "parentId": null
     },
     {
       "id": "simulation-outputs",
@@ -3521,14 +3621,14 @@
         {
           "id": "binary-population-synthesis",
           "kind": "necessary",
-          "note": "Binary Population Synthesis supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Population Synthesis is required to interpret event, system, and history tables.",
           "appliesTo": "Interpret event, system, and history tables.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "data-tables",
           "kind": "necessary",
-          "note": "Tabular Scientific Data supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Tabular Scientific Data is required to interpret event, system, and history tables.",
           "appliesTo": "Interpret event, system, and history tables.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3545,7 +3645,8 @@
         "vimes"
       ],
       "scale": "micro",
-      "whyItMatters": "COMPAS post-processing."
+      "whyItMatters": "COMPAS post-processing.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "population-weights",
@@ -3556,14 +3657,14 @@
         {
           "id": "simulation-outputs",
           "kind": "necessary",
-          "note": "Population-Synthesis Outputs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Population-Synthesis Outputs is required to explain why simulated systems carry weights.",
           "appliesTo": "Explain why simulated systems carry weights.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-foundations",
           "kind": "necessary",
-          "note": "Probability Foundations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Foundations is required to explain why simulated systems carry weights.",
           "appliesTo": "Explain why simulated systems carry weights.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3579,7 +3680,8 @@
         "compas-demos"
       ],
       "scale": "micro",
-      "whyItMatters": "Unbiased synthesis estimates."
+      "whyItMatters": "Unbiased synthesis estimates.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "formation-efficiency",
@@ -3590,14 +3692,14 @@
         {
           "id": "population-weights",
           "kind": "necessary",
-          "note": "Simulation Weights supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Simulation Weights is required to calculate formation efficiency per unit stellar mass.",
           "appliesTo": "Calculate formation efficiency per unit stellar mass.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "initial-mass-function",
           "kind": "necessary",
-          "note": "Initial Mass Function supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Initial Mass Function is required to calculate formation efficiency per unit stellar mass.",
           "appliesTo": "Calculate formation efficiency per unit stellar mass.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3614,7 +3716,8 @@
         "breivik-2026"
       ],
       "scale": "micro",
-      "whyItMatters": "Connecting simulations to cosmic populations."
+      "whyItMatters": "Connecting simulations to cosmic populations.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "delay-time-distributions",
@@ -3625,21 +3728,21 @@
         {
           "id": "compact-binary-inspiral",
           "kind": "necessary",
-          "note": "Compact-Binary Inspiral supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact-Binary Inspiral is required to calculate formation-to-merger delay times.",
           "appliesTo": "Calculate formation-to-merger delay times.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to calculate formation-to-merger delay times.",
           "appliesTo": "Calculate formation-to-merger delay times.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "simulation-outputs",
           "kind": "necessary",
-          "note": "Population-Synthesis Outputs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Population-Synthesis Outputs is required to calculate formation-to-merger delay times.",
           "appliesTo": "Calculate formation-to-merger delay times.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3656,7 +3759,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Mapping star formation to merger epochs."
+      "whyItMatters": "Mapping star formation to merger epochs.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "cosmic-star-formation",
@@ -3667,14 +3771,14 @@
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to interpret star-formation rate density versus redshift.",
           "appliesTo": "Interpret star-formation rate density versus redshift.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "stellar-evolution",
           "kind": "necessary",
-          "note": "Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Evolution is required to interpret star-formation rate density versus redshift.",
           "appliesTo": "Interpret star-formation rate density versus redshift.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3690,7 +3794,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "micro",
-      "whyItMatters": "Rate predictions through cosmic time."
+      "whyItMatters": "Rate predictions through cosmic time.",
+      "parentId": "cosmic-merger-rates"
     },
     {
       "id": "cosmic-metallicity",
@@ -3701,21 +3806,21 @@
         {
           "id": "metallicity",
           "kind": "necessary",
-          "note": "Stellar Metallicity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Stellar Metallicity is required to represent metallicity distributions across cosmic time.",
           "appliesTo": "Represent metallicity distributions across cosmic time.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-distributions",
           "kind": "necessary",
-          "note": "Probability Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Distributions is required to represent metallicity distributions across cosmic time.",
           "appliesTo": "Represent metallicity distributions across cosmic time.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-star-formation",
           "kind": "useful",
-          "note": "Cosmic Star-Formation History adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Cosmic Star-Formation History supports a deeper treatment of explain metallicity-model uncertainty, but is not required for the core objective.",
           "appliesTo": "Explain metallicity-model uncertainty.",
           "provenance": "proposed-educational-connection"
         }
@@ -3731,7 +3836,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "micro",
-      "whyItMatters": "Metallicity-sensitive black-hole populations."
+      "whyItMatters": "Metallicity-sensitive black-hole populations.",
+      "parentId": "cosmic-merger-rates"
     },
     {
       "id": "cosmological-redshift",
@@ -3742,21 +3848,21 @@
         {
           "id": "special-relativity",
           "kind": "necessary",
-          "note": "Special Relativity supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Special Relativity is required to convert conceptually between redshift and lookback time.",
           "appliesTo": "Convert conceptually between redshift and lookback time.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "integrals",
           "kind": "necessary",
-          "note": "Integrals supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Integrals is required to convert conceptually between redshift and lookback time.",
           "appliesTo": "Convert conceptually between redshift and lookback time.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-star-formation",
           "kind": "useful",
-          "note": "Cosmic Star-Formation History adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Cosmic Star-Formation History supports a deeper treatment of distinguish source-frame and detector-frame quantities, but is not required for the core objective.",
           "appliesTo": "Distinguish source-frame and detector-frame quantities.",
           "provenance": "proposed-educational-connection"
         }
@@ -3770,7 +3876,8 @@
       "resource": "https://lambda.gsfc.nasa.gov/education/graphic_history/univ_evol.html",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Interpreting distant gravitational-wave sources."
+      "whyItMatters": "Interpreting distant gravitational-wave sources.",
+      "parentId": "cosmic-merger-rates"
     },
     {
       "id": "cosmic-merger-rates",
@@ -3781,28 +3888,28 @@
         {
           "id": "formation-efficiency",
           "kind": "necessary",
-          "note": "Formation Efficiency supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Formation Efficiency is required to convolve formation history with delay times.",
           "appliesTo": "Convolve formation history with delay times.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "delay-time-distributions",
           "kind": "necessary",
-          "note": "Delay-Time Distributions supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Delay-Time Distributions is required to convolve formation history with delay times.",
           "appliesTo": "Convolve formation history with delay times.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-star-formation",
           "kind": "necessary",
-          "note": "Cosmic Star-Formation History supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Cosmic Star-Formation History is required to convolve formation history with delay times.",
           "appliesTo": "Convolve formation history with delay times.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-metallicity",
           "kind": "necessary",
-          "note": "Cosmic Metallicity Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Cosmic Metallicity Evolution is required to convolve formation history with delay times.",
           "appliesTo": "Convolve formation history with delay times.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3819,7 +3926,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Predicting detectable compact-object coalescences."
+      "whyItMatters": "Predicting detectable compact-object coalescences.",
+      "parentId": "binary-population-synthesis"
     },
     {
       "id": "detector-selection-effects",
@@ -3830,21 +3938,21 @@
         {
           "id": "interferometric-detectors",
           "kind": "necessary",
-          "note": "Interferometric Detectors supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Interferometric Detectors is required to explain detection probability dependence on source parameters.",
           "appliesTo": "Explain detection probability dependence on source parameters.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "probability-foundations",
           "kind": "necessary",
-          "note": "Probability Foundations supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Probability Foundations is required to explain detection probability dependence on source parameters.",
           "appliesTo": "Explain detection probability dependence on source parameters.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "chirp-mass",
           "kind": "necessary",
-          "note": "Chirp Mass supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Chirp Mass is required to explain detection probability dependence on source parameters.",
           "appliesTo": "Explain detection probability dependence on source parameters.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3860,7 +3968,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "micro",
-      "whyItMatters": "Relating intrinsic and detected populations."
+      "whyItMatters": "Relating intrinsic and detected populations.",
+      "parentId": "population-inference"
     },
     {
       "id": "observational-bias",
@@ -3871,14 +3980,14 @@
         {
           "id": "detector-selection-effects",
           "kind": "necessary",
-          "note": "Detector Selection Effects supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Detector Selection Effects is required to distinguish selection bias from measurement uncertainty.",
           "appliesTo": "Distinguish selection bias from measurement uncertainty.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "statistical-estimation",
           "kind": "necessary",
-          "note": "Statistical Estimation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Statistical Estimation is required to distinguish selection bias from measurement uncertainty.",
           "appliesTo": "Distinguish selection bias from measurement uncertainty.",
           "provenance": "proposed-educational-dependency"
         }
@@ -3892,7 +4001,8 @@
       "resource": "https://compas.science/",
       "researchReferences": [],
       "scale": "micro",
-      "whyItMatters": "Catalog interpretation."
+      "whyItMatters": "Catalog interpretation.",
+      "parentId": "population-inference"
     },
     {
       "id": "merger-rate-inference",
@@ -3903,21 +4013,21 @@
         {
           "id": "statistical-estimation",
           "kind": "necessary",
-          "note": "Statistical Estimation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Statistical Estimation is required to construct a Poisson rate likelihood with efficiency.",
           "appliesTo": "Construct a Poisson rate likelihood with efficiency.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "detector-selection-effects",
           "kind": "necessary",
-          "note": "Detector Selection Effects supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Detector Selection Effects is required to construct a Poisson rate likelihood with efficiency.",
           "appliesTo": "Construct a Poisson rate likelihood with efficiency.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-merger-rates",
           "kind": "useful",
-          "note": "Cosmic Merger Rates adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Cosmic Merger Rates supports a deeper treatment of calculate a credible or confidence interval, but is not required for the core objective.",
           "appliesTo": "Calculate a credible or confidence interval.",
           "provenance": "proposed-educational-connection"
         }
@@ -3933,7 +4043,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "micro",
-      "whyItMatters": "Measured compact-object coalescence rates."
+      "whyItMatters": "Measured compact-object coalescence rates.",
+      "parentId": "population-inference"
     },
     {
       "id": "population-inference",
@@ -3944,21 +4055,21 @@
         {
           "id": "hierarchical-models",
           "kind": "necessary",
-          "note": "Hierarchical Models supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Hierarchical Models is required to formulate a selection-corrected hierarchical model.",
           "appliesTo": "Formulate a selection-corrected hierarchical model.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "detector-selection-effects",
           "kind": "necessary",
-          "note": "Detector Selection Effects supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Detector Selection Effects is required to formulate a selection-corrected hierarchical model.",
           "appliesTo": "Formulate a selection-corrected hierarchical model.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "gravitational-waveforms",
           "kind": "necessary",
-          "note": "Gravitational Waveforms supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Gravitational Waveforms is required to formulate a selection-corrected hierarchical model.",
           "appliesTo": "Formulate a selection-corrected hierarchical model.",
           "provenance": "proposed-educational-dependency"
         },
@@ -3981,7 +4092,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "meso",
-      "whyItMatters": "Constraining compact-binary formation."
+      "whyItMatters": "Constraining compact-binary formation.",
+      "parentId": "gravitational-wave-paleontology"
     },
     {
       "id": "model-comparison",
@@ -3992,14 +4104,14 @@
         {
           "id": "population-inference",
           "kind": "necessary",
-          "note": "Gravitational-Wave Population Inference supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Gravitational-Wave Population Inference is required to compare predictive models with population data.",
           "appliesTo": "Compare predictive models with population data.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "binary-population-synthesis",
           "kind": "necessary",
-          "note": "Binary Population Synthesis supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Population Synthesis is required to compare predictive models with population data.",
           "appliesTo": "Compare predictive models with population data.",
           "provenance": "proposed-educational-dependency"
         },
@@ -4023,7 +4135,8 @@
         "breivik-2026"
       ],
       "scale": "meso",
-      "whyItMatters": "Testing binary-evolution prescriptions."
+      "whyItMatters": "Testing binary-evolution prescriptions.",
+      "parentId": "gravitational-wave-paleontology"
     },
     {
       "id": "gravitational-wave-paleontology",
@@ -4034,21 +4147,21 @@
         {
           "id": "model-comparison",
           "kind": "necessary",
-          "note": "Formation-Model Comparison supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Formation-Model Comparison is required to connect present merger observations to progenitor evolution.",
           "appliesTo": "Connect present merger observations to progenitor evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "formation-channels",
           "kind": "necessary",
-          "note": "Compact-Binary Formation Channels supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact-Binary Formation Channels is required to connect present merger observations to progenitor evolution.",
           "appliesTo": "Connect present merger observations to progenitor evolution.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "cosmic-merger-rates",
           "kind": "necessary",
-          "note": "Cosmic Merger Rates supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Cosmic Merger Rates is required to connect present merger observations to progenitor evolution.",
           "appliesTo": "Connect present merger observations to progenitor evolution.",
           "provenance": "proposed-educational-dependency"
         },
@@ -4072,7 +4185,8 @@
         "breivik-2026"
       ],
       "scale": "macro",
-      "whyItMatters": "Reconstructing massive-binary histories from gravitational waves."
+      "whyItMatters": "Reconstructing massive-binary histories from gravitational waves.",
+      "parentId": null
     },
     {
       "id": "dynamical-formation",
@@ -4083,21 +4197,21 @@
         {
           "id": "three-body-problem",
           "kind": "necessary",
-          "note": "General Three-Body Problem supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding General Three-Body Problem is required to explain how dense environments assemble compact binaries.",
           "appliesTo": "Explain how dense environments assemble compact binaries.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "compact-remnants",
           "kind": "necessary",
-          "note": "Compact Remnants supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Compact Remnants is required to explain how dense environments assemble compact binaries.",
           "appliesTo": "Explain how dense environments assemble compact binaries.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "formation-channels",
           "kind": "useful",
-          "note": "Compact-Binary Formation Channels adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Compact-Binary Formation Channels supports a deeper treatment of contrast dynamical and isolated signatures, but is not required for the core objective.",
           "appliesTo": "Contrast dynamical and isolated signatures.",
           "provenance": "proposed-educational-connection"
         }
@@ -4113,7 +4227,8 @@
         "mandel-broekgaarden-2022"
       ],
       "scale": "micro",
-      "whyItMatters": "Alternative context for population inference."
+      "whyItMatters": "Alternative context for population inference.",
+      "parentId": "model-comparison"
     },
     {
       "id": "vimes-visualization-pathway",
@@ -4124,49 +4239,49 @@
         {
           "id": "binary-stellar-evolution",
           "kind": "necessary",
-          "note": "Binary Stellar Evolution supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Binary Stellar Evolution is required to synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "appliesTo": "Synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "simulation-outputs",
           "kind": "necessary",
-          "note": "Population-Synthesis Outputs supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Population-Synthesis Outputs is required to synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "appliesTo": "Synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "interpolation",
           "kind": "necessary",
-          "note": "Numerical Interpolation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Numerical Interpolation is required to synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "appliesTo": "Synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "temporal-sampling",
           "kind": "necessary",
-          "note": "Temporal Sampling supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Temporal Sampling is required to synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "appliesTo": "Synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "animation",
           "kind": "necessary",
-          "note": "Scientific Animation supplies required methods or physical principles for this concept at the stated application level.",
+          "note": "Understanding Scientific Animation is required to synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "appliesTo": "Synthesize orbital, stellar, and event data into a faithful visual narrative.",
           "provenance": "proposed-educational-dependency"
         },
         {
           "id": "orbital-eccentricity",
           "kind": "useful",
-          "note": "Orbital Eccentricity adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Orbital Eccentricity supports a deeper treatment of document which displayed states are simulated and which are interpolated, but is not required for the core objective.",
           "appliesTo": "Document which displayed states are simulated and which are interpolated.",
           "provenance": "proposed-educational-connection"
         },
         {
           "id": "reproducible-workflows",
           "kind": "useful",
-          "note": "Reproducible Workflows adds context or a deeper comparison but is not required for the stated objective.",
+          "note": "Reproducible Workflows supports a deeper treatment of document which displayed states are simulated and which are interpolated, but is not required for the core objective.",
           "appliesTo": "Document which displayed states are simulated and which are interpolated.",
           "provenance": "proposed-educational-connection"
         },
@@ -4190,7 +4305,8 @@
         "compas-demos"
       ],
       "scale": "meso",
-      "whyItMatters": "Independent educational preparation for understanding VIMES-style visualization; not an official VIMES or Rakiura product."
+      "whyItMatters": "Independent educational preparation for understanding VIMES-style visualization; not an official VIMES or Rakiura product.",
+      "parentId": "scientific-computing"
     },
     {
       "id": "calculus",
@@ -4233,7 +4349,8 @@
       "tags": [
         "anchor",
         "pathway"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "classical-mechanics",
@@ -4276,7 +4393,8 @@
       "tags": [
         "anchor",
         "pathway"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "stellar-astrophysics",
@@ -4319,7 +4437,8 @@
       "tags": [
         "anchor",
         "pathway"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "gravitational-wave-science",
@@ -4362,7 +4481,8 @@
       "tags": [
         "anchor",
         "pathway"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "scientific-computing",
@@ -4405,7 +4525,8 @@
       "tags": [
         "anchor",
         "pathway"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "research-practice",
@@ -4426,7 +4547,8 @@
       "tags": [
         "anchor",
         "research"
-      ]
+      ],
+      "parentId": null
     },
     {
       "id": "literature-search",
@@ -4455,7 +4577,8 @@
       "tags": [
         "research",
         "literature"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "reading-scientific-papers",
@@ -4491,7 +4614,8 @@
       "tags": [
         "research",
         "literature"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "research-questions",
@@ -4527,7 +4651,8 @@
       "tags": [
         "research",
         "planning"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "concept-mapping",
@@ -4563,7 +4688,8 @@
       "tags": [
         "research",
         "knowledge-graph"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "scientific-computing-workflow",
@@ -4599,7 +4725,8 @@
       "tags": [
         "research",
         "computing"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "reproducing-a-result",
@@ -4642,7 +4769,8 @@
       "tags": [
         "research",
         "reproducibility"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "research-data-analysis",
@@ -4685,7 +4813,8 @@
       "tags": [
         "research",
         "data"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "model-validation",
@@ -4728,7 +4857,8 @@
       "tags": [
         "research",
         "validation"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "scientific-writing",
@@ -4764,7 +4894,8 @@
       "tags": [
         "research",
         "communication"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "presenting-research",
@@ -4800,7 +4931,8 @@
       "tags": [
         "research",
         "communication"
-      ]
+      ],
+      "parentId": "research-practice"
     },
     {
       "id": "research-ethics-open-science",
@@ -4836,7 +4968,8 @@
       "tags": [
         "research",
         "ethics"
-      ]
+      ],
+      "parentId": "research-practice"
     }
   ]
 }

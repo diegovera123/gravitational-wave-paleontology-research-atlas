@@ -52,11 +52,15 @@
           <div class="loading"><span></span>Mapping concepts…</div>
         </div>
         <div class="graph-footer">
-          <div id="legend" class="legend" aria-label="Domain legend"></div>
-          <p><span class="mouse-icon" aria-hidden="true"></span> Drag to orbit · Scroll to zoom · Click to focus</p>
+          <div class="level-controls" aria-label="Navigation level">
+            <button id="global-view" class="view-button" type="button" aria-pressed="true">Global</button>
+            <button id="domain-view" class="view-button" type="button" aria-pressed="false" disabled>Domain</button>
+            <button id="concept-view" class="view-button" type="button" aria-pressed="false" disabled>Concept</button>
+          </div>
           <div class="graph-actions">
-            <button id="overview-view" class="view-button" type="button" aria-pressed="true">Overview</button>
-            <button id="neighborhood-view" class="view-button" type="button" aria-pressed="false">Neighborhood</button>
+            <button id="parent-view" class="view-button" type="button" disabled>Parent</button>
+            <button id="expand-view" class="view-button" type="button" disabled>Expand depth 1</button>
+            <button id="detail-view" class="view-button" type="button" aria-pressed="false">Full detail</button>
             <button id="reset-view" class="icon-button" type="button" title="Reset graph view" aria-label="Reset graph view">↗</button>
           </div>
         </div>

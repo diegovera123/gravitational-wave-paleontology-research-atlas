@@ -18,6 +18,18 @@ A **useful** edge supplies intuition, context, comparison, or a route to deeper 
 
 The Research Practice region makes the transition from learning to contribution explicit. Its pathway covers finding and reading literature, formulating questions, mapping knowledge, building computational workflows, reproducing results, analyzing evidence, validating assumptions, writing, presenting, and ethical open practice. Connections to population synthesis, inference, visualization, and paleontology are useful relationships rather than artificial technical blockers.
 
+## Containment hierarchy
+
+Schema version 4 adds `parentId` as a separate organizational relationship. It answers “which broader topic contains this concept?” and never means “what must be learned first?” A null parent places a concept directly within its domain. Parent assignments were reviewed by domain and unit rather than inferred from prerequisite paths. This avoids false dependencies and duplicate concepts.
+
+The hierarchy drives three views:
+
+1. Global Overview renders only the eight virtual domain anchors.
+2. Domain Exploration renders macro and meso topics connected by containment; Full detail adds micro concepts.
+3. Concept Focus renders the selected concept, its ancestry, children, typed prerequisite neighborhood, and downstream concepts. Each Expand action adds one necessary-prerequisite level.
+
+Containment edges are subtle and non-directional in appearance. Necessary prerequisites remain blue and directed; useful prerequisites remain contextual and purple.
+
 Dependencies marked `proposed-educational-dependency` or `proposed-educational-connection` are curricular judgments by the Atlas, not claims made by cited authors. `researchReferences` separately records which literature motivated or supports a concept's research relevance. Indirect dependencies are not copied transitively into a concept.
 
 ## Literature alignment
@@ -57,4 +69,4 @@ Run:
 python3 scripts/validate_curriculum.py
 ```
 
-The validator checks schema version 3, required fields, valid scales and relationship kinds, unique concept IDs, resolved necessary and useful references, valid research-source IDs, relationship notes, and absence of cycles among necessary prerequisites. Useful links are intentionally excluded from progression-cycle checks.
+The validator checks schema version 4, required fields, valid scales and relationship kinds, unique IDs, resolved same-domain parents, containment cycles, necessary/useful references, valid research-source IDs, relationship notes, and cycles among necessary prerequisites. Useful links are intentionally excluded from progression-cycle checks.

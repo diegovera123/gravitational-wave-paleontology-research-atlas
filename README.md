@@ -24,7 +24,7 @@ Then open <http://localhost:8000>.
 
 ## Relationship model
 
-Schema version 3 stores every prerequisite as one object in a single, consistent collection:
+Schema version 4 stores every prerequisite as one object in a single, consistent collection:
 
 ```json
 { "id": "derivatives", "kind": "necessary", "note": "Required to calculate rates of change." }
@@ -34,13 +34,17 @@ Schema version 3 stores every prerequisite as one object in a single, consistent
 
 The dependency classifications are independently authored curricular judgments. A paper appearing in `researchReferences` supports the concept's research relevance; it does not imply that the paper asserted the Atlas dependency.
 
-## Concept scale and map modes
+## Containment, scale, and navigation
+
+`parentId` records conceptual containment independently from prerequisites. A concept may belong to a broader topic without requiring that topic first. Parent links must remain within a domain and form a cycle-free forest; `null` identifies a domain-level topic. This separation prevents visual organization from changing the curriculum's learning dependencies.
 
 - **Macro** concepts are broad regions and pathway anchors, rendered as the largest fixed nodes.
 - **Meso** concepts are modules and substantial topics, rendered at medium size.
 - **Micro** concepts are focused ideas or techniques, rendered as smaller nodes.
 
-Overview mode shows macro and meso structure by default. Full detail reveals micro concepts; Neighborhood isolates the selected concept's immediate incoming and outgoing relationships. Domain anchors are positioned in stable constellation regions, while the force simulation keeps local pathways alive. If the optional label library fails, sphere nodes and hover labels still work.
+Navigation has three levels. **Global Overview** shows eight stable domain anchors. **Domain Exploration** shows that domain's macro/meso hierarchy, with Full detail available for micro concepts. **Concept Focus** shows the parent path, children, immediate typed relationships, and downstream directions; Expand depth adds one necessary-prerequisite level at a time. Parent and breadcrumb controls preserve location. Reset Camera frames the current level rather than returning to an unrelated view.
+
+The layout is deterministic: global domains occupy a compact ring, topic anchors remain stable inside a domain region, and concept focus places prerequisites and downstream concepts on opposite sides of the selected node. The force simulation only provides local motion. If the optional label library fails, sphere nodes and hover labels still work.
 
 The **Research Practice** domain connects literature search, paper reading, research questions, concept mapping, computational workflow, reproduction, analysis, validation, writing, presentation, and responsible open science to the technical curriculum.
 
@@ -55,6 +59,7 @@ Add an object to the `concepts` array in `knowledge-graph/concepts.json`:
   "domain": "Astrophysics",
   "unit": "Unit name",
   "scale": "meso",
+  "parentId": "broader-topic-id",
   "prerequisites": [
     {
       "id": "existing-concept-id",
@@ -87,4 +92,4 @@ Useful prerequisites use the same collection:
 ]
 ```
 
-The Atlas automatically creates the node, prerequisite arrows, search entry, dependent-concept navigation, domain filters, and detail panel. Every referenced ID must match another concept's `id`. Arrows point from the necessary prerequisite toward the concept it supports. Run `python3 scripts/validate_curriculum.py` after editing to check the schema, references, and necessary-pathway acyclicity.
+The Atlas automatically creates hierarchy links, prerequisite arrows, search navigation, breadcrumbs, and details. Every referenced ID must match another concept's `id`. `parentId` must reference a concept in the same domain and must never be inferred from a prerequisite. Arrows point from a necessary prerequisite toward the concept it supports. Run `python3 scripts/validate_curriculum.py` after editing to check the schema, containment forest, references, and necessary-pathway acyclicity.
