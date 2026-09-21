@@ -137,3 +137,15 @@ Instructional content resides in \`knowledge-graph/learning-units.json\`: concep
 Practice results are **formative only**: feedback is shown locally within the page, never sent to a server, never labeled certified mastery, and never used to auto-mark a concept understood. The existing self-reported progress indicator remains separate. Objective-level prerequisite annotations describe the scope of the *pilot learning objective*, not a claim that a concept is universally required for every possible treatment.
 
 Run \`python3 scripts/validate_curriculum.py\` and \`node scripts/test_app.mjs\` after changing the lesson JSON or engine. Actual browser layout, keyboard navigation, quiz feedback and 3D rendering still require a visual browser test. The pilot has not been reviewed or endorsed by the GROWL lab.
+
+## Focused navigation and adaptive practice pilot
+
+The Atlas now separates five tasks so that the landing page is not one enormous scroll: **Overview** (graph, progress and three featured lessons), **Research pathways** (questions and domain cards), **Learn & practice** (full Learning Studio), **Knowledge atlas** (hierarchical structured graph and optional 3D), and **Resources** (public reading room). Tabs support keyboard arrow navigation; clicking a concept or learning unit opens the appropriate section without deleting the rest of the Atlas.
+
+**Adaptive practice is available only for the three pilot units.** The static \`adaptive.js\` module reads the authored \`knowledge-graph/adaptive-items.json\` bank (24 items; four per objective), balances objective coverage, selects an authored difficulty based on recent responses, avoids reusing the same item in a short session, and displays hint and feedback after each answer. Sessions last up to five questions. A simple 1/3/7-day review suggestion can surface objectives due for review; the learner is always free to practise early or navigate ahead.
+
+**Important limits:** these are transparent pedagogical heuristics, *not* a fitted item-response model, Bayesian knowledge-tracing model, FSRS, artificial-intelligence tutor, or empirically validated mastery estimate. Multiple-choice responses are formative evidence; they do not automatically advance the pre-existing self-reported understanding marker or verify research competence. Recent item/question identifiers, correctness flags, authored difficulty, objective and timestamps are kept locally in the learner's browser under \`research-atlas-adaptive-evidence-v1\`; no accounts or server-side adaptive data are created.
+
+For the evidence informing this pilot, design tradeoffs, implementation and evaluation requirements, see [Adaptive learning design](docs/adaptive-learning-design.md).
+
+After modifying the bank or lesson schema, run \`python3 scripts/validate_curriculum.py\`, \`node scripts/test_adaptive.mjs\`, and \`node scripts/test_app.mjs\`. Real-browser accessibility, mobile layout, review controls and WebGL still need visual inspection.
