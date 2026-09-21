@@ -882,10 +882,18 @@ $("#global-view").addEventListener("click",enterGlobal);
 $("#parent-view").addEventListener("click",goParent);
 $("#history-view").addEventListener("click",()=>{const prior=previousLocations.pop();if(prior)restoreLocation(prior);});
 $("#open-full-3d").addEventListener("click",()=>{scrollToExplorer();setDisplayMode("3d");});
-$("#resume-learning").addEventListener("click",()=>{
-  const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
+function continueRecommendedPath(){
+  const diagnosticPick=diagnosticController?.snapshot?.()?.goal?.goalId;
+  const next=(diagnosticPick&&byId(diagnosticPick)&&learningState(byId(diagnosticPick))!=="studied"?byId(diagnosticPick):null)||
+    concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||
+    concepts.find(c=>learningState(c)==="ready");
   if(next){openConcept(next.id,true);scrollToExplorer();}
-});
+  else scrollToExplorer();
+}
+$("#resume-learning").addEventListener("click",continueRecommendedPath);
+$("#home-continue").addEventListener("click",continueRecommendedPath);
+$("#home-learn").addEventListener("click",()=>setActiveView("learn"));
+$("#home-research").addEventListener("click",()=>setActiveView("paths"));
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
