@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "description": "Original educational pilot explanations linked to public sources. Not copied or AI-rewritten from source text; no private lab materials included. Assessments are formative, not verified mastery.",
+  "units": [
+    {
+      "id": "derivatives",
+      "status": "pilot",
+      "level": "Introductory calculus",
+      "duration": "20–30 min",
+      "summary": "A derivative measures how fast a quantity changes at a particular input.",
+      "objectives": [
+        {
+          "id": "instant-rate",
+          "title": "Interpret a derivative as an instantaneous rate",
+          "necessaryIds": [
+            "limits"
+          ],
+          "usefulIds": [
+            "functions"
+          ],
+          "evidence": "Explain how increasingly short average-rate intervals approach the local rate."
+        },
+        {
+          "id": "compute-derivative",
+          "title": "Differentiate a simple position model",
+          "necessaryIds": [
+            "limits"
+          ],
+          "usefulIds": [
+            "algebraic-equations"
+          ],
+          "evidence": "Obtain v(t) from a polynomial x(t), with correct units."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Why start here?",
+          "body": "Gravitational-wave and binary-evolution models contain quantities that change over time. A derivative describes the local rate of that change, while a finite difference only gives a rate over a chosen interval."
+        },
+        {
+          "heading": "Build intuition: averages becoming local",
+          "body": "Over a nonzero time interval, average velocity is displacement divided by elapsed time. To ask for velocity at a single instant, examine averages over shorter intervals around that instant. If these averages approach one definite number, that limit is the instantaneous velocity."
+        },
+        {
+          "heading": "Formal model",
+          "body": "For a function f, the derivative at a is f′(a) = lim(h→0) [f(a+h) − f(a)]/h, provided the limit exists. For position x(t), velocity v(t) = dx/dt. Velocity units equal position units divided by time units."
+        },
+        {
+          "heading": "When this connection is useful",
+          "body": "A simulator might store stellar mass at discrete times. A finite difference estimates an average mass-change rate over an interval; a differentiable analytic model permits a local derivative. Neither is automatically the same as a numerically measured derivative from noisy, unevenly spaced data."
+        }
+      ],
+      "workedExample": {
+        "title": "From position to velocity",
+        "setup": "Illustrative model: x(t) = 3t² metres, where t is measured in seconds and the coefficient 3 has units m/s².",
+        "steps": [
+          "Over the interval from t to t+h, the displacement is 3(t+h)² − 3t² = 6th + 3h² metres.",
+          "Divide by h seconds to obtain the average velocity 6t + 3h metres per second.",
+          "As h approaches 0, this tends to v(t) = 6t metres per second.",
+          "At t = 2 seconds, v(2) = 12 m/s. The positive sign indicates motion in the chosen positive coordinate direction."
+        ],
+        "takeaway": "The derivative describes the local rate, not the total displacement."
+      },
+      "activity": {
+        "prompt": "For x(t) = 2t² metres, predict the velocity at t = 3 seconds before calculating.",
+        "hint": "Use [x(t+h)−x(t)]/h, expand, then take h→0.",
+        "solution": "x(t+h)−x(t) = 4th+2h²; dividing by h gives 4t+2h, so v(t)=4t m/s and v(3)=12 m/s."
+      },
+      "assessment": [
+        {
+          "id": "d-1",
+          "objectiveId": "instant-rate",
+          "prompt": "What distinguishes instantaneous velocity from average velocity?",
+          "choices": [
+            "Instantaneous velocity is a limit of average velocities over shrinking intervals, when that limit exists.",
+            "Instantaneous velocity is the position divided by the total elapsed time.",
+            "Instantaneous velocity must be greater than average velocity."
+          ],
+          "correctIndex": 0,
+          "feedback": "An instantaneous derivative uses the limit of a difference quotient; an average uses one finite interval."
+        },
+        {
+          "id": "d-2",
+          "objectiveId": "compute-derivative",
+          "prompt": "For x(t)=3t² metres (t in seconds), what is v(2)?",
+          "choices": [
+            "6 m/s",
+            "12 m/s",
+            "12 m"
+          ],
+          "correctIndex": 1,
+          "feedback": "v(t)=6t m/s, so v(2)=12 m/s; units are length/time."
+        }
+      ],
+      "researchConnection": "In computational stellar and orbital evolution, compare derivatives predicted by smooth models with finite-difference estimates from sampled simulation outputs.",
+      "sources": [
+        {
+          "title": "Calculus Volume 1, §3.1: Defining the Derivative",
+          "url": "https://openstax.org/books/calculus-volume-1/pages/3-1-defining-the-derivative",
+          "role": "External conceptual reference; original Atlas text was independently authored, not adapted or ingested from this textbook.",
+          "license": "External reference only. OpenStax's current use conditions include AI-ingestion and noncommercial restrictions; do not copy or repurpose the source text."
+        }
+      ]
+    },
+    {
+      "id": "supernova-kicks",
+      "status": "pilot",
+      "level": "Binary stellar evolution",
+      "duration": "25–35 min",
+      "summary": "A natal kick is a velocity imparted to a newly formed compact remnant; its direction matters alongside mass loss and pre-explosion orbital motion.",
+      "objectives": [
+        {
+          "id": "interpret-kick",
+          "title": "Explain what a natal kick can do to a binary",
+          "necessaryIds": [
+            "core-collapse-supernovae"
+          ],
+          "usefulIds": [
+            "binary-orbital-evolution"
+          ],
+          "evidence": "Distinguish compact-remnant formation from post-explosion orbital consequences."
+        },
+        {
+          "id": "compose-velocity",
+          "title": "Use vector addition to calculate a post-kick velocity",
+          "necessaryIds": [
+            "linear-momentum"
+          ],
+          "usefulIds": [
+            "probability-distributions"
+          ],
+          "evidence": "Compute a post-event velocity vector from a pre-event velocity and kick vector."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Why natal kicks matter",
+          "body": "Some newly formed neutron stars and black holes receive an additional velocity around formation. In a binary, this velocity change, together with any associated mass loss, changes the relative orbit and can affect whether the components remain bound."
+        },
+        {
+          "heading": "Think in vectors, not just speeds",
+          "body": "A kick is a vector. Two equally strong kicks pointing in different directions can have different effects on the relative velocity of the stellar companions. A scalar kick magnitude alone does not determine the post-event orbit."
+        },
+        {
+          "heading": "A minimal physical model",
+          "body": "At the instant of the event, describe the compact remnant's velocity change as v_after = v_before + v_kick. A fuller binary model must also account for the companion's velocity, the orbital separation, the masses before and after the event, and the system's total relative orbital energy. You cannot infer survival just from the remnant's final speed."
+        },
+        {
+          "heading": "What is uncertain?",
+          "body": "Natal-kick distributions and the physical mechanisms that generate them are active subjects of study. A population-synthesis model must state which kick prescription it uses; changing that prescription can change predicted surviving-binary populations."
+        }
+      ],
+      "workedExample": {
+        "title": "Equal kick size, different outcomes",
+        "setup": "An illustrative one-dimensional calculation, not a complete binary-survival simulation. Suppose a remnant moves at +100 km/s before a kick.",
+        "steps": [
+          "If it receives a +50 km/s kick, v_after = +100 + 50 = +150 km/s.",
+          "If it receives a −50 km/s kick, v_after = +100 − 50 = +50 km/s.",
+          "The kick magnitude is 50 km/s in both cases, but the resulting speeds differ.",
+          "To decide whether the binary remains bound, additionally compute the post-event relative orbital energy from the system's masses, separation, and relative velocity."
+        ],
+        "takeaway": "Direction affects the orbital response; the speed of one star by itself cannot establish binary survival."
+      },
+      "activity": {
+        "prompt": "A remnant initially has velocity (+80,0) km/s and receives kick (0,+60) km/s. Predict its new velocity vector and speed.",
+        "hint": "Add the vector components first, then use the Pythagorean theorem for the magnitude.",
+        "solution": "The new velocity is (+80,+60) km/s. Its speed is √(80²+60²)=100 km/s. This alone does not tell you whether the binary remains bound."
+      },
+      "assessment": [
+        {
+          "id": "k-1",
+          "objectiveId": "interpret-kick",
+          "prompt": "Can the remnant's speed after a natal kick alone tell you whether its binary remains bound?",
+          "choices": [
+            "Yes; a higher speed always disrupts the binary.",
+            "No; the relative orbit, masses, separation, and kick direction also matter.",
+            "Yes; any natal kick disrupts the binary."
+          ],
+          "correctIndex": 1,
+          "feedback": "Binary survival is an orbital-energy question; neither kick magnitude nor a single star's speed is sufficient."
+        },
+        {
+          "id": "k-2",
+          "objectiveId": "compose-velocity",
+          "prompt": "A remnant moving at +100 km/s receives a −50 km/s kick along the same axis. Its new velocity is:",
+          "choices": [
+            "+150 km/s",
+            "+50 km/s",
+            "−50 km/s"
+          ],
+          "correctIndex": 1,
+          "feedback": "Add signed vector components: +100+(−50)=+50 km/s."
+        }
+      ],
+      "researchConnection": "Population-synthesis models specify a distribution or prescription for kick magnitudes and directions; compare resulting binary outcomes while holding other modeling assumptions fixed.",
+      "sources": [
+        {
+          "title": "Wagg et al. (2025), Stellar ejection velocities from the binary supernova scenario",
+          "url": "https://doi.org/10.33232/001c.141718",
+          "role": "Public peer-reviewed discussion of binary-supernova dynamics and the importance of kick implementations; the worked numerical example here is independently invented.",
+          "license": "Read and cite the original; no figures or extended text copied."
+        }
+      ]
+    },
+    {
+      "id": "simulation-outputs",
+      "status": "pilot",
+      "level": "Scientific computing / population synthesis",
+      "duration": "25–40 min",
+      "summary": "Population-synthesis output groups store different event types; interpreting a binary history requires matching records correctly.",
+      "objectives": [
+        {
+          "id": "identify-events",
+          "title": "Identify what different COMPAS output groups represent",
+          "necessaryIds": [
+            "data-tables"
+          ],
+          "usefulIds": [
+            "binary-population-synthesis"
+          ],
+          "evidence": "Match an event question to a suitable output group."
+        },
+        {
+          "id": "avoid-double-counting",
+          "title": "Explain how to link events to systems without counting one binary multiple times",
+          "necessaryIds": [
+            "data-tables"
+          ],
+          "usefulIds": [
+            "population-weights"
+          ],
+          "evidence": "Use a stable system identifier and define an explicit counting unit."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Why simulation outputs matter",
+          "body": "A rapid population-synthesis code evolves many initial binaries under assumed physical prescriptions and writes event records. Different tables answer different questions: initial conditions, mass-transfer episodes, supernova events, common-envelope phases, and possible final compact objects."
+        },
+        {
+          "heading": "Read the structure before making a plot",
+          "body": "The public COMPAS data-analysis tutorial shows HDF5 output groups such as BSE_System_Parameters, BSE_RLOF, BSE_Common_Envelopes, BSE_Supernovae, and BSE_Double_Compact_Objects. Groups are event categories, not a guarantee that each system contributes exactly one row to each group."
+        },
+        {
+          "heading": "Define your counting unit",
+          "body": "One binary can experience multiple events. Counting rows from an event table gives an event count, while counting unique binary identifiers gives a count of distinct systems represented there. To build a system history, connect records using the relevant identifier and, where available, their time or event-order fields; confirm field names against the actual output schema."
+        },
+        {
+          "heading": "Do not confuse a classroom example with real data",
+          "body": "The small records in this unit are invented to teach relational reasoning. They are not fetched COMPAS output. To reproduce a scientific result, download or generate a genuine dataset and record the model options, COMPAS version, selection criteria, and any weights."
+        }
+      ],
+      "workedExample": {
+        "title": "Three records but only two binaries",
+        "setup": "Synthetic teaching example: an event table contains (system A, transfer 1), (system A, transfer 2), and (system B, transfer 1).",
+        "steps": [
+          "Count the event rows: there are three mass-transfer events.",
+          "Identify the distinct system labels: A and B, so two different binaries appear in this event table.",
+          "State the question before joining tables: 'How many transfer episodes?' is not the same as 'How many binaries experienced transfer?'",
+          "If you combine this table with a system-level table without accounting for repeated identifiers, system A will appear twice. Decide whether you want event-level or system-level statistics before aggregating."
+        ],
+        "takeaway": "A dataset's row represents a specific event or entity; do not automatically treat each row as one independent binary."
+      },
+      "activity": {
+        "prompt": "A hypothetical supernova table has rows for seeds 11, 11, 24, and 30. How many supernova event records and how many distinct binaries are represented?",
+        "hint": "Count rows and then count unique seed values.",
+        "solution": "Four event rows and three distinct binary identifiers (11, 24, 30). A real COMPAS run requires checking the identifier semantics in its documentation."
+      },
+      "assessment": [
+        {
+          "id": "s-1",
+          "objectiveId": "identify-events",
+          "prompt": "In the public COMPAS tutorial, which output group records supernova events?",
+          "choices": [
+            "BSE_System_Parameters",
+            "BSE_Supernovae",
+            "BSE_RLOF"
+          ],
+          "correctIndex": 1,
+          "feedback": "BSE_Supernovae records supernova events; BSE_System_Parameters covers initial system parameters, and BSE_RLOF covers mass-transfer events."
+        },
+        {
+          "id": "s-2",
+          "objectiveId": "avoid-double-counting",
+          "prompt": "A synthetic event table has rows (A,1), (A,2), (B,1). What is the correct interpretation?",
+          "choices": [
+            "Three events from two distinct binary identifiers.",
+            "Three distinct binaries and three events.",
+            "Two events from three distinct binary identifiers."
+          ],
+          "correctIndex": 0,
+          "feedback": "Count records for events; count unique system IDs for binaries, subject to real dataset identifier semantics."
+        }
+      ],
+      "researchConnection": "Use publicly available COMPAS demonstrations to inspect actual HDF5 groups, then trace the history of one system by its documented identifier. Reproduction of published population results requires the appropriate run settings and any statistical weights.",
+      "sources": [
+        {
+          "title": "COMPAS: Basic COMPAS data analysis",
+          "url": "https://compas.readthedocs.io/en/latest/pages/User%20guide/Post-processing/notebooks/DataAnalysis.html",
+          "role": "Public official documentation establishing example event categories and inspection workflow.",
+          "license": "Link to official public documentation. No notebook text, plots, or datasets redistributed."
+        },
+        {
+          "title": "COMPAS: Running detailed output",
+          "url": "https://compas.readthedocs.io/en/latest/pages/User%20guide/Running%20COMPAS/running-detailed-output.html",
+          "role": "Public documentation for detailed binary-evolution output and run metadata.",
+          "license": "External reference only."
+        }
+      ]
+    }
+  ]
+}
