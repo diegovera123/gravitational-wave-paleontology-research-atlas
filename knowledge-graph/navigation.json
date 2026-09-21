@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "description": "Explicit navigation containment only; research prerequisite edges remain in concepts.json. Macro anchors are existing curriculum concepts and have a dedicated learning-unit action.",
+  "macros": [
+    {
+      "id": "calculus",
+      "title": "Mathematics",
+      "domain": "Mathematics",
+      "order": 0
+    },
+    {
+      "id": "classical-mechanics",
+      "title": "Classical Mechanics",
+      "domain": "Physics",
+      "order": 1
+    },
+    {
+      "id": "stellar-astrophysics",
+      "title": "Stellar Astrophysics",
+      "domain": "Stellar Astrophysics",
+      "order": 2
+    },
+    {
+      "id": "binary-stellar-evolution",
+      "title": "Binary Stellar Evolution",
+      "domain": "Binary Stellar Evolution",
+      "order": 3
+    },
+    {
+      "id": "general-relativity",
+      "title": "General Relativity",
+      "domain": "General Relativity and Gravitational Waves",
+      "order": 4
+    },
+    {
+      "id": "gravitational-wave-science",
+      "title": "Gravitational-Wave Science",
+      "domain": "General Relativity and Gravitational Waves",
+      "order": 5
+    },
+    {
+      "id": "scientific-computing",
+      "title": "Scientific Computing",
+      "domain": "Scientific Computing",
+      "order": 6
+    },
+    {
+      "id": "binary-population-synthesis",
+      "title": "Binary Population Synthesis",
+      "domain": "Population Synthesis and Paleontology",
+      "order": 7
+    },
+    {
+      "id": "gravitational-wave-paleontology",
+      "title": "Gravitational-Wave Paleontology",
+      "domain": "Population Synthesis and Paleontology",
+      "order": 8
+    },
+    {
+      "id": "research-practice",
+      "title": "Research Practice",
+      "domain": "Research Practice",
+      "order": 9
+    }
+  ],
+  "topics": [
+    {
+      "id": "topic-calculus-mathematical-foundations",
+      "macroId": "calculus",
+      "title": "Mathematical Foundations",
+      "order": 0,
+      "conceptIds": [
+        "algebraic-equations",
+        "functions",
+        "exponentials-logarithms",
+        "trigonometry",
+        "coordinate-systems",
+        "dimensional-analysis"
+      ]
+    },
+    {
+      "id": "topic-calculus-calculus",
+      "macroId": "calculus",
+      "title": "Calculus",
+      "order": 1,
+      "conceptIds": [
+        "limits",
+        "derivatives",
+        "integrals"
+      ]
+    },
+    {
+      "id": "topic-calculus-multivariable-and-vector-methods",
+      "macroId": "calculus",
+      "title": "Multivariable and Vector Methods",
+      "order": 2,
+      "conceptIds": [
+        "multivariable-calculus",
+        "vector-algebra",
+        "vector-calculus"
+      ]
+    },
+    {
+      "id": "topic-calculus-linear-algebra-and-differential-equations",
+      "macroId": "calculus",
+      "title": "Linear Algebra and Differential Equations",
+      "order": 3,
+      "conceptIds": [
+        "matrices",
+        "eigenvalues",
+        "ordinary-differential-equations",
+        "coupled-odes"
+      ]
+    },
+    {
+      "id": "topic-calculus-probability-and-statistical-inference",
+      "macroId": "calculus",
+      "title": "Probability and Statistical Inference",
+      "order": 4,
+      "conceptIds": [
+        "probability-foundations",
+        "probability-distributions",
+        "statistical-estimation",
+        "bayesian-inference",
+        "hierarchical-models",
+        "uncertainty-propagation"
+      ]
+    },
+    {
+      "id": "topic-classical-mechanics-motion-and-conservation",
+      "macroId": "classical-mechanics",
+      "title": "Motion and Conservation",
+      "order": 0,
+      "conceptIds": [
+        "kinematics",
+        "newtons-laws",
+        "work-energy",
+        "linear-momentum",
+        "centre-of-mass"
+      ]
+    },
+    {
+      "id": "topic-classical-mechanics-gravity-and-keplerian-orbits",
+      "macroId": "classical-mechanics",
+      "title": "Gravity and Keplerian Orbits",
+      "order": 1,
+      "conceptIds": [
+        "newtonian-gravitation",
+        "angular-momentum",
+        "two-body-problem",
+        "keplerian-orbits",
+        "orbital-eccentricity",
+        "orbital-energy"
+      ]
+    },
+    {
+      "id": "topic-classical-mechanics-beyond-idealized-orbits",
+      "macroId": "classical-mechanics",
+      "title": "Beyond Idealized Orbits",
+      "order": 2,
+      "conceptIds": [
+        "orbital-perturbations",
+        "three-body-problem",
+        "tidal-interactions",
+        "binary-orbital-evolution"
+      ]
+    },
+    {
+      "id": "topic-stellar-astrophysics-stellar-structure",
+      "macroId": "stellar-astrophysics",
+      "title": "Stellar Structure",
+      "order": 0,
+      "conceptIds": [
+        "radiation-and-spectra",
+        "hydrostatic-equilibrium",
+        "thermodynamics",
+        "energy-transport",
+        "nuclear-burning",
+        "stellar-structure"
+      ]
+    },
+    {
+      "id": "topic-stellar-astrophysics-stellar-evolution",
+      "macroId": "stellar-astrophysics",
+      "title": "Stellar Evolution",
+      "order": 1,
+      "conceptIds": [
+        "hertzsprung-russell-diagram",
+        "stellar-evolution",
+        "initial-mass-function",
+        "metallicity",
+        "massive-star-evolution"
+      ]
+    },
+    {
+      "id": "topic-stellar-astrophysics-mass-loss-and-winds",
+      "macroId": "stellar-astrophysics",
+      "title": "Mass Loss and Winds",
+      "order": 2,
+      "conceptIds": [
+        "stellar-mass-loss",
+        "stellar-winds"
+      ]
+    },
+    {
+      "id": "topic-stellar-astrophysics-supernovae-and-remnants",
+      "macroId": "stellar-astrophysics",
+      "title": "Supernovae and Remnants",
+      "order": 3,
+      "conceptIds": [
+        "core-collapse-supernovae",
+        "compact-remnants"
+      ]
+    },
+    {
+      "id": "topic-binary-stellar-evolution-binary-systems-and-roche-geometry",
+      "macroId": "binary-stellar-evolution",
+      "title": "Binary Systems and Roche Geometry",
+      "order": 0,
+      "conceptIds": [
+        "binary-star-observables",
+        "roche-potential",
+        "roche-lobe"
+      ]
+    },
+    {
+      "id": "topic-binary-stellar-evolution-binary-mass-transfer",
+      "macroId": "binary-stellar-evolution",
+      "title": "Binary Mass Transfer",
+      "order": 1,
+      "conceptIds": [
+        "mass-transfer",
+        "mass-transfer-stability",
+        "conservative-transfer"
+      ]
+    },
+    {
+      "id": "topic-binary-stellar-evolution-common-envelope-evolution",
+      "macroId": "binary-stellar-evolution",
+      "title": "Common-Envelope Evolution",
+      "order": 2,
+      "conceptIds": [
+        "common-envelope",
+        "orbital-shrinkage"
+      ]
+    },
+    {
+      "id": "topic-binary-stellar-evolution-compact-binary-formation",
+      "macroId": "binary-stellar-evolution",
+      "title": "Compact-Binary Formation",
+      "order": 3,
+      "conceptIds": [
+        "supernova-kicks",
+        "binary-disruption",
+        "compact-binary-formation",
+        "chemically-homogeneous-evolution",
+        "formation-channels"
+      ]
+    },
+    {
+      "id": "topic-general-relativity-relativistic-foundations",
+      "macroId": "general-relativity",
+      "title": "Relativistic Foundations",
+      "order": 0,
+      "conceptIds": [
+        "special-relativity",
+        "tensors",
+        "spacetime-geometry",
+        "geodesics"
+      ]
+    },
+    {
+      "id": "topic-general-relativity-einstein-s-field-equations",
+      "macroId": "general-relativity",
+      "title": "Einstein's Field Equations",
+      "order": 1,
+      "conceptIds": [
+        "einstein-field-equations"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-science-gravitational-radiation",
+      "macroId": "gravitational-wave-science",
+      "title": "Gravitational Radiation",
+      "order": 0,
+      "conceptIds": [
+        "linearized-gravity",
+        "differential-wave-equation",
+        "gw-polarizations",
+        "quadrupole-radiation"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-science-compact-sources-and-waveforms",
+      "macroId": "gravitational-wave-science",
+      "title": "Compact Sources and Waveforms",
+      "order": 1,
+      "conceptIds": [
+        "chirp-mass",
+        "compact-binary-inspiral",
+        "gravitational-waveforms",
+        "numerical-relativity"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-science-detection-and-observation",
+      "macroId": "gravitational-wave-science",
+      "title": "Detection and Observation",
+      "order": 2,
+      "conceptIds": [
+        "interferometric-detectors",
+        "gw150914"
+      ]
+    },
+    {
+      "id": "topic-scientific-computing-python-and-scientific-data",
+      "macroId": "scientific-computing",
+      "title": "Python and Scientific Data",
+      "order": 0,
+      "conceptIds": [
+        "python-fundamentals",
+        "data-structures",
+        "numpy-arrays",
+        "data-tables",
+        "floating-point"
+      ]
+    },
+    {
+      "id": "topic-scientific-computing-numerical-methods",
+      "macroId": "scientific-computing",
+      "title": "Numerical Methods",
+      "order": 1,
+      "conceptIds": [
+        "numerical-methods",
+        "root-finding",
+        "numerical-integration",
+        "ode-solvers",
+        "partial-differential-equations",
+        "interpolation"
+      ]
+    },
+    {
+      "id": "topic-scientific-computing-simulation-and-sampling",
+      "macroId": "scientific-computing",
+      "title": "Simulation and Sampling",
+      "order": 2,
+      "conceptIds": [
+        "monte-carlo-methods",
+        "temporal-sampling"
+      ]
+    },
+    {
+      "id": "topic-scientific-computing-visualization-and-animation",
+      "macroId": "scientific-computing",
+      "title": "Visualization and Animation",
+      "order": 3,
+      "conceptIds": [
+        "scientific-visualization",
+        "animation",
+        "vimes-visualization-pathway"
+      ]
+    },
+    {
+      "id": "topic-scientific-computing-reproducible-computing",
+      "macroId": "scientific-computing",
+      "title": "Reproducible Computing",
+      "order": 4,
+      "conceptIds": [
+        "reproducible-workflows"
+      ]
+    },
+    {
+      "id": "topic-binary-population-synthesis-population-inputs",
+      "macroId": "binary-population-synthesis",
+      "title": "Population Inputs",
+      "order": 0,
+      "conceptIds": [
+        "binary-initial-conditions"
+      ]
+    },
+    {
+      "id": "topic-binary-population-synthesis-simulation-outputs-and-weights",
+      "macroId": "binary-population-synthesis",
+      "title": "Simulation Outputs and Weights",
+      "order": 1,
+      "conceptIds": [
+        "simulation-outputs",
+        "population-weights",
+        "formation-efficiency"
+      ]
+    },
+    {
+      "id": "topic-binary-population-synthesis-delay-times",
+      "macroId": "binary-population-synthesis",
+      "title": "Delay Times",
+      "order": 2,
+      "conceptIds": [
+        "delay-time-distributions"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-paleontology-cosmic-evolution-and-rates",
+      "macroId": "gravitational-wave-paleontology",
+      "title": "Cosmic Evolution and Rates",
+      "order": 0,
+      "conceptIds": [
+        "cosmic-star-formation",
+        "cosmic-metallicity",
+        "cosmological-redshift",
+        "cosmic-merger-rates"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-paleontology-selection-and-population-inference",
+      "macroId": "gravitational-wave-paleontology",
+      "title": "Selection and Population Inference",
+      "order": 1,
+      "conceptIds": [
+        "detector-selection-effects",
+        "observational-bias",
+        "merger-rate-inference",
+        "population-inference",
+        "model-comparison"
+      ]
+    },
+    {
+      "id": "topic-gravitational-wave-paleontology-alternative-formation-environments",
+      "macroId": "gravitational-wave-paleontology",
+      "title": "Alternative Formation Environments",
+      "order": 2,
+      "conceptIds": [
+        "dynamical-formation"
+      ]
+    },
+    {
+      "id": "topic-research-practice-finding-and-organizing-evidence",
+      "macroId": "research-practice",
+      "title": "Finding and Organizing Evidence",
+      "order": 0,
+      "conceptIds": [
+        "literature-search",
+        "reading-scientific-papers",
+        "concept-mapping"
+      ]
+    },
+    {
+      "id": "topic-research-practice-planning-responsible-research",
+      "macroId": "research-practice",
+      "title": "Planning Responsible Research",
+      "order": 1,
+      "conceptIds": [
+        "research-questions",
+        "research-ethics-open-science"
+      ]
+    },
+    {
+      "id": "topic-research-practice-conducting-and-evaluating-research",
+      "macroId": "research-practice",
+      "title": "Conducting and Evaluating Research",
+      "order": 2,
+      "conceptIds": [
+        "scientific-computing-workflow",
+        "reproducing-a-result",
+        "research-data-analysis",
+        "model-validation"
+      ]
+    },
+    {
+      "id": "topic-research-practice-communicating-findings",
+      "macroId": "research-practice",
+      "title": "Communicating Findings",
+      "order": 3,
+      "conceptIds": [
+        "scientific-writing",
+        "presenting-research"
+      ]
+    }
+  ]
+}
