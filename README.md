@@ -149,3 +149,30 @@ The Atlas now separates five tasks so that the landing page is not one enormous 
 For the evidence informing this pilot, design tradeoffs, implementation and evaluation requirements, see [Adaptive learning design](docs/adaptive-learning-design.md).
 
 After modifying the bank or lesson schema, run \`python3 scripts/validate_curriculum.py\`, \`node scripts/test_adaptive.mjs\`, and \`node scripts/test_app.mjs\`. Real-browser accessibility, mobile layout, review controls and WebGL still need visual inspection.
+
+## Concept Discovery Diagnostic
+
+The Atlas now includes an optional **My starting point** diagnostic. It does not ask every learner to sit the same placement test. Instead, the learner chooses a research question, a major knowledge region, or an individual concept. The diagnostic then surfaces up to ten relevant concepts from the existing necessary-prerequisite graph.
+
+For every surfaced concept, the learner can:
+- rate their current understanding on a five-level scale, from **New to me** through **I can use it independently in advanced work**;
+- optionally state how certain they are about that self-rating;
+- answer one short conceptual check when the Atlas currently has one for that concept;
+- state confidence in the check answer **before** feedback is revealed;
+- skip the concept, skip the check, or finish early.
+
+The traversal is deliberately transparent. A low self-rating or incorrect conceptual check can send the next step toward direct necessary prerequisites, while the engine periodically returns to the chosen goal instead of descending forever. The current prototype samples at most ten concepts and at most five conceptual checks. There are 22 original Atlas diagnostic checks covering selected mathematical, physical, computational, stellar/binary, population-synthesis, inference and research-practice concepts.
+
+Diagnostic evidence is represented as distinct states rather than one overall readiness percentage:
+- **Self-rated only** — a learner judgment with no concept check.
+- **One conceptual check correct** — limited supporting evidence, not mastery.
+- **Correct check · low confidence** — initial evidence with uncertainty.
+- **Review suggested** — one sampled check was incorrect.
+- **Review suggested · high-confidence error** — a possible calibration mismatch worth revisiting, not proof of a misconception.
+- **Not yet assessed** — absence of evidence remains absence of evidence.
+
+The structured Atlas and 3D concept nodes can show this evidence as a lightweight personalized overlay while preserving the domain and prerequisite structure. A learner can reopen the diagnostic from any assessed concept or research question. Recommendations are starting points for exploration, not an official research-readiness score, ability estimate, prerequisite certification, or claim that untested concepts are mastered.
+
+Ratings and conceptual-check records are stored in browser-local storage under \`research-atlas-concept-profile-v1\` when available. There is no account or server-side learner profile. Users can clear the saved diagnostic from the results screen.
+
+Relevant implementation files: \`diagnostic.js\`, \`diagnostic-ui.js\`, and \`knowledge-graph/diagnostic-questions.json\`. Run \`node scripts/test_diagnostic.mjs\` and \`python3 scripts/validate_curriculum.py\` after modifying the diagnostic. Browser accessibility, mobile behavior and actual WebGL coloring still require manual visual QA.
