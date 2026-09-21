@@ -36,11 +36,11 @@
 
 
     <nav id="atlas-tabs" class="atlas-primary-nav" aria-label="Main sections" role="tablist">
-      <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Overview</button>
-      <button type="button" role="tab" id="tab-diagnostic" aria-controls="diagnostic-panel" aria-selected="false" data-atlas-tab="diagnostic" tabindex="-1">My starting point</button>
-      <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research pathways</button>
+      <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Home</button>
+      <button type="button" role="tab" id="tab-diagnostic" aria-controls="diagnostic-panel" aria-selected="false" data-atlas-tab="diagnostic" tabindex="-1">Starting point</button>
+      <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research</button>
       <button type="button" role="tab" id="tab-learn" aria-controls="learn-panel" aria-selected="false" data-atlas-tab="learn" tabindex="-1">Learn &amp; practice</button>
-      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge atlas</button>
+      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge map</button>
       <button type="button" role="tab" id="tab-library" aria-controls="library-panel" aria-selected="false" data-atlas-tab="library" tabindex="-1">Resources</button>
     </nav>
 
@@ -52,37 +52,42 @@
 
     <section id="dashboard" class="dashboard" aria-label="Research workspace">
       <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
-      <div class="dashboard-heading">
-        <div><p class="eyebrow">Your research workspace</p><h2 id="dashboard-title">Start with the bigger picture.</h2>
-          <p>Follow a question into the science, or enter a knowledge region. The structured map is your guide; the 3D constellation is there when you want to explore.</p></div>
+      <div class="home-map-heading">
+        <div><p class="eyebrow">Your Atlas</p><h2 id="dashboard-title">Start from the map.</h2>
+          <p>Your diagnostic shapes the overlay. Open a region, continue a recommendation, or jump into a lesson.</p></div>
         <div class="dashboard-metrics" id="atlas-stats" aria-live="polite"><span>Preparing the Atlas…</span></div>
       </div>
-      <section class="learning-progress-strip" aria-label="Your guided learning progress">
-        <div><p class="eyebrow">Guided learning · Your journey</p><strong id="learning-progress">Preparing your learning path…</strong>
-          <span id="practice-due-summary" class="practice-due-summary">Adaptive practice · 3 pilot lessons</span>
-          <p>Follow necessary prerequisites to reveal recommended next steps. Progress is self-reported, not a verified mastery assessment.</p></div>
-        <button id="resume-learning" type="button" class="learning-resume" disabled>Find my next step ↗</button>
-      </section>
-      <section id="diagnostic-overview" class="diagnostic-overview" aria-label="Concept-based starting point diagnostic">
-        <div><p class="eyebrow">Find your starting point</p><h3>What do you already know?</h3><p>Rate relevant concepts and try optional conceptual checks.</p></div>
-        <button type="button" id="diagnostic-launch" class="diagnostic-main-action">Start concept discovery ↗</button>
-      </section>
-      <section class="dashboard-network" aria-labelledby="dashboard-network-title">
+      <section class="dashboard-network home-primary-map" aria-labelledby="dashboard-network-title">
         <div class="network-heading">
-          <div><p class="eyebrow">The knowledge graph · Always in view</p><h3 id="dashboard-network-title">Your research constellation</h3>
-            <p>Explore the major regions and follow the scientific connections between them. Select any region to open its learning map.</p></div>
+          <div><p class="eyebrow">Your knowledge graph</p><h3 id="dashboard-network-title">Research constellation</h3>
+            <p>Choose a major region. The Atlas reveals topics and concepts progressively instead of showing everything at once.</p></div>
           <div class="network-actions">
             <span class="network-key"><i></i> Necessary scientific connection</span>
-            <button type="button" id="open-full-3d" class="network-expand">Explore the 3D graph ↗</button>
+            <button type="button" id="open-full-3d" class="network-expand">Open full graph ↗</button>
           </div>
         </div>
         <div id="dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
           <p class="dashboard-loading">Loading the knowledge graph…</p>
         </div>
       </section>
+      <section class="home-next-actions" aria-label="Choose what to do next">
+        <button id="home-continue" type="button"><span>01</span><strong>Continue my path</strong><small>Open the next recommended concept.</small></button>
+        <button id="home-learn" type="button"><span>02</span><strong>Learn &amp; practice</strong><small>Open explanations and adaptive practice.</small></button>
+        <button id="home-research" type="button"><span>03</span><strong>Research pathways</strong><small>Start from an interesting scientific question.</small></button>
+      </section>
+      <section class="learning-progress-strip compact-progress" aria-label="Your guided learning progress">
+        <div><p class="eyebrow">Your progress</p><strong id="learning-progress">Preparing your learning path…</strong>
+          <span id="practice-due-summary" class="practice-due-summary">Adaptive practice · 3 pilot lessons</span>
+          <p>Necessary prerequisites guide recommendations, but you can always explore ahead.</p></div>
+        <button id="resume-learning" type="button" class="learning-resume" disabled>Next concept ↗</button>
+      </section>
+      <section id="diagnostic-overview" class="diagnostic-overview compact-diagnostic" aria-label="Concept-based starting point diagnostic">
+        <div><p class="eyebrow">Starting point</p><h3>Update what the Atlas knows about you.</h3><p>Re-rate concepts or try short conceptual checks at any time.</p></div>
+        <button type="button" id="diagnostic-launch" class="diagnostic-main-action">Update my map ↗</button>
+      </section>
       <section class="pilot-gallery" aria-labelledby="pilot-gallery-title">
-        <div class="dashboard-section-heading"><div><p class="eyebrow">04 / Learn the science</p><h3 id="pilot-gallery-title">Featured learning units</h3></div>
-          <span class="pilot-note">Three original instructional pilots · More lessons in development</span></div>
+        <div class="dashboard-section-heading"><div><p class="eyebrow">Featured lessons</p><h3 id="pilot-gallery-title">Learn a concept in depth</h3></div>
+          <span class="pilot-note">Three instructional pilots · More in development</span></div>
         <div id="pilot-cards" class="pilot-cards"><p class="dashboard-loading">Loading learning units…</p></div>
       </section>
       </div>
