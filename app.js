@@ -840,11 +840,12 @@ async function initialise() {
       console.warn("[Research Atlas] Diagnostic module unavailable; the rest of the Atlas remains usable.");
       $("#diagnostic-root").textContent="The diagnostic is temporarily unavailable. You can still explore the knowledge atlas.";
       $("#tab-diagnostic").disabled=true;
+      markOnboardingSeen();
     }
     renderDashboard();renderFeaturedUnits();updateReviewBadge();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
-      $("#view-3d").disabled=true;enterGlobal();return;
+      $("#view-3d").disabled=true;enterGlobal();firstRunLanding();return;
     }
     // Measure the real canvas only after its tab is visible; a hidden panel reports 0 × 0.
     setActiveView("explore",{scroll:false});
