@@ -339,7 +339,8 @@ function updateReviewBadge(){
 }
 function startAdaptiveQuiz(mode="practice"){
   const unit=learningUnits.get(openUnitId);if(!unit)return;
-  const session={unitId:unit.id,mode,results:[],current:null,choice:null,answered:false,done:false};
+  const dueObjectives=mode==="review"?unit.objectives.filter(o=>window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).due).map(o=>o.id):[];
+  const session={unitId:unit.id,mode,focusObjectiveIds:dueObjectives,results:[],current:null,choice:null,answered:false,done:false};
   quizSessions.set(unit.id,session);
   advanceAdaptiveQuiz();
   renderAdaptivePanel();
@@ -351,7 +352,7 @@ function advanceAdaptiveQuiz(){
   // Each result is already in the lifetime history. Exclude this session's records before
   // passing them separately to the selector, avoiding double-counted evidence.
   const lifetime=adaptiveHistory.filter(r=>!session.results.includes(r));
-  session.current=window.AtlasAdaptive.chooseNext(adaptiveItems,unit,lifetime,session.results);
+  session.current=window.AtlasAdaptive.chooseNext(adaptiveItems,unit,lifetime,session.results,Date.now(),session.focusObjectiveIds);
   session.choice=null;session.answered=false;
   if(!session.current)session.done=true;
 }
