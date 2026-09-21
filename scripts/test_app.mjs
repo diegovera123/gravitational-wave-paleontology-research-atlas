@@ -10,6 +10,7 @@ const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json
 const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questions.json","utf8"));
 const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-units.json","utf8"));
 const adaptiveBank = JSON.parse(await fs.readFile("knowledge-graph/adaptive-items.json","utf8"));
+const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-items.json","utf8"));
 
 class ElementStub {
   constructor() {
@@ -36,7 +37,9 @@ const selectors=[
   "#pilot-cards","#learning-studio","#learning-studio-title","#lesson-content","#close-learning-studio","#open-learning-unit","#lesson-submit","#lesson-concept-back",
   "#atlas-tabs","#dashboard","#home-panel","#paths-panel","#library-panel","#explore-panel","#learn-panel",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
-  "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
+  "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back",
+  "#start-diagnostic","#view-diagnostic-profile","#diagnostic-workspace","#diagnostic-content","#diagnostic-title","#close-diagnostic",
+  "#diagnostic-next","#diagnostic-finish-early","#diagnostic-submit-check","#diagnostic-show-saved","#diagnostic-open-map","#diagnostic-retake"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 const document={
@@ -61,7 +64,8 @@ const responseData={
   "knowledge-graph/navigation.json":navigation,
   "knowledge-graph/research-questions.json":questions,
   "knowledge-graph/learning-units.json":learningUnits,
-  "knowledge-graph/adaptive-items.json":adaptiveBank
+  "knowledge-graph/adaptive-items.json":adaptiveBank,
+  "knowledge-graph/diagnostic-items.json":diagnosticBank
 };
 const stored=new Map();
 const context=vm.createContext({
@@ -73,12 +77,17 @@ const context=vm.createContext({
   setTimeout:fn=>fn()
 });
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
+vm.runInContext(await fs.readFile("diagnostic.js","utf8"),context);
 vm.runInContext(await fs.readFile("app.js","utf8"),context);
 await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
 assert.equal(elements.get("#dashboard").hidden,false,"Overview is the starting view");
+run('startDiagnosticGoal("broad-foundations")');
+assert.match(elements.get("#diagnostic-content").innerHTML,/How would you rate your current understanding/,"Concept diagnostic starts from a surfaced concept");
+assert.ok(stored.get("research-atlas-concept-diagnostic-v1"),"Diagnostic goal and profile are browser-local");
+
 assert.equal(elements.get("#paths-panel").hidden,true,"Non-active pathways remain hidden");
 run('setActiveView("paths",{scroll:false})');
 assert.equal(elements.get("#paths-panel").hidden,false,"Pathways tab opens");
@@ -163,4 +172,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: focused tab navigation, objective-responsive five-item practice, browser-local evidence, immediate feedback, three learning units, 3D and structured map, graph navigation, cross-domain jumps, and mocked camera framing.");
+console.log("Passed: focused tabs, concept-discovery diagnostic entry/persistence, objective-responsive practice, browser-local evidence, learning units, 3D/structured map, graph navigation and mocked camera framing.");
