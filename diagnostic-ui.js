@@ -104,8 +104,8 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   function renderChoose(){
     const completed=Object.keys(profile.ratings).length;
     host.innerHTML='<div class="diag-heading"><p class="eyebrow">01 / Define your direction</p>'+
-      '<h2>Find your place in the research landscape.</h2>'+
-      '<p>Choose a question or scientific region. The Atlas will surface up to ten relevant concepts, then move toward necessary prerequisites when you report a possible gap. This is self-assessment, not a placement verdict.</p></div>'+
+      '<h2>Let’s find your starting point.</h2>'+
+      '<p>Pick what you want to understand. The Atlas will show you a few relevant concepts, let you rate them, and occasionally ask a basic conceptual question. Your answers shape the map you see next.</p></div>'+
       '<div class="diag-goal-grid"><div><label class="diag-label" for="diagnostic-goal-select">My research interest</label>'+
       '<select id="diagnostic-goal-select" class="diag-select"><optgroup label="Explore a research question">'+
       questionPaths.map(q=>'<option value="q:'+esc(q.id)+'">'+esc(q.title)+'</option>').join("")+
@@ -242,7 +242,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
         '<small>'+esc(statusNames[item.status]||statusNames.unassessed)+'</small></span><span aria-hidden="true">↗</span></button>').join(""):
         '<p>Nothing is flagged in this short sample. Choose a goal in the Atlas, or assess more concepts to refine your starting point.</p>')+'</div>'+
       '<p class="diag-privacy">These are provisional, learner-controlled recommendations, not a calibrated score, a claim that you mastered untested prerequisites, or an official research-readiness assessment.</p>'+
-      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">View my personalized map →</button>'+
+      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Continue to my knowledge map →</button>'+
       '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
