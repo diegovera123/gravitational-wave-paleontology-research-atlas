@@ -127,3 +127,34 @@ for question in questions:
         source = next(s for s in sources_data["sources"] if s["id"] == source_id)
         assert source.get("url"), f"{question['id']} references a nonpublic/unverified source {source_id}"
 print(f"Validated {len(questions)} curated educational research questions and their public source links.")
+
+
+# Pilot learning units are separately authored instructional resources, not fetched/copyrighted source copies.
+unit_data=json.loads((ROOT / "knowledge-graph/learning-units.json").read_text())
+assert unit_data.get("schemaVersion")==1, "Unsupported learning-unit schema"
+units=unit_data["units"]
+unit_ids=[u["id"] for u in units]
+assert len(unit_ids)==len(set(unit_ids)), "Duplicate learning unit IDs"
+assert set(unit_ids)<=concept_ids, "Learning unit references unknown concepts"
+for u in units:
+    assert u["summary"] and u["level"] and u["sections"] and u["sources"], f"Incomplete lesson {u['id']}"
+    assert len(u["objectives"])>=2, f"Lesson {u['id']} needs at least two explicit objectives"
+    objective_ids=[o["id"] for o in u["objectives"]]
+    assert len(objective_ids)==len(set(objective_ids)), f"Duplicate objective in lesson {u['id']}"
+    assert len(u["assessment"])>=2, f"Lesson {u['id']} needs practice questions"
+    for objective in u["objectives"]:
+        assert objective["title"] and objective["evidence"], f"Unspecified objective in {u['id']}"
+        assert set(objective["necessaryIds"]+objective["usefulIds"])<=concept_ids, f"Unknown objective dependency in {u['id']}"
+        assert set(objective["necessaryIds"]).isdisjoint(objective["usefulIds"]), f"Conflicting objective dependency in {u['id']}"
+    question_ids=[q["id"] for q in u["assessment"]]
+    assert len(question_ids)==len(set(question_ids)), f"Duplicate practice ID in {u['id']}"
+    for q in u["assessment"]:
+        assert q["objectiveId"] in objective_ids, f"Practice question not aligned to an objective in {u['id']}"
+        assert len(q["choices"])>=2 and 0<=q["correctIndex"]<len(q["choices"]), f"Invalid answer in {u['id']}"
+        assert q["feedback"] and q["prompt"], f"Practice question lacks feedback in {u['id']}"
+    assert u["workedExample"]["steps"] and u["activity"]["solution"], f"Lesson {u['id']} lacks a worked example or solution"
+    for source in u["sources"]:
+        assert source["url"].startswith("https://"), f"Lesson {u['id']} has no public source URL"
+        assert source["title"] and source["role"] and source["license"], f"Lesson {u['id']} lacks source provenance"
+print(f"Validated {len(units)} original pilot learning units with linked objectives, "
+      "worked examples, formative assessments, and public references.")

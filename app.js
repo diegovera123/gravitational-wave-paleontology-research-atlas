@@ -14,6 +14,8 @@ const questionCardsElement = $("#question-cards"), statsElement = $("#atlas-stat
 let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locationByConcept;
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
+let learningUnits=new Map(), openUnitId=null;
+const lessonAnswers=new Map(), lessonSubmitted=new Set();
 const PROGRESS_KEY="research-atlas-studied-v1";
 let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
@@ -234,6 +236,80 @@ function renderNetworkPreview(){
   });
 }
 
+
+function renderFeaturedUnits(){
+  const host=$("#pilot-cards");host.replaceChildren();
+  for(const unit of learningUnits.values()){
+    const concept=byId(unit.id);
+    host.appendChild(makeCard(concept.title,unit.summary,unit.level,unit.duration+" · Read, practice, investigate",
+      ()=>openLearningUnit(unit.id),colorFor(concept.domain),"pilot-card"));
+  }
+}
+function openLearningUnit(id){
+  if(!learningUnits.has(id))return;
+  openUnitId=id;openConcept(id,true);renderLearningUnit();
+  const area=$("#learning-studio");area.hidden=false;
+  area.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+  area.focus?.();
+}
+function closeLearningUnit(){
+  openUnitId=null;$("#learning-studio").hidden=true;
+  $("#explorer").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+}
+function renderLearningUnit(){
+  const unit=learningUnits.get(openUnitId);if(!unit)return;
+  const host=$("#lesson-content"),concept=byId(unit.id),answers=lessonAnswers.get(unit.id)||{},submitted=lessonSubmitted.has(unit.id);
+  $("#learning-studio-title").textContent=concept.title;
+  const para=text=>'<p>'+html(text)+'</p>';
+  const objectives=unit.objectives.map((obj,i)=>'<div class="lesson-objective"><b>'+String(i+1).padStart(2,"0")+' · '+html(obj.title)+'</b>'+para("Evidence: "+obj.evidence)+
+    '<small>Necessary: '+(obj.necessaryIds.map(id=>html(byId(id).title)).join(", ")||"None mapped")+
+    (obj.usefulIds.length?' · Useful: '+obj.usefulIds.map(id=>html(byId(id).title)).join(", "):"")+'</small></div>').join("");
+  const sections=unit.sections.map((section,i)=>'<section class="lesson-section"><span class="lesson-kicker">'+String(i+1).padStart(2,"0")+' · EXPLAIN</span><h3>'+html(section.heading)+'</h3>'+para(section.body)+'</section>').join("");
+  const example=unit.workedExample;
+  const worked='<section class="lesson-worked"><span class="lesson-kicker">WORKED EXAMPLE</span><h3>'+html(example.title)+'</h3>'+para(example.setup)+
+    '<ol>'+example.steps.map(step=>'<li>'+html(step)+'</li>').join("")+'</ol><p class="lesson-takeaway">'+html(example.takeaway)+'</p></section>';
+  const activity='<section class="lesson-worked"><span class="lesson-kicker">TRY IT YOURSELF</span><h3>Predict before checking</h3>'+
+    para(unit.activity.prompt)+'<details><summary>Show a hint</summary>'+para(unit.activity.hint)+'</details>'+
+    '<details><summary>Show the worked solution</summary>'+para(unit.activity.solution)+'</details></section>';
+  const questions=unit.assessment.map((q,i)=>{
+    const selected=answers[q.id];
+    return '<fieldset class="lesson-question"><legend>'+String(i+1).padStart(2,"0")+' · '+html(q.prompt)+'</legend>'+
+      q.choices.map((choice,j)=>'<button type="button" class="lesson-option'+(selected===j?" selected":"")+
+        (submitted&&selected===j?(j===q.correctIndex?" correct":" incorrect"):"")+
+        '" aria-pressed="'+String(selected===j)+'" data-lesson-question="'+html(q.id)+'" data-lesson-choice="'+j+'">'+html(choice)+'</button>').join("")+
+      (submitted?'<p class="lesson-feedback">'+(selected===q.correctIndex?"Correct. ":"Not quite. ")+html(q.feedback)+'</p>':"")+'</fieldset>';
+  }).join("");
+  const ready=unit.assessment.every(q=>Number.isInteger(answers[q.id]));
+  const score=unit.assessment.filter(q=>answers[q.id]===q.correctIndex).length;
+  const result=submitted?'<p class="lesson-result" role="status">'+score+" / "+unit.assessment.length+
+    ' correct on this formative attempt. '+(score===unit.assessment.length?"These checks were answered correctly; no verified mastery is awarded.":"Review the explanations and try again.")+'</p>':"";
+  const refs=unit.sources.map(s=>'<li><a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener noreferrer">'+html(s.title)+' ↗</a>'+
+    para(s.role)+'<small>'+html(s.license)+'</small></li>').join("");
+  host.innerHTML='<div class="lesson-intro"><span class="lesson-kicker">'+html(unit.level)+' · '+html(unit.duration)+'</span><h3>'+html(unit.summary)+'</h3>'+
+    '<p>Original Atlas explanations and illustrative examples. Public sources are linked for further verification; external textbook and paper texts are not reproduced.</p>'+
+    '<button type="button" id="lesson-concept-back" class="lesson-back">View this concept in the graph ↗</button></div>'+
+    '<div class="lesson-grid"><div><section class="lesson-objectives"><span class="lesson-kicker">LEARNING OBJECTIVES</span>'+objectives+'</section>'+
+    sections+worked+activity+'<section class="lesson-assessment"><span class="lesson-kicker">FORMATIVE CHECK</span><h3>Check your understanding</h3>'+
+    '<p>Choose an answer to each question and review the feedback.</p>'+questions+
+    '<button type="button" id="lesson-submit" class="lesson-submit" '+(!ready?"disabled":"")+'>'+
+    (submitted?"Reset practice":"Check answers")+'</button>'+result+'</section></div>'+
+    '<aside class="lesson-research"><section><span class="lesson-kicker">RESEARCH APPLICATION</span>'+para(unit.researchConnection)+'</section>'+
+    '<section><span class="lesson-kicker">PUBLIC SOURCES & PROVENANCE</span><ul>'+refs+'</ul></section>'+
+    '<section><span class="lesson-kicker">ABOUT YOUR PROGRESS</span><p>These two practice checks provide formative feedback only. They never automatically change your separate self-reported understanding marker or certify mastery.</p></section></aside></div>';
+  host.querySelectorAll("[data-lesson-question]").forEach(b=>b.addEventListener("click",()=>{
+    const current=lessonAnswers.get(unit.id)||{};
+    current[b.dataset.lessonQuestion]=Number(b.dataset.lessonChoice);
+    lessonAnswers.set(unit.id,current);lessonSubmitted.delete(unit.id);renderLearningUnit();
+  }));
+  $("#lesson-submit").addEventListener("click",()=>{
+    if(!unit.assessment.every(q=>Number.isInteger((lessonAnswers.get(unit.id)||{})[q.id])))return;
+    if(lessonSubmitted.has(unit.id)){lessonSubmitted.delete(unit.id);lessonAnswers.set(unit.id,{});}
+    else lessonSubmitted.add(unit.id);
+    renderLearningUnit();
+  });
+  $("#lesson-concept-back").addEventListener("click",closeLearningUnit);
+}
+
 function renderDashboard() {
   statsElement.innerHTML='<span><strong>'+concepts.length+'</strong> concepts</span>'+
     '<span><strong>'+atlas.macros.length+'</strong> regions</span>'+
@@ -427,6 +503,7 @@ function showConceptDetails(concept) {
   detailsElement.innerHTML=(activeQuestionId?'<button id="back-to-question" class="back-to-question" type="button">← Back to research question</button>':'')+'<div class="detail-top"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span><span class="scale-badge '+html(concept.scale)+'">'+html(concept.scale)+' scale</span></div>'+
     '<h2>'+html(concept.title)+'</h2><p class="unit">'+html(concept.unit)+'</p>'+
     lessonStatus+
+    (learningUnits.has(concept.id)?'<button type="button" id="open-learning-unit" class="lesson-entry">Open full learning unit · Explanations, worked example, practice ↗</button>':'<p class="lesson-coming">Full lesson in development. The curriculum map and external resources remain available.</p>')+
     '<div class="why"><h3>Why this matters</h3><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p></div>'+
     detailGroup("Necessary prerequisites",required,"No necessary prerequisites are mapped.",true)+
     detailGroup("Useful supporting knowledge",useful,"No useful connections are mapped.")+
@@ -438,6 +515,7 @@ function showConceptDetails(concept) {
     '<div class="source-list">'+refs.map(s=>s.url?'<a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener"><span>'+html(s.citation)+'</span><small>'+html(s.title)+'</small></a>':'<div><span>'+html(s.citation)+'</span><small>'+html(s.verificationNote)+'</small></div>').join("")+'</div></details>';
   detailsElement.querySelectorAll("[data-concept]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.concept,true)));
   $("#mark-understood").addEventListener("click",()=>markUnderstood(concept.id));
+  if(learningUnits.has(concept.id))$("#open-learning-unit").addEventListener("click",()=>openLearningUnit(concept.id));
   if(readyStep)$("#next-required").addEventListener("click",()=>openConcept(readyStep.id,true));
   if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>openQuestion(activeQuestionId));
 }
@@ -520,14 +598,17 @@ async function initialise() {
       fetch("knowledge-graph/concepts.json"),
       fetch("knowledge-graph/research-sources.json"),
       fetch("knowledge-graph/navigation.json"),
-      fetch("knowledge-graph/research-questions.json")
+      fetch("knowledge-graph/research-questions.json"),
+      fetch("knowledge-graph/learning-units.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
     researchQuestions=questionsData.questions;
+    if(unitsData.schemaVersion!==1||!Array.isArray(unitsData.units))throw Error("Unsupported learning units.");
+    learningUnits=new Map(unitsData.units.map(unit=>[unit.id,unit]));
     const conceptIds=new Set(concepts.map(c=>c.id)),sourceIds=new Set(researchSources.map(s=>s.id));
     for(const q of researchQuestions) {
       if(!q.title || !q.conceptIds.length || q.conceptIds.some(id=>!conceptIds.has(id)) ||
@@ -535,7 +616,7 @@ async function initialise() {
     }
     macroById=new Map(atlas.macros.map(m=>[m.id,m]));
     topicById=new Map(atlas.topics.map(t=>[t.id,t]));
-    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();
+    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();renderFeaturedUnits();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
@@ -576,6 +657,7 @@ $("#resume-learning").addEventListener("click",()=>{
   const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
   if(next){openConcept(next.id,true);scrollToExplorer();}
 });
+$("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
 $("#reset-view").addEventListener("click",()=>{if(displayMode==="3d")graph?.zoomToFit(lowerMotion()?0:700,72);});
