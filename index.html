@@ -38,6 +38,24 @@
           <p>Follow a question into the science, or enter a knowledge region. The structured map is your guide; the 3D constellation is there when you want to explore.</p></div>
         <div class="dashboard-metrics" id="atlas-stats" aria-live="polite"><span>Preparing the Atlas…</span></div>
       </div>
+      <section class="learning-progress-strip" aria-label="Your guided learning progress">
+        <div><p class="eyebrow">Guided learning · Your journey</p><strong id="learning-progress">Preparing your learning path…</strong>
+          <p>Follow necessary prerequisites to reveal recommended next steps. Progress is self-reported, not a verified mastery assessment.</p></div>
+        <button id="resume-learning" type="button" class="learning-resume" disabled>Find my next step ↗</button>
+      </section>
+      <section class="dashboard-network" aria-labelledby="dashboard-network-title">
+        <div class="network-heading">
+          <div><p class="eyebrow">The knowledge graph · Always in view</p><h3 id="dashboard-network-title">Your research constellation</h3>
+            <p>Explore the major regions and follow the scientific connections between them. Select any region to open its learning map.</p></div>
+          <div class="network-actions">
+            <span class="network-key"><i></i> Necessary scientific connection</span>
+            <button type="button" id="open-full-3d" class="network-expand">Explore the 3D graph ↗</button>
+          </div>
+        </div>
+        <div id="dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
+          <p class="dashboard-loading">Loading the knowledge graph…</p>
+        </div>
+      </section>
       <div class="dashboard-columns">
         <div class="dashboard-main">
           <div class="dashboard-section-heading"><div><p class="eyebrow">01 / The landscape</p><h3>Explore a knowledge region</h3></div><a href="#explorer" class="subtle-link">Open map ↗</a></div>
@@ -78,7 +96,7 @@
         </div>
 
         <nav id="atlas-crumbs" class="atlas-breadcrumbs" aria-label="Knowledge hierarchy"></nav>
-        <div class="map-switch" role="group" aria-label="Map display mode"><button id="view-map" class="view-button current" type="button" aria-pressed="true">Structured map</button><button id="view-3d" class="view-button" type="button" aria-pressed="false">3D constellation</button><span class="map-switch-hint">Choose a region, then explore its topics and concepts.</span></div>
+        <div class="map-switch" role="group" aria-label="Map display mode"><button id="view-map" class="view-button current" type="button" aria-pressed="true">Structured map</button><button id="view-3d" class="view-button" type="button" aria-pressed="false">3D constellation</button><span class="map-switch-hint">The constellation is also visible at the top of the dashboard. Select a region, then follow its guided prerequisite path.</span></div>
         <div id="graph-map" class="graph-map" aria-label="Navigable knowledge map" hidden></div>
         <div id="graph" aria-label="Interactive 3D knowledge hierarchy">
           <div class="loading"><span></span>Mapping concepts…</div>

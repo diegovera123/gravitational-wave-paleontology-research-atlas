@@ -29,13 +29,15 @@ class ElementStub {
 const selectors=[
   "#graph","#details","#concept-search","#search-results","#atlas-crumbs","#atlas-choices",
   "#global-view","#parent-view","#history-view","#reset-view","#study-macro",
-  "#graph-map","#domain-cards","#question-cards","#atlas-stats","#view-map","#view-3d","#explorer","#explorer-title","#back-to-question"
+  "#graph-map","#domain-cards","#question-cards","#atlas-stats","#view-map","#view-3d","#explorer","#explorer-title","#back-to-question",
+  "#dashboard-network-map","#open-full-3d","#learning-progress","#resume-learning","#mark-understood","#next-required"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 const document={
   activeElement:null,
   querySelector:selector=>elements.get(selector)||new ElementStub(),
   createElement:()=>new ElementStub(),
+  createElementNS:()=>new ElementStub(),
   createTextNode:text=>({textContent:text}),
   addEventListener(){}
 };
@@ -53,9 +55,11 @@ const responseData={
   "knowledge-graph/navigation.json":navigation,
   "knowledge-graph/research-questions.json":questions
 };
+const stored=new Map();
 const context=vm.createContext({
   document,URL,console,
-  window:{location:{href:"https://example.org/research-atlas/"},matchMedia:()=>({matches:true}),addEventListener(){}},
+  window:{location:{href:"https://example.org/research-atlas/"},matchMedia:()=>({matches:true}),addEventListener(){},
+    localStorage:{getItem:key=>stored.get(key)||null,setItem:(key,value)=>stored.set(key,value)}},
   ForceGraph3D:()=>()=>graph,
   fetch:async path=>({ok:true,json:async()=>responseData[path]}),
   setTimeout:fn=>fn()
@@ -69,6 +73,19 @@ assert.ok(scene.nodes.every(node=>node.type==="macro"),"No meso/micro content le
 assert.equal(elements.get("#graph").hidden,true,"Structured map is displayed by default");
 assert.equal(elements.get("#graph-map").hidden,false,"Structured map is available");
 assert.equal(elements.get("#domain-cards").children.length,navigation.macros.length,"Dashboard renders region cards");
+assert.equal(elements.get("#dashboard-network-map").children.length,navigation.macros.length+1,"Visible graph includes directional edge layer and macro nodes");
+assert.ok(elements.get("#learning-progress").textContent.includes("0 / "+curriculum.concepts.length),"Initial self-reported progress is empty");
+run('openConcept("limits",true)');
+assert.equal(elements.get("#graph-map").children.length,3,"Selected concept displays a prerequisite → concept → downstream learning path");
+assert.match(elements.get("#details").innerHTML,/Guided path:/,"Necessary prerequisites lock the guided path without hiding content");
+assert.match(elements.get("#details").innerHTML,/Go to next recommended prerequisite/,"Locked concept links to a ready prerequisite");
+run('markUnderstood("functions")');
+assert.ok(stored.get("research-atlas-studied-v1").includes("functions"),"Study markers are saved locally");
+run('openConcept("limits",true)');
+assert.match(elements.get("#details").innerHTML,/Ready for guided study/,"Marking a necessary prerequisite unlocks the recommended next concept");
+run('markUnderstood("limits")');
+assert.ok(stored.get("research-atlas-studied-v1").includes("limits"),"Self-reported completed concept is persisted");
+
 assert.equal(elements.get("#question-cards").children.length,questions.questions.length,"Dashboard renders research questions");
 run('openQuestion("binary-survival")');
 assert.match(elements.get("#details").innerHTML,/What determines whether a massive binary survives/);
@@ -106,4 +123,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: dashboard cards, research-question pathways, map/3D toggle, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");
+console.log("Passed: dashboard graph, saved guided prerequisites, research-question pathways, map/3D toggle, macro-only overview, topic drill-down, concept details, cross-domain jumps, back navigation, and camera framing (mocked DOM/WebGL).");

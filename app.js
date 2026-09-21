@@ -14,6 +14,8 @@ const questionCardsElement = $("#question-cards"), statsElement = $("#atlas-stat
 let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locationByConcept;
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
+const PROGRESS_KEY="research-atlas-studied-v1";
+let studiedIds=new Set(), progressAvailable=true;
 const REGION_DESCRIPTIONS = {
   calculus:"The mathematical language behind change, models, and uncertainty.",
   "classical-mechanics":"Motion, gravity, and the orbital dynamics of binary systems.",
@@ -131,10 +133,113 @@ function makeCard(title,description,eyebrow,footer,action,color,kind="") {
     '<span class="explorer-card-footer">'+html(footer)+'</span>';
   return card;
 }
+
+function loadLearningProgress(){
+  try{
+    if(!window.localStorage){progressAvailable=false;studiedIds=new Set();return;}
+    const saved=window.localStorage.getItem(PROGRESS_KEY);
+    const items=saved?JSON.parse(saved):[];
+    studiedIds=new Set(Array.isArray(items)?items.filter(id=>typeof id==="string"&&byId(id)):[]);
+  }catch(error){progressAvailable=false;studiedIds=new Set();console.warn("[Research Atlas] Progress is session-only.",error);}
+}
+function persistProgress(){
+  if(!progressAvailable)return;
+  try{window.localStorage.setItem(PROGRESS_KEY,JSON.stringify([...studiedIds]));}
+  catch(error){progressAvailable=false;console.warn("[Research Atlas] Could not save learning progress.",error);}
+}
+function missingRequirements(concept){
+  return concept.prerequisites.filter(edge=>edge.kind==="necessary" && !studiedIds.has(edge.id));
+}
+function learningState(concept){
+  if(studiedIds.has(concept.id))return "studied";
+  return missingRequirements(concept).length?"locked":"ready";
+}
+function learningStateLabel(concept) {
+  const state=learningState(concept);
+  return state==="studied"?"✓ Self-marked understood":state==="ready"?"◇ Ready to explore":"🔒 Guided path: prerequisites first";
+}
+// Find the earliest unstudied necessary dependency, rather than sending someone to a locked node.
+function nextReadyRequirement(concept,seen=new Set()){
+  if(!concept || seen.has(concept.id))return null;
+  seen.add(concept.id);
+  for(const edge of missingRequirements(concept)){
+    const prerequisite=byId(edge.id);
+    const earlier=nextReadyRequirement(prerequisite,seen);
+    if(earlier)return earlier;
+    if(prerequisite && learningState(prerequisite)==="ready")return prerequisite;
+  }
+  return null;
+}
+function currentStudyCount(ids){
+  return ids.filter(id=>studiedIds.has(id)).length;
+}
+function updateLearningStats(){
+  $("#learning-progress").textContent=currentStudyCount(concepts.map(c=>c.id))+" / "+concepts.length+" concepts marked understood";
+  const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
+  const b=$("#resume-learning");
+  b.disabled=!next;
+  b.textContent=next?"Continue: "+next.title+" ↗":"All available concepts self-marked ✓";
+}
+function markUnderstood(id){
+  if(!byId(id))return;
+  if(studiedIds.has(id))studiedIds.delete(id);else studiedIds.add(id);
+  persistProgress();
+  updateLearningStats();
+  renderDashboard();
+  const detailShown=detailsElement.querySelector("#mark-understood");
+  if(selectedId===id || detailShown)showConceptDetails(byId(id));
+  draw({frame:false});
+}
+function renderNetworkPreview(){
+  const surface=$("#dashboard-network-map");
+  surface.replaceChildren();
+  const positions=new Map(atlas.macros.map((m,i)=>[m.id,{x:100+200*(i%5),y:i<5?104:322}]));
+  // Aggregate real, direct necessary dependencies only; navigation containment is never a prerequisite.
+  const counts=new Map();
+  concepts.forEach(target=>{
+    const to=locationByConcept.get(target.id)?.macroId;
+    if(!to)return;
+    target.prerequisites.filter(edge=>edge.kind==="necessary").forEach(edge=>{
+      const from=locationByConcept.get(edge.id)?.macroId;
+      if(!from||from===to)return;
+      const key=from+"→"+to;
+      counts.set(key,(counts.get(key)||0)+1);
+    });
+  });
+  const edges=[...counts].sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 1000 420");
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.setAttribute("class","network-edges");
+  svg.setAttribute("aria-hidden","true");
+  svg.innerHTML='<defs><marker id="knowledge-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#769acb"/></marker></defs>'+
+    edges.map(([key,weight])=>{
+      const [source,target]=key.split("→"),a=positions.get(source),b=positions.get(target);
+      if(!a||!b)return "";
+      const angle=Math.atan2(b.y-a.y,b.x-a.x),start=64,end=67;
+      const x1=a.x+Math.cos(angle)*start,y1=a.y+Math.sin(angle)*start;
+      const x2=b.x-Math.cos(angle)*end,y2=b.y-Math.sin(angle)*end;
+      return '<path d="M'+x1.toFixed(1)+' '+y1.toFixed(1)+' L'+x2.toFixed(1)+' '+y2.toFixed(1)+'" stroke="#7595c3" stroke-width="'+Math.min(2.4,.65+weight*.25)+'" stroke-opacity="'+Math.min(.7,.23+weight*.07)+'" fill="none" marker-end="url(#knowledge-arrow)"><title>'+html(byId(source)?.title||source)+' → '+html(byId(target)?.title||target)+': '+weight+' direct necessary links</title></path>';
+    }).join("");
+  surface.appendChild(svg);
+  atlas.macros.forEach((m,i)=>{
+    const pos=positions.get(m.id),leafIds=atlas.topics.filter(t=>t.macroId===m.id).flatMap(t=>t.conceptIds);
+    const known=currentStudyCount([m.id,...leafIds]),total=leafIds.length+1;
+    const b=button("",()=>{enterMacro(m.id);scrollToExplorer();},"network-region");
+    b.style.setProperty("--region-color",colorFor(m.domain));
+    b.style.left=(pos.x/10)+"%";b.style.top=(pos.y/420*100)+"%";
+    b.innerHTML='<span class="network-region-icon" aria-hidden="true"></span><span class="network-region-title">'+html(m.title)+'</span>'+
+      '<span class="network-region-progress">'+known+" / "+total+' understood</span>';
+    surface.appendChild(b);
+  });
+}
+
 function renderDashboard() {
   statsElement.innerHTML='<span><strong>'+concepts.length+'</strong> concepts</span>'+
     '<span><strong>'+atlas.macros.length+'</strong> regions</span>'+
     '<span><strong>'+researchQuestions.length+'</strong> research pathways</span>';
+  updateLearningStats();
+  renderNetworkPreview();
   domainCardsElement.replaceChildren();
   atlas.macros.forEach((macro,i)=>{
     const count=atlas.topics.filter(t=>t.macroId===macro.id).length;
@@ -151,6 +256,38 @@ function renderDashboard() {
       },colorFor(byId(q.conceptIds[0]).domain),"question-card"));
   });
 }
+
+function renderLearningPathway(container){
+  if(!selectedId || level!=="meso")return;
+  const concept=byId(selectedId);if(!concept)return;
+  const required=concept.prerequisites.filter(e=>e.kind==="necessary").map(e=>byId(e.id)).filter(Boolean);
+  const downstream=concepts.filter(c=>c.prerequisites.some(e=>e.kind==="necessary"&&e.id===concept.id)).slice(0,4);
+  const pathway=document.createElement("section");pathway.className="map-pathway";
+  const heading=document.createElement("div");heading.className="map-pathway-heading";
+  heading.innerHTML='<p class="eyebrow">Guided path · '+html(learningStateLabel(concept))+'</p>'+
+    '<h4>Build on what you know.</h4><p>Arrows show necessary knowledge dependencies, not the topic containment hierarchy. Other subjects can appear as prerequisites.</p>';
+  pathway.appendChild(heading);
+  const stages=document.createElement("div");stages.className="map-pathway-stages";
+  const groups=[
+    {label:"LEARN FIRST",concepts:required,empty:"No direct necessary prerequisites"},
+    {label:"CURRENT LEVEL",concepts:[concept],empty:""},
+    {label:"UNLOCKS NEXT",concepts:downstream,empty:"No downstream concepts mapped"}
+  ];
+  groups.forEach((group,index)=>{
+    if(index){const arrow=document.createElement("span");arrow.className="map-path-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");stages.appendChild(arrow);}
+    const col=document.createElement("div");col.className="map-path-column";
+    const name=document.createElement("span");name.className="map-path-label";name.textContent=group.label;col.appendChild(name);
+    if(!group.concepts.length){const none=document.createElement("p");none.className="map-path-empty";none.textContent=group.empty;col.appendChild(none);}
+    group.concepts.forEach(target=>{
+      const b=button(target.title+" · "+learningStateLabel(target),()=>openConcept(target.id,true),
+        "map-path-node is-"+learningState(target)+(target.id===selectedId?" current":""));
+      b.style.setProperty("--choice-color",colorFor(target.domain));col.appendChild(b);
+    });
+    stages.appendChild(col);
+  });
+  pathway.appendChild(stages);container.appendChild(pathway);
+}
+
 function renderMap(scene) {
   mapElement.replaceChildren();
   const lead=document.createElement("div");
@@ -162,6 +299,7 @@ function renderMap(scene) {
       :{eyebrow:"03 / Topic explorer",title:activeTopic().title,text:"Select a concept to inspect its prerequisites, learning objectives, and research links."};
   lead.innerHTML='<p class="eyebrow">'+html(summary.eyebrow)+'</p><h3>'+html(summary.title)+'</h3><p>'+html(summary.text)+'</p>';
   mapElement.appendChild(lead);
+  renderLearningPathway(mapElement);
   const container=document.createElement("div");
   container.className="structured-map-grid "+(level==="global"?"macro-grid":"");
   const childNodes=scene.nodes.filter(n=>level==="global"||n.type!==(level==="macro"?"macro":"topic"));
@@ -172,14 +310,14 @@ function renderMap(scene) {
     const description=node.type==="macro"?REGION_DESCRIPTIONS[node.id]||"Explore the field.":
       node.type==="topic"?"A focused collection of concepts within "+activeMacro().title+".":
       concept.whyItMatters||concept.researchApplication||"Explore this scientific concept.";
-    const footer=node.type==="macro"?count+" topics · Enter region":
-      node.type==="topic"?count+" concepts · Open topic":
-      concept.prerequisites.filter(e=>e.kind==="necessary").length+" necessary prerequisites · Open learning unit";
+    const footer=node.type==="macro"?count+" topics · "+currentStudyCount([node.id,...atlas.topics.filter(t=>t.macroId===node.id).flatMap(t=>t.conceptIds)])+" studied · Enter region":
+      node.type==="topic"?count+" concepts · "+currentStudyCount(activeTopicFor(node.id).conceptIds)+" studied · Open topic":
+      learningStateLabel(concept)+" · "+missingRequirements(concept).length+" unfulfilled prerequisites";
     container.appendChild(makeCard(node.name,description,
       node.type==="macro"?"KNOWLEDGE REGION "+String(i+1).padStart(2,"0"):
       node.type==="topic"?"TOPIC "+String(i+1).padStart(2,"0"):"CONCEPT "+String(i+1).padStart(2,"0"),
       footer,()=>handleNodeClick(node),colorFor(node.domain),
-      "map-card "+(node.id===selectedId?"selected":"")));
+      "map-card "+(node.id===selectedId?"selected ":"")+(node.type==="concept"?"is-"+learningState(concept):"")));
   });
   mapElement.appendChild(container);
 }
@@ -278,8 +416,17 @@ function showConceptDetails(concept) {
   const next=concepts.flatMap(c=>c.prerequisites.filter(e=>e.id===concept.id).map(edge=>({concept:c,edge})));
   const refs=concept.researchReferences.map(id=>researchSources.find(s=>s.id===id)).filter(Boolean);
   const resource=safeLink(concept.resource);
+  const state=learningState(concept),missing=missingRequirements(concept);
+  const readyStep=nextReadyRequirement(concept);
+  const badge=state==="studied"?"✓ Self-marked understood":state==="ready"?"◇ Ready for guided study":"🔒 Guided path: "+missing.length+" prerequisites to mark understood";
+  const action=state==="studied"?"Undo self-mark":state==="locked"?"I already know this (skip prerequisites)":"Mark as understood";
+  const lessonStatus='<div class="lesson-progress is-'+html(state)+'"><div class="lesson-progress-row"><span class="lesson-progress-badge">'+html(badge)+'</span><button class="lesson-mark" id="mark-understood" type="button">'+html(action)+'</button></div>'+
+    '<p>'+(state==="locked"?"You can preview this concept now; the guided path recommends its necessary prerequisites first.":state==="studied"?"This is your own study marker, not a graded or verified mastery certificate.":"The necessary prerequisites have been self-marked. Explore the objectives and assess your understanding.")+'</p>'+
+    (readyStep?'<button id="next-required" class="next-required" type="button">Go to next recommended prerequisite: '+html(readyStep.title)+' ↗</button>':'')+
+    '<small>Progress is stored in this browser only. This self-report does not verify mastery.</small></div>';
   detailsElement.innerHTML=(activeQuestionId?'<button id="back-to-question" class="back-to-question" type="button">← Back to research question</button>':'')+'<div class="detail-top"><span class="domain-pill" style="--domain-color:'+colorFor(concept.domain)+'"><i></i>'+html(concept.domain)+'</span><span class="scale-badge '+html(concept.scale)+'">'+html(concept.scale)+' scale</span></div>'+
     '<h2>'+html(concept.title)+'</h2><p class="unit">'+html(concept.unit)+'</p>'+
+    lessonStatus+
     '<div class="why"><h3>Why this matters</h3><p>'+html(concept.whyItMatters||concept.researchApplication)+'</p></div>'+
     detailGroup("Necessary prerequisites",required,"No necessary prerequisites are mapped.",true)+
     detailGroup("Useful supporting knowledge",useful,"No useful connections are mapped.")+
@@ -290,6 +437,8 @@ function showConceptDetails(concept) {
     (resource==="#"?'<p class="none">No public resource link available.</p>':'<a class="resource-link" href="'+html(resource)+'" target="_blank" rel="noopener">Open learning resource ↗</a>')+
     '<div class="source-list">'+refs.map(s=>s.url?'<a href="'+html(safeLink(s.url))+'" target="_blank" rel="noopener"><span>'+html(s.citation)+'</span><small>'+html(s.title)+'</small></a>':'<div><span>'+html(s.citation)+'</span><small>'+html(s.verificationNote)+'</small></div>').join("")+'</div></details>';
   detailsElement.querySelectorAll("[data-concept]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.concept,true)));
+  $("#mark-understood").addEventListener("click",()=>markUnderstood(concept.id));
+  if(readyStep)$("#next-required").addEventListener("click",()=>openConcept(readyStep.id,true));
   if(activeQuestionId)$("#back-to-question").addEventListener("click",()=>openQuestion(activeQuestionId));
 }
 function openConcept(id,record=false) {
@@ -386,7 +535,7 @@ async function initialise() {
     }
     macroById=new Map(atlas.macros.map(m=>[m.id,m]));
     topicById=new Map(atlas.topics.map(t=>[t.id,t]));
-    locationByConcept=new Map();validateNavigation();renderDashboard();
+    locationByConcept=new Map();validateNavigation();loadLearningProgress();renderDashboard();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();return;
@@ -422,6 +571,11 @@ document.addEventListener("click",event=>{if(!event.target.closest(".graph-toolb
 $("#global-view").addEventListener("click",enterGlobal);
 $("#parent-view").addEventListener("click",goParent);
 $("#history-view").addEventListener("click",()=>{const prior=previousLocations.pop();if(prior)restoreLocation(prior);});
+$("#open-full-3d").addEventListener("click",()=>{setDisplayMode("3d");scrollToExplorer();});
+$("#resume-learning").addEventListener("click",()=>{
+  const next=concepts.find(c=>learningState(c)==="ready" && c.scale!=="macro")||concepts.find(c=>learningState(c)==="ready");
+  if(next){openConcept(next.id,true);scrollToExplorer();}
+});
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
 $("#reset-view").addEventListener("click",()=>{if(displayMode==="3d")graph?.zoomToFit(lowerMotion()?0:700,72);});
