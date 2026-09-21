@@ -23,7 +23,7 @@ function targetDifficulty(stats){
   if(stats.recentSuccess>=2)return 2;
   return 1;
 }
-function chooseNext(items,unit,history,session=[],now=Date.now()){
+function chooseNext(items,unit,history,session=[],now=Date.now(),preferredObjectiveIds=[]){
   const previous=safeHistory(history).concat(safeHistory(session));
   const seen=new Set(session.map(r=>r.itemId));
   const options=items.filter(q=>q.unitId===unit.id&&!seen.has(q.id));
@@ -31,7 +31,10 @@ function chooseNext(items,unit,history,session=[],now=Date.now()){
   const objectives=unit.objectives.map(o=>o.id);
   const stats=Object.fromEntries(objectives.map(id=>[id,objectiveStats(unit.id,id,previous,now)]));
   const sessionCounts=Object.fromEntries(objectives.map(id=>[id,session.filter(r=>r.objectiveId===id).length]));
-  const viable=objectives.filter(id=>options.some(q=>q.objectiveId===id));
+  let viable=objectives.filter(id=>options.some(q=>q.objectiveId===id));
+  // In an explicit review session, cover each due objective before adding broader practice.
+  const dueUncovered=viable.filter(id=>preferredObjectiveIds.includes(id)&&sessionCounts[id]===0);
+  if(dueUncovered.length)viable=dueUncovered;
   viable.sort((a,b)=>{
     const sa=stats[a],sb=stats[b],ca=sessionCounts[a],cb=sessionCounts[b];
     // Cover both objectives in a session, revisit weaker objectives, then prefer less-practised.
