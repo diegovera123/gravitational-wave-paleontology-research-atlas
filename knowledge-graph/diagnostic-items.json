@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "description": "Original one-question concept checks used only to supplement self-ratings in the Concept Discovery Diagnostic. A correct answer is limited evidence and does not establish mastery.",
+  "items": [
+    {
+      "id": "diag-functions",
+      "conceptId": "functions",
+      "prompt": "What does the graph of a function y=f(x) represent?",
+      "choices": [
+        "For each allowed x, it shows the corresponding output f(x)",
+        "It shows every possible equation with variable x",
+        "It only shows where f(x)=0"
+      ],
+      "correctIndex": 0,
+      "feedback": "A function graph pairs each allowed input x with its output f(x); intercepts and zeros are only some features of that graph."
+    },
+    {
+      "id": "diag-limits",
+      "conceptId": "limits",
+      "prompt": "What does lim(x→a) f(x)=L primarily describe?",
+      "choices": [
+        "How f(x) behaves as x gets arbitrarily close to a",
+        "The value f(a) must equal L",
+        "The derivative of f at every point"
+      ],
+      "correctIndex": 0,
+      "feedback": "A limit concerns nearby behavior. f(a) may equal L, differ from L, or even be undefined."
+    },
+    {
+      "id": "diag-derivatives",
+      "conceptId": "derivatives",
+      "prompt": "For a position function x(t), what does dx/dt represent when the derivative exists?",
+      "choices": [
+        "Instantaneous velocity",
+        "Total distance traveled",
+        "Average acceleration"
+      ],
+      "correctIndex": 0,
+      "feedback": "The derivative of position with respect to time is instantaneous velocity."
+    },
+    {
+      "id": "diag-vector-algebra",
+      "conceptId": "vector-algebra",
+      "prompt": "Two velocity vectors have the same magnitude but different directions. Are they the same vector?",
+      "choices": [
+        "No; vectors require both magnitude and direction",
+        "Yes; equal magnitude makes vectors equal",
+        "Only if they are measured in the same units"
+      ],
+      "correctIndex": 0,
+      "feedback": "Equal magnitude is not enough: vector equality also requires the same direction/components."
+    },
+    {
+      "id": "diag-newtonian-gravity",
+      "conceptId": "newtonian-gravitation",
+      "prompt": "If the separation between two point masses doubles while their masses stay fixed, how does the magnitude of Newtonian gravitational force change?",
+      "choices": [
+        "It becomes one quarter as large",
+        "It becomes half as large",
+        "It doubles"
+      ],
+      "correctIndex": 0,
+      "feedback": "Newtonian gravitational force scales as 1/r², so doubling r reduces the force by a factor of four."
+    },
+    {
+      "id": "diag-angular-momentum",
+      "conceptId": "angular-momentum",
+      "prompt": "For an isolated two-body system with no external torque, which quantity is conserved?",
+      "choices": [
+        "Total angular momentum",
+        "Orbital speed of each body separately",
+        "Separation at every instant"
+      ],
+      "correctIndex": 0,
+      "feedback": "With no external torque, total angular momentum is conserved even though speed and separation can change."
+    },
+    {
+      "id": "diag-probability-distributions",
+      "conceptId": "probability-distributions",
+      "prompt": "What does a probability distribution describe?",
+      "choices": [
+        "How probability is allocated across possible outcomes or values",
+        "A single most likely outcome only",
+        "The causal mechanism that generated every observation"
+      ],
+      "correctIndex": 0,
+      "feedback": "A probability distribution characterizes how probability is spread over possible outcomes; it does not by itself establish causation."
+    },
+    {
+      "id": "diag-monte-carlo",
+      "conceptId": "monte-carlo-methods",
+      "prompt": "What is the central idea of a Monte Carlo method?",
+      "choices": [
+        "Use repeated random samples to estimate quantities or explore model outcomes",
+        "Replace all probability models with deterministic equations",
+        "Guarantee an exact answer after one simulation"
+      ],
+      "correctIndex": 0,
+      "feedback": "Monte Carlo methods rely on repeated random sampling; estimates improve statistically with more informative sampling, not by becoming exact after one draw."
+    },
+    {
+      "id": "diag-stellar-evolution",
+      "conceptId": "stellar-evolution",
+      "prompt": "Why is a star's initial mass especially important for its evolution?",
+      "choices": [
+        "It strongly influences its lifetime, burning stages, and final fate",
+        "It uniquely determines every later property regardless of environment or interactions",
+        "It matters only after the star becomes a compact object"
+      ],
+      "correctIndex": 0,
+      "feedback": "Initial mass is a major driver of stellar evolution, but composition, mass loss, rotation, and binary interaction can also matter."
+    },
+    {
+      "id": "diag-metallicity",
+      "conceptId": "metallicity",
+      "prompt": "In stellar astrophysics, metallicity generally refers to what?",
+      "choices": [
+        "The abundance of elements heavier than helium relative to hydrogen/helium",
+        "The fraction of a star made of literal metals such as iron only",
+        "The magnetic-field strength at the stellar surface"
+      ],
+      "correctIndex": 0,
+      "feedback": "Astronomers use 'metals' for elements heavier than helium; metallicity measures their abundance by a chosen convention."
+    },
+    {
+      "id": "diag-stellar-winds",
+      "conceptId": "stellar-winds",
+      "prompt": "Why can stellar winds matter for the final mass of a massive star?",
+      "choices": [
+        "They can remove mass from the star over time",
+        "They always increase the star's core mass",
+        "They prevent all binary interactions"
+      ],
+      "correctIndex": 0,
+      "feedback": "Winds can remove substantial mass and thereby affect later evolution and remnant properties."
+    },
+    {
+      "id": "diag-roche-lobe",
+      "conceptId": "roche-lobe",
+      "prompt": "What is the Roche lobe in a binary system?",
+      "choices": [
+        "A region around a star within which material is gravitationally associated with that star in the rotating binary frame",
+        "The event horizon of a compact object",
+        "The spherical surface on which both stars have equal temperature"
+      ],
+      "correctIndex": 0,
+      "feedback": "The Roche lobe is defined by the effective potential in the rotating frame and helps determine when mass transfer can occur."
+    },
+    {
+      "id": "diag-mass-transfer",
+      "conceptId": "mass-transfer",
+      "prompt": "What is Roche-lobe overflow?",
+      "choices": [
+        "Mass transfer that begins when a star expands to fill its Roche lobe",
+        "A supernova ejecting all material from both stars",
+        "A gravitational wave carrying mass from one star to another"
+      ],
+      "correctIndex": 0,
+      "feedback": "When a star fills its Roche lobe, material can flow through the inner Lagrange-point region toward its companion."
+    },
+    {
+      "id": "diag-common-envelope",
+      "conceptId": "common-envelope",
+      "prompt": "What is a central feature of common-envelope evolution?",
+      "choices": [
+        "The companion and a stellar core can orbit inside a shared envelope while orbital energy/angular momentum may help eject it",
+        "Both stars always merge immediately without orbital evolution",
+        "The binary becomes completely non-interacting"
+      ],
+      "correctIndex": 0,
+      "feedback": "Common-envelope evolution involves a shared envelope and often strong orbital shrinkage; the final outcome can be envelope ejection or merger."
+    },
+    {
+      "id": "diag-compact-remnants",
+      "conceptId": "compact-remnants",
+      "prompt": "Which objects are examples of compact stellar remnants?",
+      "choices": [
+        "White dwarfs, neutron stars, and black holes",
+        "Main-sequence stars, red giants, and molecular clouds",
+        "Planets, asteroids, and comets"
+      ],
+      "correctIndex": 0,
+      "feedback": "White dwarfs, neutron stars, and black holes are compact remnants of stellar evolution."
+    },
+    {
+      "id": "diag-supernova-kicks",
+      "conceptId": "supernova-kicks",
+      "prompt": "Why can the direction of a natal kick matter for whether a binary stays bound?",
+      "choices": [
+        "Because the kick changes the remnant's velocity vector relative to its companion",
+        "Because only the direction determines how much mass was ejected",
+        "Because orbital binding depends only on temperature"
+      ],
+      "correctIndex": 0,
+      "feedback": "A natal kick is a vector velocity change, so its direction relative to the pre-supernova orbital motion affects the post-event relative velocity and orbital energy."
+    },
+    {
+      "id": "diag-special-relativity",
+      "conceptId": "special-relativity",
+      "prompt": "Which principle is central to special relativity?",
+      "choices": [
+        "The laws of physics take the same form in all inertial frames, and the speed of light in vacuum is invariant",
+        "Time is absolute for all observers",
+        "Massive objects can always travel faster than light"
+      ],
+      "correctIndex": 0,
+      "feedback": "Special relativity is built around Lorentz invariance and the invariant vacuum speed of light."
+    },
+    {
+      "id": "diag-gravitational-waves",
+      "conceptId": "quadrupole-radiation",
+      "prompt": "In the leading weak-field picture, what kind of changing source structure produces gravitational radiation?",
+      "choices": [
+        "A time-varying mass quadrupole moment",
+        "Any perfectly static spherical mass",
+        "A constant total mass with no changing multipole structure"
+      ],
+      "correctIndex": 0,
+      "feedback": "The leading gravitational radiation term is associated with a changing mass quadrupole moment; static spherical systems do not radiate gravitational waves."
+    },
+    {
+      "id": "diag-detectors",
+      "conceptId": "interferometric-detectors",
+      "prompt": "What do ground-based laser interferometers such as LIGO fundamentally measure from a passing gravitational wave?",
+      "choices": [
+        "Tiny differential changes in optical path length between perpendicular arms",
+        "The total mass of a binary directly without a model",
+        "A permanent electric charge deposited on the mirrors"
+      ],
+      "correctIndex": 0,
+      "feedback": "A gravitational wave changes relative separations, producing a tiny differential arm-length signal measured interferometrically."
+    },
+    {
+      "id": "diag-python",
+      "conceptId": "python-fundamentals",
+      "prompt": "In a scientific Python workflow, what is a function most useful for?",
+      "choices": [
+        "Encapsulating a reusable computation that can take inputs and return outputs",
+        "Guaranteeing that numerical results are physically correct",
+        "Replacing the need to understand data structures"
+      ],
+      "correctIndex": 0,
+      "feedback": "Functions package reusable behavior; they do not guarantee scientific correctness by themselves."
+    },
+    {
+      "id": "diag-simulation-outputs",
+      "conceptId": "simulation-outputs",
+      "prompt": "Why is it risky to assume row 25 in two different simulation output tables refers to the same binary?",
+      "choices": [
+        "Different tables can have different event counts/order, so identifiers should be used",
+        "Every scientific table randomizes all rows",
+        "Rows cannot contain binary identifiers"
+      ],
+      "correctIndex": 0,
+      "feedback": "Join records using documented identifiers/keys rather than assuming positional alignment across output tables."
+    },
+    {
+      "id": "diag-pop-synthesis",
+      "conceptId": "binary-population-synthesis",
+      "prompt": "What is binary population synthesis used for?",
+      "choices": [
+        "Evolving many modeled binary systems under specified assumptions to predict population-level outcomes",
+        "Observing every real binary directly",
+        "Solving Einstein's field equations exactly for every galaxy"
+      ],
+      "correctIndex": 0,
+      "feedback": "Population synthesis samples and evolves many modeled binaries to connect assumptions about stellar/binary physics to statistical outcomes."
+    },
+    {
+      "id": "diag-selection",
+      "conceptId": "detector-selection-effects",
+      "prompt": "Why must selection effects be considered when inferring an astrophysical population from detected gravitational-wave events?",
+      "choices": [
+        "Detected events are not necessarily a representative random sample of all existing sources",
+        "Selection effects only change plot colors, not inference",
+        "Every source is equally detectable at any distance and mass"
+      ],
+      "correctIndex": 0,
+      "feedback": "Detection probability depends on source properties and observing conditions, so the observed sample is filtered relative to the underlying population."
+    },
+    {
+      "id": "diag-bayesian",
+      "conceptId": "bayesian-inference",
+      "prompt": "What does Bayes' theorem do in statistical inference?",
+      "choices": [
+        "Updates beliefs about hypotheses/parameters by combining prior information with likelihood from data",
+        "Proves that the most complicated model is true",
+        "Eliminates uncertainty after one observation"
+      ],
+      "correctIndex": 0,
+      "feedback": "Bayesian inference combines a prior with the likelihood to produce a posterior distribution."
+    }
+  ]
+}
