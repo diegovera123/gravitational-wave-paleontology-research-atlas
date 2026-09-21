@@ -512,3 +512,67 @@ noscript { display: block; padding: 20px; text-align: center; color: #fff; }
 @media(max-width:1050px){.lesson-grid{grid-template-columns:1fr;gap:18px;}.pilot-cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:700px){.pilot-cards{grid-template-columns:1fr;}.studio-top{padding:18px;align-items:start;flex-direction:column;}
   .lesson-content{padding:15px;}.lesson-objectives,.lesson-assessment,.lesson-worked{padding:14px;}.learning-studio{border-radius:13px;}}
+
+
+/* Focused navigation: one primary task per tab, with the knowledge graph preserved. */
+[hidden]{display:none!important}
+.intro{padding-bottom:22px}
+.atlas-primary-nav{position:sticky;top:0;z-index:12;display:flex;gap:5px;align-items:center;
+  overflow-x:auto;max-width:100%;margin:0 0 20px;padding:7px;border:1px solid rgba(130,161,213,.22);
+  border-radius:13px;background:rgba(11,18,32,.96);backdrop-filter:blur(18px);scrollbar-width:thin;}
+.atlas-primary-nav button{flex:1 0 auto;min-width:105px;border:1px solid transparent;border-radius:9px;
+  padding:12px 14px;color:#98aac9;background:transparent;font-size:12px;font-weight:600;cursor:pointer;
+  white-space:nowrap;}
+.atlas-primary-nav button:hover{color:#edf4ff;background:rgba(92,132,203,.12);}
+.atlas-primary-nav button[aria-selected="true"]{color:#eaf3ff;background:rgba(97,142,220,.2);
+  border-color:rgba(126,170,242,.34);box-shadow:inset 0 1px 0 rgba(218,231,255,.05);}
+.atlas-primary-nav button:focus-visible{outline:2px solid #a5c6ff;outline-offset:2px;}
+.atlas-tab-panel{min-width:0;}
+.tab-panel-header{margin:1px 0 23px;padding:0 0 19px;border-bottom:1px solid var(--line);}
+.tab-panel-header h2,.learn-hub h2{margin:5px 0 7px;font:600 clamp(22px,2.8vw,34px)/1.18 var(--font-display);}
+.tab-panel-header p:last-child,.learn-hub>p:not(.eyebrow){margin:0;max-width:720px;color:#9aabc4;font-size:12px;line-height:1.7;}
+#paths-panel .dashboard-columns{margin-top:0;}
+#library-panel .dashboard-reading{margin-top:0;padding-top:0;border-top:0;}
+#dashboard:has(#paths-panel:not([hidden])),#dashboard:has(#library-panel:not([hidden])){min-height:480px;}
+#explore-panel .workspace{margin-top:0;}
+#explore-panel .graph-map,#explore-panel #graph{height:530px;}
+#explore-panel .workspace .details{max-height:none;}
+.learn-hub{margin:0 0 22px;padding:27px;border:1px solid var(--line);border-radius:17px;
+  background:linear-gradient(132deg,rgba(22,35,58,.92),rgba(8,15,29,.94));}
+.learn-hub .pilot-cards{margin:24px 0;}
+.due-practice{border-top:1px solid var(--line);padding-top:16px;display:flex;align-items:center;
+  flex-wrap:wrap;gap:9px;}
+.adaptive-due-info{color:#9fb2d0;font-size:12px;line-height:1.5;margin:0 12px 0 0;}
+.adaptive-due-button{padding:10px 13px;border:1px solid var(--line-bright);border-radius:8px;
+  background:rgba(99,142,218,.12);color:#ddeaff;cursor:pointer;font-size:11px;}
+.adaptive-due-button:hover{background:rgba(99,142,218,.22);}
+#learn-panel .learning-studio{margin-top:0;}
+.practice-readiness{padding:12px 14px;border-radius:9px;background:rgba(24,39,65,.57);}
+.practice-privacy{display:block;color:#8698b8;font-size:10px;line-height:1.6;margin:13px 0 0;}
+.practice-objective{margin:8px 0 18px!important;color:#98b3db;font-size:11px;}
+.practice-choices{display:grid;gap:8px;}
+.practice-choices .lesson-option{text-align:left;}
+.practice-hint{margin-top:15px;padding:12px;border:1px solid var(--line);
+  border-radius:9px;color:#bdd0ea;font-size:12px;line-height:1.6;}
+.practice-hint summary{cursor:pointer;color:#cbdfff;}
+.practice-hint p{margin:9px 0 0;}
+.practice-progress-track{width:100%;height:4px;border-radius:5px;background:rgba(135,159,205,.2);overflow:hidden;}
+.practice-progress-track span{height:100%;display:block;border-radius:5px;background:#8aacf0;transition:width .2s;}
+.practice-feedback{margin:15px 0;padding:16px;border:1px solid rgba(112,188,174,.33);
+  background:rgba(38,76,81,.24);border-radius:10px;color:#cae8e8;font-size:12px;line-height:1.7;}
+.practice-feedback strong{display:block;font-size:13px;margin-bottom:7px;}
+.practice-feedback p{margin:7px 0;}
+.practice-outcomes{padding-left:20px;color:#c6d6ea;font-size:12px;line-height:1.8;}
+#adaptive-panel .lesson-back{margin-left:9px;}
+#adaptive-panel button:focus-visible{outline:2px solid #8bbdff;outline-offset:2px;}
+#adaptive-panel .lesson-option:disabled{opacity:.8;cursor:default;}
+@media(max-width:760px){
+  .atlas-primary-nav{margin-bottom:13px;border-radius:10px;padding:5px;}
+  .atlas-primary-nav button{font-size:11px;padding:11px 12px;min-width:90px;}
+  #explore-panel .graph-map,#explore-panel #graph{height:390px;}
+  .learn-hub{padding:16px;}
+  .dashboard{padding:17px;}
+  .dashboard-network-map{height:350px;}
+  #adaptive-panel .lesson-back{margin:10px 0 0;}
+}
+@media(prefers-reduced-motion:reduce){.practice-progress-track span{transition:none;}}
