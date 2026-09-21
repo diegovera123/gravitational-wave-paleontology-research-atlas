@@ -368,9 +368,19 @@ function renderNetworkPreview(){
     const rated=[m.id,...leafIds].filter(id=>profile?.ratings?.[id]).length;
     const b=button("",()=>{enterMacro(m.id);scrollToExplorer();},"network-region");
     b.style.setProperty("--region-color",colorFor(m.domain));
+    const scoped=new Set([m.id,...leafIds]);
+    const flagged=[...scoped].some(id=>{
+      const state=diagnosticController?.status(id);
+      return state==="review"||state==="review-confident"||state==="self-reported-gap";
+    });
+    const profileGoal=profile?.goal?.goalId;
+    const goalMacro=profileGoal?locationByConcept.get(profileGoal)?.macroId:null;
+    const relevance=goalMacro===m.id?"focus":flagged?"review":"default";
+    b.dataset.relevance=relevance;
+    b.setAttribute("aria-label",m.title+(relevance==="focus"?", your selected research region":relevance==="review"?", includes concepts to revisit":"")+". Open its topics.");
     b.style.left=(pos.x/10)+"%";b.style.top=(pos.y/420*100)+"%";
     b.innerHTML='<span class="network-region-icon" aria-hidden="true"></span><span class="network-region-title">'+html(m.title)+'</span>'+
-      '<span class="network-region-progress">'+known+" / "+total+' understood'+(rated?' · '+rated+' assessed':'')+'</span>';
+      '<span class="network-region-progress">'+(goalMacro===m.id?"YOUR RESEARCH AREA · ":flagged?"REVISIT CONCEPTS · ":"")+rated+' concept'+(rated===1?"":"s")+' rated · '+known+" self-marked understood"+'</span>';
     surface.appendChild(b);
   });
 }
