@@ -1,0 +1,171 @@
+{
+  "sources": [
+    {
+      "id": "marchant-bodensteiner-2024",
+      "citation": "Marchant & Bodensteiner (2024)",
+      "title": "The Evolution of Massive Binary Stars",
+      "url": "https://doi.org/10.1146/annurev-astro-052722-102936",
+      "status": "Annual Review of Astronomy and Astrophysics 62",
+      "verificationNote": "Public journal landing page; exact subsection citations should be added only after checking the full text.",
+      "supportedConceptIds": [
+        "tidal-interactions",
+        "binary-orbital-evolution",
+        "stellar-mass-loss",
+        "massive-star-evolution",
+        "binary-star-observables",
+        "roche-potential",
+        "roche-lobe",
+        "mass-transfer",
+        "mass-transfer-stability",
+        "conservative-transfer",
+        "common-envelope",
+        "compact-binary-formation",
+        "chemically-homogeneous-evolution",
+        "binary-stellar-evolution"
+      ]
+    },
+    {
+      "id": "ekstrom-2026",
+      "citation": "Ekström (2026)",
+      "title": "Evolution and final fates of massive stars",
+      "url": null,
+      "status": "Foundational reading list; forthcoming/availability not verified",
+      "verificationNote": "No public full-text location was verifiable in the development environment.",
+      "supportedConceptIds": [
+        "stellar-evolution",
+        "metallicity",
+        "massive-star-evolution",
+        "core-collapse-supernovae",
+        "compact-remnants"
+      ]
+    },
+    {
+      "id": "vink-2026",
+      "citation": "Vink (2026)",
+      "title": "Stellar winds",
+      "url": null,
+      "status": "Foundational reading list; forthcoming/availability not verified",
+      "verificationNote": "No public full-text location was verifiable in the development environment.",
+      "supportedConceptIds": [
+        "metallicity",
+        "stellar-mass-loss",
+        "stellar-winds"
+      ]
+    },
+    {
+      "id": "han-2020",
+      "citation": "Han et al. (2020)",
+      "title": "Binary Population Synthesis",
+      "url": "https://doi.org/10.1088/1674-4527/20/10/161",
+      "status": "Research in Astronomy and Astrophysics 20, 161",
+      "verificationNote": "Public article landing page; used only for broad topic alignment.",
+      "supportedConceptIds": [
+        "common-envelope",
+        "supernova-kicks",
+        "compact-binary-formation",
+        "monte-carlo-methods",
+        "binary-initial-conditions",
+        "binary-population-synthesis"
+      ]
+    },
+    {
+      "id": "breivik-2026",
+      "citation": "Breivik (2026)",
+      "title": "Population synthesis of gravitational wave sources",
+      "url": null,
+      "status": "Foundational reading list; forthcoming/availability not verified",
+      "verificationNote": "No public full-text location was verifiable in the development environment.",
+      "supportedConceptIds": [
+        "formation-channels",
+        "monte-carlo-methods",
+        "binary-initial-conditions",
+        "binary-population-synthesis",
+        "formation-efficiency",
+        "delay-time-distributions",
+        "cosmic-merger-rates",
+        "model-comparison",
+        "gravitational-wave-paleontology"
+      ]
+    },
+    {
+      "id": "abbott-2016",
+      "citation": "Abbott et al. (2016)",
+      "title": "Observation of Gravitational Waves from a Binary Black Hole Merger",
+      "url": "https://doi.org/10.1103/PhysRevLett.116.061102",
+      "status": "Physical Review Letters 116, 061102",
+      "verificationNote": "Figure 1 supports the waveform stages and event narrative; the abstract supports the first direct-detection context.",
+      "supportedConceptIds": [
+        "chirp-mass",
+        "compact-binary-inspiral",
+        "gravitational-waveforms",
+        "interferometric-detectors",
+        "gw150914"
+      ]
+    },
+    {
+      "id": "mandel-broekgaarden-2022",
+      "citation": "Mandel & Broekgaarden (2022)",
+      "title": "Rates of compact object coalescences",
+      "url": "https://doi.org/10.1007/s41114-021-00034-3",
+      "status": "Living Reviews in Relativity 25, 1",
+      "verificationNote": "Public review; used for rate, delay-time, cosmic-history, selection, and formation-channel topic alignment.",
+      "supportedConceptIds": [
+        "formation-channels",
+        "formation-efficiency",
+        "delay-time-distributions",
+        "cosmic-star-formation",
+        "cosmic-metallicity",
+        "cosmic-merger-rates",
+        "detector-selection-effects",
+        "merger-rate-inference",
+        "population-inference",
+        "model-comparison",
+        "gravitational-wave-paleontology",
+        "dynamical-formation"
+      ]
+    },
+    {
+      "id": "compas-demos",
+      "citation": "COMPAS documentation",
+      "title": "Post-processing demonstrations",
+      "url": "https://compas.readthedocs.io/en/latest/",
+      "status": "Public COMPAS documentation",
+      "verificationNote": "Documentation examples support simulation-table processing and reproducible post-processing workflows.",
+      "supportedConceptIds": [
+        "numpy-arrays",
+        "data-tables",
+        "reproducible-workflows",
+        "simulation-outputs",
+        "population-weights",
+        "vimes-visualization-pathway"
+      ]
+    },
+    {
+      "id": "vimes",
+      "citation": "Binu, Broekgaarden & Romagnolo",
+      "title": "Animating the Continuous Evolution of Simulated Massive Binary Stars",
+      "url": null,
+      "status": "Unpublished manuscript context supplied for this educational pathway",
+      "verificationNote": "No private manuscript text, figures, equations, or draft links are reproduced. Topic alignment uses only the topics authorized in the project brief.",
+      "supportedConceptIds": [
+        "orbital-eccentricity",
+        "binary-orbital-evolution",
+        "roche-potential",
+        "roche-lobe",
+        "mass-transfer",
+        "common-envelope",
+        "supernova-kicks",
+        "binary-disruption",
+        "binary-stellar-evolution",
+        "data-structures",
+        "data-tables",
+        "interpolation",
+        "temporal-sampling",
+        "scientific-visualization",
+        "animation",
+        "simulation-outputs",
+        "vimes-visualization-pathway"
+      ]
+    }
+  ]
+}
