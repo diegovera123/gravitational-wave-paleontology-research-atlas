@@ -61,6 +61,6 @@ assert.match(get("home #focus-detail").innerHTML,/Gravitational-Wave Paleontolog
 const mapped=new Set([...navigation.macros.map(m=>m.id),...navigation.topics.flatMap(t=>t.conceptIds)]);
 assert.ok(concepts.every(c=>mapped.has(c.id)),"All 133 existing concepts remain reachable through parts, topics or their macro overview");
 const page=await fs.readFile("index.html","utf8");
-assert.ok(page.includes('<details id="focus-graph-toggle"')&&page.split('id="dashboard-network-map"').length===2);
+assert.ok(page.includes('id="focus-full-map" type="button" class="gw-constellation-link"')&&page.includes('id="constellation-shell"')&&page.includes('id="legacy-explorer" hidden'),"Homepage opens the full 3D constellation without displaying the old network map");
 assert.ok(!page.includes("Pick a field. Explore an idea."));
-console.log("Passed: one-field landing; 5 chapters; progressive chapter→topic→concept; all 133 concepts; typed prerequisites; real drills and checks; bottom-optional graph.");
+console.log("Passed: one-field landing; 5 chapters; progressive chapter→topic→concept; all 133 concepts; typed prerequisites; real drills and checks; single-click immersive 3D graph.");
