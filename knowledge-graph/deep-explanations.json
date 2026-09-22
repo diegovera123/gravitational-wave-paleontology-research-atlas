@@ -163,6 +163,168 @@
         "text": "A toy event log has eight rows representing three distinct simulated binaries; four of those rows belong to the same binary. Suppose only one of the three distinct systems forms a pair that merges within the chosen horizon. The unweighted successful-system fraction is 1/3, not 1/8 or 4/8. A physical formation efficiency additionally requires the represented formed-stellar-mass normalization and any sampling weights."
       },
       "boundary": "Rapid population synthesis uses approximate and uncertain prescriptions, not a direct movie of the Universe. Controlled sensitivity studies and stochastic-convergence checks are needed before interpreting an output trend."
+    },
+    {
+      "id": "detector-selection-effects",
+      "opening": "Imagine a population containing equal numbers of two kinds of merging binaries. One kind produces stronger signals at the same distance and orientation. Your detector records many more of that kind, even though their true cosmic abundance is equal.",
+      "steps": [
+        {
+          "heading": "Start with the underlying population",
+          "text": "The intrinsic merger distribution describes the systems that actually merge, whether or not any detector observes them. A finite observing run does not survey the entire Universe equally: detectable strain depends on source masses, spins, distance, inclination and a time-dependent instrument response."
+        },
+        {
+          "heading": "Model the filter explicitly",
+          "text": "A detection probability p_det(θ) describes how likely a source with properties θ is to meet a specified detection criterion. It can be estimated with simulated signal injections into real or representative detector noise. It is not an independent probability that the source physically exists."
+        },
+        {
+          "heading": "See how the histogram changes",
+          "text": "If one class is detected with probability 0.8 and another with probability 0.2, equal intrinsic numbers generate a four-to-one expected ratio in the observed catalog. An inference that mistakes this detected distribution for the intrinsic distribution would incorrectly claim one type forms four times more often."
+        },
+        {
+          "heading": "Undo the filter carefully",
+          "text": "Population inference compares a forward prediction passed through the detection process with the actual catalog, while also accounting for measurement uncertainties, observing exposure and the fact that the analysis is conditioned on detection. Raw inverse-probability weights can illustrate the idea but are not a substitute for a complete astrophysical rate likelihood."
+        }
+      ],
+      "example": {
+        "title": "An observed ratio is not automatically a formation ratio",
+        "text": "Suppose 100 intrinsic events of class A and 100 of class B occur during a toy observing window. With efficiencies 0.8 and 0.2, expected observed counts are 80 and 20. The catalog ratio 4:1 differs from the intrinsic ratio 1:1 without any change in the Universe's actual population."
+      },
+      "boundary": "The model must specify a detector network, observing run, search method and source distribution. Euclidean volume approximations become inadequate when cosmology, duty cycles and detector antenna patterns matter."
+    },
+    {
+      "id": "gravitational-wave-paleontology",
+      "opening": "Picture receiving a short gravitational-wave signal from two black holes just before merger. You can estimate properties of those compact objects, but there is no recording of their original stars. The research problem is how to infer what happened during the millions or billions of years that preceded the final signal.",
+      "steps": [
+        {
+          "heading": "Begin at the observed end of the story",
+          "text": "A waveform constrains merger properties such as redshifted masses and aspects of the spins, distance and orientation with measurement uncertainties. Those are observations of a late evolutionary stage, not direct measurements of stellar birth masses or past mass-transfer events."
+        },
+        {
+          "heading": "Run the physical story forward",
+          "text": "Model many possible progenitor populations. Evolve massive stars through winds, binary interactions, core collapse and kicks; propagate surviving compact binaries through gravitational-wave inspiral and cosmic delay times. Each set of prescriptions predicts a distribution of merger properties."
+        },
+        {
+          "heading": "Pass the prediction through a detector",
+          "text": "Account for redshift, orientation, instrument sensitivity and the analysis selection function. Only then compare predicted detections to an observed catalog. A good match to the raw catalog alone may result from detector filtering rather than correct underlying stellar physics."
+        },
+        {
+          "heading": "Work backward statistically, not as a single lookup",
+          "text": "Compare multiple forward-model predictions with observations. A distribution of detected masses, spins and merger rates may constrain combinations of formation assumptions, but distinct histories can generate overlapping signals. Report which assumptions the data inform and which remain degenerate."
+        }
+      ],
+      "example": {
+        "title": "A simple ambiguity",
+        "text": "Suppose two stellar-evolution prescriptions both predict merging black holes with comparable masses, but via different wind and mass-transfer histories. Measuring one binary's two merger masses will not distinguish these histories uniquely. Their predicted mass distribution, spin distribution, merger-rate evolution and selection effects must be compared over many events."
+      },
+      "boundary": "Conclusions about progenitors are conditional on astrophysical models, cosmic history, detection efficiencies and waveform inference. They should not be presented as direct memories encoded uniquely in a single signal."
+    },
+    {
+      "id": "cosmic-merger-rates",
+      "opening": "Suppose a wave reaches Earth from a binary merging today, but its two original stars formed several billion years earlier. Counting only stars born today would miss that event, because formation and merger occur at different times.",
+      "steps": [
+        {
+          "heading": "Assign two clocks to every binary",
+          "text": "One clock marks the birth of the progenitor stellar system; another marks the compact-binary merger. Their elapsed difference is a delay time, which may include stellar evolution and later inspiral depending on the model definition."
+        },
+        {
+          "heading": "Build the birth history",
+          "text": "The cosmic star-formation rate describes how much stellar mass forms at different epochs, while the metallicity distribution describes the range of birth compositions. Binary-formation efficiency and survival depend on those conditions and the assumed stellar-evolution prescriptions."
+        },
+        {
+          "heading": "Shift births forward by their delays",
+          "text": "For a toy single-delay population, each cohort merges a fixed interval after it forms. Real populations contain a delay-time distribution, so a merger-rate history combines contributions from many earlier formation epochs. This is why the merger-rate peak need not coincide with the star-formation peak."
+        },
+        {
+          "heading": "Convert intrinsic events to predicted detections",
+          "text": "The physical rate density is commonly expressed per comoving volume per source-frame time. Predicted detector counts also require the cosmological volume element, the factor converting source-frame time to observer-frame time, the observing schedule and the detection efficiency."
+        }
+      ],
+      "example": {
+        "title": "Two cohorts and a fixed delay",
+        "text": "In a toy universe, 10 merger-capable systems form at cosmic time 2 Gyr and 20 at 5 Gyr. If all merge after a 4-Gyr delay, they merge at times 6 and 9 Gyr respectively. The merger history is shifted relative to the birth history even though the underlying birth cohorts are unchanged."
+      },
+      "boundary": "This toy construction ignores distributions in mass, metallicity, star formation, delay and detection. Cosmological comparisons must state which time coordinate and rate normalization they use."
+    },
+    {
+      "id": "population-inference",
+      "opening": "Imagine a detector catalog with fifty merger candidates. Each event has uncertain masses and spins; some kinds of mergers are much easier to detect. You want to learn the properties of the underlying population without pretending every candidate gives one exact pair of masses.",
+      "steps": [
+        {
+          "heading": "Distinguish the three distributions",
+          "text": "An event-level likelihood describes which source parameters fit the detector data. An analysis prior represents assumptions used in that event's parameter estimation. Combining the two produces the event posterior; a population distribution is yet another model describing how source parameters vary across events."
+        },
+        {
+          "heading": "Write a forward population model",
+          "text": "Introduce hyperparameters Λ, such as a mass-distribution slope or a formation-channel mixture fraction. This model predicts the relative frequency of different event parameters θ. Predict how those events would be measured, rather than fitting a histogram of posterior medians."
+        },
+        {
+          "heading": "Account for the fact that you saw detected events",
+          "text": "Detection conditions change the population of events that enters the catalog. The likelihood for an observed sample requires a selection term computed for the population model and observing procedure; otherwise a model might fit the easiest-to-detect sources while misrepresenting the intrinsic distribution."
+        },
+        {
+          "heading": "Interpret the result within its assumptions",
+          "text": "Combine the information from events, including measurement uncertainties and proper accounting for the event-level priors. The resulting constraints on Λ depend on the chosen model family, priors and selection calculation. Comparing different families and conducting sensitivity checks helps expose degeneracy."
+        }
+      ],
+      "example": {
+        "title": "A misleading detected mixture",
+        "text": "Suppose source classes A and B have intrinsic fractions 0.3 and 0.7 but detection probabilities 0.9 and 0.1. Their expected detected contributions are 0.27 and 0.07. A contributes 0.27/(0.27+0.07) ≈ 79% of detections despite being only 30% of the intrinsic population."
+      },
+      "boundary": "Posterior preference among a chosen set of models is not proof that the inferred progenitor pathway is uniquely true. Selection modeling, event priors and neglected alternatives must be reported."
+    },
+    {
+      "id": "gravitational-waveforms",
+      "opening": "Imagine looking at a detector strain time series: its signal grows and the peaks come closer together. Rather than memorizing labels for waveform phases, ask what motion of the binary would make both of those changes appear.",
+      "steps": [
+        {
+          "heading": "Relate orbit and periodic strain",
+          "text": "Two masses orbit a shared center of mass. Their changing mass quadrupole produces gravitational radiation. In the leading quasi-circular approximation, the strongest oscillatory component has a frequency approximately twice the orbital frequency."
+        },
+        {
+          "heading": "Follow the shrinking orbit",
+          "text": "Radiation removes orbital energy and angular momentum. In the idealized isolated inspiral, separation decreases and orbital frequency rises. The characteristic gravitational-wave frequency rises too; the spacing between successive cycles in a time-domain plot becomes shorter."
+        },
+        {
+          "heading": "Separate inspiral, merger and ringdown",
+          "text": "The early inspiral is amenable to perturbative approximations when gravity is comparatively weak and motion is not too relativistic. Near merger, strong-field dynamics require more complete models. After two black holes merge, the perturbed remnant settles through damped oscillations called ringdown."
+        },
+        {
+          "heading": "Read what an instrument actually records",
+          "text": "The detector responds to a projection of the source's wave polarizations, influenced by sky location, inclination, distance and instrumental noise. A strain pattern is therefore not a direct plot of either object's physical trajectory, even though waveform models connect the two."
+        }
+      ],
+      "example": {
+        "title": "Frequency in a circular orbit",
+        "text": "If a quasi-circular compact binary has orbital frequency 35 Hz, its leading quadrupolar gravitational-wave frequency is approximately 70 Hz. As the binary loses energy and inspirals, both frequencies rise. This relation is leading-order; a complete merger waveform includes additional modes and strong-field behavior."
+      },
+      "boundary": "Waveform interpretation depends on approximations, the adopted mass/spin/eccentricity model and detector calibration. Do not interpret all transient detector noise as astrophysical waveforms."
+    },
+    {
+      "id": "binary-orbital-evolution",
+      "opening": "Take two stars orbiting each other. One begins losing matter in a wind, and later gas flows toward its companion. The orbit can widen during one stage and shrink during another even though 'mass loss' appears in both descriptions.",
+      "steps": [
+        {
+          "heading": "Track two objects rather than one scalar mass",
+          "text": "Record the masses m₁ and m₂, relative separation, eccentricity and orbital angular momentum. In an isolated Newtonian two-body orbit, masses and orbital elements determine energy and angular momentum, but interactive evolution changes the binary's internal energy budget."
+        },
+        {
+          "heading": "Ask what happens to escaping matter",
+          "text": "Matter leaving a star might be captured by the companion or escape altogether. Escaping gas may remove angular momentum, while tides, winds and drag can exchange energy with the orbit. Merely knowing that one star lost one solar mass does not identify the orbital response."
+        },
+        {
+          "heading": "Separate slow, fast and dissipative events",
+          "text": "Slow mass changes can allow a different orbital response than an impulsive supernova. During Roche-lobe overflow, the donor's radius and its effective lobe change with mass ratio and angular-momentum transport. A common-envelope spiral-in dissipates orbital energy into gas."
+        },
+        {
+          "heading": "Connect the resulting orbit to a later merger",
+          "text": "After the compact remnants form, a wide binary may remain bound yet take longer than a cosmic age to merge. A close binary can have a much shorter gravitational-wave inspiral time. Formation survival and merger-within-a-horizon are distinct filters."
+        }
+      ],
+      "example": {
+        "title": "One missing piece in an orbit calculation",
+        "text": "An initial binary has 10 and 8 solar masses. The donor loses 3, the companion accretes 2, and 1 escapes, leaving masses 7 and 10. You can calculate this mass ledger exactly, but the final separation still depends on the angular momentum carried by the escaping mass and the interaction history."
+      },
+      "boundary": "Isolated Keplerian conservation cannot simply be applied to an interacting two-star subsystem without accounting for energy and angular momentum exchanged with gas or other bodies."
     }
   ]
 }
