@@ -189,6 +189,55 @@ print(f"Validated {len(bank)} adaptive practice items across {len(units)} pilot 
       "with objective coverage and author-defined difficulty labels.")
 
 
+# Extended scientific practice is distinct from full lessons: do not present it as fabricated instruction.
+extended = json.loads((ROOT / "knowledge-graph/practice-sets.json").read_text())
+assert extended.get("schemaVersion") == 1, "Unsupported extended practice schema"
+practice_sets = extended["sets"]
+assert len(practice_sets) >= 12, "Deep practice needs all twelve research tracks"
+components = {"conceptual", "quantitative", "causal", "model-critique"}
+set_ids = {u["id"] for u in units}
+linked_concepts = set(set_ids)
+question_ids = set(item_ids)
+extended_count = 0
+case_count = 0
+for track in practice_sets:
+    uid = track["id"]
+    assert uid and uid not in set_ids, f"Duplicate practice track {uid}"
+    set_ids.add(uid)
+    assert track["conceptId"] in concept_ids and track["conceptId"] not in linked_concepts, f"Bad concept link {uid}"
+    linked_concepts.add(track["conceptId"])
+    assert track["title"] and track["area"] and track["summary"], f"Incomplete practice track {uid}"
+    assert len(track["objectives"]) == 4, f"Expected four distinct assessed knowledge components in {uid}"
+    assert {o["component"] for o in track["objectives"]} == components, f"Missing knowledge component in {uid}"
+    assert len({o["id"] for o in track["objectives"]}) == 4, f"Duplicate objective ID in {uid}"
+    for objective in track["objectives"]:
+        assert objective["id"] and objective["title"] and objective["evidence"], f"Missing objective in {uid}"
+        questions = objective["questions"]
+        assert len(questions) >= 3, f"Insufficient depth in {uid}/{objective['id']}"
+        for question in questions:
+            qid = uid + "-" + question["id"]
+            assert qid not in question_ids, f"Duplicate question ID: {qid}"
+            question_ids.add(qid)
+            assert question["component"] == objective["component"], f"Component mismatch in {qid}"
+            assert type(question["difficulty"]) is int and 1 <= question["difficulty"] <= 3, f"Invalid difficulty {qid}"
+            assert question["prompt"] and question["hint"] and question["feedback"], f"Incomplete question {qid}"
+            choices = question["choices"]
+            assert len(choices) >= 3 and len(set(choices)) == len(choices), f"Invalid distractors {qid}"
+            assert type(question["correctIndex"]) is int and 0 <= question["correctIndex"] < len(choices), f"Invalid key {qid}"
+            extended_count += 1
+    assert len(track["cases"]) >= 2, f"Need multiple independent applied cases in {uid}"
+    for case in track["cases"]:
+        assert case["title"] and case["scenario"] and case["task"], f"Incomplete case in {uid}"
+        assert len(case["steps"]) >= 2 and case["solution"], f"Missing worked solution in {uid}"
+        case_count += 1
+    assert track["sources"], f"Unreferenced practice set {uid}"
+    for source in track["sources"]:
+        assert source["title"] and source["url"].startswith("https://"), f"Invalid reference in {uid}"
+print(f"Validated {len(practice_sets)} extended practice tracks, {extended_count} added questions, "
+      f"{len(practice_sets)*4} learning components and {case_count} self-checked research cases; "
+      f"{len(bank)+extended_count} total authored adaptive questions.")
+
+
 # Concept-discovery diagnostic checks: one sparse conceptual item per selected concept.
 diagnostic = json.loads((ROOT / "knowledge-graph/diagnostic-questions.json").read_text())
 assert diagnostic.get("schemaVersion") == 1, "Diagnostic question bank must use schema version 1"
