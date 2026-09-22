@@ -1430,3 +1430,12 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
  .concept-reading-fill{transition:none;}
  .concept-single-unit{scroll-behavior:auto;}
 }
+
+/* Preserve readable label sizes on narrow screens. Figures can be scrolled
+   sideways independently of the lesson instead of scaling text to illegibility. */
+@media(max-width:560px){
+ .physics-figure{overflow-x:auto;overscroll-behavior-inline:contain;}
+ .physics-figure svg{min-width:490px;}
+ .concept-dialog-header{padding:15px 17px 10px;}
+ .concept-dialog-context{display:none;}
+}
