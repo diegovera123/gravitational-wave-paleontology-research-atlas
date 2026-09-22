@@ -11,7 +11,7 @@ const CHAPTERS=[
  {id:"research-tools",name:"Foundations & research tools",macros:["calculus","research-practice"],color:"#b49bf0"}
 ];
 const esc=value=>String(value??"").replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
-function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson}){
+function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson,hasPractice=()=>false,startPractice=()=>{}}){
  if(!host)throw Error("3D constellation mount missing");
  const $=sel=>host.querySelector(sel);
  const canvas=$("#constellation-canvas"),detail=$("#constellation-detail"),choices=$("#constellation-choices");
@@ -149,6 +149,7 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
        '<section class="constellation-unit-block"><h4>Try an exercise</h4><p>'+esc(c.masteryAssessment||"Explain the idea in your own words.")+
        '</p><small>Open-ended practice prompt; not automatically graded.</small>'+
        (question?'<button type="button" id="constellation-check" class="focus-secondary">Try one conceptual check →</button>':'')+
+       (hasPractice(id)?'<button type="button" id="constellation-practice" class="focus-primary">Open in-depth practice track →</button>':'')+
        '</section>')+
      '<section class="constellation-unit-block"><h4>Research resources</h4>'+
      (references.length||direct?
@@ -169,8 +170,9 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    if(hasLesson(id)){
      detail.querySelector("#constellation-lesson").addEventListener("click",()=>openLesson(id));
      detail.querySelector("#constellation-drill").addEventListener("click",()=>startDrill(id));
-   }else if(question){
-     detail.querySelector("#constellation-check").addEventListener("click",()=>renderQuickCheck(question));
+   }else{
+     if(question)detail.querySelector("#constellation-check").addEventListener("click",()=>renderQuickCheck(question));
+     if(hasPractice(id))detail.querySelector("#constellation-practice").addEventListener("click",()=>startPractice(id));
    }
    onConceptSelected(id);
    detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});
