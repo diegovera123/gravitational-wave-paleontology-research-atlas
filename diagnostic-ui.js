@@ -95,7 +95,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     const n=Object.keys(profile.ratings).length;
     const wrong=Object.keys(profile.checks).filter(id=>!profile.checks[id].correct).length;
     const text=n?n+" concept"+(n===1?"":"s")+" self-rated · "+Object.keys(profile.checks).length+
-      " brief conceptual checks · "+wrong+" check"+(wrong===1?"":"s")+" to revisit":"Choose a research goal, then rate the concepts the Atlas surfaces.";
+      " brief conceptual checks · "+wrong+" check"+(wrong===1?"":"s")+" to revisit":"Rate a few concepts from gravitational-wave paleontology to find a possible starting point.";
     overview.innerHTML='<div class="diag-overview-copy"><p class="eyebrow">Find your starting point</p><h3>What do you already know?</h3>'+
       '<p>'+esc(text)+'</p><small>Ratings and checks are provisional, not a mastery score. You can skip, correct, or repeat them.</small></div>'+
       '<button id="diagnostic-launch" type="button" class="diagnostic-main-action">'+(n?"Update my knowledge map ↗":"Start concept discovery ↗")+'</button>';
@@ -103,33 +103,17 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   }
   function renderChoose(){
     const completed=Object.keys(profile.ratings).length;
-    host.innerHTML='<div class="diag-heading"><p class="eyebrow">01 / Define your direction</p>'+
-      '<h2>Let’s find your starting point.</h2>'+
-      '<p>Pick what you want to understand. The Atlas will show you a few relevant concepts, let you rate them, and occasionally ask a basic conceptual question. Your answers shape the map you see next.</p></div>'+
-      '<div class="diag-goal-grid"><div><label class="diag-label" for="diagnostic-goal-select">My research interest</label>'+
-      '<select id="diagnostic-goal-select" class="diag-select"><optgroup label="Explore a research question">'+
-      questionPaths.map(q=>'<option value="q:'+esc(q.id)+'">'+esc(q.title)+'</option>').join("")+
-      '</optgroup><optgroup label="Explore a scientific region">'+macros.map(x=>'<option value="m:'+esc(x.id)+'">'+esc(x.title)+'</option>').join("")+
-      '</optgroup></select><button type="button" id="diagnostic-begin" class="diag-primary">Begin concept discovery →</button></div>'+
-      '<div class="diag-support"><strong>Prefer a particular concept?</strong><p>Search for any of the '+concepts.length+' Atlas concepts and assess it directly.</p>'+
-      '<label class="diag-label" for="diagnostic-concept-search">Concept name</label><input id="diagnostic-concept-search" list="diagnostic-concept-options" placeholder="e.g. Probability Distributions" autocomplete="off"/>'+
-      '<datalist id="diagnostic-concept-options">'+concepts.map(c=>'<option value="'+esc(c.title)+'"></option>').join("")+'</datalist>'+
-      '<button id="diagnostic-start-concept" type="button" class="diag-secondary">Assess this concept →</button><p id="diagnostic-search-feedback" role="status"></p></div></div>'+
-      (completed?'<p class="diag-saved">'+completed+' previous self-ratings are saved in this browser. A new diagnostic updates only the concepts you reassess.</p>':'')+
-      '<div class="diag-onboarding-exit"><button id="diagnostic-skip-onboarding" type="button" class="diag-text-action">Skip for now · Explore the Atlas</button></div>'+
-      '<p class="diag-privacy">Optional · about 8–12 concept ratings · at most five short conceptual checks · skip or end early anytime. No sign-in or server profile.</p>';
-    const select=host.querySelector("#diagnostic-goal-select");
-    if(goalKey&&researchGoal(goalKey))select.value=goalKey;
-    host.querySelector("#diagnostic-begin").addEventListener("click",()=>begin(select.value));
-    host.querySelector("#diagnostic-skip-onboarding").addEventListener("click",()=>{
-      onSkipOnboarding?.();navigate("home");
-    });
-    host.querySelector("#diagnostic-start-concept").addEventListener("click",()=>{
-      const query=host.querySelector("#diagnostic-concept-search").value.trim().toLowerCase();
-      const match=concepts.find(c=>c.title.toLowerCase()===query||c.id===query);
-      if(!match){host.querySelector("#diagnostic-search-feedback").textContent="Select a concept from the suggested names.";return;}
-      begin("c:"+match.id);
-    });
+    host.innerHTML='<div class="diag-heading"><p class="eyebrow">FIND YOUR STARTING POINT</p>'+
+      '<h2>One field. Your own starting point.</h2>'+
+      '<p>Gravitational-wave paleontology connects stars, binary evolution, simulations and gravitational-wave observations. Rate a few relevant ideas and try optional short conceptual checks so the Atlas can suggest what to learn first.</p></div>'+
+      '<div class="diag-single-goal"><strong>Gravitational-Wave Paleontology</strong>'+
+      '<p>No field selection needed. We will sample concepts from different parts of this research area.</p>'+
+      '<button type="button" id="diagnostic-begin" class="diag-primary">Find my starting point →</button></div>'+
+      (completed?'<p class="diag-saved">'+completed+' previous self-ratings are saved locally. Reassessment updates only the concepts you revisit.</p>':'')+
+      '<div class="diag-onboarding-exit"><button id="diagnostic-skip-onboarding" type="button" class="diag-text-action">Skip for now · Explore the field</button></div>'+
+      '<p class="diag-privacy">Optional · up to ten concept ratings and five brief conceptual checks · no sign-in or certified mastery score.</p>';
+    host.querySelector("#diagnostic-begin").addEventListener("click",()=>begin("c:gravitational-wave-paleontology"));
+    host.querySelector("#diagnostic-skip-onboarding").addEventListener("click",()=>{onSkipOnboarding?.();navigate("home");});
   }
   function topLine(){
     const progress=session.stepIds.length+1;
@@ -240,10 +224,10 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
       '<div class="diag-recommendations">'+(stats.recommendations.length?stats.recommendations.map(item=>
         '<button data-diagnostic-recommend="'+esc(item.id)+'" class="diag-recommendation" type="button"><span><strong>'+esc(item.title)+'</strong>'+
         '<small>'+esc(statusNames[item.status]||statusNames.unassessed)+'</small></span><span aria-hidden="true">↗</span></button>').join(""):
-        '<p>Nothing is flagged in this short sample. Choose a goal in the Atlas, or assess more concepts to refine your starting point.</p>')+'</div>'+
+        '<p>Nothing is flagged in this short sample. Assess more concepts to refine your starting point.</p>')+'</div>'+
       '<p class="diag-privacy">These are provisional, learner-controlled recommendations, not a calibrated score, a claim that you mastered untested prerequisites, or an official research-readiness assessment.</p>'+
       '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Explore my concepts →</button>'+
-      '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
+      '<button id="diag-repeat" class="diag-secondary" type="button">Reassess my starting point</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
     host.querySelector("#diag-open-map").addEventListener("click",()=>navigate("home"));
