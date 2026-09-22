@@ -92,7 +92,33 @@ function visual(kind){
    '<span class="concept-schematic-number">0'+(i+1)+'</span><span>'+escape(x)+'</span></div>').join(arrows)+
    '</div><figcaption>Conceptual schematic · relationships shown are illustrative, not a simulation or observation.</figcaption></figure>';
 }
+let deepUnits=new Map();
+function load(data,concepts=[]){
+ if(data?.schemaVersion!==1||!Array.isArray(data.units))throw Error("Unsupported deep-explanation schema.");
+ const known=new Set(concepts.map(c=>c.id)),seen=new Set();
+ for(const unit of data.units){
+   if(!unit.id||!known.has(unit.id)||seen.has(unit.id)||!unit.opening||!unit.example?.title||
+      !unit.example.text||!unit.boundary||!Array.isArray(unit.steps)||unit.steps.length<4||
+      unit.steps.some(step=>!step.heading||!step.text))throw Error("Invalid deep explanation "+unit?.id);
+   seen.add(unit.id);
+ }
+ deepUnits=new Map(data.units.map(unit=>[unit.id,unit]));
+}
 function render(concept){
+ const deep=deepUnits.get(concept.id);
+ if(deep){
+   const kind=NOTES[concept.id]?.visual||"pipeline";
+   return '<article class="concept-deep-lesson" data-deep-explanation="'+escape(concept.id)+'">'+
+     '<p class="concept-deep-opening">'+escape(deep.opening)+'</p>'+
+     '<div class="concept-deep-steps">'+deep.steps.map((step,i)=>
+      '<section class="concept-deep-step"><span class="concept-deep-step-num">STEP '+String(i+1).padStart(2,"0")+'</span>'+
+      '<h5>'+escape(step.heading)+'</h5><p>'+escape(step.text)+'</p></section>').join("")+'</div>'+
+     '<section class="concept-deep-example"><span class="lesson-kicker">FOLLOW AN EXAMPLE</span>'+
+      '<h5>'+escape(deep.example.title)+'</h5><p>'+escape(deep.example.text)+'</p></section>'+
+     visual(kind)+
+     '<section class="concept-intuition-limits"><strong>Where the model stops</strong><p>'+
+       escape(deep.boundary)+'</p></section></article>';
+ }
  const note=NOTES[concept.id];
  if(note){
   return '<div class="concept-intuition"><p class="concept-intuition-question">'+escape(note.question)+'</p>'+
@@ -103,15 +129,13 @@ function render(concept){
  const why=concept.whyItMatters||concept.researchApplication||"the research problem";
  const a=(concept.learningObjectives||[])[0]||"explain how this idea works";
  const b=(concept.learningObjectives||[])[1]||"apply it to a relevant example";
- const pre=(concept.prerequisites||[]).filter(p=>p.kind==="necessary");
- return '<div class="concept-intuition"><p class="concept-intuition-question">What problem is this concept helping us solve?</p>'+
-  '<p>Start with its role in the research story: '+escape(why)+
-  ' Rather than memorizing the term by itself, ask what information the concept represents, what assumptions make its use possible and what prediction or explanation it supports.</p>'+
-  '<div class="concept-intuition-model"><strong>Build a concrete mental model</strong><p>First, '+escape(a)+
-  ' Then, '+escape(b)+'. Relate each step to '+escape(concept.researchApplication||why)+
-  ' and identify which quantities are inputs, which are outputs and what remains uncertain.</p></div>'+
-  '<div class="concept-intuition-limits"><strong>Check the boundaries</strong><p>Do not treat this brief orientation as a complete derivation. Follow the necessary background and original resources to establish the precise definitions and assumptions.</p></div>'+
-  visual(pre.length?"pipeline":"wave")+'</div>';
+ return '<div class="concept-intuition"><p class="concept-intuition-question">A first orientation to '+escape(concept.title)+'</p>'+
+  '<p>This concept enters the research work through '+escape(why)+
+  '. A complete worked explanation has not yet been authored for this concept in the Atlas. Use the learning objectives above to identify exactly what should be explained before accepting an unfamiliar equation or term.</p>'+
+  '<div class="concept-intuition-model"><strong>What to unpack</strong><p>'+
+  escape(a)+' Then: '+escape(b)+
+  '. Follow the necessary-background links and the public resources below for the underlying definitions, physical examples and derivations.</p></div>'+
+  '<div class="concept-intuition-limits"><strong>What remains to be developed</strong><p>This short orientation is not a substitute for a concept-specific derivation or worked example. The longer, concrete lessons will be added in explicitly authored batches.</p></div></div>';
 }
-root.AtlasConceptInsight={render,NOTES};
+root.AtlasConceptInsight={render,load,NOTES,deepCount:()=>deepUnits.size};
 })(typeof window!=="undefined"?window:globalThis);

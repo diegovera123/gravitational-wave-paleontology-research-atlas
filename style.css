@@ -1340,3 +1340,31 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
  .practice-all-concepts{align-items:stretch;flex-direction:column;}
  .practice-all-concepts>div{flex:auto;}
 }
+
+
+/* One scrollable learning unit: goals first, concrete explanation and worked
+   illustration next, related ideas after understanding, verified resources last. */
+.concept-single-unit{scroll-behavior:smooth;}
+.concept-unit-section{padding:0 0 27px;margin:0 0 30px;border-bottom:1px solid rgba(146,173,222,.22);}
+.concept-single-unit .concept-unit-section:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0;}
+.concept-single-unit>.concept-unit-section>h4{font:600 clamp(17px,2.1vw,21px)/1.35 var(--font-display);color:#f1f4ff;margin:0 0 18px;}
+.concept-learning-goals{padding:18px 20px 22px!important;border:1px solid rgba(160,179,229,.27)!important;border-radius:13px;
+ background:linear-gradient(125deg,rgba(50,61,106,.30),rgba(28,41,67,.22));}
+.concept-single-unit .constellation-objectives{margin:12px 0 3px;}
+.concept-single-unit .constellation-objectives li{padding-left:5px;margin:3px 0;color:#e1edff;font:500 13px/1.8 var(--font-body);}
+.concept-deep-opening{font:500 clamp(14px,1.6vw,16px)/1.9 var(--font-body)!important;color:#e5eefc!important;max-width:72ch!important;}
+.concept-deep-steps{display:grid;gap:22px;margin:24px 0 27px;}
+.concept-deep-step{padding:0 0 0 19px;border-left:2px solid rgba(162,178,231,.58);}
+.concept-deep-step-num{font:700 10px/1.5 var(--font-body);letter-spacing:.13em;color:#a7bcef;}
+.concept-deep-step h5,.concept-deep-example h5{font:600 clamp(15px,1.8vw,18px)/1.5 var(--font-display);color:#f0f4ff;margin:7px 0 8px;}
+.concept-deep-step p,.concept-deep-example p{font:400 13px/1.9 var(--font-body)!important;color:#c4d2e9!important;max-width:75ch!important;margin:8px 0 0;}
+.concept-deep-example{padding:20px;border:1px solid rgba(151,194,199,.35);border-radius:13px;background:rgba(34,73,76,.18);margin:25px 0 21px;}
+.concept-deep-example .lesson-kicker{color:#b6e2df;}
+.concept-single-unit .concept-schematic{margin:22px 0 26px;}
+.concept-unit-connections .concept-connection-group{padding:12px 0;}
+.concept-unit-resources>h4:not(:first-child){margin-top:28px!important;}
+@media(max-width:760px){
+ .concept-learning-goals{padding:15px 14px 20px!important;}
+ .concept-deep-example{padding:16px;}
+ .concept-deep-step{padding-left:13px;}
+}

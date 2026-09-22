@@ -116,30 +116,12 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    detail.classList.remove("is-expanded");
    detail.focus?.();
  }
- function switchTab(name){
-   const tabs=detail.querySelectorAll("[data-concept-tab]");
-   const panels=detail.querySelectorAll("[data-concept-panel]");
-   tabs.forEach(button=>{
-     const active=button.dataset.conceptTab===name;
-     button.setAttribute("aria-selected",String(active));button.tabIndex=active?0:-1;
-   });
-   panels.forEach(panel=>{panel.hidden=panel.dataset.conceptPanel!==name;});
- }
  function wireDialog(){
    detail.querySelector("#constellation-close-detail")?.addEventListener("click",closeDetail);
    detail.querySelector("#constellation-expand-detail")?.addEventListener("click",event=>{
      const expanded=detail.classList.toggle("is-expanded");
      event.currentTarget?.setAttribute?.("aria-pressed",String(expanded));
      event.currentTarget.textContent=expanded?"Exit expanded view ↙":"Expand view ↗";
-   });
-   detail.querySelectorAll("[data-concept-tab]").forEach((button,index,all)=>{
-     button.addEventListener("click",()=>switchTab(button.dataset.conceptTab));
-     button.addEventListener("keydown",event=>{
-       const offset=event.key==="ArrowRight"?1:event.key==="ArrowLeft"?-1:0;
-       const next=event.key==="Home"?0:event.key==="End"?all.length-1:offset?(index+offset+all.length)%all.length:-1;
-       if(next<0)return;
-       event.preventDefault();switchTab(all[next].dataset.conceptTab);all[next].focus();
-     });
    });
    detail.querySelectorAll("[data-related]").forEach(button=>
      button.addEventListener("click",()=>showConcept(button.dataset.related)));
@@ -172,35 +154,29 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    const referenceList=references.map(ref=>
      '<a href="'+esc(safeUrl(ref.url))+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title||ref.citation)+' ↗</a>').join("")+
      (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Open '+esc(concept.title)+' reference ↗</a>':"");
-   const nav=[
-     ["overview","Intuition & visuals"],["objectives","Learning objectives"],
-     ["connections","Connections"],["resources","Research resources"]
-   ];
-   detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">CONCEPT · '+esc(concept.unit||"RESEARCH ATLAS")+'</span>'+
+   detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">LEARNING UNIT · '+esc(concept.unit||"RESEARCH ATLAS")+'</span>'+
       '<h3 id="concept-dialog-heading">'+esc(concept.title)+'</h3>'+
       '<p>'+esc(concept.whyItMatters||concept.researchApplication||"Follow this idea through the research field.")+'</p></div>'+
       '<div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button>'+
       '<button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept dialog">Close ✕</button></div></div>'+
-      '<div class="concept-dialog-tabs" role="tablist" aria-label="Concept information">'+nav.map(([key,label],i)=>
-        '<button type="button" role="tab" id="concept-tab-'+key+'" aria-controls="concept-panel-'+key+'" data-concept-tab="'+key+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'">'+label+'</button>').join("")+'</div>'+
-      '<div class="concept-dialog-body">'+
-      '<section role="tabpanel" id="concept-panel-overview" aria-labelledby="concept-tab-overview" data-concept-panel="overview">'+
-      '<h4>Understand it intuitively</h4>'+
+      '<div class="concept-dialog-body concept-single-unit">'+
+      '<section class="concept-unit-section concept-learning-goals" aria-labelledby="concept-learning-goals-title">'+
+      '<h4 id="concept-learning-goals-title">Learning objectives</h4><ol class="constellation-objectives">'+(concept.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol></section>'+
+      '<section class="concept-unit-section concept-explanation" aria-labelledby="concept-explanation-title">'+
+      '<h4 id="concept-explanation-title">Understand the idea</h4>'+
       (root.AtlasConceptInsight?.render(concept)||'<p>Explore what this idea represents, how it works and which scientific assumptions it needs.</p>')+
       (hasLesson(id)?'<button type="button" id="constellation-lesson" class="focus-secondary">Read the full authored lesson →</button>':'')+
       '</section>'+
-      '<section role="tabpanel" id="concept-panel-objectives" aria-labelledby="concept-tab-objectives" data-concept-panel="objectives" hidden>'+
-      '<h4>What you will learn</h4><ol class="constellation-objectives">'+(concept.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol>'+
-      '<p>Use these objectives to decide which aspects of the concept you want to practise.</p></section>'+
-      '<section role="tabpanel" id="concept-panel-connections" aria-labelledby="concept-tab-connections" data-concept-panel="connections" hidden>'+
-      '<h4>Follow the surrounding ideas</h4>'+
+      '<section class="concept-unit-section concept-unit-connections" aria-labelledby="concept-connections-title">'+
+      '<h4 id="concept-connections-title">Build on this understanding</h4>'+
       relatedSection("Necessary background",necessary)+
       relatedSection("Useful context",useful)+
       relatedSection("What this helps you learn next",downstream.map(x=>({id:x.id})))+
       (!necessary.length&&!useful.length&&!downstream.length?'<p>No other concept connections have been mapped here yet.</p>':"")+
       '</section>'+
-      '<section role="tabpanel" id="concept-panel-resources" aria-labelledby="concept-tab-resources" data-concept-panel="resources" hidden>'+
-      '<h4>Curated starting points</h4>'+(referenceList?'<div class="constellation-resource-list">'+referenceList+'</div>':
+      '<section class="concept-unit-section concept-unit-resources" aria-labelledby="concept-resources-title">'+
+      '<h4 id="concept-resources-title">Research resources</h4>'+
+      (referenceList?'<div class="constellation-resource-list">'+referenceList+'</div>':
       '<p>No individual public references have been mapped to this concept yet.</p>')+
       '<h4>Discover related papers</h4><div id="constellation-literature"></div></section></div>'+
       '<div class="concept-dialog-footer"><span>Work through problems in the dedicated Practice section.</span>'+
@@ -209,7 +185,6 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    detail.querySelector("#constellation-open-practice")?.addEventListener("click",()=>{closeDetail();startPractice(id);});
    const resourceHost=detail.querySelector("#constellation-literature");
    root.AtlasLiterature?.mount({host:resourceHost,concept});
-   switchTab("overview");
    showDialog();onConceptSelected(id);
  }
  function showQuestion(question){
