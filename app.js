@@ -923,7 +923,7 @@ async function initialise() {
       constellation=window.AtlasConstellation.mount({
         host:$("#constellation-shell"),macros:atlas.macros,topics:atlas.topics,
         concepts,locationByConcept,
-        forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D:null,
+        forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{focusedHome?.selectConcept(id);setActiveView("home");},
         openLesson:id=>openLearningUnit(id),
         startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
