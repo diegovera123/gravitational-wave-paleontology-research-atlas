@@ -61,9 +61,11 @@ assert.match(get("home #focus-detail").innerHTML,/Gravitational-Wave Paleontolog
 const mapped=new Set([...navigation.macros.map(m=>m.id),...navigation.topics.flatMap(t=>t.conceptIds)]);
 assert.ok(concepts.every(c=>mapped.has(c.id)),"All 133 existing concepts remain reachable through parts, topics or their macro overview");
 const page=await fs.readFile("index.html","utf8");
-assert.equal((page.match(/data-atlas-tab=/g)||[]).length,2,"The entire app exposes only Home and Knowledge Graph");
+assert.equal((page.match(/data-atlas-tab=/g)||[]).length,3,"The app exposes Home, Knowledge Graph and Practice");
 assert.ok(page.includes('id="simple-home-graph"')&&page.includes('id="constellation-shell"')&&page.includes('id="legacy-explorer" hidden'),"Home opens the 3D constellation and never shows the old two-column explorer");
 assert.ok(page.indexOf('id="diagnostic-panel"')>page.indexOf('id="home-panel"'),"The optional diagnostic lives within Home");
-assert.ok(page.indexOf('id="learning-studio"')>page.indexOf('id="explore-panel"'),"Learning and practice are embedded within Knowledge Graph");
+assert.ok(page.indexOf('id="learning-studio"')>page.indexOf('id="explore-panel"'),"Full authored learning units remain within Knowledge Graph");
+assert.ok(page.includes('id="practice-panel"')&&page.includes('id="practice-unit-cards"')&&page.includes('id="due-practice"'),"Practice has its own panel, real sets and review queue");
+assert.equal((page.match(/id="adaptive-panel"/g)||[]).length,1,"Adaptive quiz belongs to the dedicated Practice panel only");
 assert.ok(!page.includes("Pick a field. Explore an idea."));
-console.log("Passed: one-field curriculum with 133 concepts, progressive graph, two top-level sections, optional Home diagnostic and learning/practice inside Graph.");
+console.log("Passed: one-field curriculum with 133 concepts, progressive graph, three top-level sections, Home diagnostic, Graph lessons and separate Practice.");
