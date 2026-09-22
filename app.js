@@ -14,7 +14,8 @@ const questionCardsElement = $("#question-cards"), statsElement = $("#atlas-stat
 let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locationByConcept;
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
-let learningUnits=new Map(), openUnitId=null;
+let learningUnits=new Map(), practiceUnits=new Map(), practiceByConcept=new Map(), openUnitId=null;
+let practiceArea="all",practiceQuery="";
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
 let activeView="home", diagnosticController=null, guideController=null, focusedHome=null, constellation=null;
@@ -249,7 +250,7 @@ function setActiveView(view,options={}){
     tab.tabIndex=name===view?0:-1;
   }
   $("#dashboard").hidden=view!=="home";
-  if(view==="practice"&&learningUnits.size)renderPracticeHub();
+  if(view==="practice"&&practiceUnits.size)renderPracticeHub();
   $("#diagnostic-panel").hidden=view!=="home"||!homeDiagnosticVisible;
   $("#simple-home").hidden=view!=="home"||homeDiagnosticVisible;
   $("#focus-home").hidden=true;
@@ -416,12 +417,12 @@ function renderPracticeHub(){
   }
 }
 function openPracticeUnit(id,mode=null){
-  if(!learningUnits.has(id))return;
+  if(!practiceUnits.has(id))return;
   openUnitId=id;
   $("#learning-studio").hidden=true;
   setActiveView("practice",{scroll:false});
   $("#practice-active").hidden=false;
-  $("#practice-selected-title").textContent=byId(id).title;
+  $("#practice-selected-title").textContent=practiceUnits.get(id).title;
   renderPracticeHub();
   if(mode)startAdaptiveQuiz(mode);
   else renderAdaptivePanel();
@@ -470,23 +471,23 @@ function saveAdaptiveHistory(){
   catch(error){adaptiveStorageAvailable=false;console.warn("[Atlas] Could not save local practice history.",error);}
 }
 function updateReviewBadge(){
-  const all=[...learningUnits.values()];
+  const all=[...practiceUnits.values()];
   const due=window.AtlasAdaptive.dueObjectives(all,adaptiveHistory);
   const host=$("#due-practice");host.replaceChildren();
   const p=document.createElement("p");
   p.className="adaptive-due-info";
-  p.textContent=due.length?due.length+" learning objective"+(due.length===1?" is":"s are")+" ready for another review.":"No reviews due right now. Try a learning unit to get started.";
+  p.textContent=due.length?due.length+" learning objective"+(due.length===1?" is":"s are")+" ready for another review.":"No reviews due right now. Try a research practice track to get started.";
   host.appendChild(p);
   const shown=new Set();
   for(const x of due){
     if(shown.has(x.unitId))continue;shown.add(x.unitId);
-    const b=button("Review "+byId(x.unitId).title+" ↗",()=>{
+    const b=button("Review "+practiceUnits.get(x.unitId).title+" ↗",()=>{
       openPracticeUnit(x.unitId,"review");
     },"adaptive-due-button");
     host.appendChild(b);
   }
   const hint=$("#practice-due-summary");
-  if(hint)hint.textContent=due.length?due.length+" objective"+(due.length===1?"":"s")+" due for review":"Adaptive practice · 3 pilot lessons";
+  if(hint)hint.textContent=due.length?due.length+" objective"+(due.length===1?"":"s")+" due for review":"Adaptive practice · "+practiceUnits.size+" research tracks";
 }
 function startAdaptiveQuiz(mode="practice"){
   const unit=learningUnits.get(openUnitId);if(!unit)return;
@@ -917,19 +918,21 @@ async function initialise() {
       fetch("knowledge-graph/research-questions.json"),
       fetch("knowledge-graph/learning-units.json"),
       fetch("knowledge-graph/adaptive-items.json"),
+      fetch("knowledge-graph/practice-sets.json"),
       fetch("knowledge-graph/diagnostic-questions.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
     researchQuestions=questionsData.questions;
     if(unitsData.schemaVersion!==1||!Array.isArray(unitsData.units))throw Error("Unsupported learning units.");
     learningUnits=new Map(unitsData.units.map(unit=>[unit.id,unit]));
-    if(!window.AtlasAdaptive)throw Error("The adaptive-practice module did not load.");
-    window.AtlasAdaptive.validateBank(adaptiveData,unitsData.units);
-    adaptiveItems=adaptiveData.items;
+    if(!window.AtlasAdaptive||!window.AtlasPractice)throw Error("A practice module did not load.");
+    const catalog=window.AtlasPractice.build(unitsData.units,adaptiveData,practiceData,concepts);
+    practiceUnits=catalog.units;practiceByConcept=catalog.byConcept;adaptiveItems=catalog.items;
+    window.AtlasAdaptive.validateBank({schemaVersion:1,items:adaptiveItems},[...practiceUnits.values()]);
     loadAdaptiveHistory();
     const conceptIds=new Set(concepts.map(c=>c.id)),sourceIds=new Set(researchSources.map(s=>s.id));
     for(const q of researchQuestions) {
@@ -977,7 +980,7 @@ async function initialise() {
       $("#tab-diagnostic").disabled=true;
       markOnboardingSeen();
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();renderPracticeFilters();renderPracticeHub();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
     // The full Explorer is now one progressive 3D constellation, not the legacy
     // structured-map / sidebar workspace. The legacy data engine remains for
     // research, deep links, the learning studio and old progress records.
@@ -990,7 +993,9 @@ async function initialise() {
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
-        startDrill:id=>openPracticeUnit(id,"practice"),
+        startDrill:id=>openPracticeUnit(practiceByConcept.get(id),"practice"),
+        hasPractice:id=>practiceByConcept.has(id),
+        startPractice:id=>openPracticeUnit(practiceByConcept.get(id)),
         hasLesson:id=>learningUnits.has(id)
       });
     }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
@@ -1038,7 +1043,7 @@ $("#otto-helper-close").addEventListener("click",()=>{
 });
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#practice-return-graph").addEventListener("click",()=>{
-  const id=openUnitId;
+  const id=practiceUnits.get(openUnitId)?.conceptId;
   closePracticeUnit();
   if(id)openConcept(id,true);
   scrollToExplorer();
