@@ -859,7 +859,21 @@ async function initialise() {
           if(selectedId)showConceptDetails(byId(selectedId));
         },
         onOnboardingComplete:()=>{markOnboardingSeen();guideController?.render();},
-        onSkipOnboarding:()=>{markOnboardingSeen();guideController?.render();}
+        onSkipOnboarding:()=>{markOnboardingSeen();guideController?.render();},
+        onStageChange:(stage,correct)=>{
+          const title=$("#otto-coach-title"),line=$("#otto-coach-line");
+          if(!title||!line)return;
+          const scripts={
+            choose:["What would you like to discover?","Pick a mission. I’ll help you find your starting point, one idea at a time."],
+            rate:["How familiar is this idea?","No pressure to know everything. A quick self-rating is enough to start."],
+            check:["A tiny knowledge check.","Try one question if you like. You can skip it and keep exploring."],
+            feedback:correct?["Nice reasoning!","One good answer is a start. We’ll keep discovering what you know."]:
+              ["An interesting clue!","That’s a useful place to explore next. We’ll check the foundations together."],
+            results:["Your journey starts here.","Your answers suggest a path, but you can explore wherever curiosity takes you."]
+          };
+          const copy=scripts[stage]||scripts.choose;
+          title.textContent=copy[0];line.textContent=copy[1];
+        }
       });
     }else{
       console.warn("[Research Atlas] Diagnostic module unavailable; the rest of the Atlas remains usable.");
