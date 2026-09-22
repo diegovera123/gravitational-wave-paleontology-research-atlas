@@ -179,6 +179,7 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
  $("#focus-research").addEventListener("click",openResearch);
  $("#focus-all-practice").addEventListener("click",openAllPractice);
  $("#focus-library").addEventListener("click",openLibrary);
+ $("#focus-concept-section").hidden=true;
  renderChapters();
  return {refresh,selectChapter,selectTopic,selectConcept,selected:()=>selectedId,chapter:()=>chapterId,topic:()=>topicId,
     domain:()=>{const chapter=CHAPTERS.find(x=>x.id===chapterId);return chapter?.macros[0]||null;},chapters:CHAPTERS};
