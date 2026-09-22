@@ -122,7 +122,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     if(goalKey&&researchGoal(goalKey))select.value=goalKey;
     host.querySelector("#diagnostic-begin").addEventListener("click",()=>begin(select.value));
     host.querySelector("#diagnostic-skip-onboarding").addEventListener("click",()=>{
-      onSkipOnboarding?.();navigate("explore");
+      onSkipOnboarding?.();navigate("home");
     });
     host.querySelector("#diagnostic-start-concept").addEventListener("click",()=>{
       const query=host.querySelector("#diagnostic-concept-search").value.trim().toLowerCase();
@@ -242,14 +242,11 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
         '<small>'+esc(statusNames[item.status]||statusNames.unassessed)+'</small></span><span aria-hidden="true">↗</span></button>').join(""):
         '<p>Nothing is flagged in this short sample. Choose a goal in the Atlas, or assess more concepts to refine your starting point.</p>')+'</div>'+
       '<p class="diag-privacy">These are provisional, learner-controlled recommendations, not a calibrated score, a claim that you mastered untested prerequisites, or an official research-readiness assessment.</p>'+
-      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Continue to my knowledge map →</button>'+
+      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Meet Otto and start my mission →</button>'+
       '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
-    host.querySelector("#diag-open-map").addEventListener("click",()=>{
-      const choice=stats.recommendations[0];
-      if(choice)openConcept(choice.id);else navigate("explore");
-    });
+    host.querySelector("#diag-open-map").addEventListener("click",()=>navigate("home"));
     host.querySelector("#diag-repeat").addEventListener("click",()=>{stage="choose";session=null;render();});
     host.querySelector("#diag-clear").addEventListener("click",()=>{
       if(typeof root.confirm==="function"&&!root.confirm("Clear all saved diagnostic ratings and conceptual checks on this browser?"))return;
