@@ -94,10 +94,10 @@ const page=await fs.readFile("index.html","utf8");
 assert.ok(page.includes('id="constellation-shell"'));
 assert.ok(page.includes('id="legacy-explorer" hidden'));
 assert.ok(!page.includes('<details id="focus-graph-toggle"'));
-assert.equal((page.match(/data-atlas-tab=/g)||[]).length,2,"Only Home and Knowledge Graph top-level tabs");
+assert.equal((page.match(/data-atlas-tab=/g)||[]).length,3,"Home, Knowledge Graph and Practice are the three top-level tabs");
 assert.ok(page.includes('id="diagnostic-panel"')&&page.indexOf('id="diagnostic-panel"')>page.indexOf('id="home-panel"'),"Diagnostic lives inside Home");
 assert.ok(page.includes('id="learning-studio"')&&page.indexOf('id="learning-studio"')>page.indexOf('id="explore-panel"'),"Full unit lives in Graph");
-assert.ok(page.includes('id="otto-helper"'),"Otto follows the learner across both destinations");
+assert.ok(page.includes('id="otto-helper"'),"Otto follows the learner across all destinations");
 // Fresh view with no 3D dependency.
 const fallback=window.AtlasConstellation.mount({
  host:new Stub("fallback"),macros:navigation.macros,topics:navigation.topics,concepts,locationByConcept:links,
