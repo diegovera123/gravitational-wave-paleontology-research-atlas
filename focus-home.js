@@ -21,6 +21,17 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
  const unitIds=new Set(learningUnits.map(u=>u.id));
  const chapterByMacro=new Map(CHAPTERS.flatMap(ch=>ch.macros.map(id=>[id,ch.id])));
  let chapterId=null,topicId=null,selectedId=null,expanded=false,answered=false;
+ let suggestedId=null;
+ function suggestedFromDiagnostic(){
+   const profile=getProfile?.()||{};
+   const misses=Object.entries(profile.checks||{}).filter(([id,r])=>byId.has(id)&&r?.correct===false)
+     .sort((a,b)=>(b[1]?.at||0)-(a[1]?.at||0));
+   if(misses.length)return misses[0][0];
+   const gaps=Object.entries(profile.ratings||{}).filter(([id,r])=>byId.has(id)&&Number.isInteger(r?.rating)&&r.rating<=1)
+     .sort((a,b)=>(a[1].rating-b[1].rating)||((b[1]?.at||0)-(a[1]?.at||0)));
+   return gaps[0]?.[0]||null;
+ }
+
  function topicList(chapter){
    return chapter.macros.flatMap(id=>topics.filter(t=>t.macroId===id));
  }
@@ -161,10 +172,15 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
   }
 
  function refresh(){
+   suggestedId=suggestedFromDiagnostic();
+   const start=$("#focus-big-picture");
+   start.textContent=suggestedId?"Continue from my diagnostic →":"Start with the big picture →";
+   start.setAttribute("aria-label",suggestedId?
+     "Continue with the suggested concept "+byId.get(suggestedId).title:"Start with the big picture of gravitational-wave paleontology");
    renderChapters();
-   // Reassessments change suggestions; they do not silently replace the learner's chosen chapter.
+   // Never silently replace the learner's selected chapter or claim diagnostic mastery.
  }
- $("#focus-big-picture").addEventListener("click",()=>selectConcept("gravitational-wave-paleontology"));
+ $("#focus-big-picture").addEventListener("click",()=>selectConcept(suggestedId||"gravitational-wave-paleontology"));
  $("#focus-back-chapters").addEventListener("click",()=>{
    chapterId=null;topicId=null;selectedId=null;expanded=false;
    $("#focus-concept-section").hidden=true;$("#focus-detail").hidden=true;$("#focus-quiz").hidden=true;renderChapters();
@@ -180,7 +196,7 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
  $("#focus-all-practice").addEventListener("click",openAllPractice);
  $("#focus-library").addEventListener("click",openLibrary);
  $("#focus-concept-section").hidden=true;
- renderChapters();
+ refresh();
  return {refresh,selectChapter,selectTopic,selectConcept,selected:()=>selectedId,chapter:()=>chapterId,topic:()=>topicId,
     domain:()=>{const chapter=CHAPTERS.find(x=>x.id===chapterId);return chapter?.macros[0]||null;},chapters:CHAPTERS};
 }
