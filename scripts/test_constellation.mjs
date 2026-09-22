@@ -53,7 +53,7 @@ assert.ok(scene.nodes.slice(1).every(n=>n.type==="chapter"));
 assert.ok(zooms>0,"Camera fits the active cluster");
 nodeClick(scene.nodes.find(n=>n.id==="stellar-origins"));
 assert.equal(ui.snapshot().stage,"chapter");
-assert.deepEqual(scene.nodes.slice(1).map(n=>n.id),["stellar-astrophysics","binary-stellar-evolution"]);
+assert.equal(Array.from(scene.nodes.slice(1),n=>n.id).join("|"),"stellar-astrophysics|binary-stellar-evolution");
 nodeClick(scene.nodes.find(n=>n.id==="binary-stellar-evolution"));
 assert.equal(ui.snapshot().stage,"macro");
 assert.ok(scene.nodes.slice(1).every(n=>n.type==="topic"));
@@ -83,7 +83,7 @@ assert.ok(page.includes('id="constellation-shell"'));
 assert.ok(page.includes('id="legacy-explorer" hidden'));
 assert.ok(!page.includes('<details id="focus-graph-toggle"'));
 assert.ok(!page.includes('id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge map'));
-const fallbackNodes=new Map(nodes); // fresh view, no 3D dependency
+// Fresh view with no 3D dependency.
 const fallback=window.AtlasConstellation.mount({
  host:new Stub("fallback"),macros:navigation.macros,topics:navigation.topics,concepts,locationByConcept:links,
  forceGraph:()=>null,openConcept:()=>{},openLesson:()=>{},startDrill:()=>{},hasLesson:()=>false
