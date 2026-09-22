@@ -973,6 +973,978 @@
           "url": "https://compas.readthedocs.io/en/latest/"
         }
       ]
+    },
+    {
+      "id": "remnant-pathways",
+      "title": "Compact remnants and formation channels",
+      "conceptId": "compact-remnants",
+      "area": "Stellar evolution",
+      "summary": "Trace core-collapse outcomes, supernova mass loss, natal kicks and the formation of merging compact-object binaries.",
+      "objectives": [
+        {
+          "id": "remnant-identity",
+          "title": "Distinguish remnant pathways",
+          "component": "conceptual",
+          "evidence": "Explain the meanings of compact remnant, neutron star and black hole without a deterministic birth-mass threshold.",
+          "questions": [
+            {
+              "id": "remnant-identity-1",
+              "difficulty": 1,
+              "prompt": "Which objects are commonly called stellar compact remnants?",
+              "choices": [
+                "Only galaxies and dark-matter haloes.",
+                "White dwarfs, neutron stars and stellar-origin black holes.",
+                "Only planets and main-sequence stars."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish stellar endpoints supported by degeneracy pressure or gravitational collapse.",
+              "feedback": "Compact remnants include white dwarfs, neutron stars and black holes; the exact pathway depends on progenitor and interaction history.",
+              "component": "conceptual"
+            },
+            {
+              "id": "remnant-identity-2",
+              "difficulty": 2,
+              "prompt": "Does every star above one universal birth-mass threshold produce an identical black-hole mass?",
+              "choices": [
+                "Yes; all stars collapse at the same age and composition.",
+                "No; metallicity, winds, binary interaction and remnant-formation prescriptions matter.",
+                "Yes; remnant mass is exactly equal to initial mass."
+              ],
+              "correctIndex": 1,
+              "hint": "Follow the mass retained in the core and envelope rather than using only initial mass.",
+              "feedback": "No single deterministic mass mapping describes all evolutionary channels; even toy prescriptions must state their assumptions.",
+              "component": "conceptual"
+            },
+            {
+              "id": "remnant-identity-3",
+              "difficulty": 3,
+              "prompt": "Why is a double compact-object binary not automatically a future observable gravitational-wave merger?",
+              "choices": [
+                "Gravitational waves exist only from a single compact body.",
+                "Its separation, eccentricity, evolution and inspiral time may prevent a merger within the relevant time window.",
+                "Every compact pair merges instantly upon formation."
+              ],
+              "correctIndex": 1,
+              "hint": "Formation, merger and detection are different stages.",
+              "feedback": "A bound double compact object can have an inspiral time exceeding the age of the Universe or lie outside instrumental sensitivity.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "remnant-budget",
+          "title": "Calculate simplified formation budgets",
+          "component": "quantitative",
+          "evidence": "Use mass, velocity and delay-time accounting in toy remnant histories.",
+          "questions": [
+            {
+              "id": "remnant-budget-1",
+              "difficulty": 1,
+              "prompt": "A 9 M☉ pre-collapse star leaves a 1.5 M☉ compact remnant in a toy model. How much mass is ejected?",
+              "choices": [
+                "1.5 M☉.",
+                "7.5 M☉.",
+                "10.5 M☉."
+              ],
+              "correctIndex": 1,
+              "hint": "Subtract retained remnant mass from pre-event stellar mass.",
+              "feedback": "9−1.5=7.5 M☉ ejected; this toy ledger does not specify asymmetry or kinetic-energy distribution.",
+              "component": "quantitative"
+            },
+            {
+              "id": "remnant-budget-2",
+              "difficulty": 2,
+              "prompt": "A remnant has pre-event velocity (+70,0) km/s and receives kick (0,+24) km/s. Its new speed is:",
+              "choices": [
+                "46 km/s.",
+                "74 km/s.",
+                "94 km/s."
+              ],
+              "correctIndex": 1,
+              "hint": "Add perpendicular velocity components and use the Pythagorean theorem.",
+              "feedback": "sqrt(70²+24²)=sqrt(5476)=74 km/s; the vector is (+70,+24) km/s.",
+              "component": "quantitative"
+            },
+            {
+              "id": "remnant-budget-3",
+              "difficulty": 3,
+              "prompt": "A compact binary forms 2 Gyr after star formation and merges another 5 Gyr later. What is its total formation-to-merger delay?",
+              "choices": [
+                "10 Gyr.",
+                "7 Gyr.",
+                "3 Gyr."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish stellar evolution time from the compact-binary inspiral time.",
+              "feedback": "2+5=7 Gyr from initial star formation to merger; some population models use a different explicitly stated delay definition.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "remnant-causality",
+          "title": "Explain disruptions and surviving channels",
+          "component": "causal",
+          "evidence": "Distinguish mass-loss and kick mechanisms in a specified binary frame.",
+          "questions": [
+            {
+              "id": "remnant-causality-1",
+              "difficulty": 1,
+              "prompt": "Why can a rapid supernova disrupt a previously bound binary?",
+              "choices": [
+                "The binary is guaranteed to keep its exact orbital energy.",
+                "Mass loss can reduce binding gravity while a kick changes the relative orbital velocity.",
+                "The presence of any neutron star makes gravity repulsive."
+              ],
+              "correctIndex": 1,
+              "hint": "Write post-event ε=v_rel²/2−GM_after/r.",
+              "feedback": "The gravitational mass and instantaneous relative velocity can both change, altering the orbit's specific energy and survival.",
+              "component": "causal"
+            },
+            {
+              "id": "remnant-causality-2",
+              "difficulty": 2,
+              "prompt": "Two otherwise identical compact-binary progenitors have different post-event orbital separations. Why might their merger times differ substantially?",
+              "choices": [
+                "Orbital separation matters only to optical brightness.",
+                "Under circular point-mass GW evolution, inspiral time scales strongly with separation (as a⁴ for fixed masses).",
+                "Merger time is completely independent of initial separation."
+              ],
+              "correctIndex": 1,
+              "hint": "Recall the steep separation dependence of GW-driven inspiral.",
+              "feedback": "For fixed component masses and circular orbits, a factor of two in separation corresponds to a factor of sixteen in idealized inspiral time.",
+              "component": "causal"
+            },
+            {
+              "id": "remnant-causality-3",
+              "difficulty": 3,
+              "prompt": "How can an isolated-binary formation path differ from a dynamical formation path?",
+              "choices": [
+                "An isolated path necessarily includes an encounter with a third black hole.",
+                "One evolves from a pre-existing stellar binary, while the other can assemble or exchange members through many-body encounters.",
+                "A dynamical path forbids all gravitational forces."
+              ],
+              "correctIndex": 1,
+              "hint": "Look at what brings the two compact objects into a pair.",
+              "feedback": "Field binary interactions versus dense-environment encounters can lead to different distributions of masses, spins, eccentricities and delays under particular models.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "remnant-critical",
+          "title": "Qualify population-level remnant conclusions",
+          "component": "model-critique",
+          "evidence": "Recognize uncertain kick, mass-loss and explosion prescriptions and distinguish intrinsic from observed populations.",
+          "questions": [
+            {
+              "id": "remnant-critical-1",
+              "difficulty": 1,
+              "prompt": "A simulated black-hole mass spectrum disagrees with detections. Which conclusion follows immediately?",
+              "choices": [
+                "Observed detections are an unbiased draw of all births.",
+                "The combination of formation, cosmic history, selection and measurement assumptions needs investigation.",
+                "A single remnant mass prescription is proven wrong by definition."
+              ],
+              "correctIndex": 1,
+              "hint": "An observed sample is filtered by several physical and statistical processes.",
+              "feedback": "One mismatch does not isolate which physical prescription or selection model is responsible.",
+              "component": "model-critique"
+            },
+            {
+              "id": "remnant-critical-2",
+              "difficulty": 2,
+              "prompt": "A remnant model predicts zero natal kicks for every black hole. What should a research report call this?",
+              "choices": [
+                "A direct consequence of Newton's first law.",
+                "An explicit modeling assumption whose sensitivity should be tested.",
+                "A universally measured property of every black hole."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish a prescription from an established measurement.",
+              "feedback": "Zero-kick prescriptions can be useful scenarios, but their population predictions should be compared with alternative kick assumptions.",
+              "component": "model-critique"
+            },
+            {
+              "id": "remnant-critical-3",
+              "difficulty": 3,
+              "prompt": "Can a detected gravitational-wave mass be equated without caveat to a progenitor's zero-age main-sequence mass?",
+              "choices": [
+                "Yes; detector strain directly measures initial stellar radius.",
+                "No; stellar evolution, binary interactions and gravitational-wave parameter inference separate the two.",
+                "Yes; initial and measured final masses are identical by conservation of mass."
+              ],
+              "correctIndex": 1,
+              "hint": "Track formation history and uncertainty between progenitor and merger.",
+              "feedback": "Detector inference concerns compact-object merger parameters; inferring birth masses is a model-dependent inverse problem.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Survival versus future merger",
+          "scenario": "Two compact-binary models give circular separations a and 2a at fixed masses, ignoring subsequent environmental effects.",
+          "task": "Compare idealized GW inspiral times and explain what a survival check alone misses.",
+          "steps": [
+            "Peters-type circular inspiral time scales as a⁴ for fixed masses.",
+            "The wider binary takes 2⁴=16 times longer.",
+            "Both binaries may be bound but only one might merge within an observational time window."
+          ],
+          "solution": "Binding at formation and merging within a specified horizon are separate filters on a simulated population."
+        },
+        {
+          "title": "Mass ledger and kick",
+          "scenario": "A toy 10 M☉ star leaves a 2 M☉ remnant; its pre-event velocity is (+100,0) km/s and its kick is (−20,+60) km/s.",
+          "task": "Find the ejected mass and final velocity, then explain why binary survival remains unknown.",
+          "steps": [
+            "Ejected mass=10−2=8 M☉.",
+            "Final velocity=(80,60) km/s with speed 100 km/s.",
+            "Companion mass, instantaneous separation and post-event relative motion are missing."
+          ],
+          "solution": "The final speed alone cannot decide survival; mass loss and relative orbital energy must be computed."
+        }
+      ],
+      "sources": [
+        {
+          "title": "Massive binary stars: review",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        },
+        {
+          "title": "Rates of compact-object coalescences: review",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
+    },
+    {
+      "id": "waveform-dynamics",
+      "title": "Gravitational-wave generation and chirps",
+      "conceptId": "gravitational-waveforms",
+      "area": "Gravitational waves",
+      "summary": "Reason about quadrupole radiation, chirp mass, frequency evolution and detector/source-frame interpretation.",
+      "objectives": [
+        {
+          "id": "wave-mechanism",
+          "title": "Connect motion to emitted waves",
+          "component": "conceptual",
+          "evidence": "Explain time-varying mass quadrupoles, wave strain and inspiral-merger-ringdown.",
+          "questions": [
+            {
+              "id": "wave-mechanism-1",
+              "difficulty": 1,
+              "prompt": "At leading order, what source property generates gravitational radiation in the weak-field slow-motion approximation?",
+              "choices": [
+                "A constant total mass with no changing multipole moments.",
+                "A time-varying mass quadrupole moment.",
+                "Any static isolated spherical mass."
+              ],
+              "correctIndex": 1,
+              "hint": "Remember the leading radiative multipole for gravity.",
+              "feedback": "The leading far-field signal involves time derivatives of the mass quadrupole; stationary spherical distributions do not radiate at this order.",
+              "component": "conceptual"
+            },
+            {
+              "id": "wave-mechanism-2",
+              "difficulty": 2,
+              "prompt": "What does dimensionless interferometer gravitational-wave strain h represent?",
+              "choices": [
+                "The source's mass in kilograms.",
+                "A fractional differential change in the detector's arm lengths in an idealized response description.",
+                "The absolute number of photons detected per second."
+              ],
+              "correctIndex": 1,
+              "hint": "Relate the wave to fractional stretching/squeezing of separations.",
+              "feedback": "Strain is dimensionless and is related to relative length change; real detector calibration and antenna response must also be considered.",
+              "component": "conceptual"
+            },
+            {
+              "id": "wave-mechanism-3",
+              "difficulty": 3,
+              "prompt": "In the common compact-binary waveform sequence, the 'ringdown' refers to:",
+              "choices": [
+                "A detector's yearly mirror replacement.",
+                "Damped oscillations of the remnant after merger.",
+                "Steady hydrogen fusion before the stars are born."
+              ],
+              "correctIndex": 1,
+              "hint": "Think of perturbations of the post-merger compact remnant.",
+              "feedback": "A settling remnant emits damped modes; the waveform before merger includes inspiral and strong-field merger dynamics.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "chirp-quantities",
+          "title": "Compute chirp-mass and period scalings",
+          "component": "quantitative",
+          "evidence": "Use the definition M_c=(m₁m₂)^(3/5)/(m₁+m₂)^(1/5) and simple circular-binary scalings.",
+          "questions": [
+            {
+              "id": "chirp-quantities-1",
+              "difficulty": 1,
+              "prompt": "For an equal-mass binary m₁=m₂=m, the chirp mass is:",
+              "choices": [
+                "m/2.",
+                "m/2^(1/5).",
+                "2m."
+              ],
+              "correctIndex": 1,
+              "hint": "Insert m₁=m₂=m into the chirp-mass expression.",
+              "feedback": "M_c=(m²)^(3/5)/(2m)^(1/5)=m/2^(1/5), approximately 0.871m.",
+              "component": "quantitative"
+            },
+            {
+              "id": "chirp-quantities-2",
+              "difficulty": 2,
+              "prompt": "A quasi-circular binary has orbital frequency 50 Hz. Its dominant quadrupole GW frequency is approximately:",
+              "choices": [
+                "50 Hz.",
+                "100 Hz.",
+                "25 Hz."
+              ],
+              "correctIndex": 1,
+              "hint": "The leading quadrupole varies twice per orbital cycle.",
+              "feedback": "For the dominant (l,m)=(2,2) mode of a quasi-circular binary, f_GW≈2 f_orb.",
+              "component": "quantitative"
+            },
+            {
+              "id": "chirp-quantities-3",
+              "difficulty": 3,
+              "prompt": "In a toy leading-order inspiral with fixed masses, GW frequency increases over time. The observed cycle spacing in a time trace:",
+              "choices": [
+                "Stays constant.",
+                "Decreases.",
+                "Increases without limit."
+              ],
+              "correctIndex": 1,
+              "hint": "Frequency is the reciprocal of period.",
+              "feedback": "As f increases, the period 1/f decreases: successive cycles arrive closer together, producing the 'chirp'.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "chirp-causality",
+          "title": "Explain waveform evolution",
+          "component": "causal",
+          "evidence": "Relate radiation of energy/angular momentum to tighter orbit and higher characteristic frequency.",
+          "questions": [
+            {
+              "id": "chirp-causality-1",
+              "difficulty": 1,
+              "prompt": "Why does the leading-order orbital frequency rise during a compact-binary inspiral?",
+              "choices": [
+                "An inspiral requires its component masses to increase at every orbit.",
+                "Gravitational radiation removes orbital energy and angular momentum, shrinking the orbit.",
+                "Waves supply the binary with unlimited positive orbital energy."
+              ],
+              "correctIndex": 1,
+              "hint": "Connect loss of orbital energy with separation and Kepler's law.",
+              "feedback": "For an isolated quasi-circular compact binary, GW emission tightens the orbit and drives faster orbital motion until the approximations fail near merger.",
+              "component": "causal"
+            },
+            {
+              "id": "chirp-causality-2",
+              "difficulty": 2,
+              "prompt": "At the same intrinsic chirp mass and source evolution, a more distant source generally has:",
+              "choices": [
+                "Exactly equal detector strain independent of orientation.",
+                "Smaller detected strain amplitude, all else equal.",
+                "Larger strain because light travels longer."
+              ],
+              "correctIndex": 1,
+              "hint": "Think of wave amplitude fall-off plus orientation/antenna factors.",
+              "feedback": "At leading order amplitude scales inversely with distance, but actual observed strain also depends on inclination, polarization and detector response.",
+              "component": "causal"
+            },
+            {
+              "id": "chirp-causality-3",
+              "difficulty": 3,
+              "prompt": "Why does a nonzero source redshift alter mass interpretation from observed detector-frame waveform timescales?",
+              "choices": [
+                "Redshift changes only photon brightness, never GW frequency.",
+                "Observed waveform timescales are stretched by (1+z), producing a detector-frame mass scale (1+z) times source-frame mass.",
+                "The source's rest mass grows physically during propagation."
+              ],
+              "correctIndex": 1,
+              "hint": "Cosmological redshift stretches observed periods for gravitational waves too.",
+              "feedback": "At cosmological distances, the waveform naturally constrains redshifted mass parameters; source-frame masses require redshift information or a distance–cosmology relation.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "wave-model-limit",
+          "title": "Distinguish approximations and inference",
+          "component": "model-critique",
+          "evidence": "Identify regime limitations, degeneracies and why detector strain is not a direct progenitor record.",
+          "questions": [
+            {
+              "id": "wave-model-limit-1",
+              "difficulty": 1,
+              "prompt": "When might a leading-order circular point-mass inspiral formula be inadequate?",
+              "choices": [
+                "Only when a detector is offline.",
+                "Near merger or for important spin, eccentricity, tidal or strong-field effects.",
+                "Whenever two compact objects are bound."
+              ],
+              "correctIndex": 1,
+              "hint": "Ask what the low-velocity weak-field assumptions omit.",
+              "feedback": "Reliable inference near merger requires more complete waveform models; spin, eccentricity, tides and instrument response may affect the signal.",
+              "component": "model-critique"
+            },
+            {
+              "id": "wave-model-limit-2",
+              "difficulty": 2,
+              "prompt": "Does a measured chirp mass by itself uniquely determine both component masses?",
+              "choices": [
+                "No; chirp mass has no connection to component masses.",
+                "No; many mass pairs can share a chirp mass without additional information.",
+                "Yes; one scalar fixes two independent masses uniquely."
+              ],
+              "correctIndex": 1,
+              "hint": "Count parameters compared with independent constraints.",
+              "feedback": "Additional waveform features help constrain mass ratio/spins; chirp mass alone is insufficient to identify each component mass.",
+              "component": "model-critique"
+            },
+            {
+              "id": "wave-model-limit-3",
+              "difficulty": 3,
+              "prompt": "A waveform fit constrains merger component masses. What extra step is needed to claim a particular stellar formation channel?",
+              "choices": [
+                "Assume every compact binary came from one channel.",
+                "Compare predictions of competing formation models after accounting for cosmic history, selection and parameter uncertainty.",
+                "Read the progenitor's birthplace directly from the strain time series."
+              ],
+              "correctIndex": 1,
+              "hint": "Separate the inverse problem of formation history from a compact-binary parameter fit.",
+              "feedback": "Different formation histories can predict overlapping merger properties; population-level modeling and uncertainty are necessary.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Equal-mass chirp",
+          "scenario": "Two equal-mass objects each have m=10 M☉ in an idealized system.",
+          "task": "Calculate chirp mass numerically to two significant digits; name an inference the result cannot make.",
+          "steps": [
+            "For equal masses M_c=m/2^(1/5).",
+            "2^(1/5)≈1.149, so M_c≈8.7 M☉.",
+            "Chirp mass alone does not determine formation channel or source redshift."
+          ],
+          "solution": "About 8.7 M☉ in the specified frame. Additional waveform parameters, distance and population models are needed for broader claims."
+        },
+        {
+          "title": "Detector-frame scaling",
+          "scenario": "An illustrative source has source-frame chirp mass 20 M☉ and redshift z=0.5.",
+          "task": "Compute its detector-frame chirp mass and state what the mass conversion assumes.",
+          "steps": [
+            "M_c,det=(1+z) M_c,src.",
+            "(1+0.5)×20=30 M☉.",
+            "This uses the cosmological redshift relation; independent z information or a cosmological model is needed to recover source masses."
+          ],
+          "solution": "The detector-frame chirp mass is 30 M☉; redshifted time/frequency scales should not be interpreted as a physical increase in source rest mass."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GW150914 observation paper",
+          "url": "https://doi.org/10.1103/PhysRevLett.116.061102"
+        },
+        {
+          "title": "Rates of compact-object coalescences: review",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
+    },
+    {
+      "id": "gw-detectors",
+      "title": "Interferometers, noise and evidence",
+      "conceptId": "interferometric-detectors",
+      "area": "Gravitational waves",
+      "summary": "Separate detector response, signal-to-noise, noise transients, networks and selection limitations.",
+      "objectives": [
+        {
+          "id": "detector-basics",
+          "title": "Interpret a detector response",
+          "component": "conceptual",
+          "evidence": "Describe differential arm response and distinguish signal from local instrumental noise.",
+          "questions": [
+            {
+              "id": "detector-basics-1",
+              "difficulty": 1,
+              "prompt": "Why do laser interferometers compare two arm lengths?",
+              "choices": [
+                "Every equal-arm noise fluctuation is a new astrophysical source.",
+                "A passing gravitational wave can produce a time-varying differential arm-length signal.",
+                "The two arms measure the black hole's radius directly."
+              ],
+              "correctIndex": 1,
+              "hint": "Think of relative stretching of orthogonal directions.",
+              "feedback": "Differential arm readout is sensitive to GW strain projected onto detector geometry; instrumental disturbances can also affect this channel.",
+              "component": "conceptual"
+            },
+            {
+              "id": "detector-basics-2",
+              "difficulty": 2,
+              "prompt": "Why is one strong transient in a single interferometer not automatically proof of an astrophysical merger?",
+              "choices": [
+                "A real GW only affects one detector by definition.",
+                "Instrumental glitches and terrestrial noise can imitate signal-like transients.",
+                "Every large strain fluctuation must be a GW."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about comparing coherence across detectors and modeling noise.",
+              "feedback": "Multi-detector coincidence, waveform consistency and background estimation help distinguish astrophysical signals from instrumental artefacts.",
+              "component": "conceptual"
+            },
+            {
+              "id": "detector-basics-3",
+              "difficulty": 3,
+              "prompt": "What is the main advantage of observing a signal in detectors with different orientations and locations?",
+              "choices": [
+                "Detector separation eliminates all calibration uncertainty.",
+                "Coherent time/phase/amplitude information can strengthen interpretation and constrain sky position and polarization.",
+                "All detectors always record exactly equal wave amplitudes."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare travel-time delays and antenna responses.",
+              "feedback": "A geographically distributed network samples the wave differently and can improve localization and consistency tests.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "detector-numbers",
+          "title": "Compute response and SNR toy quantities",
+          "component": "quantitative",
+          "evidence": "Reason with h≈ΔL/L and noise-weighted detection metrics without treating them as complete pipelines.",
+          "questions": [
+            {
+              "id": "detector-numbers-1",
+              "difficulty": 1,
+              "prompt": "A toy interferometer has an arm length of 4000 m and an idealized fractional strain h=10⁻²¹. The associated scale hL is:",
+              "choices": [
+                "4×10⁻² m.",
+                "4×10⁻¹⁸ m.",
+                "4×10⁻²⁴ m."
+              ],
+              "correctIndex": 1,
+              "hint": "Multiply dimensionless strain by length; this ignores antenna and optical response factors.",
+              "feedback": "4000×10⁻²¹=4×10⁻¹⁸ m. Real instruments infer differential strain through calibrated optical responses.",
+              "component": "quantitative"
+            },
+            {
+              "id": "detector-numbers-2",
+              "difficulty": 2,
+              "prompt": "If the same signal amplitude is observed against twice the noise-amplitude spectral density in a comparable toy frequency band, its approximate amplitude SNR:",
+              "choices": [
+                "Stays exactly unchanged for every possible noise shape.",
+                "Halves.",
+                "Doubles."
+              ],
+              "correctIndex": 1,
+              "hint": "SNR measures signal against noise after appropriate weighting.",
+              "feedback": "At fixed signal and identical spectral shape, doubling noise amplitude approximately halves matched-filter SNR; broadband results need integration.",
+              "component": "quantitative"
+            },
+            {
+              "id": "detector-numbers-3",
+              "difficulty": 3,
+              "prompt": "Two interferometers see coherent arrival times 7 ms apart. Can that delay alone uniquely fix the source's exact sky position?",
+              "choices": [
+                "No; gravitational waves always arrive everywhere simultaneously.",
+                "No; a time delay defines a locus of possible directions, with additional information needed.",
+                "Yes; two time measurements fix all sky coordinates uniquely."
+              ],
+              "correctIndex": 1,
+              "hint": "Geometric time-delay constraints are not a unique full-sky localization.",
+              "feedback": "Timing provides a projected-baseline constraint; amplitude, phase and more detectors improve localization.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "noise-sources",
+          "title": "Explain false alarms and sensitivity",
+          "component": "causal",
+          "evidence": "Reason how background, antenna orientation and observation time change the detected sample.",
+          "questions": [
+            {
+              "id": "noise-sources-1",
+              "difficulty": 1,
+              "prompt": "Why is a detector's reported detection threshold not simply a universal intrinsic black-hole mass cutoff?",
+              "choices": [
+                "Detector noise depends only on progenitor metallicity.",
+                "Sensitivity depends on waveform masses/spins, distance, orientation, noise and search method.",
+                "All binaries with masses above a threshold are observed regardless of distance."
+              ],
+              "correctIndex": 1,
+              "hint": "Consider source amplitude and the instrument/search response.",
+              "feedback": "A detector samples a selection function over source parameters and conditions; one fixed mass alone does not determine detectability.",
+              "component": "causal"
+            },
+            {
+              "id": "noise-sources-2",
+              "difficulty": 2,
+              "prompt": "What changes when detector noise worsens during a run, with the same source population?",
+              "choices": [
+                "Every source's intrinsic mass doubles.",
+                "The detection efficiency for otherwise identical signals can decrease.",
+                "The physical cosmic merger rate instantly decreases."
+              ],
+              "correctIndex": 1,
+              "hint": "Separate detector sensitivity from astrophysical event production.",
+              "feedback": "Higher noise generally reduces SNR and can reduce detection probability; it does not alter the underlying astrophysical birth or merger rate.",
+              "component": "causal"
+            },
+            {
+              "id": "noise-sources-3",
+              "difficulty": 3,
+              "prompt": "Why is a noise-background estimate needed when claiming a detection?",
+              "choices": [
+                "Background estimation proves a formation channel uniquely.",
+                "Search statistics can also arise from non-astrophysical fluctuations, so significance needs a false-alarm model.",
+                "A noise model is only necessary after publishing an event."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish signal consistency from the frequency of noise mimics.",
+              "feedback": "A candidate's ranking statistic needs context from the search background; this is separate from astrophysical population inference.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "detector-critical",
+          "title": "Critique observational interpretation",
+          "component": "model-critique",
+          "evidence": "Distinguish physical source properties, detector-frame parameters and instrument/calibration uncertainties.",
+          "questions": [
+            {
+              "id": "detector-critical-1",
+              "difficulty": 1,
+              "prompt": "Can a non-detection of one predicted binary prove it did not exist?",
+              "choices": [
+                "Only if its host galaxy is optically invisible.",
+                "No; it may have been too distant, unfavorably oriented, outside a sensitive band or during downtime.",
+                "Yes; all astrophysical binaries are detected."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish source existence from the probability that it is recorded.",
+              "feedback": "Non-detection constrains populations through the detection efficiency and observing time, not a single source's existence in general.",
+              "component": "model-critique"
+            },
+            {
+              "id": "detector-critical-2",
+              "difficulty": 2,
+              "prompt": "A claimed population shift is based on detections from two observing runs with different sensitivities. What should be compared before attributing it to astrophysics?",
+              "choices": [
+                "Whether the data filenames match.",
+                "Run-dependent selection functions, pipelines and measurement uncertainties.",
+                "Only the raw number of observed waveforms."
+              ],
+              "correctIndex": 1,
+              "hint": "Detector improvements change which part of the population is visible.",
+              "feedback": "Apparent distribution differences can result from changing instruments and analysis rather than evolving astrophysical populations.",
+              "component": "model-critique"
+            },
+            {
+              "id": "detector-critical-3",
+              "difficulty": 3,
+              "prompt": "Why does a network-calibrated event not uniquely reveal the host galaxy in most cases?",
+              "choices": [
+                "Every detected binary has an electromagnetic counterpart.",
+                "Sky localization and distance are uncertain, and multiple galaxies may lie in the allowed volume.",
+                "An interferometer reads galaxy names as electromagnetic signals."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about broad positional and distance posteriors.",
+              "feedback": "GW parameter estimation often yields a three-dimensional localization volume rather than a unique host identification.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Strain scale",
+          "scenario": "A toy strain of 2×10⁻²¹ acts on a 4 km arm. Treat ΔL≈hL only for an order-of-magnitude illustration.",
+          "task": "Calculate ΔL, then name two detector factors not represented.",
+          "steps": [
+            "Convert 4 km to 4000 m.",
+            "ΔL≈2×10⁻²¹×4000=8×10⁻¹⁸ m.",
+            "Antenna response, optical transfer, noise and calibration affect real measurements."
+          ],
+          "solution": "An order-of-magnitude length scale is 8×10⁻¹⁸ m, not a universal measured displacement of one mirror."
+        },
+        {
+          "title": "Candidate comparison",
+          "scenario": "A hypothetical candidate appears in two detectors with arrival times consistent with light travel, but one detector also reports a large environmental disturbance.",
+          "task": "What must be checked before interpreting the pair as an astrophysical GW?",
+          "steps": [
+            "Inspect detector state and environmental/instrumental vetoes.",
+            "Check coherent waveform consistency and background false-alarm estimation.",
+            "Account for calibration and the second detector's signal strength."
+          ],
+          "solution": "Coincidence is useful evidence but alone cannot replace an instrument-quality and noise-background analysis."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GW150914 observation paper",
+          "url": "https://doi.org/10.1103/PhysRevLett.116.061102"
+        },
+        {
+          "title": "Gravitational Wave Open Science Center",
+          "url": "https://gwosc.org/"
+        }
+      ]
+    },
+    {
+      "id": "population-simulations",
+      "title": "Population synthesis and Monte Carlo sampling",
+      "conceptId": "binary-population-synthesis",
+      "area": "Simulation",
+      "summary": "Connect sampled initial conditions, binary histories, statistical weights and sensitivity checks.",
+      "objectives": [
+        {
+          "id": "synthesis-definitions",
+          "title": "Read a population model",
+          "component": "conceptual",
+          "evidence": "Distinguish simulated systems, birth distributions, evolution prescriptions and observable samples.",
+          "questions": [
+            {
+              "id": "synthesis-definitions-1",
+              "difficulty": 1,
+              "prompt": "What does a rapid binary-population synthesis model typically evolve?",
+              "choices": [
+                "A single galaxy's exact future without uncertainty.",
+                "Many sampled initial binary systems under prescribed stellar and binary physics.",
+                "Only one observed gravitational waveform with no stellar history."
+              ],
+              "correctIndex": 1,
+              "hint": "Identify the input ensemble and evolution rules.",
+              "feedback": "Population synthesis maps assumed birth conditions through approximated stellar/binary evolution to distributions of outcomes.",
+              "component": "conceptual"
+            },
+            {
+              "id": "synthesis-definitions-2",
+              "difficulty": 2,
+              "prompt": "Why might a simulated binary produce more than one row in an event log?",
+              "choices": [
+                "A binary is forbidden from experiencing more than one mass-transfer event.",
+                "The same system can undergo multiple recorded phases or events.",
+                "Every row must correspond to an independently born binary."
+              ],
+              "correctIndex": 1,
+              "hint": "Separate the unit of sampling from the unit of recorded events.",
+              "feedback": "One system can have repeated mass transfers or supernovae, so event rows are not independent system counts.",
+              "component": "conceptual"
+            },
+            {
+              "id": "synthesis-definitions-3",
+              "difficulty": 3,
+              "prompt": "What is a formation efficiency in a specified population-synthesis model?",
+              "choices": [
+                "An instrument's noise floor in strain per root hertz.",
+                "The yield of a defined class of outcomes per appropriately normalized formed stellar mass or comparable stated birth normalization.",
+                "The percentage of rows with nonempty filenames."
+              ],
+              "correctIndex": 1,
+              "hint": "Always state the denominator and outcome definition.",
+              "feedback": "Formation efficiencies require a defined mass/initial-population normalization and a defined event class; choices influence interpretation.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "sampling-weight",
+          "title": "Compute weighted counts and uncertainty",
+          "component": "quantitative",
+          "evidence": "Distinguish raw counts from sums of sampling weights and estimate toy sampling precision.",
+          "questions": [
+            {
+              "id": "sampling-weight-1",
+              "difficulty": 1,
+              "prompt": "Three distinct simulated systems have weights 1, 2 and 5; only the second and third form merging compact binaries. Their total weighted yield is:",
+              "choices": [
+                "8.",
+                "7.",
+                "2."
+              ],
+              "correctIndex": 1,
+              "hint": "Sum weights only over the successful systems.",
+              "feedback": "The successful systems contribute 2+5=7 weight units, whereas their raw number is two.",
+              "component": "quantitative"
+            },
+            {
+              "id": "sampling-weight-2",
+              "difficulty": 2,
+              "prompt": "In two unbiased Monte Carlo samples from the same distribution, increasing sample size from N to 4N changes the approximate standard error of a simple sample mean by a factor of:",
+              "choices": [
+                "4.",
+                "1/2.",
+                "1/4."
+              ],
+              "correctIndex": 1,
+              "hint": "Under ordinary finite-variance IID assumptions, SE scales as 1/sqrt(N).",
+              "feedback": "SE(4N)/SE(N)=sqrt(N/(4N))=1/2; weighted/non-IID simulations need more careful variance treatment.",
+              "component": "quantitative"
+            },
+            {
+              "id": "sampling-weight-3",
+              "difficulty": 3,
+              "prompt": "A toy simulation samples 200 distinct binaries, of which 20 meet a stated outcome criterion. The unweighted sample fraction is:",
+              "choices": [
+                "10.",
+                "0.10.",
+                "0.01."
+              ],
+              "correctIndex": 1,
+              "hint": "Divide successes by total sampled systems, not by event rows.",
+              "feedback": "20/200=0.10. This sample fraction is not automatically a cosmic merger rate or a mass-normalized formation efficiency.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "sampling-mechanisms",
+          "title": "Trace sensitivity and survivorship",
+          "component": "causal",
+          "evidence": "Explain how model parameters propagate to output populations.",
+          "questions": [
+            {
+              "id": "sampling-mechanisms-1",
+              "difficulty": 1,
+              "prompt": "If a code changes kick magnitude assumptions while keeping birth binaries and all other physics fixed, what outcome is most directly useful to compare?",
+              "choices": [
+                "The observed detector population without modeling selection.",
+                "The surviving compact-binary yield and distribution of post-event orbital properties.",
+                "Only the terminal file's byte size."
+              ],
+              "correctIndex": 1,
+              "hint": "Ask which physical transition kicks directly modify.",
+              "feedback": "Kicks alter post-supernova relative motion, survival and later evolution; comparing controlled populations isolates sensitivity to the chosen prescription.",
+              "component": "causal"
+            },
+            {
+              "id": "sampling-mechanisms-2",
+              "difficulty": 2,
+              "prompt": "Why might preferentially oversampling rare massive binaries require weights?",
+              "choices": [
+                "Weighting is needed only for optical telescope exposure time.",
+                "Otherwise sample counts would not represent the intended underlying birth distribution.",
+                "Oversampling guarantees unbiased cosmic rates without any correction."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare proposal distribution with target birth distribution.",
+              "feedback": "Importance or stratified sampling may need appropriate weights to recover target-population expectations.",
+              "component": "causal"
+            },
+            {
+              "id": "sampling-mechanisms-3",
+              "difficulty": 3,
+              "prompt": "Why can a rare outcome disappear entirely in a small Monte Carlo run despite nonzero true model probability?",
+              "choices": [
+                "A simulation must always produce every possible channel once.",
+                "Finite sampling can miss low-probability outcomes by chance.",
+                "Its probability must be exactly zero if unseen."
+              ],
+              "correctIndex": 1,
+              "hint": "Recall that a random finite sample does not enumerate all possibilities.",
+              "feedback": "Low-count channels have large relative Monte Carlo uncertainty; zero sampled events does not by itself establish zero expected rate.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "simulation-methods",
+          "title": "Critique population predictions",
+          "component": "model-critique",
+          "evidence": "Distinguish numerical convergence, physical uncertainty and selection-biased comparisons.",
+          "questions": [
+            {
+              "id": "simulation-methods-1",
+              "difficulty": 1,
+              "prompt": "A result changes when the random seed changes in a small simulation. What should be investigated?",
+              "choices": [
+                "Whether stochastic methods have invalidated probability theory.",
+                "Monte Carlo uncertainty and convergence across independent samples.",
+                "Which random seed gives the nicest-looking figure."
+              ],
+              "correctIndex": 1,
+              "hint": "Random variation can be substantial for rare events.",
+              "feedback": "Compare replicate seeds/sample sizes and report sampling error before attributing differences to physical mechanisms.",
+              "component": "model-critique"
+            },
+            {
+              "id": "simulation-methods-2",
+              "difficulty": 2,
+              "prompt": "Two codes have different binary-merger yields. What comparison most helps identify an origin?",
+              "choices": [
+                "Declare the code with more simulated systems physically correct.",
+                "Match initial distributions, prescriptions, definitions, weights and output selection before testing differences.",
+                "Compare only the number of lines in their source code."
+              ],
+              "correctIndex": 1,
+              "hint": "Controlled code comparison needs matched inputs and outcome definitions.",
+              "feedback": "Different outputs may arise from sampling, normalization, physics prescriptions or implementation; matched setups and tests help disentangle them.",
+              "component": "model-critique"
+            },
+            {
+              "id": "simulation-methods-3",
+              "difficulty": 3,
+              "prompt": "A paper reports 50 successful binaries but no simulated formed mass or sampling method. What can't be deduced?",
+              "choices": [
+                "That at least one system met the paper's reported criterion.",
+                "A properly normalized physical formation efficiency or cosmic event rate.",
+                "The raw count of 50."
+              ],
+              "correctIndex": 1,
+              "hint": "An absolute yield needs a denominator and, often, weights.",
+              "feedback": "Raw successful-system counts lack birth-population normalization and are not rates per cosmic volume/time.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Sample versus weight",
+          "scenario": "Five hypothetical systems have weights [1,4,2,3,5]; systems 2 and 5 produce the target event.",
+          "task": "Calculate the raw successful-system count and weighted yield, then identify the required denominator for a physical efficiency.",
+          "steps": [
+            "Raw success count=2.",
+            "Weighted success yield=4+5=9.",
+            "A defined sampled/represented formed mass is needed for a mass-normalized formation efficiency."
+          ],
+          "solution": "The raw count 2 and weighted yield 9 answer different questions; neither alone is an astrophysical merger rate."
+        },
+        {
+          "title": "Rare-event stability",
+          "scenario": "Independent simulation runs of 100, 1000 and 10000 systems find 0, 2 and 24 rare outcomes under one model.",
+          "task": "Explain whether the first zero disproves the modeled channel and name a convergence check.",
+          "steps": [
+            "The first sample can miss a rare event by chance.",
+            "Fractions are 0, 0.002 and 0.0024.",
+            "Repeat seeds, increase N, and use uncertainty appropriate to sparse counts and weighting."
+          ],
+          "solution": "A zero in a small run is not proof of impossibility; investigate Monte Carlo precision and normalization."
+        }
+      ],
+      "sources": [
+        {
+          "title": "COMPAS public documentation",
+          "url": "https://compas.readthedocs.io/en/latest/"
+        },
+        {
+          "title": "Rates of compact-object coalescences: review",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
     }
   ]
 }
