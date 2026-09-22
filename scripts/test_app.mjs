@@ -106,6 +106,7 @@ assert.equal(elements.get("#simple-home").hidden,true,"Simple welcome is hidden 
 run('markOnboardingSeen();setActiveView("home",{scroll:false})');
 assert.equal(elements.get("#simple-home").hidden,false,"Finishing or skipping diagnostic returns to simple Home");
 assert.equal(elements.get("#diagnostic-panel").hidden,true,"Optional diagnostic closes without adding a separate tab");
+run("diagnosticController=null"); // Restore the module-unavailable stub after testing first-run routing.
 assert.equal(elements.get("#paths-panel").hidden,true,"Old research tab remains hidden");
 run('setActiveView("explore",{scroll:false})');
 assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge Graph is the second top-level view");
