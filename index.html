@@ -18,6 +18,7 @@
   <script defer src="focus-home.js"></script>
   <script defer src="guided-practice.js"></script>
   <script defer src="literature-search.js"></script>
+  <script defer src="concept-insight.js"></script>
   <script defer src="constellation.js"></script>
   <script defer src="app.js"></script>
 </head>
@@ -201,7 +202,8 @@
           <h3 id="constellation-prompt">Explore a cluster</h3>
           <div id="constellation-choices" class="constellation-choices" aria-label="Accessible constellation nodes"></div>
         </div>
-        <section id="constellation-detail" class="constellation-detail" hidden aria-live="polite"></section>
+        <div id="constellation-detail-shade" class="constellation-detail-shade" hidden aria-hidden="true"></div>
+        <section id="constellation-detail" class="constellation-detail" role="dialog" aria-modal="true" aria-label="Selected research concept" tabindex="-1" hidden></section>
       </section>
     <section id="learning-studio" class="learning-studio" aria-labelledby="learning-studio-title" hidden tabindex="-1">
       <div class="studio-top"><div><p class="eyebrow">Learning unit · Original Atlas instruction</p>
