@@ -73,6 +73,13 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     }
     if(gKey.startsWith("c:")&&m.has(gKey.slice(2))){
       const id=gKey.slice(2);
+      if(id==="gravitational-wave-paleontology"){
+        // One field, several scientific strands; each seed refers to a real authored concept.
+        const branches=["gravitational-wave-paleontology","binary-stellar-evolution",
+          "gravitational-wave-science","binary-population-synthesis","monte-carlo-methods",
+          "probability-distributions","reading-scientific-papers"].filter(x=>m.has(x));
+        return {label:"Gravitational-Wave Paleontology",goalId:id,seedIds:branches};
+      }
       return {label:m.get(id).title,goalId:id,seedIds:[id]};
     }
     return null;
@@ -87,7 +94,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
   function open(key=null){
     navigate("diagnostic");
     if(key){begin(key);return;}
-    stage=session&&!session.finished?stage:"choose";
+    stage=session&&!session.finished&&profile.goal?.goalId==="gravitational-wave-paleontology"?stage:"choose";
     render();
   }
   function getQuestion(id){return qMap.get(id)||null;}
