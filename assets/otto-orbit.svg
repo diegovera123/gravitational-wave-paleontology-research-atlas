@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340" role="img" aria-labelledby="t d">
+<title id="t">Otto the Orbit Otter</title><desc id="d">A friendly original cartoon otter in a lilac space suit waving inside a transparent astronaut helmet, with a small golden orbiting star.</desc>
+<defs><radialGradient id="helmet" cx=".35" cy=".25" r=".8"><stop stop-color="#b5daff" stop-opacity=".22"/><stop offset="1" stop-color="#24437a" stop-opacity=".38"/></radialGradient><linearGradient id="suit" x1=".2" x2=".85" y2="1"><stop stop-color="#9e8cf4"/><stop offset="1" stop-color="#6257bb"/></linearGradient><linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b7816c"/><stop offset="1" stop-color="#7e514d"/></linearGradient><filter id="soft"><feGaussianBlur stdDeviation="4"/></filter></defs>
+<ellipse cx="167" cy="321" rx="84" ry="9" fill="#0a1d42" opacity=".35" filter="url(#soft)"/>
+<ellipse cx="166" cy="170" rx="145" ry="105" fill="none" stroke="#8ab3fd" stroke-width="2" opacity=".4" transform="rotate(-19 166 170)"/>
+<path d="m279 71 5 12 13 3-13 5-5 13-5-13-13-5 13-3z" fill="#f5cb69" stroke="#ffe7a3" stroke-width="2"/>
+<circle cx="48" cy="99" r="4" fill="#9fc8fd" opacity=".8"/><circle cx="267" cy="245" r="3" fill="#c0a8fa" opacity=".7"/>
+<!-- Tail and boots -->
+<path d="M94 249C50 269 42 301 67 313c16 7 42-2 54-24l20-35Z" fill="#865658" stroke="#694751" stroke-width="4"/>
+<path d="M111 273c-6 16-13 32-3 36 16 8 30-4 38-19m38-13c7 18 16 33 29 31 20-2 16-21 9-33" fill="#5d639e" stroke="#535a92" stroke-width="17" stroke-linecap="round"/>
+<!-- Suit and sleeves -->
+<path d="M115 205Q92 216 94 258Q99 297 151 304h36q44-8 53-44l-9-40-29-21Z" fill="url(#suit)" stroke="#494887" stroke-width="5"/>
+<path d="M111 220q-23 1-32 25-8 20-25 12-20-12-8-30" fill="none" stroke="#7168c2" stroke-width="22" stroke-linecap="round"/>
+<path d="M227 224q18-15 24-35l19-18" fill="none" stroke="#7467cb" stroke-width="23" stroke-linecap="round"/>
+<path d="M267 170c5-16 16-26 24-23 12 5 3 21-3 25 12-8 20 4 8 14-10 8-18 11-30 10l-8-13Z" fill="#a87866" stroke="#754b4e" stroke-width="3"/>
+<circle cx="175" cy="249" r="19" fill="#f5f3ff" stroke="#4e4c93" stroke-width="5"/><circle cx="175" cy="249" r="9" fill="#89bcf6"/><path d="M151 285h48" stroke="#c7b9ff" stroke-width="5" stroke-linecap="round"/>
+<!-- Face and ears -->
+<circle cx="105" cy="126" r="25" fill="#8a5e5c" stroke="#70474f" stroke-width="5"/><circle cx="105" cy="126" r="12" fill="#cf9a85"/>
+<circle cx="227" cy="124" r="25" fill="#8a5e5c" stroke="#70474f" stroke-width="5"/><circle cx="227" cy="124" r="12" fill="#cf9a85"/>
+<path d="M102 114q14-32 57-40 56-4 77 34 15 27 9 74-7 47-61 57-64 9-86-30-15-26-5-67Z" fill="url(#fur)" stroke="#70484d" stroke-width="5"/>
+<ellipse cx="166" cy="179" rx="65" ry="43" fill="#dfb5a0"/>
+<ellipse cx="136" cy="159" rx="8" ry="10" fill="#2e2d48"/><ellipse cx="196" cy="159" rx="8" ry="10" fill="#2e2d48"/>
+<circle cx="139" cy="156" r="2.5" fill="white"/><circle cx="199" cy="156" r="2.5" fill="white"/>
+<path d="M156 183q10-9 21 0-1 12-11 13-10-1-10-13Z" fill="#49363e"/>
+<path d="M167 195q-3 14-16 8m16-8q4 14 18 7" fill="none" stroke="#674b51" stroke-width="3" stroke-linecap="round"/>
+<path d="m116 188-28-6m27 15-31 3m131-13 28-6m-27 16 30 4" fill="none" stroke="#eed9c5" stroke-width="2.7" stroke-linecap="round"/>
+<circle cx="120" cy="179" r="9" fill="#df908c" opacity=".35"/><circle cx="214" cy="179" r="9" fill="#df908c" opacity=".35"/>
+<!-- Clear helmet overlay + rim -->
+<ellipse cx="167" cy="156" rx="106" ry="114" fill="url(#helmet)" stroke="#95b9ed" stroke-width="8"/>
+<path d="M88 104q28-55 86-55" fill="none" stroke="white" opacity=".47" stroke-width="8" stroke-linecap="round"/>
+<path d="M72 212q13 43 51 57h89q36-11 51-59" fill="none" stroke="#b5c7f5" stroke-width="9" stroke-linecap="round"/>
+<rect x="123" y="263" width="89" height="18" rx="8" fill="#dbd9fb" stroke="#7478b3" stroke-width="4"/>
+</svg>

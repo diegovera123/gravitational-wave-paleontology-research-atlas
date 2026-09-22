@@ -17,7 +17,7 @@ let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
-let activeView="home", diagnosticController=null;
+let activeView="home", diagnosticController=null, guideController=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
 const ONBOARDING_KEY="research-atlas-onboarding-seen-v1";
 let studiedIds=new Set(), progressAvailable=true;
@@ -149,6 +149,27 @@ function markOnboardingSeen(){
   try{window.localStorage?.setItem(ONBOARDING_KEY,"1");}catch{}
   document.body?.classList?.remove("onboarding-first");
 }
+
+function mountMissionGuide(){
+  if(!window.AtlasGuide){console.warn("[Research Atlas] Optional mission guide unavailable; classic home remains.");return;}
+  try{
+    guideController=window.AtlasGuide.mount({
+      host:$("#otto-guide"),
+      concepts,questionPaths:researchQuestions,
+      getProfile:()=>diagnosticController?.snapshot?.()||{},
+      getStudied:()=>[...studiedIds],
+      hasLesson:id=>learningUnits.has(id),
+      openConcept:id=>{openConcept(id,true);scrollToExplorer();},
+      openLesson:id=>openLearningUnit(id),
+      openDiagnostic:()=>diagnosticController?.open(),
+      openAtlas:()=>scrollToExplorer(),
+      openQuestion:id=>{openQuestion(id);scrollToExplorer();}
+    });
+    $("#otto-guide").hidden=false;
+    $("#home-panel").classList.add("guide-ready");
+  }catch(e){guideController=null;console.error("[Research Atlas] Guide unavailable; showing classic map-first home.",e);}
+}
+
 function firstRunLanding(){
   const done=diagnosticController?.hasCompleted?.()||onboardingSeen();
   if(done){
@@ -164,6 +185,7 @@ function firstRunLanding(){
 function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
+  document.body?.classList?.toggle?.("mission-home",view==="home");
   for(const name of TAB_NAMES){
     const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
     panel.hidden=name!==view;
@@ -171,6 +193,7 @@ function setActiveView(view,options={}){
     tab.tabIndex=name===view?0:-1;
   }
   $("#dashboard").hidden=!["home","paths","library"].includes(view);
+  if(view==="home")guideController?.render();
   if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
   if(options.focus)$("#tab-"+view).focus();
   if(view==="explore" && graph && displayMode==="3d"){
@@ -255,6 +278,7 @@ function markUnderstood(id){
   persistProgress();
   updateLearningStats();
   renderDashboard();
+  guideController?.render();
   const detailShown=detailsElement.querySelector("#mark-understood");
   if(selectedId===id || detailShown)showConceptDetails(byId(id));
   draw({frame:false});
@@ -829,12 +853,27 @@ async function initialise() {
         openConcept:id=>{openConcept(id,true);scrollToExplorer();},
         openLearningUnit:id=>openLearningUnit(id),
         onProfileChange:()=>{
+          guideController?.render();
           renderDashboard();
           if(atlas)draw({frame:false});
           if(selectedId)showConceptDetails(byId(selectedId));
         },
-        onOnboardingComplete:()=>markOnboardingSeen(),
-        onSkipOnboarding:()=>markOnboardingSeen()
+        onOnboardingComplete:()=>{markOnboardingSeen();guideController?.render();},
+        onSkipOnboarding:()=>{markOnboardingSeen();guideController?.render();},
+        onStageChange:(stage,correct)=>{
+          const title=$("#otto-coach-title"),line=$("#otto-coach-line");
+          if(!title||!line)return;
+          const scripts={
+            choose:["What would you like to discover?","Pick a mission. I’ll help you find your starting point, one idea at a time."],
+            rate:["How familiar is this idea?","No pressure to know everything. A quick self-rating is enough to start."],
+            check:["A tiny knowledge check.","Try one question if you like. You can skip it and keep exploring."],
+            feedback:correct?["Nice reasoning!","One good answer is a start. We’ll keep discovering what you know."]:
+              ["An interesting clue!","That’s a useful place to explore next. We’ll check the foundations together."],
+            results:["Your journey starts here.","Your answers suggest a path, but you can explore wherever curiosity takes you."]
+          };
+          const copy=scripts[stage]||scripts.choose;
+          title.textContent=copy[0];line.textContent=copy[1];
+        }
       });
     }else{
       console.warn("[Research Atlas] Diagnostic module unavailable; the rest of the Atlas remains usable.");
@@ -842,7 +881,7 @@ async function initialise() {
       $("#tab-diagnostic").disabled=true;
       markOnboardingSeen();
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();firstRunLanding();return;
@@ -894,6 +933,7 @@ $("#resume-learning").addEventListener("click",continueRecommendedPath);
 $("#home-continue").addEventListener("click",continueRecommendedPath);
 $("#home-learn").addEventListener("click",()=>setActiveView("learn"));
 $("#home-research").addEventListener("click",()=>setActiveView("paths"));
+$("#brand-home").addEventListener("click",event=>{event.preventDefault();setActiveView("home");});
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));

@@ -16,6 +16,7 @@ class ElementStub {
     this.clientWidth=1100;this.clientHeight=500;this.innerHTML="";this.hidden=false;
     this.value="";this.disabled=false;this.children=[];this.dataset={};this.handlers={};
     this.style={setProperty() {}};
+    const classes=new Set();this.classList={add:x=>classes.add(x),remove:x=>classes.delete(x),contains:x=>classes.has(x),toggle:(x,on)=>{if(on===undefined)on=!classes.has(x);if(on)classes.add(x);else classes.delete(x);return on;}};
   }
   addEventListener(name,fn){this.handlers[name]=fn;}
   setAttribute(name,value){this[name]=value;}
@@ -23,7 +24,7 @@ class ElementStub {
   append(...children){this.children.push(...children);}
   replaceChildren(...children){this.children=children;}
   querySelectorAll(){return [];}
-  querySelector(){return null;}
+  querySelector(){return new ElementStub();}
   closest(){return null;}
   focus(){}
   scrollIntoView(){}
@@ -36,12 +37,13 @@ const selectors=[
   "#pilot-cards","#learning-studio","#learning-studio-title","#lesson-content","#close-learning-studio","#open-learning-unit","#lesson-submit","#lesson-concept-back",
   "#atlas-tabs","#dashboard","#home-panel","#diagnostic-panel","#paths-panel","#library-panel","#explore-panel","#learn-panel",
   "#tab-diagnostic","#home-continue","#home-learn","#home-research",
+  "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 const document={
-  activeElement:null,
+  activeElement:null,body:new ElementStub(),
   querySelector:selector=>elements.get(selector)||new ElementStub(),
   createElement:()=>new ElementStub(),
   createElementNS:()=>new ElementStub(),
@@ -74,11 +76,25 @@ const context=vm.createContext({
   setTimeout:fn=>fn()
 });
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
+vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("app.js","utf8"),context);
 await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
+assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Guided home mounts instead of classic dashboard");
+assert.match(elements.get("#otto-guide").innerHTML,/OTTO · YOUR COSMIC GUIDE/,"The mascot is visible in the primary home experience");
+assert.match(elements.get("#otto-guide").innerHTML,/Continue my mission/,"A single primary learning action is shown");
+const route=run('guideController.plan()');
+assert.ok(route.steps.length>=2 && route.steps.length<=5,"Mission path has a compact number of real concept stops");
+for(let i=1;i<route.steps.length;i++){
+  const target=curriculum.concepts.find(c=>c.id===route.steps[i].id);
+  assert.ok(target.prerequisites.some(e=>e.kind==="necessary"&&e.id===route.steps[i-1].id),"Adjacent mission stops are actual necessary dependencies");
+}
+run('guideController.enter(guideController.plan().steps[0].id)');
+assert.ok(JSON.parse(stored.get("research-atlas-otto-visited-v1")).includes(route.steps[0].id),"Visited navigation progress is persisted separately from mastery");
+assert.match(elements.get("#otto-guide").innerHTML,/Visiting a stop does not establish mastery/,"Mission progress is never claimed as mastery");
+
 // Exercise the first-run router independently of the module-unavailable fallback used by this mock.
 stored.delete("research-atlas-onboarding-seen-v1");
 run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false})};firstRunLanding()');
@@ -170,4 +186,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: diagnostic-first onboarding, map-first home, focused tabs, adaptive practice, graph navigation, cross-domain jumps, and mocked camera framing.");
+console.log("Passed: mascot-led mission home, genuine prerequisite-linked stops, separate visited state, diagnostic-first onboarding, full graph fallback, adaptive practice, and mocked 3D navigation.");
