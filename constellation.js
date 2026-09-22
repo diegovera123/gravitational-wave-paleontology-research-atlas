@@ -106,7 +106,7 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    stage="macro";chapterId=c.id;macroId=id;topicId=null;render();}
  function openTopic(id){const t=byTopic.get(id);if(!t)return;
    stage="topic";macroId=t.macroId;chapterId=macroGroup.get(macroId)?.id||null;topicId=id;render();}
- function back(){if(!detail.hidden){detail.hidden=true;selectedId=null;return;}
+ function back(){if(!detail.hidden){detail.hidden=true;selectedId=null;onConceptSelected(null);return;}
    if(stage==="topic")openMacro(macroId);
    else if(stage==="macro")openChapter(chapterId);
    else openOverview();}
@@ -123,7 +123,6 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    const references=[...new Set((c.researchReferences||[]).map(ref=>sourcesById.get(ref)).filter(x=>x&&safeUrl(x.url)))];
    const direct=safeUrl(c.resource);
    const question=questionByConcept.get(id);
-   const related=researchQuestions.filter(q=>(q.conceptIds||[]).includes(id)).slice(0,3);
    const links=edges=>edges.map(edge=>
      '<button type="button" class="constellation-related" data-related="'+esc(edge.id)+'">'+
      esc(byConcept.get(edge.id).title)+' ↗</button>').join("");
@@ -134,8 +133,8 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
      '<h3>'+esc(c.title)+'</h3>'+
      '<p>'+esc(c.whyItMatters||c.researchApplication||"Explore this scientific idea and its research connections.")+'</p>'+
      '<section class="constellation-unit-block"><h4>Understand this idea</h4>'+
-     '<p>'+esc(c.researchApplication||c.whyItMatters||"Explore this scientific concept.")+'</p>'+
-     '<div class="constellation-objectives">'+(c.learningObjectives||[]).map(o=>'<p>↳ '+esc(o)+'</p>').join("")+'</div></section>'+
+     '<p>'+esc(c.researchApplication||c.whyItMatters||"Explore this scientific concept.")+'</p></section>'+
+     '<section class="constellation-unit-block"><h4>Learning objectives</h4><ol class="constellation-objectives">'+(c.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol></section>'+
      '<section class="constellation-unit-block"><h4>Necessary background</h4>'+
      (necessary.length?'<div class="constellation-related-list">'+links(necessary)+'</div>':'<p>No direct required prerequisites are listed at this learning depth.</p>')+
      '<small>These are suggested educational dependencies. You may open any concept at any time.</small></section>'+
@@ -158,15 +157,11 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
          (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Additional public learning resource ↗</a>':'')+
        '</div>':'<p>There is no verified public resource link mapped to this concept yet.</p>')+
      '</section>'+
-     (related.length?'<details class="constellation-unit-more"><summary>Connected research questions</summary><div class="constellation-related-list">'+
-       related.map(q=>'<button type="button" data-question-id="'+esc(q.id)+'" class="constellation-related">'+esc(q.title)+' ↗</button>').join("")+
-       '</div></details>':'')+
+     '<section class="constellation-unit-block"><h4>100 progressive guided practice prompts</h4><div id="constellation-guided-practice"></div></section>'+
+     '<section class="constellation-unit-block"><h4>Discover more research papers</h4><div id="constellation-literature"></div></section>'+
      '<div id="constellation-unit-check" aria-live="polite"></div>';
    detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;selectedId=null;onConceptSelected(null);});
    detail.querySelectorAll("[data-related]").forEach(b=>b.addEventListener("click",()=>showConcept(b.dataset.related)));
-   detail.querySelectorAll("[data-question-id]").forEach(b=>b.addEventListener("click",()=>{
-     showQuestion(researchQuestions.find(q=>q.id===b.dataset.questionId));
-   }));
    if(hasLesson(id)){
      detail.querySelector("#constellation-lesson").addEventListener("click",()=>openLesson(id));
      detail.querySelector("#constellation-drill").addEventListener("click",()=>startDrill(id));
@@ -174,6 +169,8 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
      if(question)detail.querySelector("#constellation-check").addEventListener("click",()=>renderQuickCheck(question));
      if(hasPractice(id))detail.querySelector("#constellation-practice").addEventListener("click",()=>startPractice(id));
    }
+   root.AtlasGuidedPractice?.mount({host:detail.querySelector("#constellation-guided-practice"),concept:c,concepts});
+   root.AtlasLiterature?.mount({host:detail.querySelector("#constellation-literature"),concept:c});
    onConceptSelected(id);
    detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});
  }
@@ -201,7 +198,7 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
  }
  function showQuestion(q){
    if(!q)return;
-   openOverview();
+   openOverview();onConceptSelected(null);
    detail.hidden=false;
    detail.innerHTML='<div class="constellation-detail-top"><span class="focus-eyebrow">RESEARCH QUESTION</span>'+
      '<button type="button" id="constellation-close-detail" class="constellation-quiet">Close ✕</button></div>'+
