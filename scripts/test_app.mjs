@@ -24,7 +24,7 @@ class ElementStub {
   append(...children){this.children.push(...children);}
   replaceChildren(...children){this.children=children;}
   querySelectorAll(){return [];}
-  querySelector(){return new ElementStub();}
+  querySelector(selector){return elements.get(selector)||new ElementStub();}
   closest(){return null;}
   focus(){}
   scrollIntoView(){}
@@ -38,6 +38,7 @@ const selectors=[
   "#atlas-tabs","#dashboard","#home-panel","#diagnostic-panel","#paths-panel","#library-panel","#explore-panel","#learn-panel",
   "#tab-diagnostic","#home-continue","#home-learn","#home-research",
   "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
+  "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
@@ -77,12 +78,16 @@ const context=vm.createContext({
 });
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
+vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
 vm.runInContext(await fs.readFile("app.js","utf8"),context);
 await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
-assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Guided home mounts instead of classic dashboard");
+assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Otto mission fallback remains mounted");
+assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Domain-first homepage replaces guide as the default");
+assert.equal(elements.get("#focus-domains").children.length,navigation.macros.length,"Focused homepage offers all domains");
+assert.equal(elements.get("#focus-concepts").children.length,6,"Focused homepage shows six concepts at once");
 assert.match(elements.get("#otto-guide").innerHTML,/OTTO · YOUR COSMIC GUIDE/,"The mascot is visible in the primary home experience");
 assert.match(elements.get("#otto-guide").innerHTML,/Continue my mission/,"A single primary learning action is shown");
 const route=run('guideController.plan()');
@@ -186,4 +191,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: mascot-led mission home, genuine prerequisite-linked stops, separate visited state, diagnostic-first onboarding, full graph fallback, adaptive practice, and mocked 3D navigation.");
+console.log("Passed: domain-first homepage, compact concept cards, Otto fallback, diagnostic-first onboarding, optional knowledge graph, adaptive practice, and mocked 3D navigation.");
