@@ -60,5 +60,7 @@ assert.equal(host.querySelector("#focus-quiz").hidden,false);
 home.selectConcept("binary-population-synthesis");
 assert.match(detail.innerHTML,/Exercise idea/,"Ungraded practice prompt is still available when no authored bank item exists");
 assert.ok(!detail.innerHTML.includes("Start 5-question drill"),"Does not promise non-existent adaptive drills");
-assert.ok(host.querySelector("#focus-graph-toggle")!==null,"Graph remains optional in page markup");
+const markup=await fs.readFile("index.html","utf8");
+assert.ok(markup.includes('<details id="focus-graph-toggle"')&&markup.split('id="dashboard-network-map"').length===2,
+  "The optional graph appears once in a native disclosure element");
 console.log("Passed: goal-related domains, compact cards, typed prerequisites, downstream links, real drills, one-question checks, and no invented practice.");
