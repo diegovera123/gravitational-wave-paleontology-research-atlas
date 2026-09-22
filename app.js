@@ -1007,12 +1007,15 @@ async function initialise() {
       fetch("knowledge-graph/learning-units.json"),
       fetch("knowledge-graph/adaptive-items.json"),
       fetch("knowledge-graph/practice-sets.json"),
+      fetch("knowledge-graph/deep-explanations.json"),
       fetch("knowledge-graph/diagnostic-questions.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,deepData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
+    if(!window.AtlasConceptInsight)throw Error("The concept explanation module did not load.");
+    window.AtlasConceptInsight.load(deepData,concepts);
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
     researchQuestions=questionsData.questions;
     if(unitsData.schemaVersion!==1||!Array.isArray(unitsData.units))throw Error("Unsupported learning units.");
