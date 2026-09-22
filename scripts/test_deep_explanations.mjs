@@ -19,7 +19,9 @@ for(const lesson of data.units){
  assert.ok(lesson.example.title&&lesson.example.text.length>=170,"An independently written illustrative example is required");
  assert.ok(lesson.boundary.length>=110,"State where the model fails or becomes conditional");
 }
-const context={window:{},console};vm.runInNewContext(await fs.readFile("concept-insight.js","utf8"),context);
+const context={window:{},console};
+vm.runInNewContext(await fs.readFile("concept-figures.js","utf8"),context);
+vm.runInNewContext(await fs.readFile("concept-insight.js","utf8"),context);
 const insight=context.window.AtlasConceptInsight;
 insight.load(data,curriculum);assert.equal(insight.deepCount(),12);
 for(const item of data.units){
@@ -27,7 +29,8 @@ for(const item of data.units){
  assert.ok(markup.includes('data-deep-explanation="'+item.id+'"'),"Deep content used rather than generic orientation");
  assert.equal((markup.match(/class="concept-deep-step"/g)||[]).length,item.steps.length);
  assert.ok(markup.indexOf("concept-deep-opening")<markup.indexOf("concept-deep-example"),"Scenario precedes worked example");
- assert.ok(markup.indexOf("concept-deep-example")<markup.indexOf("concept-schematic"),"Explanatory diagram follows concrete reasoning");
+ assert.ok(markup.indexOf("concept-deep-example")<markup.indexOf("physics-figure"),"Topic-specific physical diagram follows the worked example");
+ assert.ok(markup.includes('role="img"')&&markup.includes("not a measurement"),"Diagram uses accessible SVG and explicitly disclaims empirical status");
 }
 const shallow=curriculum.find(x=>!seen.has(x.id));
 assert.ok(insight.render(shallow).includes("has not yet been authored"),"Unfinished topics are labeled rather than given invented deep instruction");
