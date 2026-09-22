@@ -43,9 +43,9 @@ const selectors=[
   "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
   "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
   "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
-  "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
+  "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-detail-shade","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
-  "#practice-summary","#practice-area-filter","#practice-search","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
+  "#practice-summary","#practice-area-filter","#practice-search","#practice-concept-picker","#practice-open-concept","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
@@ -88,6 +88,7 @@ vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
 vm.runInContext(await fs.readFile("practice-catalog.js","utf8"),context);
 vm.runInContext(await fs.readFile("guided-practice.js","utf8"),context);
 vm.runInContext(await fs.readFile("literature-search.js","utf8"),context);
+vm.runInContext(await fs.readFile("concept-insight.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
 vm.runInContext(await fs.readFile("constellation.js","utf8"),context);
@@ -177,6 +178,13 @@ for(let i=0;i<12;i++){
 assert.equal(seen.size,12,"Full practice set spans twelve authored questions");
 assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Deep session completes with a component-by-component summary");
 assert.ok(stored.get("research-atlas-adaptive-evidence-v1").includes("detection-selection"),"Cross-field practice evidence is persisted under the same browser-local history key");
+run('openConceptPractice("linearized-gravity")');
+assert.equal(elements.get("#practice-panel").hidden,false,"A graph concept without a graded bank opens Practice");
+assert.equal(elements.get("#practice-selected-title").textContent,"Linearized Gravity");
+assert.match(elements.get("#practice-guided-prompts").innerHTML,/100 PROGRESSIVE GUIDED RESEARCH PROMPTS/,"Guided work is actually available in Practice for every concept");
+assert.match(elements.get("#adaptive-panel").innerHTML,/has not been added/,"No invented scored item bank is advertised");
+assert.equal(elements.get("#practice-case-studies").hidden,true,"Ungraded concept route does not show irrelevant authored cases");
+run('closePracticeUnit()');
 
 assert.match(elements.get("#lesson-content").innerHTML,/From position to velocity/,"Worked example is rendered");
 assert.match(elements.get("#lesson-content").innerHTML,/Defining the Derivative/,"Source and provenance are displayed");
@@ -199,7 +207,10 @@ assert.match(elements.get("#constellation-detail").innerHTML,/Supernova Natal Ki
 assert.match(elements.get("#constellation-detail").innerHTML,/Necessary background/,"Prerequisites live inside the opened learning unit");
 assert.match(elements.get("#constellation-detail").innerHTML,/Research resources/,"Concept-specific resources live inside Knowledge Graph");
 assert.match(elements.get("#constellation-detail").innerHTML,/Learning objectives/,"Concept learning objectives appear as their own section");
-assert.match(elements.get("#constellation-detail").innerHTML,/100 progressive guided practice prompts/,"Each concept links to its own 100 progressive prompts");
+assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/100 progressive guided practice prompts|constellation-guided-practice|Try an exercise/,"100-step trainer and exercise text do not appear in the graph drawer");
+assert.match(elements.get("#constellation-detail").innerHTML,/Intuition &amp; visuals|Intuition & visuals/,"Concept drawer has an intuition and visuals tab");
+assert.match(elements.get("#constellation-detail").innerHTML,/Conceptual schematic/,"Concept drawer includes an explanatory schematic");
+assert.equal(elements.get("#constellation-detail-shade").hidden,false,"Drawer opens over constellation, not below it");
 assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/Connected research questions/,"The duplicate concept-level question group is gone");
 run('constellation.back()');
 assert.equal(run('constellation.snapshot().selectedId'),null,"Back closes current concept");

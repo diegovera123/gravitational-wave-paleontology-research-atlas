@@ -13,7 +13,8 @@ const links=new Map(navigation.macros.map(m=>[m.id,{macroId:m.id,topicId:null}])
 navigation.topics.forEach(t=>t.conceptIds.forEach(id=>links.set(id,{macroId:t.macroId,topicId:t.id})));
 const nodes=new Map();
 class Stub{
- constructor(id){this.id=id;this.innerHTML="";this.textContent="";this.hidden=false;this.disabled=false;this.children=[];this.handlers={};this.dataset={};this.style={setProperty(){}};}
+ constructor(id){this.id=id;this.innerHTML="";this.textContent="";this.hidden=false;this.disabled=false;this.children=[];this.handlers={};this.dataset={};this.style={setProperty(){}};
+ const classes=new Set();this.classList={add:x=>classes.add(x),remove:x=>classes.delete(x),contains:x=>classes.has(x),toggle:x=>{if(classes.has(x)){classes.delete(x);return false;}classes.add(x);return true;}};}
  get clientWidth(){return 1100;}get clientHeight(){return 580;}
  addEventListener(type,handler){this.handlers[type]=handler;}
  appendChild(child){this.children.push(child);return child;}
@@ -21,11 +22,12 @@ class Stub{
  setAttribute(){}
  querySelector(selector){return element(selector);}
  querySelectorAll(){return [];}
- scrollIntoView(){}closest(){return null;}
+ scrollIntoView(){}closest(){return null;}focus(){}
 }
 const element=id=>{if(!nodes.has(id))nodes.set(id,new Stub(id));return nodes.get(id);};
 const document={createElement:tag=>new Stub(tag)};
 const window={matchMedia:()=>({matches:true})};
+vm.runInNewContext(await fs.readFile("concept-insight.js","utf8"),{window,document,console,URL});
 vm.runInNewContext(await fs.readFile("constellation.js","utf8"),{
  window,document,console,URL,setTimeout:fn=>fn()
 });
@@ -45,7 +47,7 @@ const ui=window.AtlasConstellation.mount({
  openConcept:id=>actions.push("concept:"+id),
  openLesson:id=>actions.push("lesson:"+id),
  startDrill:id=>actions.push("drill:"+id),
- hasLesson:id=>id==="supernova-kicks"
+ hasLesson:id=>id==="supernova-kicks",startPractice:id=>actions.push("practice:"+id)
 });
 assert.equal(ui.snapshot().stage,"overview");
 assert.equal(element("#constellation-choices").children.length,5,"Starts with five groups, not 133 points");
@@ -71,13 +73,21 @@ assert.match(element("#constellation-detail").innerHTML,/Supernova Natal Kicks/)
 assert.match(element("#constellation-detail").innerHTML,/Necessary background/,"Unit includes prerequisites");
 assert.match(element("#constellation-detail").innerHTML,/Research resources/,"Unit includes concept-specific links");
 assert.match(element("#constellation-detail").innerHTML,/Learning objectives/,"Concept offers explicit objectives as a distinct section");
-assert.match(element("#constellation-detail").innerHTML,/100 progressive guided practice prompts/,"Every concept exposes progressive work");
+assert.doesNotMatch(element("#constellation-detail").innerHTML,/100 progressive guided practice prompts|guided-working/,"Guided written work is absent from Knowledge Graph");
+assert.match(element("#constellation-detail").innerHTML,/Intuition &amp; visuals|Intuition & visuals/,"Concept information opens in tabbed drawer");
+assert.match(element("#constellation-detail").innerHTML,/How can one stellar explosion change an entire binary orbit/,"Intuitive physical explanation is shown");
+assert.match(element("#constellation-detail").innerHTML,/Conceptual schematic/,"Diagram is explicitly illustrative");
+assert.equal(element("#constellation-detail-shade").hidden,false,"Drawer backdrop opens on concept selection");
 assert.doesNotMatch(element("#constellation-detail").innerHTML,/Connected research questions/,"No duplicate inline question group");
-assert.match(element("#constellation-detail").innerHTML,/Try an exercise|Read and practise/,"Unit includes practice");
-element("#constellation-lesson").handlers.click();
-assert.deepEqual(actions,["lesson:supernova-kicks"],"Authored lesson opens inside graph");
-element("#constellation-drill").handlers.click();
-assert.deepEqual(actions,["lesson:supernova-kicks","drill:supernova-kicks"],"Practice is launched from the concept unit");
+assert.doesNotMatch(element("#constellation-detail").innerHTML,/Try an exercise|Quick conceptual check/,"No graded or guided problems embedded in Graph drawer");
+element("#constellation-open-practice").handlers.click();
+assert.deepEqual(actions,["practice:supernova-kicks"],"All written work routes into the dedicated Practice section");
+ui.showConcept("supernova-kicks");
+element("#constellation-expand-detail").handlers.click({currentTarget:{setAttribute(){},textContent:""}});
+assert.equal(element("#constellation-detail").classList.contains("is-expanded"),true,"Concept drawer can expand");
+element("#constellation-close-detail").handlers.click();
+assert.equal(element("#constellation-detail-shade").hidden,true,"Closing drawer returns to graph");
+ui.showConcept("supernova-kicks");
 ui.back();assert.equal(ui.snapshot().selectedId,null,"First back closes concept preview");
 ui.back();assert.equal(ui.snapshot().stage,"macro","Next back opens containing region");
 ui.back();assert.equal(ui.snapshot().stage,"chapter");
@@ -86,9 +96,8 @@ ui.showConcept("probability-distributions");
 assert.equal(ui.snapshot().macroId,"calculus","Cross-domain concept opens its actual region");
 assert.equal(ui.snapshot().selectedId,"probability-distributions");
 ui.showConcept("functions");
-assert.match(element("#constellation-detail").innerHTML,/Quick conceptual|conceptual check/,"Existing authored one-question check appears in nonpilot unit");
-element("#constellation-check").handlers.click();
-assert.match(element("#constellation-unit-check").innerHTML,/A function assigns each allowed input/,"Original short conceptual question displays in the graph");
+assert.match(element("#constellation-detail").innerHTML,/Open practice for this concept/,"Concept without a graded bank still has a Practice route");
+assert.doesNotMatch(element("#constellation-detail").innerHTML,/data-answer|constellation-guided-practice/,"No inline quiz or 100-prompt trainer is mounted in the graph");
 
 assert.ok(concepts.every(c=>links.has(c.id)),"Every existing concept stays navigable");
 ui.showQuestion({title:"Research question",summary:"Test",activity:"Try it",conceptIds:["supernova-kicks"]});
@@ -110,4 +119,4 @@ fallback.initialize();
 assert.equal(fallback.snapshot().has3D,false);
 assert.equal(element("#constellation-fallback").hidden,false);
 assert.equal(fallback.scene().items.length,5,"No-WebGL fallback still exposes every research cluster");
-console.log("Passed: three-tab Atlas, lazy 3D hierarchy, concept context with standalone pilot-practice links and in-graph short checks, research links and accessible no-WebGL fallback.");
+console.log("Passed: 3D navigation, intuitive tabbed and expandable concept drawer, Practice-only exercise routing, curated references and no-WebGL fallback (DOM stub).");
