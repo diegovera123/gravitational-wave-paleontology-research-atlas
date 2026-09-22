@@ -77,6 +77,8 @@ const NOTES={
    visual:"chirp"}
 };
 function visual(kind){
+ const scientific=root.AtlasScientificFigures?.render?.(kind);
+ if(scientific)return scientific;
  const label={
  wave:["Flat-spacetime reference","Small metric perturbation","Propagating weak wave"],
  kick:["Pre-event orbital velocity","Directional natal kick","New relative orbit"],
