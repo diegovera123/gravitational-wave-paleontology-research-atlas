@@ -132,8 +132,15 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
      event.currentTarget?.setAttribute?.("aria-pressed",String(expanded));
      event.currentTarget.textContent=expanded?"Exit expanded view ↙":"Expand view ↗";
    });
-   detail.querySelectorAll("[data-concept-tab]").forEach(button=>
-     button.addEventListener("click",()=>switchTab(button.dataset.conceptTab)));
+   detail.querySelectorAll("[data-concept-tab]").forEach((button,index,all)=>{
+     button.addEventListener("click",()=>switchTab(button.dataset.conceptTab));
+     button.addEventListener("keydown",event=>{
+       const offset=event.key==="ArrowRight"?1:event.key==="ArrowLeft"?-1:0;
+       const next=event.key==="Home"?0:event.key==="End"?all.length-1:offset?(index+offset+all.length)%all.length:-1;
+       if(next<0)return;
+       event.preventDefault();switchTab(all[next].dataset.conceptTab);all[next].focus();
+     });
+   });
    detail.querySelectorAll("[data-related]").forEach(button=>
      button.addEventListener("click",()=>showConcept(button.dataset.related)));
    detail.querySelector("#constellation-lesson")?.addEventListener("click",()=>{
