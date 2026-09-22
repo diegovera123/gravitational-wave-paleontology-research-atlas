@@ -142,7 +142,7 @@ function scrollToExplorer() {
   $("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 
-const TAB_NAMES=["home","explore"];
+const TAB_NAMES=["home","explore","practice"];
 let homeDiagnosticVisible=false;
 
 function onboardingSeen(){
@@ -187,12 +187,12 @@ function mountFocusedHome(diagnosticQuestions){
       getStudied:()=>[...studiedIds],
       openConcept:id=>{openConcept(id,true);scrollToExplorer();},
       openLesson:id=>openLearningUnit(id),
-      startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
+      startDrill:id=>openPracticeUnit(id,"practice"),
       openDiagnostic:()=>diagnosticController?.open(),
       openMap:()=>{constellation?.openOverview();setActiveView("explore");$("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});},
       openRegion:id=>{constellation?.openMacro(id);setActiveView("explore");},
       openResearch:()=>{setActiveView("explore");$("#constellation-research").open=true;},
-      openAllPractice:()=>setActiveView("explore"),
+      openAllPractice:()=>setActiveView("practice"),
       openLibrary:()=>setActiveView("explore")
     });
     $("#home-panel").classList.add("focus-ready");
@@ -209,6 +209,7 @@ function updateOtto(){
  if(activeView==="home")target.textContent=homeDiagnosticVisible?
    "Rate what you can explain today. A quick check is only a starting point.":
    "Open the graph to explore the field. The starting-point diagnostic is optional.";
+ else if(activeView==="practice")target.textContent="Choose a pilot practice set, check each explanation, and revisit objectives due for review. Short quizzes offer formative feedback.";
  else if(lesson)target.textContent="Studying "+lesson+"? Read the explanation, try the worked example, then practise when ready.";
  else if(selected)target.textContent="This concept's background, explanations, sources and practice are all here. Follow a prerequisite whenever you need it.";
  else target.textContent="Click a large cluster to see its topics, then open a concept. Use Back to zoom out.";
@@ -234,10 +235,12 @@ function firstRunLanding(){
 function setActiveView(view,options={}){
   if(view==="diagnostic")homeDiagnosticVisible=true;
   else if(view==="home")homeDiagnosticVisible=false;
-  if(["paths","library","learn"].includes(view))view="explore";
+  if(["paths","library"].includes(view))view="explore";
+  if(view==="learn")view="practice";
   if(view==="diagnostic")view="home";
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
+  if(view!=="explore")$("#learning-studio").hidden=true;
   document.body?.classList?.toggle?.("mission-home",view==="home");
   document.body?.classList?.toggle?.("constellation-mode",view==="explore");
   for(const name of TAB_NAMES){
@@ -246,6 +249,7 @@ function setActiveView(view,options={}){
     tab.tabIndex=name===view?0:-1;
   }
   $("#dashboard").hidden=view!=="home";
+  if(view==="practice"&&learningUnits.size)renderPracticeHub();
   $("#diagnostic-panel").hidden=view!=="home"||!homeDiagnosticVisible;
   $("#simple-home").hidden=view!=="home"||homeDiagnosticVisible;
   $("#focus-home").hidden=true;
@@ -397,6 +401,38 @@ function renderFeaturedUnits(){
     }
   }
 }
+function renderPracticeHub(){
+  const host=$("#practice-unit-cards");if(!host)return;
+  host.replaceChildren();
+  for(const unit of learningUnits.values()){
+    const concept=byId(unit.id);
+    const attempts=unit.objectives.reduce((sum,o)=>sum+window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).attempts,0);
+    const card=button("",()=>openPracticeUnit(unit.id),"practice-unit-card"+(unit.id===openUnitId?" is-selected":""));
+    card.setAttribute("aria-pressed",String(unit.id===openUnitId));
+    card.innerHTML='<span class="practice-card-kicker">FIVE-QUESTION PRACTICE</span>'+
+      '<strong>'+html(concept.title)+'</strong><span>'+html(unit.summary)+'</span>'+
+      '<small>'+(attempts?attempts+" previous objective responses":"Not attempted yet")+' · Open practice ↗</small>';
+    host.appendChild(card);
+  }
+}
+function openPracticeUnit(id,mode=null){
+  if(!learningUnits.has(id))return;
+  openUnitId=id;
+  $("#learning-studio").hidden=true;
+  setActiveView("practice",{scroll:false});
+  $("#practice-active").hidden=false;
+  $("#practice-selected-title").textContent=byId(id).title;
+  renderPracticeHub();
+  if(mode)startAdaptiveQuiz(mode);
+  else renderAdaptivePanel();
+  $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+}
+function closePracticeUnit(){
+  openUnitId=null;
+  $("#practice-active").hidden=true;
+  renderPracticeHub();
+  updateOtto();
+}
 function openLearningUnit(id){
   if(!learningUnits.has(id))return;
   openUnitId=id;openConcept(id,true);
@@ -445,7 +481,7 @@ function updateReviewBadge(){
   for(const x of due){
     if(shown.has(x.unitId))continue;shown.add(x.unitId);
     const b=button("Review "+byId(x.unitId).title+" ↗",()=>{
-      openLearningUnit(x.unitId);startAdaptiveQuiz("review");
+      openPracticeUnit(x.unitId,"review");
     },"adaptive-due-button");
     host.appendChild(b);
   }
@@ -479,7 +515,7 @@ function answerAdaptiveQuiz(choice){
   const record={unitId:s.unitId,itemId:item.id,objectiveId:item.objectiveId,difficulty:item.difficulty,
     correct:choice===item.correctIndex,at:Date.now()};
   s.results.push(record);adaptiveHistory.push(record);
-  saveAdaptiveHistory();updateReviewBadge();renderAdaptivePanel();
+  saveAdaptiveHistory();updateReviewBadge();renderPracticeHub();renderAdaptivePanel();
 }
 function renderAdaptivePanel(){
   const host=$("#adaptive-panel");if(!host||!openUnitId)return;
@@ -508,9 +544,9 @@ function renderAdaptivePanel(){
       '<p>This brief check describes this attempt only. It does not certify proficiency or automatically unlock a level. Review the worked example before retrying if needed.</p>'+
       '<ul class="practice-outcomes">'+summary+'</ul>'+
       '<button id="practice-again" type="button" class="lesson-submit">Practise again with a new route →</button>'+
-      '<button id="practice-back" type="button" class="lesson-back">Back to learning units</button>';
+      '<button id="practice-back" type="button" class="lesson-back">Back to practice sets</button>';
     $("#practice-again").addEventListener("click",()=>startAdaptiveQuiz("practice"));
-    $("#practice-back").addEventListener("click",closeLearningUnit);
+    $("#practice-back").addEventListener("click",closePracticeUnit);
     return;
   }
   const item=session.current;
@@ -561,11 +597,11 @@ function renderLearningUnit(){
     '<p>Original Atlas explanations and illustrative examples. Public sources are linked for further verification; external textbook and paper texts are not reproduced.</p>'+
     '<button type="button" id="lesson-concept-back" class="lesson-back">View this concept in the graph ↗</button></div>'+
     '<div class="lesson-grid"><div><section class="lesson-objectives"><span class="lesson-kicker">LEARNING OBJECTIVES</span>'+objectives+'</section>'+
-    sections+worked+activity+'<section class="lesson-assessment" id="adaptive-panel"><p>Preparing practice…</p></section></div>'+
+    sections+worked+activity+'<section class="lesson-worked lesson-practice-link"><span class="lesson-kicker">PRACTICE</span><h3>Ready to apply this?</h3><p>Open this concept’s dedicated practice set or browse due reviews.</p><button type="button" id="lesson-go-practice" class="lesson-submit">Practise this concept →</button></section></div>'+
     '<aside class="lesson-research"><section><span class="lesson-kicker">RESEARCH APPLICATION</span>'+para(unit.researchConnection)+'</section>'+
     '<section><span class="lesson-kicker">PUBLIC SOURCES & PROVENANCE</span><ul>'+refs+'</ul></section>'+
     '<section><span class="lesson-kicker">ABOUT YOUR PROGRESS</span><p>Adaptive practice provides formative evidence and suggested review, not a verified proficiency estimate. Your self-reported understanding marker stays separate from practice history.</p></section></aside></div>';
-  renderAdaptivePanel();
+  $("#lesson-go-practice").addEventListener("click",()=>openPracticeUnit(unit.id));
   $("#lesson-concept-back").addEventListener("click",returnFromLearningToGraph);
 }
 
@@ -954,7 +990,7 @@ async function initialise() {
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
-        startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
+        startDrill:id=>openPracticeUnit(id,"practice"),
         hasLesson:id=>learningUnits.has(id)
       });
     }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
@@ -1001,6 +1037,12 @@ $("#otto-helper-close").addEventListener("click",()=>{
  $("#otto-helper-message").hidden=true;$("#otto-helper-button").setAttribute("aria-expanded","false");
 });
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
+$("#practice-return-graph").addEventListener("click",()=>{
+  const id=openUnitId;
+  closePracticeUnit();
+  if(id)openConcept(id,true);
+  scrollToExplorer();
+});
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
 $("#reset-view").addEventListener("click",()=>{if(displayMode==="3d")graph?.zoomToFit(lowerMotion()?0:700,72);});

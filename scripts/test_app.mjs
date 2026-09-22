@@ -43,11 +43,11 @@ const selectors=[
   "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
   "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
-  "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
+  "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
-for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
+for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
 const document={
   activeElement:null,body:new ElementStub(),
   querySelector:selector=>elements.get(selector)||new ElementStub(),
@@ -91,7 +91,7 @@ await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
-assert.equal(run('TAB_NAMES.length'),2,"Exactly two main destinations");
+assert.equal(run('TAB_NAMES.length'),3,"Home, Knowledge Graph, and Practice are the three main destinations");
 assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Existing curriculum controller stays available for deep links");
 assert.equal(elements.get("#focus-domains").children.length,5,"All research sections remain in the existing curriculum");
 assert.equal(elements.get("#constellation-research-questions").children.length,questions.questions.length,"Research questions move inside Knowledge Graph");
@@ -106,9 +106,10 @@ assert.equal(elements.get("#simple-home").hidden,true,"Simple welcome is hidden 
 run('markOnboardingSeen();setActiveView("home",{scroll:false})');
 assert.equal(elements.get("#simple-home").hidden,false,"Finishing or skipping diagnostic returns to simple Home");
 assert.equal(elements.get("#diagnostic-panel").hidden,true,"Optional diagnostic closes without adding a separate tab");
+run("diagnosticController=null"); // Restore the module-unavailable stub after testing first-run routing.
 assert.equal(elements.get("#paths-panel").hidden,true,"Old research tab remains hidden");
 run('setActiveView("explore",{scroll:false})');
-assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge Graph is the only other top-level view");
+assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge Graph is the second top-level view");
 assert.equal(elements.get("#constellation-shell").hidden,false,"3D graph is visible inside Knowledge Graph");
 assert.equal(scene.nodes.length,6,"New full-screen 3D scene starts with one central node and five research clusters");
 assert.ok(scene.nodes.slice(1).every(node=>node.type==="chapter"),"Only macro clusters appear at first, not all 133 concepts");
@@ -130,7 +131,13 @@ run('openLearningUnit("derivatives")');
 assert.equal(elements.get("#learning-studio").hidden,false,"Learning studio opens");
 assert.equal(elements.get("#explore-panel").hidden,false,"Learning studio remains inside Knowledge Graph");
 assert.equal(elements.get("#constellation-shell").hidden,true,"3D canvas is hidden while reading the selected full unit");
-assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point");
+assert.match(elements.get("#lesson-content").innerHTML,/Practise this concept/,"Graph lesson links to the standalone Practice workspace");
+run('openPracticeUnit("derivatives")');
+assert.equal(elements.get("#practice-panel").hidden,false,"Practice is its own visible top-level destination");
+assert.equal(elements.get("#explore-panel").hidden,true,"Knowledge Graph is hidden while practising");
+assert.equal(elements.get("#learning-studio").hidden,true,"Practice does not overlay the graph learning studio");
+assert.equal(elements.get("#practice-unit-cards").children.length,3,"Practice shows exactly the three authored pilot sets");
+assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point in Practice");
 run('startAdaptiveQuiz()');
 assert.match(elements.get("#adaptive-panel").innerHTML,/1 \/ 5/,"Adaptive quiz starts with an accessible item");
 run('answerAdaptiveQuiz(quizSessions.get("derivatives").current.correctIndex)');
@@ -145,7 +152,9 @@ assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Five-
 
 assert.match(elements.get("#lesson-content").innerHTML,/From position to velocity/,"Worked example is rendered");
 assert.match(elements.get("#lesson-content").innerHTML,/Defining the Derivative/,"Source and provenance are displayed");
-run('closeLearningUnit()');
+run('closePracticeUnit()');
+assert.equal(elements.get("#practice-active").hidden,true,"Finished practice returns to the set chooser");
+run('setActiveView("explore",{scroll:false});openLearningUnit("derivatives");closeLearningUnit()');
 assert.equal(elements.get("#learning-studio").hidden,true,"Learning studio closes without removing atlas");
 run('setActiveView("explore",{scroll:false})');
 clickNode(scene.nodes.find(node=>node.id==="stellar-origins"));
@@ -171,4 +180,4 @@ run('openConcept("linear-momentum",true);scrollToExplorer()');
 assert.equal(run('constellation.snapshot().macroId'),"classical-mechanics","Cross-domain deep links reveal the real containing cluster");
 assert.ok(cameraFits>0,"3D camera framing is invoked");
 
-console.log("Passed: two top-level sections, Home diagnostic, contextual graph learning units, source links, adaptive drills within Graph, research links and lazy 3D navigation (mock DOM).");
+console.log("Passed: three top-level sections, Home diagnostic, contextual graph lessons, separate adaptive Practice and reviews, research links and lazy 3D navigation (mock DOM).");
