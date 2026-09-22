@@ -11,13 +11,21 @@ const CHAPTERS=[
  {id:"research-tools",name:"Foundations & research tools",macros:["calculus","research-practice"],color:"#b49bf0"}
 ];
 const esc=value=>String(value??"").replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
-function mount({host,macros,topics,concepts,locationByConcept,forceGraph,openConcept,openLesson,startDrill,hasLesson}){
+function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson}){
  if(!host)throw Error("3D constellation mount missing");
  const $=sel=>host.querySelector(sel);
  const canvas=$("#constellation-canvas"),detail=$("#constellation-detail"),choices=$("#constellation-choices");
  const byMacro=new Map(macros.map(m=>[m.id,m]));
  const byTopic=new Map(topics.map(t=>[t.id,t]));
  const byConcept=new Map(concepts.map(c=>[c.id,c]));
+ const questionByConcept=new Map(diagnosticQuestions.map(q=>[q.conceptId,q]));
+ const sourcesById=new Map(researchSources.map(source=>[source.id,source]));
+ function safeUrl(value){
+   try{const url=new URL(value,root.location?.href||"https://example.org/");
+     return ["https:","http:"].includes(url.protocol)?url.href:null;
+   }catch{return null;}
+ }
+
  const macroGroup=new Map(CHAPTERS.flatMap(g=>g.macros.map(id=>[id,g])));
  const colorForMacro=id=>macroGroup.get(id)?.color||"#a2b8f0";
  let stage="overview",chapterId=null,macroId=null,topicId=null,selectedId=null,graph=null,renderToken=0;
@@ -104,25 +112,90 @@ function mount({host,macros,topics,concepts,locationByConcept,forceGraph,openCon
    else openOverview();}
  function showConcept(id){
    const c=byConcept.get(id);if(!c)return;
-   // Search and external deep links reveal the actual containing cluster and topic.
    const loc=locationByConcept.get(id);
-   if(loc && id!==selectedId && (loc.macroId!==macroId||loc.topicId!==topicId)){
+   if(loc && (loc.macroId!==macroId||loc.topicId!==topicId)){
      if(loc.topicId)openTopic(loc.topicId);else openMacro(loc.macroId);
    }
    selectedId=id;detail.hidden=false;
-   const req=(c.prerequisites||[]).filter(edge=>edge.kind==="necessary");
-   const required=req.slice(0,4).map(edge=>byConcept.get(edge.id)?.title).filter(Boolean);
-   detail.innerHTML='<div class="constellation-detail-top"><span class="focus-eyebrow">SCIENTIFIC CONCEPT</span>'+
-     '<button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept preview">Close ✕</button></div>'+
-     '<h3>'+esc(c.title)+'</h3><p>'+esc(c.whyItMatters||c.researchApplication||"Explore the scientific concept and its connections.")+'</p>'+
-     (required.length?'<p class="constellation-prereq">Necessary background: '+required.map(esc).join(" · ")+
-       (req.length>4?" · …":"")+'</p>':'')+
-     '<div class="constellation-detail-actions"><button type="button" id="constellation-study" class="focus-primary">Explore this concept →</button>'+
-     (hasLesson(id)?'<button type="button" id="constellation-lesson" class="focus-secondary">Open lesson</button>':'')+'</div>';
-   detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;selectedId=null;});
-   detail.querySelector("#constellation-study").addEventListener("click",()=>openConcept(id));
-   if(hasLesson(id))detail.querySelector("#constellation-lesson").addEventListener("click",()=>openLesson(id));
+   const necessary=(c.prerequisites||[]).filter(e=>e.kind==="necessary"&&byConcept.has(e.id));
+   const useful=(c.prerequisites||[]).filter(e=>e.kind==="useful"&&byConcept.has(e.id));
+   const downstream=concepts.filter(other=>(other.prerequisites||[]).some(e=>e.id===id&&e.kind==="necessary")).slice(0,5);
+   const references=[...new Set((c.researchReferences||[]).map(ref=>sourcesById.get(ref)).filter(x=>x&&safeUrl(x.url)))];
+   const direct=safeUrl(c.resource);
+   const question=questionByConcept.get(id);
+   const related=researchQuestions.filter(q=>(q.conceptIds||[]).includes(id)).slice(0,3);
+   const links=edges=>edges.map(edge=>
+     '<button type="button" class="constellation-related" data-related="'+esc(edge.id)+'">'+
+     esc(byConcept.get(edge.id).title)+' ↗</button>').join("");
+   const relatedSection=(title,edges)=>edges.length?
+     '<details class="constellation-unit-more"><summary>'+title+'</summary><div class="constellation-related-list">'+links(edges)+'</div></details>':"";
+   detail.innerHTML='<div class="constellation-detail-top"><span class="focus-eyebrow">LEARNING UNIT · '+esc(c.unit||"CONCEPT")+'</span>'+
+     '<button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept unit">Close ✕</button></div>'+
+     '<h3>'+esc(c.title)+'</h3>'+
+     '<p>'+esc(c.whyItMatters||c.researchApplication||"Explore this scientific idea and its research connections.")+'</p>'+
+     '<section class="constellation-unit-block"><h4>Understand this idea</h4>'+
+     '<p>'+esc(c.researchApplication||c.whyItMatters||"Explore this scientific concept.")+'</p>'+
+     '<div class="constellation-objectives">'+(c.learningObjectives||[]).map(o=>'<p>↳ '+esc(o)+'</p>').join("")+'</div></section>'+
+     '<section class="constellation-unit-block"><h4>Necessary background</h4>'+
+     (necessary.length?'<div class="constellation-related-list">'+links(necessary)+'</div>':'<p>No direct required prerequisites are listed at this learning depth.</p>')+
+     '<small>These are suggested educational dependencies. You may open any concept at any time.</small></section>'+
+     relatedSection("Useful context",useful)+
+     relatedSection("What this helps you learn next",downstream.map(x=>({id:x.id})))+
+     (hasLesson(id)?
+       '<section class="constellation-unit-block"><h4>Read and practise</h4>'+
+       '<p>This concept has a complete original Atlas learning unit, a worked example, and an authored five-question adaptive practice session.</p>'+
+       '<div class="constellation-detail-actions"><button type="button" id="constellation-lesson" class="focus-primary">Open full learning unit →</button>'+
+       '<button type="button" id="constellation-drill" class="focus-secondary">Start five-question practice →</button></div></section>':
+       '<section class="constellation-unit-block"><h4>Try an exercise</h4><p>'+esc(c.masteryAssessment||"Explain the idea in your own words.")+
+       '</p><small>Open-ended practice prompt; not automatically graded.</small>'+
+       (question?'<button type="button" id="constellation-check" class="focus-secondary">Try one conceptual check →</button>':'')+
+       '</section>')+
+     '<section class="constellation-unit-block"><h4>Research resources</h4>'+
+     (references.length||direct?
+       '<div class="constellation-resource-list">'+references.map(ref=>
+         '<a href="'+esc(safeUrl(ref.url))+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title||ref.citation)+' ↗</a>').join("")+
+         (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Additional public learning resource ↗</a>':'')+
+       '</div>':'<p>There is no verified public resource link mapped to this concept yet.</p>')+
+     '</section>'+
+     (related.length?'<details class="constellation-unit-more"><summary>Connected research questions</summary><div class="constellation-related-list">'+
+       related.map(q=>'<button type="button" data-question-id="'+esc(q.id)+'" class="constellation-related">'+esc(q.title)+' ↗</button>').join("")+
+       '</div></details>':'')+
+     '<div id="constellation-unit-check" aria-live="polite"></div>';
+   detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;selectedId=null;onConceptSelected(null);});
+   detail.querySelectorAll("[data-related]").forEach(b=>b.addEventListener("click",()=>showConcept(b.dataset.related)));
+   detail.querySelectorAll("[data-question-id]").forEach(b=>b.addEventListener("click",()=>{
+     showQuestion(researchQuestions.find(q=>q.id===b.dataset.questionId));
+   }));
+   if(hasLesson(id)){
+     detail.querySelector("#constellation-lesson").addEventListener("click",()=>openLesson(id));
+     detail.querySelector("#constellation-drill").addEventListener("click",()=>startDrill(id));
+   }else if(question){
+     detail.querySelector("#constellation-check").addEventListener("click",()=>renderQuickCheck(question));
+   }
+   onConceptSelected(id);
    detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});
+ }
+ function renderQuickCheck(question){
+   const rootEl=detail.querySelector("#constellation-unit-check");
+   if(!rootEl)return;
+   rootEl.innerHTML='<div class="constellation-unit-block"><h4>Quick conceptual check</h4><p>'+esc(question.prompt)+'</p>'+
+     '<div class="constellation-answers">'+question.choices.map((choice,index)=>
+       '<button type="button" class="constellation-answer" data-answer="'+index+'">'+esc(choice)+'</button>').join("")+
+     '</div><p id="constellation-check-feedback" role="status" aria-live="polite"></p>'+
+     '<small>One formative check is not a verified mastery assessment; the answer is not saved.</small></div>';
+   let answered=false;
+   rootEl.querySelectorAll("[data-answer]").forEach(b=>b.addEventListener("click",()=>{
+     if(answered)return;answered=true;
+     const index=Number(b.dataset.answer);
+     rootEl.querySelectorAll("[data-answer]").forEach(option=>{option.disabled=true;
+       if(Number(option.dataset.answer)===question.correctIndex)option.classList.add("correct");
+       else if(option===b)option.classList.add("incorrect");
+     });
+     rootEl.querySelector("#constellation-check-feedback").textContent=
+       (index===question.correctIndex?"Correct on this question. ":"Review this idea. ")+question.feedback+
+       " Correct answer: "+question.choices[question.correctIndex];
+   }));
+   rootEl.scrollIntoView?.({behavior:"smooth",block:"nearest"});
  }
  function showQuestion(q){
    if(!q)return;
@@ -135,7 +208,7 @@ function mount({host,macros,topics,concepts,locationByConcept,forceGraph,openCon
      '<div class="constellation-choices">'+(q.conceptIds||[]).filter(id=>byConcept.has(id)).map(id=>
      '<button type="button" class="constellation-choice" data-question-concept="'+esc(id)+'">'+
      esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div>';
-   detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;});
+   detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;onConceptSelected(null);});
    detail.querySelectorAll("[data-question-concept]").forEach(b=>
      b.addEventListener("click",()=>showConcept(b.dataset.questionConcept)));
    detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});

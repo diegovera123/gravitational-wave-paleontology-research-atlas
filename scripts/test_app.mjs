@@ -40,11 +40,13 @@ const selectors=[
   "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
   "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
   "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
+  "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
+for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#constellation-shell","#constellation-research"])elements.get(id).hidden=true;
 const document={
   activeElement:null,body:new ElementStub(),
   querySelector:selector=>elements.get(selector)||new ElementStub(),
@@ -87,40 +89,25 @@ await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
-assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Otto mission fallback remains mounted");
-assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Domain-first homepage replaces guide as the default");
-assert.equal(elements.get("#focus-domains").children.length,5,"One-field homepage shows five connected research parts");
-assert.equal(elements.get("#focus-concepts").children.length,0,"Concepts hidden until a chapter and topic are selected");
-assert.equal(elements.get("#focus-concept-section").hidden,true,"The chapter view is collapsed on initial load");
-run('focusedHome.selectChapter("cosmic-record")');
-assert.equal(elements.get("#focus-topics").children.length,3,"Cosmic-record chapter reveals three curated topics");
-run('focusedHome.selectTopic("topic-gravitational-wave-paleontology-cosmic-evolution-and-rates")');
-assert.equal(elements.get("#focus-concepts").children.length,4,"Only the selected topic's real concepts appear");
-assert.match(elements.get("#otto-guide").innerHTML,/OTTO · YOUR COSMIC GUIDE/,"The mascot is visible in the primary home experience");
-assert.match(elements.get("#otto-guide").innerHTML,/Continue my mission/,"A single primary learning action is shown");
-const route=run('guideController.plan()');
-assert.ok(route.steps.length>=2 && route.steps.length<=5,"Mission path has a compact number of real concept stops");
-for(let i=1;i<route.steps.length;i++){
-  const target=curriculum.concepts.find(c=>c.id===route.steps[i].id);
-  assert.ok(target.prerequisites.some(e=>e.kind==="necessary"&&e.id===route.steps[i-1].id),"Adjacent mission stops are actual necessary dependencies");
-}
-run('guideController.enter(guideController.plan().steps[0].id)');
-assert.ok(JSON.parse(stored.get("research-atlas-otto-visited-v1")).includes(route.steps[0].id),"Visited navigation progress is persisted separately from mastery");
-assert.match(elements.get("#otto-guide").innerHTML,/Visiting a stop does not establish mastery/,"Mission progress is never claimed as mastery");
-
+assert.equal(run('TAB_NAMES.length'),2,"Exactly two main destinations");
+assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Existing curriculum controller stays available for deep links");
+assert.equal(elements.get("#focus-domains").children.length,5,"All research sections remain in the existing curriculum");
+assert.equal(elements.get("#constellation-research-questions").children.length,questions.questions.length,"Research questions move inside Knowledge Graph");
+assert.equal(elements.get("#simple-home").hidden,false,"Simple Home is visible on entry");
+assert.equal(elements.get("#focus-home").hidden,true,"Old crowded homepage is retired");
 // Exercise the first-run router independently of the module-unavailable fallback used by this mock.
 stored.delete("research-atlas-onboarding-seen-v1");
 run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false})};firstRunLanding()');
-assert.equal(elements.get("#diagnostic-panel").hidden,false,"A true first visit opens the starting-point diagnostic first");
-assert.equal(elements.get("#dashboard").hidden,true,"The main dashboard stays out of the way during first-run onboarding");
+assert.equal(elements.get("#diagnostic-panel").hidden,false,"First visit reveals the optional diagnostic inside Home");
+assert.equal(elements.get("#dashboard").hidden,false,"Home remains the parent of the diagnostic");
+assert.equal(elements.get("#simple-home").hidden,true,"Simple welcome is hidden during concept discovery");
 run('markOnboardingSeen();setActiveView("home",{scroll:false})');
-assert.equal(elements.get("#dashboard").hidden,false,"Completing or skipping onboarding reveals the map-first home");
-assert.equal(elements.get("#paths-panel").hidden,true,"Non-active pathways remain hidden");
-run('setActiveView("paths",{scroll:false})');
-assert.equal(elements.get("#paths-panel").hidden,false,"Pathways tab opens");
+assert.equal(elements.get("#simple-home").hidden,false,"Finishing or skipping diagnostic returns to simple Home");
+assert.equal(elements.get("#diagnostic-panel").hidden,true,"Optional diagnostic closes without adding a separate tab");
+assert.equal(elements.get("#paths-panel").hidden,true,"Old research tab remains hidden");
 run('setActiveView("explore",{scroll:false})');
-assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge atlas tab opens");
-
+assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge Graph is the only other top-level view");
+assert.equal(elements.get("#constellation-shell").hidden,false,"3D graph is visible inside Knowledge Graph");
 assert.equal(scene.nodes.length,6,"New full-screen 3D scene starts with one central node and five research clusters");
 assert.ok(scene.nodes.slice(1).every(node=>node.type==="chapter"),"Only macro clusters appear at first, not all 133 concepts");
 assert.equal(elements.get("#constellation-choices").children.length,5,"Accessible equivalent shows five cluster choices");
@@ -139,7 +126,8 @@ run('openConcept("derivatives",true)');
 assert.match(elements.get("#details").innerHTML,/Open full learning unit/,"Pilot concept offers a full lesson");
 run('openLearningUnit("derivatives")');
 assert.equal(elements.get("#learning-studio").hidden,false,"Learning studio opens");
-assert.equal(elements.get("#learn-panel").hidden,false,"Lesson activates learning tab");
+assert.equal(elements.get("#explore-panel").hidden,false,"Learning studio remains inside Knowledge Graph");
+assert.equal(elements.get("#constellation-shell").hidden,true,"3D canvas is hidden while reading the selected full unit");
 assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point");
 run('startAdaptiveQuiz()');
 assert.match(elements.get("#adaptive-panel").innerHTML,/1 \/ 5/,"Adaptive quiz starts with an accessible item");
@@ -168,7 +156,9 @@ clickNode(scene.nodes.find(node=>node.id==="topic-binary-stellar-evolution-compa
 assert.equal(run('constellation.snapshot().stage'),"topic");
 assert.ok(scene.nodes.slice(1).every(node=>node.type==="concept"),"Topic reveals its own concepts, not the complete graph");
 clickNode(scene.nodes.find(node=>node.id==="supernova-kicks"));
-assert.match(elements.get("#constellation-detail").innerHTML,/Supernova Natal Kicks/,"Concept opens small preview rather than old sidebar");
+assert.match(elements.get("#constellation-detail").innerHTML,/Supernova Natal Kicks/,"Concept opens its integrated learning unit within Knowledge Graph");
+assert.match(elements.get("#constellation-detail").innerHTML,/Necessary background/,"Prerequisites live inside the opened learning unit");
+assert.match(elements.get("#constellation-detail").innerHTML,/Research resources/,"Concept-specific resources live inside Knowledge Graph");
 run('constellation.back()');
 assert.equal(run('constellation.snapshot().selectedId'),null,"Back closes current concept");
 run('constellation.back()');
@@ -179,4 +169,4 @@ run('openConcept("linear-momentum",true);scrollToExplorer()');
 assert.equal(run('constellation.snapshot().macroId'),"classical-mechanics","Cross-domain deep links reveal the real containing cluster");
 assert.ok(cameraFits>0,"3D camera framing is invoked");
 
-console.log("Passed: single-field GWP journey, lazy 3D-only graph with 5 clusters and progressive navigation, diagnostic-first onboarding, adaptive drills, research deep links and mocked WebGL navigation.");
+console.log("Passed: two top-level sections, Home diagnostic, contextual graph learning units, source links, adaptive drills within Graph, research links and lazy 3D navigation (mock DOM).");

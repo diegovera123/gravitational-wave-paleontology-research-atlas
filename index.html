@@ -38,16 +38,15 @@
     </section>
 
 
-    <nav id="atlas-tabs" class="atlas-primary-nav" aria-label="Main sections" role="tablist">
+    <nav id="atlas-tabs" class="atlas-primary-nav gw-two-tabs" aria-label="Main sections" role="tablist">
       <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Home</button>
-      <button type="button" role="tab" id="tab-diagnostic" aria-controls="diagnostic-panel" aria-selected="false" data-atlas-tab="diagnostic" tabindex="-1">Starting point</button>
-      <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research</button>
-      <button type="button" role="tab" id="tab-learn" aria-controls="learn-panel" aria-selected="false" data-atlas-tab="learn" tabindex="-1">Learn &amp; practice</button>
-      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">3D constellation</button>
-      <button type="button" role="tab" id="tab-library" aria-controls="library-panel" aria-selected="false" data-atlas-tab="library" tabindex="-1">Resources</button>
+      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge Graph</button>
     </nav>
 
-    <section id="diagnostic-panel" class="atlas-tab-panel diagnostic-shell" role="tabpanel" aria-labelledby="tab-diagnostic" hidden>
+
+    <section id="dashboard" class="dashboard" aria-label="Research workspace">
+      <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
+    <section id="diagnostic-panel" class="atlas-tab-panel diagnostic-shell" aria-label="Optional starting-point diagnostic" hidden>
       <div class="otto-onboarding-intro"><img src="assets/otto-orbit.svg" alt="Otto the otter astronaut waves hello" width="125" height="135"/>
         <div><p class="otto-eyebrow">MEET OTTO, YOUR COSMIC GUIDE</p><h2 id="otto-coach-title">How familiar are you with gravitational-wave paleontology?</h2><p id="otto-coach-line">We’ll sample a few concepts across one research field, then suggest where to begin.</p></div></div>
       <div id="diagnostic-root" class="diagnostic-root" aria-live="polite">
@@ -55,8 +54,17 @@
       </div>
     </section>
 
-    <section id="dashboard" class="dashboard" aria-label="Research workspace">
-      <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
+      <section id="simple-home" class="simple-home" aria-labelledby="simple-home-title">
+        <img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="75" height="82"/>
+        <p class="focus-eyebrow">YOUR RESEARCH JOURNEY</p>
+        <h2 id="simple-home-title">Explore gravitational-wave paleontology.</h2>
+        <p>Discover how the lives of stars become gravitational-wave signals. Open the knowledge graph to follow its connections, read the scientific explanations, explore sources, and practise inside each concept.</p>
+        <div class="simple-home-actions">
+          <button id="simple-home-graph" type="button" class="focus-primary">Explore the knowledge graph →</button>
+          <button id="simple-home-diagnostic" type="button" class="focus-secondary">Find my starting point</button>
+        </div>
+        <p class="simple-home-note">The diagnostic is optional. Your learning units, resources, research questions and exercises all live in the graph.</p>
+      </section>
       <div id="otto-guide" class="otto-guide" hidden aria-live="polite"></div>
       <section id="focus-home" class="focus-home gw-focus" aria-label="Learn gravitational-wave paleontology">
         <header class="focus-hero gw-hero">
@@ -191,6 +199,18 @@
         </div>
         <section id="constellation-detail" class="constellation-detail" hidden aria-live="polite"></section>
       </section>
+    <section id="learning-studio" class="learning-studio" aria-labelledby="learning-studio-title" hidden tabindex="-1">
+      <div class="studio-top"><div><p class="eyebrow">Learning unit · Original Atlas instruction</p>
+        <h2 id="learning-studio-title">Explore a concept in depth</h2></div>
+        <button id="close-learning-studio" type="button" class="view-button">← Return to Atlas</button>
+      </div>
+      <p class="otto-learning-tip"><img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="48" height="52"/> Otto’s tip: Explore one idea, try a worked example, then test your reasoning. You can take another route whenever you like.</p>
+      <div id="lesson-content" class="lesson-content" aria-live="polite"></div>
+    </section>
+      <details id="constellation-research" class="constellation-research">
+        <summary>Research questions to explore</summary>
+        <div id="constellation-research-questions" class="constellation-questions"></div>
+      </details>
       <div id="legacy-explorer" hidden aria-hidden="true">
     <section id="explorer" class="workspace" aria-label="Knowledge graph explorer">
       <div class="graph-panel">
@@ -238,24 +258,18 @@
     </section>
       </div>
     </section>
-        <section id="learn-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-learn" hidden>
-      <div id="learn-hub" class="learn-hub">
-        <p class="eyebrow">Learning Studio</p><h2>Learn a concept, then check your understanding.</h2>
-        <p>Choose an original learning unit. Adaptive practice responds to your answers and recommends review. These pilot questions provide formative evidence, not a calibrated mastery score.</p>
-        <div id="learn-hub-cards" class="pilot-cards"></div>
-        <div id="due-practice" class="due-practice" aria-live="polite"></div>
-      </div>
-    <section id="learning-studio" class="learning-studio" aria-labelledby="learning-studio-title" hidden tabindex="-1">
-      <div class="studio-top"><div><p class="eyebrow">Learning unit · Original Atlas instruction</p>
-        <h2 id="learning-studio-title">Explore a concept in depth</h2></div>
-        <button id="close-learning-studio" type="button" class="view-button">← Return to Atlas</button>
-      </div>
-      <p class="otto-learning-tip"><img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="48" height="52"/> Otto’s tip: Explore one idea, try a worked example, then test your reasoning. You can take another route whenever you like.</p>
-      <div id="lesson-content" class="lesson-content" aria-live="polite"></div>
-    </section>
+    <section id="learn-panel" hidden aria-hidden="true">
+      <div id="learn-hub" hidden><div id="learn-hub-cards"></div><div id="due-practice"></div></div>
     </section>
   </main>
 
+  <aside id="otto-helper" class="otto-helper" aria-label="Otto learning guide">
+    <div id="otto-helper-message" class="otto-helper-message" hidden role="status">
+      <p id="otto-helper-text">Welcome! Open the graph to start exploring.</p>
+      <button id="otto-helper-close" type="button">Close</button>
+    </div>
+    <button type="button" id="otto-helper-button" aria-expanded="false" aria-controls="otto-helper-message" aria-label="Ask Otto for a learning tip"><img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="60" height="66"/></button>
+  </aside>
   <footer>
     <p>Open curriculum · Built for curious minds</p>
     <p>Every connection is a path forward.</p>

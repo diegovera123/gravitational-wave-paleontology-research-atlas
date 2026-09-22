@@ -142,7 +142,8 @@ function scrollToExplorer() {
   $("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 
-const TAB_NAMES=["home","diagnostic","paths","learn","explore","library"];
+const TAB_NAMES=["home","explore"];
+let homeDiagnosticVisible=false;
 
 function onboardingSeen(){
   try{return window.localStorage?.getItem(ONBOARDING_KEY)==="1";}catch{return false;}
@@ -189,10 +190,10 @@ function mountFocusedHome(diagnosticQuestions){
       startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
       openDiagnostic:()=>diagnosticController?.open(),
       openMap:()=>{constellation?.openOverview();setActiveView("explore");$("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});},
-      openRegion:id=>{enterMacro(id);scrollToExplorer();},
-      openResearch:()=>setActiveView("paths"),
-      openAllPractice:()=>setActiveView("learn"),
-      openLibrary:()=>setActiveView("library")
+      openRegion:id=>{constellation?.openMacro(id);setActiveView("explore");},
+      openResearch:()=>{setActiveView("explore");$("#constellation-research").open=true;},
+      openAllPractice:()=>setActiveView("explore"),
+      openLibrary:()=>setActiveView("explore")
     });
     $("#home-panel").classList.add("focus-ready");
   }catch(error){
@@ -201,6 +202,23 @@ function mountFocusedHome(diagnosticQuestions){
   }
 }
 
+function updateOtto(){
+ const target=$("#otto-helper-text");if(!target)return;
+ const lesson=openUnitId?byId(openUnitId)?.title:null;
+ const selected=constellation?.snapshot?.()?.selectedId;
+ if(activeView==="home")target.textContent=homeDiagnosticVisible?
+   "Rate what you can explain today. A quick check is only a starting point.":
+   "Open the graph to explore the field. The starting-point diagnostic is optional.";
+ else if(lesson)target.textContent="Studying "+lesson+"? Read the explanation, try the worked example, then practise when ready.";
+ else if(selected)target.textContent="This concept's background, explanations, sources and practice are all here. Follow a prerequisite whenever you need it.";
+ else target.textContent="Click a large cluster to see its topics, then open a concept. Use Back to zoom out.";
+}
+function renderGraphResearchQuestions(){
+ const host=$("#constellation-research-questions");if(!host)return;host.replaceChildren();
+ for(const q of researchQuestions){
+   host.appendChild(button(q.title,()=>{setActiveView("explore");constellation?.showQuestion(q);},"constellation-choice"));
+ }
+}
 function firstRunLanding(){
   const done=diagnosticController?.hasCompleted?.()||onboardingSeen();
   if(done){
@@ -214,24 +232,30 @@ function firstRunLanding(){
 }
 
 function setActiveView(view,options={}){
+  if(view==="diagnostic")homeDiagnosticVisible=true;
+  else if(view==="home")homeDiagnosticVisible=false;
+  if(["paths","library","learn"].includes(view))view="explore";
+  if(view==="diagnostic")view="home";
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
   document.body?.classList?.toggle?.("mission-home",view==="home");
   document.body?.classList?.toggle?.("constellation-mode",view==="explore");
   for(const name of TAB_NAMES){
     const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
-    panel.hidden=name!==view;
-    tab.setAttribute("aria-selected",String(name===view));
+    panel.hidden=name!==view;tab.setAttribute("aria-selected",String(name===view));
     tab.tabIndex=name===view?0:-1;
   }
-  $("#dashboard").hidden=!["home","paths","library"].includes(view);
-  if(view==="home"){focusedHome?.refresh();if(!focusedHome)guideController?.render();}
+  $("#dashboard").hidden=view!=="home";
+  $("#diagnostic-panel").hidden=view!=="home"||!homeDiagnosticVisible;
+  $("#simple-home").hidden=view!=="home"||homeDiagnosticVisible;
+  $("#focus-home").hidden=true;
+  $("#constellation-shell").hidden=view!=="explore"||!$("#learning-studio").hidden;
+  $("#constellation-research").hidden=view!=="explore"||!$("#learning-studio").hidden;
+  if(view==="home"&&!homeDiagnosticVisible)focusedHome?.refresh();
+  updateOtto();
   if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
   if(options.focus)$("#tab-"+view).focus();
-  if(view==="explore"){
-    constellation?.initialize();
-    constellation?.ensureVisible();
-  }
+  if(view==="explore"&&$("#learning-studio").hidden){constellation?.initialize();constellation?.ensureVisible();}
 }
 function setActiveViewFromTab(event){
   const target=event.target?.closest?.("[data-atlas-tab]");
@@ -376,7 +400,9 @@ function renderFeaturedUnits(){
 function openLearningUnit(id){
   if(!learningUnits.has(id))return;
   openUnitId=id;openConcept(id,true);
-  setActiveView("learn",{scroll:false});
+  setActiveView("explore",{scroll:false});
+  $("#constellation-shell").hidden=true;
+  $("#constellation-research").hidden=true;
   $("#learn-hub").hidden=true;
   const area=$("#learning-studio");area.hidden=false;
   renderLearningUnit();
@@ -386,12 +412,12 @@ function openLearningUnit(id){
 function closeLearningUnit(){
   openUnitId=null;$("#learning-studio").hidden=true;
   $("#learn-hub").hidden=false;
-  setActiveView("learn");
+  setActiveView("explore");
 }
 function returnFromLearningToGraph(){
   openUnitId=null;$("#learning-studio").hidden=true;
   $("#learn-hub").hidden=false;
-  scrollToExplorer();
+  setActiveView("explore");scrollToExplorer();
 }
 
 const ADAPTIVE_KEY="research-atlas-adaptive-evidence-v1";
@@ -923,14 +949,16 @@ async function initialise() {
     if(window.AtlasConstellation){
       constellation=window.AtlasConstellation.mount({
         host:$("#constellation-shell"),macros:atlas.macros,topics:atlas.topics,
-        concepts,locationByConcept,
+        concepts,locationByConcept,researchSources,researchQuestions,diagnosticQuestions:diagnosticData.questions,
+        onConceptSelected:()=>updateOtto(),
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
-        openConcept:id=>{focusedHome?.selectConcept(id);setActiveView("home");},
+        openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
         startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
         hasLesson:id=>learningUnits.has(id)
       });
     }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
+    renderGraphResearchQuestions();
     firstRunLanding();
     console.info("[Research Atlas] Loaded "+concepts.length+" concepts across "+atlas.macros.length+" regions and "+atlas.topics.length+" curated topics.");
   }catch(error){showGraphError("Unable to render the knowledge graph.",error);}
@@ -962,6 +990,16 @@ $("#home-continue").addEventListener("click",continueRecommendedPath);
 $("#home-learn").addEventListener("click",()=>setActiveView("learn"));
 $("#home-research").addEventListener("click",()=>setActiveView("paths"));
 $("#brand-home").addEventListener("click",event=>{event.preventDefault();setActiveView("home");});
+$("#simple-home-graph").addEventListener("click",()=>{constellation?.openOverview();setActiveView("explore");});
+$("#simple-home-diagnostic").addEventListener("click",()=>diagnosticController?.open());
+$("#otto-helper-button").addEventListener("click",()=>{
+ const visible=$("#otto-helper-message").hidden;
+ $("#otto-helper-message").hidden=!visible;
+ $("#otto-helper-button").setAttribute("aria-expanded",String(visible));updateOtto();
+});
+$("#otto-helper-close").addEventListener("click",()=>{
+ $("#otto-helper-message").hidden=true;$("#otto-helper-button").setAttribute("aria-expanded","false");
+});
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
