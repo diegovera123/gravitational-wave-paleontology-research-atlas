@@ -27,6 +27,7 @@ class Stub{
 const element=id=>{if(!nodes.has(id))nodes.set(id,new Stub(id));return nodes.get(id);};
 const document={createElement:tag=>new Stub(tag)};
 const window={matchMedia:()=>({matches:true})};
+vm.runInNewContext(await fs.readFile("concept-figures.js","utf8"),{window,document,console,URL});
 vm.runInNewContext(await fs.readFile("concept-insight.js","utf8"),{window,document,console,URL});
 vm.runInNewContext(await fs.readFile("constellation.js","utf8"),{
  window,document,console,URL,setTimeout:fn=>fn()
@@ -79,7 +80,10 @@ assert.equal((element("#constellation-detail").innerHTML.match(/data-concept-tab
 assert.ok(element("#constellation-detail").innerHTML.indexOf("Learning objectives")<element("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Objectives precede the explanation");
 assert.ok(element("#constellation-detail").innerHTML.indexOf("Research resources")>element("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Research resources appear after the explanation");
 assert.match(element("#constellation-detail").innerHTML,/How can one stellar explosion change an entire binary orbit/,"Intuitive physical explanation is shown");
-assert.match(element("#constellation-detail").innerHTML,/Conceptual schematic/,"Diagram is explicitly illustrative");
+assert.match(element("#constellation-detail").innerHTML,/A directional kick changes relative orbital velocity/,"Natal-kick concept uses a physical vector diagram");
+assert.match(element("#constellation-detail").innerHTML,/Illustrative diagram, not a measurement/,"Scientific diagrams are labeled as illustrations");
+assert.match(element("#constellation-detail").innerHTML,/concept-read-progress/,"Reader shows a continuous unit progress indicator");
+assert.match(element("#constellation-detail").innerHTML,/concept-back-top/,"Long explanations have a back-to-top control");
 assert.equal(element("#constellation-detail-shade").hidden,false,"Drawer backdrop opens on concept selection");
 assert.doesNotMatch(element("#constellation-detail").innerHTML,/Connected research questions/,"No duplicate inline question group");
 assert.doesNotMatch(element("#constellation-detail").innerHTML,/Try an exercise|Quick conceptual check/,"No graded or guided problems embedded in Graph drawer");
