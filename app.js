@@ -185,6 +185,7 @@ function firstRunLanding(){
 function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
+  document.body?.classList?.toggle?.("mission-home",view==="home");
   for(const name of TAB_NAMES){
     const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
     panel.hidden=name!==view;
