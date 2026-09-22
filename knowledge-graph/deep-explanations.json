@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "description": "Concrete, author-written lesson narratives with worked illustrative examples; not simulation outputs or a claim of complete coverage.",
+  "units": [
+    {
+      "id": "linearized-gravity",
+      "opening": "Imagine two small spacecraft freely falling a long way from a black-hole merger. Light exchanged between them records a tiny, changing relative separation. You want to calculate that weak disturbance without solving the complete nonlinear Einstein equations for the entire merging system.",
+      "steps": [
+        {
+          "heading": "Start with the measurement, not the symbol",
+          "text": "A metric tells us how spacetime intervals are computed from coordinate differences. In an almost flat region, begin with the flat-spacetime metric ημν. The actual metric is close to that baseline, so write it as gμν = ημν + hμν. The new quantity hμν represents the small difference between the two metric descriptions in the chosen coordinates."
+        },
+        {
+          "heading": "Why keeping only small terms helps",
+          "text": "The full Einstein equations contain derivatives of the metric multiplied by other metric-dependent quantities. Substituting η + h produces contributions linear in h and higher-order products. If |h| is small in a suitable gauge and region, the linear terms give the leading approximation. This is the same mathematical logic as approximating a complicated function by its first-order Taylor expansion around a known reference state."
+        },
+        {
+          "heading": "What actually travels",
+          "text": "In a suitable gauge, the linearized vacuum field equations reduce to a wave equation for the trace-reversed perturbation. Wave solutions represent changes propagating at light speed in this approximation. A changing metric component by itself is not always a physical wave: an alternative coordinate choice can change h while describing the same spacetime. Physical tidal effects between nearby freely falling bodies are the crucial observable."
+        },
+        {
+          "heading": "How it connects to a detector",
+          "text": "A weak passing wave changes the light-travel-time relationship between separated free-falling test masses. Interferometers compare light returning from different arms; their response depends on wave polarization, orientation and the instrument. The theory links a weak spacetime perturbation to a predicted differential strain signal."
+        }
+      ],
+      "example": {
+        "title": "A first-order expansion you can follow",
+        "text": "Suppose one metric component is gxx = 1 + εf(t−z/c), where ε is dimensionless and |εf| ≪ 1. Along a small spatial interval dx with other coordinate differences held fixed, ds² = gxx dx² = [1 + εf]dx². For a positive spatial factor, the corresponding proper-length element is approximately [1 + (ε/2)f] dx, because √(1+u) ≈ 1+u/2 for small u. This is a schematic gauge-dependent illustration of first-order metric perturbation, not a complete detector-response or gauge-invariant distance calculation."
+      },
+      "boundary": "The metric split and simple wave equation assume a weak perturbation about an appropriate background and a particular gauge choice. They cannot by themselves model the strong-field dynamics at merger or justify treating coordinate displacements as observables."
+    },
+    {
+      "id": "supernova-kicks",
+      "opening": "Picture a circular binary just before one star collapses. At that instant the companion is at a definite location and both stars have definite velocities. The collapse can change the remnant's mass and impart a directional kick before the companion has time to travel very far.",
+      "steps": [
+        {
+          "heading": "Take a snapshot of the original orbit",
+          "text": "Record the relative separation vector r = r_remnant − r_companion and the relative velocity v = v_remnant − v_companion just before the event. Do not replace this by the remnant's speed measured relative to an arbitrary observer: whether the pair stays bound depends on the motion of one body relative to the other."
+        },
+        {
+          "heading": "Apply the event to the relevant quantities",
+          "text": "Suppose the collapsing star loses some gravitational mass and receives a natal-kick velocity vector w. In the instantaneous impulse approximation, the separation is unchanged during the event. The new relative velocity becomes v′ = v + w if the companion receives no instantaneous kick in the chosen inertial frame. The final gravitational mass is M′ = m_remnant + m_companion."
+        },
+        {
+          "heading": "Check survival, then orbital shape",
+          "text": "For an isolated Newtonian point-mass pair, compute the specific relative orbital energy ε′ = |v′|²/2 − GM′/r. Negative energy corresponds to a bound orbit, zero to the parabolic boundary, positive to an unbound orbit. For a surviving orbit, use the specific angular momentum vector h′ = r × v′ together with ε′ to obtain the new semi-major axis and eccentricity."
+        },
+        {
+          "heading": "Understand why direction matters",
+          "text": "A kick in the direction of orbital motion usually raises relative speed; an opposite kick can lower it. A perpendicular kick changes the velocity vector and angular momentum differently. The same kick magnitude can therefore produce different post-collapse eccentricities and survival outcomes depending on phase and orientation."
+        }
+      ],
+      "example": {
+        "title": "Two identical kick magnitudes, two different outcomes",
+        "text": "Use toy units r = 1, GM′ = 1 and a pre-event tangential relative speed v = 1. A tangential kick w = +0.5 gives v′ = 1.5, so ε′ = 1.5²/2 − 1 = +0.125: unbound. The same-magnitude kick w = −0.5 gives v′ = 0.5, so ε′ = 0.5²/2 − 1 = −0.875: bound. Here the direction, not just the kick magnitude, flips the conclusion. These are illustrative post-event units, not a prediction for any observed binary."
+      },
+      "boundary": "The impulse and point-mass model neglects finite-duration mass ejection, interaction with ejecta, tides and detailed collapse physics. In real population synthesis, kick magnitudes and directions are sampled from explicitly stated uncertain prescriptions."
+    },
+    {
+      "id": "chirp-mass",
+      "opening": "Listen to a binary's predicted gravitational-wave signal as it approaches merger. Its cycles become closer together. The change in cycle spacing contains information about how quickly the orbit loses energy compared with how much energy the orbit stores.",
+      "steps": [
+        {
+          "heading": "Start with two masses on a shrinking orbit",
+          "text": "For a quasi-circular binary with component masses m₁ and m₂, gravity supplies the centripetal acceleration. To leading Newtonian order, orbital frequency and separation satisfy Ω² = G(m₁+m₂)/r³. As the separation shrinks, the orbital frequency rises. The dominant quadrupolar gravitational-wave frequency is about twice the orbital frequency."
+        },
+        {
+          "heading": "Connect orbital energy to radiated energy",
+          "text": "The binary's orbital energy becomes more negative as the orbit tightens. Gravitational radiation carries positive energy away. Setting the rate of orbital-energy loss equal to the emitted gravitational-wave power yields an equation for the frequency increase, df/dt. This is why the phase pattern, not merely the signal's loudness, carries mass information."
+        },
+        {
+          "heading": "Why this particular mass combination appears",
+          "text": "When the leading circular-orbit energy and radiated power are combined, the masses appear as M_c = (m₁m₂)^(3/5)/(m₁+m₂)^(1/5), called the chirp mass. At leading order df/dt is proportional to M_c^(5/3) f^(11/3) in a fixed frame. Larger chirp mass means a faster chirp at the same gravitational-wave frequency, within that approximation."
+        },
+        {
+          "heading": "Read the inference carefully",
+          "text": "The waveform's phase evolution can constrain chirp mass particularly well. It does not uniquely determine both component masses from that one scalar alone, and observed wave periods are cosmologically redshifted. A claim about the original stars requires additional population and stellar-evolution modeling."
+        }
+      ],
+      "example": {
+        "title": "Compute the chirp mass of an equal-mass binary",
+        "text": "Set m₁ = m₂ = 10 solar masses. Substitution gives M_c = (100)^(3/5)/(20)^(1/5) solar masses = 10/2^(1/5) solar masses ≈ 8.71 solar masses. The chirp mass is neither the total mass (20) nor the mass of either component (10)."
+      },
+      "boundary": "The leading formula assumes an isolated, quasi-circular, weak-field inspiral; spin, eccentricity and merger require more complete waveform models. Distinguish source-frame from detector-frame mass."
+    },
+    {
+      "id": "common-envelope",
+      "opening": "Imagine a giant star expanding around its much smaller companion. In a possible unstable interaction, the companion travels inside the giant's gaseous envelope. Friction-like gravitational interaction with that gas removes orbital energy from the cores' relative orbit.",
+      "steps": [
+        {
+          "heading": "What has entered what?",
+          "text": "The expanded donor is not a solid sphere. Its outer layers are gas surrounding a dense core. During common-envelope evolution, the companion and the donor's core move inside gas that can exert gravitational drag and exchange energy and angular momentum with the orbit."
+        },
+        {
+          "heading": "Where does the energy go?",
+          "text": "As the orbit tightens, its gravitational orbital energy becomes more negative; the released difference can heat, accelerate and help unbind envelope gas. This produces the idea behind simplified envelope-energy prescriptions: compare the energy required to eject the gas with some usable fraction of the orbital energy released."
+        },
+        {
+          "heading": "Why an apparently successful spiral-in can still fail",
+          "text": "If insufficient energy reaches the gas before the cores collide, the system may merge inside the envelope. If the envelope is ejected in time, the survivors can emerge in a much closer orbit. That closer orbit may later become a compact binary capable of merging under gravitational-wave emission, provided subsequent evolution permits it."
+        },
+        {
+          "heading": "What a population model actually assumes",
+          "text": "A rapid synthesis code cannot resolve the entire three-dimensional gas flow for every simulated binary. It often uses an efficiency parameter and a binding-energy prescription to approximate the outcome. Varying these assumptions can substantially change predicted post-envelope separations and compact-binary yields."
+        }
+      ],
+      "example": {
+        "title": "An energy ledger, not an automatic survival proof",
+        "text": "Suppose an envelope needs 10 toy energy units to unbind. If the shrinking orbit releases 15 and an assumed efficiency α = 0.6 makes only 9 units usable, the simplified energy budget does not reach the 10-unit requirement. Even if 10 units were available, the calculation alone would not tell you whether the cores fit safely inside the final orbit."
+      },
+      "boundary": "A one-parameter energy budget neglects multidimensional hydrodynamics and possible other energy sources. Its efficiency is a model prescription, not a universally measured constant."
+    },
+    {
+      "id": "mass-transfer",
+      "opening": "Picture one star in a close binary expanding until gas at its surface can flow toward its companion. Rather than thinking of two isolated stars that occasionally trade material, you now need to think about the geometry of their shared gravitational and rotating environment.",
+      "steps": [
+        {
+          "heading": "Find the geometric boundary",
+          "text": "In a co-rotating description, each star has a Roche lobe: a region bounded by an effective gravitational equipotential. When the donor's photosphere reaches that boundary, gas can flow through the inner Lagrange region. Roche-lobe overflow is the onset of a transfer pathway; it does not by itself determine whether the exchange stays stable."
+        },
+        {
+          "heading": "Track how the star and boundary change",
+          "text": "As the donor loses mass, its radius can expand or shrink depending on stellar structure and timescale. The Roche-lobe radius changes too, because mass ratio, orbit and angular momentum evolve. If the donor expands relative to the boundary, overfilling may deepen and transfer can accelerate."
+        },
+        {
+          "heading": "Separate the mass ledger from the orbital ledger",
+          "text": "In an ideal conservative episode, the donor loses exactly what the accretor gains, so total binary mass is unchanged. In a non-conservative episode, some gas leaves the system and carries angular momentum. Even perfectly conservative exchange can change the separation because the mass ratio and orbital angular-momentum distribution evolve."
+        },
+        {
+          "heading": "Follow the possible later histories",
+          "text": "Some systems undergo stable transfer, strip an envelope and survive. Other configurations encounter unstable transfer and may enter common-envelope evolution or merge. The outcome depends on the evolutionary state, mass ratio, the star's structural response and the adopted physical prescription."
+        }
+      ],
+      "example": {
+        "title": "One transfer event, two separate accounting questions",
+        "text": "A 12-solar-mass donor loses 4 solar masses and its 6-solar-mass companion accretes 3. Final masses are 8 and 9 solar masses; 1 solar mass left the binary. The new mass ratio is 8/9, but these numbers do not determine the orbital separation until you also specify how much angular momentum the escaping material removed."
+      },
+      "boundary": "Roche geometry is a simplified binary model, and stability cannot be inferred from an instantaneous radius or mass ratio alone. Detailed mass-loss, accretion and angular-momentum prescriptions are required."
+    },
+    {
+      "id": "binary-population-synthesis",
+      "opening": "Imagine wanting to know how many of a million hypothetical newborn binary stars would eventually produce a pair of merging black holes. You cannot observe the entire lifetime of each real system, so you generate many initial binaries and follow model rules through their possible evolutionary histories.",
+      "steps": [
+        {
+          "heading": "Specify what gets born",
+          "text": "Draw initial masses, mass ratios, orbital periods, eccentricities and metallicities from documented distributions. If you deliberately oversample rare systems, record appropriate sampling weights so that raw simulated counts are not mistaken for the underlying birth population."
+        },
+        {
+          "heading": "Evolve each system through a sequence of events",
+          "text": "Apply prescriptions for stellar winds, expansion, Roche-lobe overflow, transfer stability, possible common-envelope phases, collapse and natal kicks. A system may merge early, disrupt at an explosion, remain wide or produce a double compact remnant. An event log can contain many rows for the same binary."
+        },
+        {
+          "heading": "Define the actual outcome of interest",
+          "text": "A surviving black-hole pair is not automatically a merging source within the age of the Universe. Apply an explicit inspiral-time condition, then summarize distributions of masses, spins, delay times and formation channels, respecting distinct-system identifiers and sampling weights."
+        },
+        {
+          "heading": "Connect predictions to data without skipping observation",
+          "text": "To compare predicted intrinsic mergers with detections, account for cosmic star formation, birth metallicity, delays, distance/redshift and detector selection. A difference between model and catalog can arise from stellar physics, population normalization or the observation model; raw detected counts do not isolate which."
+        }
+      ],
+      "example": {
+        "title": "Why counting table rows gives a wrong merger fraction",
+        "text": "A toy event log has eight rows representing three distinct simulated binaries; four of those rows belong to the same binary. Suppose only one of the three distinct systems forms a pair that merges within the chosen horizon. The unweighted successful-system fraction is 1/3, not 1/8 or 4/8. A physical formation efficiency additionally requires the represented formed-stellar-mass normalization and any sampling weights."
+      },
+      "boundary": "Rapid population synthesis uses approximate and uncertain prescriptions, not a direct movie of the Universe. Controlled sensitivity studies and stochastic-convergence checks are needed before interpreting an output trend."
+    }
+  ]
+}
