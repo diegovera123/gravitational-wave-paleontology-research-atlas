@@ -9,9 +9,9 @@ The default screen presents:
 2. One primary **Start with the big picture** action, optionally changed to **Continue from my diagnostic** when a previous short diagnostic found an area of uncertainty. This is a suggestion, **not proof of a gap or mastery**.
 3. Five connected parts, each explained with a single sentence. These are **educational sections**, not prerequisites or five competing course choices.
 4. **Only after** a part is selected, a small set of its existing curriculum topics. **Only after** a topic is selected, its existing concept names. A selected concept displays its actual necessary prerequisites, optional useful context, exercise prompt, and available learning or practice links.
-5. At the very bottom, the pre-existing global knowledge graph in a **closed-by-default native disclosure**, plus quiet links to research questions, learning units, and public resources.
+5. At the very bottom, one quiet link opens the **full-width interactive 3D knowledge constellation**; the old 2D preview has been removed from the active homepage. Research questions, learning units and resources remain linked nearby.
 
-The separate detailed structured/3D graph remains available by choice. The earlier ten-region picker, dense dashboard and scripted mission are no longer visible in the main first-screen flow, but their original data and advanced navigation remain reachable. There is no server-side user profile.
+The dedicated 3D constellation progressively reveals five research clusters, existing scientific regions, curated topics and concepts. The old structured/3D toggle and details sidebar no longer appear in the visible Explorer. The earlier ten-region picker, dense dashboard and scripted mission are no longer visible in the first-screen flow, but their original curriculum and progress data remain reachable. There is no server-side user profile.
 
 ## The five parts (display organization only)
 
@@ -35,4 +35,4 @@ The response history, self-ratings, confidence, self-reported progress and optio
 
 ## Follow-up QA
 
-The files \`focus-home.js\`, \`index.html\`, \`style.css\`, and \`diagnostic-ui.js\` implement this interface. Run \`node scripts/test_single_field.mjs\`, \`node scripts/test_focus_home.mjs\`, \`node scripts/test_app.mjs\`, \`node scripts/test_diagnostic.mjs\`, \`node scripts/test_adaptive.mjs\`, and \`python3 scripts/validate_curriculum.py\` after changing data or presentation. In addition to mocked behavioral tests, visually inspect the deployed desktop and mobile versions, keyboard focus, concept details, prerequisite jumps, diagnostic completion/skip, the graph disclosure, and the optional 3D view. Never claim that mocked DOM or graph stubs are visual/browser QA.
+The files \`focus-home.js\`, \`index.html\`, \`style.css\`, and \`diagnostic-ui.js\` implement this interface. Run \`node scripts/test_single_field.mjs\`, \`node scripts/test_focus_home.mjs\`, \`node scripts/test_app.mjs\`, \`node scripts/test_diagnostic.mjs\`, \`node scripts/test_adaptive.mjs\`, and \`python3 scripts/validate_curriculum.py\` after changing data or presentation. In addition to mocked behavioral tests, visually inspect the deployed desktop and mobile versions, keyboard focus, concept details, prerequisite jumps, diagnostic completion/skip, the immersive 3D scene, cluster drilldown, and accessible non-WebGL fallback. Never claim that mocked DOM or graph stubs are visual/browser QA.
