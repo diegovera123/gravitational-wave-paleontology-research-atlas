@@ -99,7 +99,7 @@ assert.equal(elements.get("#simple-home").hidden,false,"Simple Home is visible o
 assert.equal(elements.get("#focus-home").hidden,true,"Old crowded homepage is retired");
 // Exercise the first-run router independently of the module-unavailable fallback used by this mock.
 stored.delete("research-atlas-onboarding-seen-v1");
-run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false})};firstRunLanding()');
+run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false}),status:()=>"unassessed",labelFor:()=>"Unassessed",snapshot:()=>({ratings:{},checks:{}})};firstRunLanding()');
 assert.equal(elements.get("#diagnostic-panel").hidden,false,"First visit reveals the optional diagnostic inside Home");
 assert.equal(elements.get("#dashboard").hidden,false,"Home remains the parent of the diagnostic");
 assert.equal(elements.get("#simple-home").hidden,true,"Simple welcome is hidden during concept discovery");
