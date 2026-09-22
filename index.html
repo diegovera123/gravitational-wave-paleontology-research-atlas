@@ -20,7 +20,7 @@
 <body>
   <div class="star-field" aria-hidden="true"></div>
   <header class="site-header">
-    <a class="brand" href="#home" id="brand-home" aria-label="Return to domain overview">
+    <a class="brand" href="#home" id="brand-home" aria-label="Return to gravitational-wave paleontology overview">
       <span class="brand-mark" aria-hidden="true"><i></i></span>
       <span><strong>Research Atlas</strong><small>Gravitational-wave paleontology</small></span>
     </a>
@@ -33,7 +33,7 @@
         <p class="eyebrow">Explore the science across deep time</p>
         <h1 id="page-title">Trace the ideas behind<br><em>gravitational waves.</em></h1>
       </div>
-      <p class="lede">Choose a research question, explore its scientific foundations, and follow the concepts that connect stellar histories to gravitational-wave observations.</p>
+      <p class="lede">Study how gravitational waves reveal the histories of massive stars and binary systems. Explore one idea at a time or examine the full research map.</p>
     </section>
 
 
@@ -48,7 +48,7 @@
 
     <section id="diagnostic-panel" class="atlas-tab-panel diagnostic-shell" role="tabpanel" aria-labelledby="tab-diagnostic" hidden>
       <div class="otto-onboarding-intro"><img src="assets/otto-orbit.svg" alt="Otto the otter astronaut waves hello" width="125" height="135"/>
-        <div><p class="otto-eyebrow">MEET OTTO, YOUR COSMIC GUIDE</p><h2 id="otto-coach-title">What would you like to discover?</h2><p id="otto-coach-line">Pick a mission. I’ll help you find a starting point, one idea at a time.</p></div></div>
+        <div><p class="otto-eyebrow">MEET OTTO, YOUR COSMIC GUIDE</p><h2 id="otto-coach-title">How familiar are you with gravitational-wave paleontology?</h2><p id="otto-coach-line">We’ll sample a few concepts across one research field, then suggest where to begin.</p></div></div>
       <div id="diagnostic-root" class="diagnostic-root" aria-live="polite">
         <p class="dashboard-loading">Preparing your concept-based diagnostic…</p>
       </div>
@@ -57,36 +57,41 @@
     <section id="dashboard" class="dashboard" aria-label="Research workspace">
       <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
       <div id="otto-guide" class="otto-guide" hidden aria-live="polite"></div>
-      <section id="focus-home" class="focus-home" aria-label="Explore and practise research concepts">
-        <header class="focus-hero">
+      <section id="focus-home" class="focus-home gw-focus" aria-label="Learn gravitational-wave paleontology">
+        <header class="focus-hero gw-hero">
           <img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="64" height="68"/>
-          <div><span class="focus-eyebrow">YOUR RESEARCH ATLAS</span>
-            <h1>Pick a field. Explore an idea.</h1>
-            <p>See how concepts connect, check their prerequisites, and try a short exercise.</p>
+          <div><span class="focus-eyebrow">ONE FIELD · MANY CONNECTED IDEAS</span>
+            <h1>Gravitational-Wave Paleontology</h1>
+            <p>What can today's gravitational waves tell us about the lives of stars long ago? Follow the story from stellar evolution to simulated populations and observed mergers.</p>
           </div>
-          <button id="focus-change-goal" type="button" class="focus-text-button">Update my starting point</button>
         </header>
-        <section aria-labelledby="focus-domain-title">
-          <div class="focus-heading"><h2 id="focus-domain-title">Choose a domain</h2><span>Explore at your own pace</span></div>
-          <div id="focus-domains" class="focus-domain-list" aria-label="Scientific domains"></div>
+        <div class="gw-first-action">
+          <button id="focus-big-picture" type="button" class="focus-primary">Start with the big picture →</button>
+          <button id="focus-change-goal" type="button" class="focus-text-button">Find my starting point</button>
+        </div>
+        <section aria-labelledby="focus-domain-title" class="gw-chapters">
+          <div class="focus-heading"><h2 id="focus-domain-title">Explore the story</h2><span>Five connected parts of one research field</span></div>
+          <div id="focus-domains" class="focus-domain-list" aria-label="Parts of gravitational-wave paleontology"></div>
         </section>
-        <section id="focus-concept-section" aria-labelledby="focus-concept-title">
-          <div class="focus-heading"><h2 id="focus-concept-title">Concepts</h2><button id="focus-open-region" type="button" class="focus-text-button">All topics ↗</button></div>
+        <section id="focus-concept-section" class="gw-chapter-content" aria-labelledby="focus-concept-title" hidden>
+          <button type="button" id="focus-back-chapters" class="focus-text-button">← All parts</button>
+          <div class="focus-heading"><h2 id="focus-concept-title">Explore this part</h2><button id="focus-open-region" type="button" class="focus-text-button" hidden>Detailed map ↗</button></div>
           <p id="focus-domain-description" class="focus-muted"></p>
+          <div id="focus-topics" class="gw-topics" aria-label="Learning topics"></div>
           <div id="focus-concepts" class="focus-concept-list"></div>
           <button type="button" id="focus-show-more" class="focus-text-button" hidden>Show more concepts ↓</button>
           <div id="focus-detail" class="focus-detail" hidden aria-live="polite"></div>
           <div id="focus-quiz" class="focus-quiz" hidden aria-live="polite"></div>
         </section>
         <details id="focus-graph-toggle" class="focus-graph-toggle">
-          <summary><span class="focus-graph-symbol" aria-hidden="true">◎</span> Knowledge graph <small>Optional · view how domains connect</small></summary>
+          <summary><span class="focus-graph-symbol" aria-hidden="true">◎</span> See how it all connects <small>Optional · knowledge graph</small></summary>
           <div class="focus-graph-scroll"><div id="dashboard-network-map" class="dashboard-network-map" aria-label="Expandable knowledge graph of connected research domains"></div></div>
-          <button id="focus-full-map" type="button" class="focus-text-button">Open the full knowledge map ↗</button>
+          <button id="focus-full-map" type="button" class="focus-text-button">Open detailed knowledge map ↗</button>
         </details>
         <div class="focus-bottom-links">
           <button type="button" id="focus-research" class="focus-text-button">Research questions ↗</button>
-          <button type="button" id="focus-all-practice" class="focus-text-button">All lessons & exercises ↗</button>
-          <button type="button" id="focus-library" class="focus-text-button">Resources ↗</button>
+          <button type="button" id="focus-all-practice" class="focus-text-button">Lessons & exercises ↗</button>
+          <button type="button" id="focus-library" class="focus-text-button">Research resources ↗</button>
         </div>
       </section>
 
@@ -132,10 +137,10 @@
       </div>
       </div>
       <div id="paths-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-paths" hidden>
-        <header class="tab-panel-header"><p class="eyebrow">Research pathways</p><h2>Start with a question or a field.</h2><p>Select an investigation to reveal the concepts behind it, or enter a knowledge region to browse its topics.</p></header>
+        <header class="tab-panel-header"><p class="eyebrow">Gravitational-wave paleontology</p><h2>Explore questions within the field.</h2><p>Investigate how stellar histories, binary evolution, simulations, and observed mergers fit together.</p></header>
       <div class="dashboard-columns">
         <div class="dashboard-main">
-          <div class="dashboard-section-heading"><div><p class="eyebrow">01 / The landscape</p><h3>Explore a knowledge region</h3></div><a href="#explorer" class="subtle-link">Open map ↗</a></div>
+          <div class="dashboard-section-heading"><div><p class="eyebrow">01 / The landscape</p><h3>Scientific building blocks</h3></div><a href="#explorer" class="subtle-link">Open map ↗</a></div>
           <div class="dashboard-domains" id="domain-cards"><p class="dashboard-loading">Loading knowledge regions…</p></div>
         </div>
         <aside class="dashboard-research" aria-labelledby="research-heading">

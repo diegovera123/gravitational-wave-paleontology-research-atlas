@@ -39,6 +39,7 @@ const selectors=[
   "#tab-diagnostic","#home-continue","#home-learn","#home-research",
   "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
   "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
+  "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
@@ -86,8 +87,13 @@ const run=expression=>vm.runInContext(expression,context);
 assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
 assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Otto mission fallback remains mounted");
 assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Domain-first homepage replaces guide as the default");
-assert.equal(elements.get("#focus-domains").children.length,navigation.macros.length,"Focused homepage offers all domains");
-assert.equal(elements.get("#focus-concepts").children.length,6,"Focused homepage shows six concepts at once");
+assert.equal(elements.get("#focus-domains").children.length,5,"One-field homepage shows five connected research parts");
+assert.equal(elements.get("#focus-concepts").children.length,0,"Concepts hidden until a chapter and topic are selected");
+assert.equal(elements.get("#focus-concept-section").hidden,true,"The chapter view is collapsed on initial load");
+run('focusedHome.selectChapter("cosmic-record")');
+assert.equal(elements.get("#focus-topics").children.length,3,"Cosmic-record chapter reveals three curated topics");
+run('focusedHome.selectTopic("topic-gravitational-wave-paleontology-cosmic-evolution-and-rates")');
+assert.equal(elements.get("#focus-concepts").children.length,4,"Only the selected topic's real concepts appear");
 assert.match(elements.get("#otto-guide").innerHTML,/OTTO · YOUR COSMIC GUIDE/,"The mascot is visible in the primary home experience");
 assert.match(elements.get("#otto-guide").innerHTML,/Continue my mission/,"A single primary learning action is shown");
 const route=run('guideController.plan()');
@@ -191,4 +197,4 @@ assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hi
 assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
 assert.ok(cameraFits>0,"3D camera framing was invoked");
 
-console.log("Passed: domain-first homepage, compact concept cards, Otto fallback, diagnostic-first onboarding, optional knowledge graph, adaptive practice, and mocked 3D navigation.");
+console.log("Passed: single-field GW paleontology journey, progressive chapters/topics/concepts, Otto fallback, diagnostic-first onboarding, optional knowledge graph, adaptive practice, and mocked 3D navigation.");

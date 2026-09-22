@@ -1,5 +1,7 @@
 # Gravitational-Wave Paleontology Research Atlas
 
+> **Current experience (September 2026): One-field gravitational-wave paleontology journey.** This is NOT a general choose-your-subject Atlas. The active homepage now begins with one field, explains its central research question, and progressively reveals **five connected parts → existing curriculum topics → individual concepts**, with the original typed prerequisites and actual available practice. The optional diagnostic also has **one field-wide starting goal**, not a list of ten competing domains. The knowledge graph is collapsed at the bottom and the full structured/3D Atlas remains available by choice. See [the current UX architecture](docs/single-field-learning-journey.md). Earlier sections below document historical iterations of the interface, not the current default navigation.
+
 An open, interconnected curriculum and immersive 3D knowledge graph for gravitational-wave astrophysics.
 
 ## Run locally
