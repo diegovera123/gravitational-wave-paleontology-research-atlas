@@ -210,14 +210,18 @@ function updateOtto(){
  if(activeView==="home")target.textContent=homeDiagnosticVisible?
    "Rate what you can explain today. A quick check is only a starting point.":
    "Open the graph to explore the field. The starting-point diagnostic is optional.";
- else if(activeView==="practice")target.textContent="Choose a pilot practice set, check each explanation, and revisit objectives due for review. Short quizzes offer formative feedback.";
+ else if(activeView==="practice")target.textContent="Choose a research track for authored adaptive questions or work through its 100 progressive self-checked prompts. Answers to written prompts are not graded.";
  else if(lesson)target.textContent="Studying "+lesson+"? Read the explanation, try the worked example, then practise when ready.";
  else if(selected)target.textContent="This concept's background, explanations, sources and practice are all here. Follow a prerequisite whenever you need it.";
  else target.textContent="Click a large cluster to see its topics, then open a concept. Use Back to zoom out.";
 }
-function renderGraphResearchQuestions(){
+function renderGraphResearchQuestions(conceptId=null){
  const host=$("#constellation-research-questions");if(!host)return;host.replaceChildren();
- for(const q of researchQuestions){
+ // One consolidated research-question area. Select a concept to show its related
+ // questions; when no direct match exists, retain the full research index.
+ const matched=conceptId?researchQuestions.filter(q=>q.conceptIds?.includes(conceptId)):[];
+ const shown=matched.length?matched:researchQuestions;
+ for(const q of shown){
    host.appendChild(button(q.title,()=>{setActiveView("explore");constellation?.showQuestion(q);},"constellation-choice"));
  }
 }
@@ -458,6 +462,9 @@ function openPracticeUnit(id,mode=null){
   $("#practice-selected-title").textContent=practiceUnits.get(id).title;
   renderPracticeHub();
   renderPracticeCases(practiceUnits.get(id));
+  const concept=byId(practiceUnits.get(id).conceptId);
+  if(window.AtlasGuidedPractice&&concept)window.AtlasGuidedPractice.mount({host:$("#practice-guided-prompts"),concept,concepts});
+  if(window.AtlasLiterature&&concept)window.AtlasLiterature.mount({host:$("#practice-literature"),concept});
   if(mode)startAdaptiveQuiz(mode);
   else renderAdaptivePanel();
   $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
@@ -1045,7 +1052,7 @@ async function initialise() {
       constellation=window.AtlasConstellation.mount({
         host:$("#constellation-shell"),macros:atlas.macros,topics:atlas.topics,
         concepts,locationByConcept,researchSources,researchQuestions,diagnosticQuestions:diagnosticData.questions,
-        onConceptSelected:()=>updateOtto(),
+        onConceptSelected:id=>{updateOtto();renderGraphResearchQuestions(id);},
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
