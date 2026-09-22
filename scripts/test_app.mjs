@@ -10,6 +10,7 @@ const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json
 const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questions.json","utf8"));
 const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-units.json","utf8"));
 const adaptiveBank = JSON.parse(await fs.readFile("knowledge-graph/adaptive-items.json","utf8"));
+const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-questions.json","utf8"));
 
 class ElementStub {
   constructor() {
@@ -69,7 +70,8 @@ const responseData={
   "knowledge-graph/navigation.json":navigation,
   "knowledge-graph/research-questions.json":questions,
   "knowledge-graph/learning-units.json":learningUnits,
-  "knowledge-graph/adaptive-items.json":adaptiveBank
+  "knowledge-graph/adaptive-items.json":adaptiveBank,
+  "knowledge-graph/diagnostic-questions.json":diagnosticBank
 };
 const stored=new Map();
 const context=vm.createContext({
