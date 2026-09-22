@@ -107,4 +107,4 @@ fallback.initialize();
 assert.equal(fallback.snapshot().has3D,false);
 assert.equal(element("#constellation-fallback").hidden,false);
 assert.equal(fallback.scene().items.length,5,"No-WebGL fallback still exposes every research cluster");
-console.log("Passed: two-tab Atlas, lazy 3D cluster hierarchy, integrated concept background/resources/practice, authored pilot unit and conceptual check routes, research links and accessible no-WebGL fallback.");
+console.log("Passed: three-tab Atlas, lazy 3D hierarchy, concept context with standalone pilot-practice links and in-graph short checks, research links and accessible no-WebGL fallback.");
