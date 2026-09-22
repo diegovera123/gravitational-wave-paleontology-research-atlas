@@ -38,9 +38,10 @@
     </section>
 
 
-    <nav id="atlas-tabs" class="atlas-primary-nav gw-two-tabs" aria-label="Main sections" role="tablist">
+    <nav id="atlas-tabs" class="atlas-primary-nav gw-three-tabs" aria-label="Main sections" role="tablist">
       <button type="button" role="tab" id="tab-home" aria-controls="home-panel" aria-selected="true" data-atlas-tab="home">Home</button>
       <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge Graph</button>
+      <button type="button" role="tab" id="tab-practice" aria-controls="practice-panel" aria-selected="false" data-atlas-tab="practice" tabindex="-1">Practice</button>
     </nav>
 
 
@@ -258,8 +259,30 @@
     </section>
       </div>
     </section>
+    <section id="practice-panel" class="atlas-tab-panel practice-workspace" role="tabpanel" aria-labelledby="tab-practice" hidden>
+      <header class="practice-hero">
+        <span class="focus-eyebrow">YOUR PRACTICE WORKSPACE</span>
+        <h2>Put your understanding to the test.</h2>
+        <p>Choose a concept, practise with authored questions, and revisit learning objectives when a review is due.</p>
+      </header>
+      <section class="practice-library" aria-labelledby="practice-library-title">
+        <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice set</h3><span>Three complete pilot sets · More in development</span></div>
+        <div id="practice-unit-cards" class="practice-unit-cards"></div>
+      </section>
+      <section class="practice-reviews" aria-labelledby="practice-reviews-title">
+        <div class="practice-section-heading"><h3 id="practice-reviews-title">Ready for review</h3><span>Based on your answers in this browser</span></div>
+        <div id="due-practice" class="due-practice" aria-live="polite"></div>
+      </section>
+      <section id="practice-active" class="practice-active" aria-labelledby="practice-selected-title" hidden>
+        <div class="practice-active-header"><div><span class="focus-eyebrow">SELECTED PRACTICE SET</span>
+          <h3 id="practice-selected-title">Choose a concept</h3></div>
+          <button id="practice-return-graph" class="constellation-quiet" type="button">View in Knowledge Graph ↗</button></div>
+        <div id="adaptive-panel" class="lesson-assessment" aria-live="polite"></div>
+      </section>
+      <p class="practice-scope">Current adaptive practice is available for the three authored pilot units. Other concepts retain their existing ungraded exercise prompts and authored single-question checks in Knowledge Graph. This workspace does not certify mastery.</p>
+    </section>
     <section id="learn-panel" hidden aria-hidden="true">
-      <div id="learn-hub" hidden><div id="learn-hub-cards"></div><div id="due-practice"></div></div>
+      <div id="learn-hub" hidden><div id="learn-hub-cards"></div></div>
     </section>
   </main>
 
