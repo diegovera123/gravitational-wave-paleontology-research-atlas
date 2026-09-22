@@ -1270,3 +1270,73 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
 .literature-list p,[data-literature-status]{color:#9bb1d1;font:400 11px/1.6 var(--font-body);margin:7px 0 0;}
 .practice-guided-prompts{margin-top:25px;padding:22px;border:1px solid rgba(141,171,222,.29);border-radius:14px;background:rgba(20,35,60,.69);}
 @media(max-width:760px){.practice-guided-prompts{padding:14px}.guided-head{display:block}.guided-count{display:inline-block;margin-top:7px}}
+
+
+/* The constellation stays in place: selecting a node opens a tabbed, expandable overlay,
+   rather than rendering a long document underneath the 3D canvas. */
+#constellation-detail-shade[hidden],#constellation-detail[hidden],
+[data-concept-panel][hidden]{display:none!important;}
+.constellation-detail-shade{position:fixed;inset:0;z-index:100;background:rgba(3,7,16,.71);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);}
+#constellation-detail.constellation-detail{position:fixed;z-index:101;inset:clamp(10px,2vw,22px) clamp(10px,2vw,22px) clamp(10px,2vw,22px) auto;
+  display:flex;flex-direction:column;box-sizing:border-box;width:min(640px,calc(100vw - 20px));max-width:none;
+  margin:0;padding:0;border:1px solid rgba(156,180,230,.31);border-radius:20px;
+  background:linear-gradient(145deg,#17233a,#0c1425 65%,#0a101b);
+  box-shadow:0 32px 120px rgba(0,0,0,.68);overflow:hidden;color:#eaf2ff;}
+#constellation-detail.is-expanded{left:clamp(10px,2vw,22px);width:auto;}
+.concept-dialog-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:23px 25px 16px;border-bottom:1px solid rgba(150,178,225,.17);}
+.concept-dialog-header>div:first-child{min-width:0;}
+.concept-dialog-header h3{margin:10px 0 9px!important;font:600 clamp(22px,2.9vw,31px)/1.2 var(--font-display);letter-spacing:-.025em;}
+.concept-dialog-header p{margin:0;font:400 12px/1.65 var(--font-body);color:#a8bddc;}
+.concept-dialog-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+.concept-dialog-actions button{font:600 10px/1.45 var(--font-body);padding:9px 11px;}
+.concept-dialog-tabs{display:flex;gap:5px;overflow-x:auto;flex-shrink:0;padding:12px 19px 0;border-bottom:1px solid rgba(150,178,225,.17);}
+.concept-dialog-tabs button{flex:0 0 auto;padding:11px 13px 13px;border:0;border-bottom:2px solid transparent;background:transparent;color:#a0b5d3;
+ font:600 11px/1.4 var(--font-body);cursor:pointer;white-space:nowrap;}
+.concept-dialog-tabs button[aria-selected="true"]{border-bottom-color:#c5b3f3;background:rgba(108,107,181,.14);color:#f1edff;}
+.concept-dialog-tabs button:focus-visible{outline:2px solid #bdd3ff;outline-offset:-3px;}
+.concept-dialog-body{padding:24px 27px 36px;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+.concept-dialog-body>section>h4,.concept-dialog-body>h4{font:600 17px/1.35 var(--font-display);color:#edf3ff;margin:0 0 13px;}
+.concept-dialog-body p{font:400 13px/1.8 var(--font-body);color:#c0cee7;max-width:85ch;}
+.concept-dialog-body .constellation-objectives{font:500 13px/1.65 var(--font-body);padding-left:26px;display:grid;gap:11px;margin:15px 0;}
+.concept-dialog-body .constellation-objectives li{color:#e1eafd;}
+.concept-dialog-body .concept-intuition-question{color:#eae9ff;font:600 clamp(15px,2vw,19px)/1.5 var(--font-display);margin-top:8px;}
+.concept-intuition-model,.concept-intuition-limits{border-left:3px solid #98aee4;padding:12px 16px;margin:17px 0;
+ background:rgba(74,97,143,.14);border-radius:0 11px 11px 0;}
+.concept-intuition-limits{border-left-color:#bba1db;background:rgba(112,80,137,.13);}
+.concept-intuition-model strong,.concept-intuition-limits strong{font:600 12px var(--font-body);color:#f0f0ff;}
+.concept-intuition-model p,.concept-intuition-limits p{margin:7px 0 0;}
+.concept-schematic{border:1px solid rgba(148,174,227,.28);border-radius:14px;background:rgba(11,21,38,.8);padding:18px 15px;margin:24px 0 10px;}
+.concept-schematic-flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.concept-schematic-step{min-width:110px;flex:1 1 110px;display:flex;flex-direction:column;gap:13px;align-items:flex-start;min-height:94px;
+ background:linear-gradient(145deg,rgba(49,64,109,.75),rgba(29,45,75,.68));border:1px solid rgba(157,174,229,.29);
+ color:#eef3ff;border-radius:11px;padding:15px;font:600 12px/1.45 var(--font-body);}
+.concept-schematic-number{color:#b6bcef;font:600 11px var(--font-body);}
+.concept-schematic-arrow{font:600 19px var(--font-body);color:#afc3ec;}
+.concept-schematic figcaption{margin-top:14px;color:#8ea5ca;font:400 10px/1.5 var(--font-body);}
+.concept-connection-group{padding:10px 0 15px;border-bottom:1px solid rgba(137,167,215,.18);}
+.concept-connection-group h4{font:600 13px/1.5 var(--font-body);color:#d5e6ff;}
+.concept-dialog-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+ padding:15px 23px;border-top:1px solid rgba(153,178,226,.22);background:rgba(12,19,34,.92);}
+.concept-dialog-footer span{color:#94aaca;font:400 11px/1.5 var(--font-body);max-width:260px;}
+.concept-dialog-footer button{font:600 11px/1.5 var(--font-body);border-radius:9px;padding:10px 13px;}
+.practice-all-concepts{border:1px solid rgba(142,175,225,.29);background:rgba(23,36,60,.77);
+ border-radius:13px;padding:20px;margin-top:21px;display:flex;align-items:center;gap:11px;flex-wrap:wrap;}
+.practice-all-concepts>div{flex:2 1 310px;}
+.practice-all-concepts p{margin:6px 0;color:#adbed8;font:400 12px/1.65 var(--font-body);}
+.practice-all-concepts label{color:#c2d5f5;font:600 11px var(--font-body);}
+.practice-all-concepts select{max-width:100%;flex:1 1 195px;border:1px solid rgba(153,178,221,.35);border-radius:9px;
+ background:#121e34;color:#edf2ff;padding:12px;}
+.practice-all-concepts button{white-space:nowrap;font:600 11px var(--font-body);padding:12px;}
+@media(max-width:760px){
+ #constellation-detail.constellation-detail{inset:0!important;border-radius:0;width:100vw!important;max-width:none!important;}
+ .concept-dialog-header{padding:17px 16px 13px;flex-direction:column;gap:12px;}
+ .concept-dialog-actions{align-self:flex-end;}
+ .concept-dialog-body{padding:20px 17px 29px;}
+ .concept-dialog-tabs{padding:7px 10px 0;}
+ .concept-dialog-footer{padding:12px 15px;}
+ .concept-schematic-flow{align-items:stretch;}
+ .concept-schematic-arrow{display:none;}
+ .practice-all-concepts{align-items:stretch;flex-direction:column;}
+ .practice-all-concepts>div{flex:auto;}
+}
