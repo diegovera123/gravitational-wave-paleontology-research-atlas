@@ -79,7 +79,7 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
     }
     selectedId=id;answered=false;
     renderConcepts();
-    const req=necessary(c),supp=useful(c),detail=$("#focus-detail");
+    const req=necessary(c),supp=useful(c),downstream=concepts.filter(other=>necessary(other).some(e=>e.id===id)).slice(0,3),detail=$("#focus-detail");
     const format=links=>links.map(e=>linkFor(e.id)).join("");
     const startLabel=unitIds.has(id)?"Start 5-question drill":byQuestion.has(id)?"Try a quick conceptual check":null;
     detail.hidden=false;detail.innerHTML=
@@ -90,6 +90,7 @@ function mount({host,macros,topics,concepts,questions,learningUnits,locationByCo
       '<div class="focus-relation"><strong>Necessary before this</strong>'+
       '<div class="focus-prereq-links">'+(req.length?format(req):'<span class="focus-muted">No direct necessary prerequisites listed.</span>')+'</div></div>'+
       (supp.length?'<div class="focus-relation"><strong>Useful for context</strong><div class="focus-prereq-links">'+format(supp)+'</div></div>':'')+
+      (downstream.length?'<div class="focus-relation"><strong>Builds toward</strong><div class="focus-prereq-links">'+downstream.map(next=>linkFor(next.id)).join("")+'</div></div>':'')+
       '<div class="focus-exercise"><strong>Exercise idea</strong><p>'+escape(c.masteryAssessment||"Explain the central idea in your own words.")+'</p>'+
       '<small>Suggested practice prompt; not automatically graded.</small></div>'+
       '<div class="focus-detail-actions">'+
