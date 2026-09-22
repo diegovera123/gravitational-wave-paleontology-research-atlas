@@ -14,12 +14,13 @@
   <script defer src="diagnostic.js"></script>
   <script defer src="diagnostic-ui.js"></script>
   <script defer src="guide.js"></script>
+  <script defer src="focus-home.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
   <div class="star-field" aria-hidden="true"></div>
   <header class="site-header">
-    <a class="brand" href="#home" id="brand-home" aria-label="Return to your mission">
+    <a class="brand" href="#home" id="brand-home" aria-label="Return to domain overview">
       <span class="brand-mark" aria-hidden="true"><i></i></span>
       <span><strong>Research Atlas</strong><small>Gravitational-wave paleontology</small></span>
     </a>
@@ -56,6 +57,39 @@
     <section id="dashboard" class="dashboard" aria-label="Research workspace">
       <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
       <div id="otto-guide" class="otto-guide" hidden aria-live="polite"></div>
+      <section id="focus-home" class="focus-home" aria-label="Explore and practise research concepts">
+        <header class="focus-hero">
+          <img src="assets/otto-orbit.svg" alt="" aria-hidden="true" width="64" height="68"/>
+          <div><span class="focus-eyebrow">YOUR RESEARCH ATLAS</span>
+            <h1>Pick a field. Explore an idea.</h1>
+            <p>See how concepts connect, check their prerequisites, and try a short exercise.</p>
+          </div>
+          <button id="focus-change-goal" type="button" class="focus-text-button">Update my starting point</button>
+        </header>
+        <section aria-labelledby="focus-domain-title">
+          <div class="focus-heading"><h2 id="focus-domain-title">Choose a domain</h2><span>Explore at your own pace</span></div>
+          <div id="focus-domains" class="focus-domain-list" aria-label="Scientific domains"></div>
+        </section>
+        <section id="focus-concept-section" aria-labelledby="focus-concept-title">
+          <div class="focus-heading"><h2 id="focus-concept-title">Concepts</h2><button id="focus-open-region" type="button" class="focus-text-button">All topics ↗</button></div>
+          <p id="focus-domain-description" class="focus-muted"></p>
+          <div id="focus-concepts" class="focus-concept-list"></div>
+          <button type="button" id="focus-show-more" class="focus-text-button" hidden>Show more concepts ↓</button>
+          <div id="focus-detail" class="focus-detail" hidden aria-live="polite"></div>
+          <div id="focus-quiz" class="focus-quiz" hidden aria-live="polite"></div>
+        </section>
+        <details id="focus-graph-toggle" class="focus-graph-toggle">
+          <summary><span class="focus-graph-symbol" aria-hidden="true">◎</span> Knowledge graph <small>Optional · view how domains connect</small></summary>
+          <div class="focus-graph-scroll"><div id="dashboard-network-map" class="dashboard-network-map" aria-label="Expandable knowledge graph of connected research domains"></div></div>
+          <button id="focus-full-map" type="button" class="focus-text-button">Open the full knowledge map ↗</button>
+        </details>
+        <div class="focus-bottom-links">
+          <button type="button" id="focus-research" class="focus-text-button">Research questions ↗</button>
+          <button type="button" id="focus-all-practice" class="focus-text-button">All lessons & exercises ↗</button>
+          <button type="button" id="focus-library" class="focus-text-button">Resources ↗</button>
+        </div>
+      </section>
+
       <div id="legacy-home">
       <div class="home-map-heading">
         <div><p class="eyebrow">Your Atlas</p><h2 id="dashboard-title">Start from the map.</h2>
@@ -71,7 +105,7 @@
             <button type="button" id="open-full-3d" class="network-expand">Open full graph ↗</button>
           </div>
         </div>
-        <div id="dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
+        <div id="legacy-dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
           <p class="dashboard-loading">Loading the knowledge graph…</p>
         </div>
       </section>
