@@ -32,8 +32,8 @@ function kick(){
  L(267,117,267,51,"figure-velocity",true)+L(267,117,358,117,"figure-kick",true)+
  L(267,117,358,51,"figure-result",true)+
  T(178,36,"Before collapse")+T(264,45,"v")+
- T(314,105,"kick w",'class="figure-text-kick"'))+
- T(372,58,"v + w",'class="figure-text-result"'))+
+ T(314,105,"kick w")+
+ T(372,58,"v + w")+
  L(389,111,451,111,"figure-link",true)+
  '<rect x="454" y="70" width="150" height="103" rx="12" class="figure-panel"/>'+
  T(465,95,"New mass M′")+T(465,119,"New separation r")+T(465,143,"New relative speed |v′|")+
