@@ -14,7 +14,7 @@ const questionCardsElement = $("#question-cards"), statsElement = $("#atlas-stat
 let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locationByConcept;
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
-let learningUnits=new Map(), practiceUnits=new Map(), practiceByConcept=new Map(), openUnitId=null;
+let learningUnits=new Map(), practiceUnits=new Map(), practiceByConcept=new Map(), openUnitId=null,practiceConceptId=null;
 let practiceArea="all",practiceQuery="";
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
@@ -407,6 +407,14 @@ function renderFeaturedUnits(){
   }
 }
 function renderPracticeFilters(){
+  const chooser=$("#practice-concept-picker");
+  if(chooser){chooser.innerHTML='<option value="">Choose a concept…</option>'+
+    [...concepts].sort((a,b)=>a.title.localeCompare(b.title)).map(concept=>
+      '<option value="'+html(concept.id)+'">'+html(concept.title)+'</option>').join("");
+    $("#practice-open-concept").addEventListener("click",()=>{
+      if(chooser.value)openConceptPractice(chooser.value);
+    });
+  }
   const select=$("#practice-area-filter");if(!select)return;
   const areas=[...new Set([...practiceUnits.values()].map(u=>u.area))].sort();
   select.innerHTML='<option value="all">All research areas</option>'+
@@ -453,9 +461,26 @@ function renderPracticeCases(unit){
    '<div class="practice-sources"><span class="lesson-kicker">PUBLIC READING · CHECK ORIGINAL SOURCES</span>'+
    (unit.sources||[]).map(s=>'<a target="_blank" rel="noopener noreferrer" href="'+html(safeLink(s.url))+'">'+html(s.title)+' ↗</a>').join("")+'</div>';
 }
+function openConceptPractice(conceptId){
+  const concept=byId(conceptId);if(!concept)return;
+  if(practiceByConcept.has(conceptId)){openPracticeUnit(practiceByConcept.get(conceptId));return;}
+  openUnitId=null;practiceConceptId=conceptId;
+  $("#learning-studio").hidden=true;
+  setActiveView("practice",{scroll:false});
+  $("#practice-active").hidden=false;
+  $("#practice-selected-title").textContent=concept.title;
+  renderPracticeHub();
+  $("#practice-objectives").innerHTML='<span class="lesson-kicker">LEARNING OBJECTIVES</span><ol class="constellation-objectives">'+
+    (concept.learningObjectives||[]).map(obj=>"<li>"+html(obj)+"</li>").join("")+"</ol>";
+  $("#adaptive-panel").innerHTML='<p>This concept has a 100-step guided, self-checked practice progression below. A separate authored, automatically scored question bank has not been added for this concept yet.</p>';
+  $("#practice-case-studies").hidden=true;
+  window.AtlasGuidedPractice?.mount({host:$("#practice-guided-prompts"),concept,concepts});
+  window.AtlasLiterature?.mount({host:$("#practice-literature"),concept});
+  $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+}
 function openPracticeUnit(id,mode=null){
   if(!practiceUnits.has(id))return;
-  openUnitId=id;
+  openUnitId=id;practiceConceptId=null;
   $("#learning-studio").hidden=true;
   setActiveView("practice",{scroll:false});
   $("#practice-active").hidden=false;
@@ -470,7 +495,7 @@ function openPracticeUnit(id,mode=null){
   $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 function closePracticeUnit(){
-  openUnitId=null;
+  openUnitId=null;practiceConceptId=null;
   $("#practice-active").hidden=true;
   $("#practice-case-studies").hidden=true;
   renderPracticeHub();
@@ -1056,9 +1081,9 @@ async function initialise() {
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
-        startDrill:id=>openPracticeUnit(practiceByConcept.get(id),"practice"),
-        hasPractice:id=>practiceByConcept.has(id),
-        startPractice:id=>openPracticeUnit(practiceByConcept.get(id)),
+        startDrill:id=>openConceptPractice(id),
+        hasPractice:()=>true,
+        startPractice:id=>openConceptPractice(id),
         hasLesson:id=>learningUnits.has(id)
       });
     }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
@@ -1106,7 +1131,7 @@ $("#otto-helper-close").addEventListener("click",()=>{
 });
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#practice-return-graph").addEventListener("click",()=>{
-  const id=practiceUnits.get(openUnitId)?.conceptId;
+  const id=practiceUnits.get(openUnitId)?.conceptId||practiceConceptId;
   closePracticeUnit();
   if(id)openConcept(id,true);
   scrollToExplorer();
