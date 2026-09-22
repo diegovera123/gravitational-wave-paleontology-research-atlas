@@ -90,6 +90,7 @@ vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
 vm.runInContext(await fs.readFile("practice-catalog.js","utf8"),context);
 vm.runInContext(await fs.readFile("guided-practice.js","utf8"),context);
 vm.runInContext(await fs.readFile("literature-search.js","utf8"),context);
+vm.runInContext(await fs.readFile("concept-figures.js","utf8"),context);
 vm.runInContext(await fs.readFile("concept-insight.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
@@ -215,7 +216,8 @@ assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/concept-dia
 assert.ok(elements.get("#constellation-detail").innerHTML.indexOf("Learning objectives")<elements.get("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Objectives come first");
 assert.ok(elements.get("#constellation-detail").innerHTML.indexOf("Research resources")>elements.get("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Resources come last");
 assert.match(elements.get("#constellation-detail").innerHTML,/data-deep-explanation="supernova-kicks"/,"A concrete, extended supernova explanation was loaded");
-assert.match(elements.get("#constellation-detail").innerHTML,/Conceptual schematic/,"Concept drawer includes an explanatory schematic");
+assert.match(elements.get("#constellation-detail").innerHTML,/A directional kick changes relative orbital velocity/,"Concept unit presents its own annotated physical illustration");
+assert.match(elements.get("#constellation-detail").innerHTML,/concept-read-progress/,"Reader includes a continuous progress indicator");
 assert.equal(elements.get("#constellation-detail-shade").hidden,false,"Drawer opens over constellation, not below it");
 assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/Connected research questions/,"The duplicate concept-level question group is gone");
 run('constellation.back()');
