@@ -21,7 +21,7 @@ const statusNames={
   "review":"Review suggested · check incorrect",
   "review-confident":"Review suggested · high-confidence error"
 };
-function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,navigate,openConcept,openLearningUnit,onOnboardingComplete,onSkipOnboarding}){
+function mount({host,overview,concepts,questions,questionPaths,macros,topics,engine,onProfileChange,navigate,openConcept,openLearningUnit,onOnboardingComplete,onSkipOnboarding,onStageChange}){
   if(!host||!overview)throw Error("Diagnostic interface missing.");
   engine.validateQuestions({schemaVersion:1,questions},concepts);
   const m=new Map(concepts.map(c=>[c.id,c])),qMap=new Map(questions.map(q=>[q.conceptId,q]));
@@ -255,6 +255,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
     });
   }
   function render(){
+    onStageChange?.(stage,stage==="feedback"&&session?.currentId?session.checks[session.currentId]?.correct:null);
     if(stage==="choose"||!session)return renderChoose();
     if(stage==="rate")return renderRate();
     if(stage==="check")return renderCheck();
