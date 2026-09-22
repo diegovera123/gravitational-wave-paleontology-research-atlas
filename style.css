@@ -1019,3 +1019,79 @@ body.mission-home .site-header{padding-bottom:11px;}
   .gw-focus .focus-concept{align-items:flex-start;flex-direction:column;gap:5px}
   .gw-focus .focus-concept-meta{text-align:left;max-width:none}
 }
+
+
+/* 3D-only Explorer: the previous 2-column structured explorer is retained only
+   as an inert compatibility data surface for pre-existing deep links. */
+#legacy-explorer{display:none!important}
+#explore-panel{min-width:0;}
+.constellation-shell{width:min(100%,1420px);margin:0 auto 48px;}
+.constellation-header{display:flex;gap:25px;justify-content:space-between;align-items:flex-start;padding:14px 8px 23px;}
+.constellation-header h2{font:600 clamp(29px,4.2vw,52px)/1.12 var(--font-display);letter-spacing:-.055em;margin:8px 0 11px;}
+.constellation-header p{color:#a4b3d1;font:400 13px/1.65 var(--font-body);max-width:640px;margin:0;}
+.constellation-quiet{border:1px solid rgba(151,170,213,.23);border-radius:999px;
+  color:#d4def2;background:rgba(27,37,60,.78);padding:10px 16px;cursor:pointer;font:500 12px var(--font-body);}
+.constellation-quiet:hover,.constellation-quiet:focus-visible{border-color:#b1c4ef;color:#fff;outline:2px solid transparent;}
+.constellation-quiet:disabled{opacity:.35;cursor:default;}
+.constellation-stage{position:relative;overflow:hidden;border:1px solid rgba(146,166,209,.25);border-radius:23px;
+  min-height:540px;background:
+  radial-gradient(ellipse at 47% 44%,rgba(57,67,133,.20),transparent 65%),
+  radial-gradient(circle at 15% 20%,rgba(210,223,255,.45) .7px,transparent 1.3px),
+  radial-gradient(circle at 85% 70%,rgba(210,223,255,.35) .6px,transparent 1.5px),
+  #090e1a;background-size:auto,137px 157px,211px 181px,auto;
+  box-shadow:0 30px 90px rgba(0,0,0,.19);}
+#constellation-canvas{height:min(70vh,690px);min-height:540px;width:100%;position:relative;cursor:grab;}
+#constellation-canvas:active{cursor:grabbing}
+#constellation-canvas canvas{display:block}
+#constellation-canvas[hidden],#constellation-fallback[hidden],#constellation-detail[hidden]{display:none!important;}
+.constellation-stage-top{position:absolute;top:18px;left:19px;right:19px;display:flex;align-items:center;gap:11px;pointer-events:none;}
+.constellation-stage-top>*{pointer-events:auto}
+.constellation-stage-top .constellation-location{margin:auto;color:#e1e9ff;border:1px solid rgba(153,168,203,.18);
+  background:rgba(13,19,35,.85);backdrop-filter:blur(9px);border-radius:999px;padding:9px 15px;
+  font:500 11px var(--font-body);text-align:center;max-width:46%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.constellation-stage-top #constellation-reset{margin-left:auto}
+.constellation-hint{position:absolute;bottom:13px;left:15px;right:15px;margin:0;pointer-events:none;
+  text-align:center;font:400 11px var(--font-body);color:#97a7c4;text-shadow:0 1px 5px #050811;}
+.constellation-loading,.constellation-fallback{position:absolute;inset:0;display:grid;place-items:center;
+  text-align:center;padding:45px;color:#c2d3f0;font:500 14px var(--font-body);line-height:1.6;}
+.constellation-navigation{margin:21px 0 5px;}
+.constellation-navigation h3{font:500 16px var(--font-display);color:#e7eeff;margin:0 0 14px;}
+.constellation-choices{display:flex;flex-wrap:wrap;gap:9px;}
+.constellation-choice{display:flex;align-items:center;gap:10px;max-width:320px;min-height:43px;text-align:left;
+  border:1px solid rgba(153,173,214,.24);border-radius:999px;background:rgba(25,35,59,.68);
+  color:#e1e9fa;padding:10px 14px;cursor:pointer;font:500 12px/1.4 var(--font-body);}
+.constellation-choice:hover,.constellation-choice:focus-visible{border-color:var(--node-color,#aabbff);
+  background:rgba(63,75,121,.34);outline:2px solid transparent;}
+.constellation-choice-dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--node-color,#aabbff);
+  box-shadow:0 0 10px var(--node-color,#aabbff);}
+.constellation-choice-arrow{color:#95a7c8;margin-left:auto;}
+.constellation-detail{border-top:1px solid rgba(139,162,209,.25);margin:24px 0 0;padding:24px 0 4px;max-width:850px;}
+.constellation-detail-top{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.constellation-detail h3{font:600 clamp(23px,3vw,34px)/1.2 var(--font-display);color:#edf1ff;margin:8px 0 12px;}
+.constellation-detail p{font:400 13px/1.7 var(--font-body);color:#a9b9d6;max-width:720px;}
+.constellation-detail .constellation-prereq{font-size:11px;color:#c1cde8;}
+.constellation-detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;}
+.gw-open-constellation{margin:33px 0 12px;border-top:1px solid rgba(151,177,215,.20);padding-top:17px;}
+.gw-constellation-link{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;
+  color:#d9e5ff;text-align:left;cursor:pointer;padding:13px 6px;font:600 15px/1.4 var(--font-display);}
+.gw-constellation-link:hover,.gw-constellation-link:focus-visible{color:#fff;outline:2px solid #9db8ef;outline-offset:3px;}
+.gw-constellation-link>span:first-child{color:#b9a7f4;font-size:23px;}
+.gw-constellation-link>span:nth-child(2){flex:1}
+.gw-constellation-link small{display:block;color:#899ab8;font:400 11px/1.6 var(--font-body);margin-top:3px;}
+@media(max-width:680px){
+  .constellation-header{padding:11px 2px 17px;gap:12px;flex-wrap:wrap;}
+  .constellation-header h2{font-size:31px;}
+  .constellation-header>button{margin-left:auto;}
+  .constellation-stage{border-radius:15px;min-height:440px;}
+  #constellation-canvas{height:470px;min-height:470px;}
+  .constellation-stage-top{top:10px;left:9px;right:9px;gap:5px;}
+  .constellation-quiet{padding:9px 11px;font-size:10px;}
+  .constellation-stage-top .constellation-location{font-size:9px;padding:9px;max-width:44%;}
+  .constellation-hint{font-size:9px;}
+  .constellation-choice{max-width:100%;flex:1 1 auto;}
+}
+@media(prefers-reduced-motion:reduce){.constellation-shell *{scroll-behavior:auto!important;transition:none!important;}}
+
+body.constellation-mode .intro{display:none!important}
+body.constellation-mode .atlas-primary-nav{margin-top:4px;margin-bottom:12px}
+body.constellation-mode #explore-panel{margin-top:0}

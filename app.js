@@ -17,7 +17,7 @@ let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
-let activeView="home", diagnosticController=null, guideController=null, focusedHome=null;
+let activeView="home", diagnosticController=null, guideController=null, focusedHome=null, constellation=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
 const ONBOARDING_KEY="research-atlas-onboarding-seen-v1";
 let studiedIds=new Set(), progressAvailable=true;
@@ -137,7 +137,9 @@ function updateChoices(scene) {
 
 function scrollToExplorer() {
   setActiveView("explore",{scroll:false});
-  $("#explorer")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+  if(selectedId)constellation?.showConcept(selectedId);
+  else if(activeQuestionId)constellation?.showQuestion(researchQuestions.find(q=>q.id===activeQuestionId));
+  $("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
 }
 
 const TAB_NAMES=["home","diagnostic","paths","learn","explore","library"];
@@ -186,7 +188,7 @@ function mountFocusedHome(diagnosticQuestions){
       openLesson:id=>openLearningUnit(id),
       startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
       openDiagnostic:()=>diagnosticController?.open(),
-      openMap:()=>scrollToExplorer(),
+      openMap:()=>{constellation?.openOverview();setActiveView("explore");$("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});},
       openRegion:id=>{enterMacro(id);scrollToExplorer();},
       openResearch:()=>setActiveView("paths"),
       openAllPractice:()=>setActiveView("learn"),
@@ -215,6 +217,7 @@ function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
   document.body?.classList?.toggle?.("mission-home",view==="home");
+  document.body?.classList?.toggle?.("constellation-mode",view==="explore");
   for(const name of TAB_NAMES){
     const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
     panel.hidden=name!==view;
@@ -225,9 +228,9 @@ function setActiveView(view,options={}){
   if(view==="home"){focusedHome?.refresh();if(!focusedHome)guideController?.render();}
   if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
   if(options.focus)$("#tab-"+view).focus();
-  if(view==="explore" && graph && displayMode==="3d"){
-    graph.width(graphElement.clientWidth).height(graphElement.clientHeight);
-    draw({frame:true});
+  if(view==="explore"){
+    constellation?.initialize();
+    constellation?.ensureVisible();
   }
 }
 function setActiveViewFromTab(event){
@@ -913,27 +916,21 @@ async function initialise() {
       markOnboardingSeen();
     }
     renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
-    if(typeof ForceGraph3D!=="function") {
-      console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
-      $("#view-3d").disabled=true;enterGlobal();firstRunLanding();return;
-    }
-    // Measure the real canvas only after its tab is visible; a hidden panel reports 0 × 0.
-    setActiveView("explore",{scroll:false});
-    if(!graphElement.clientWidth||!graphElement.clientHeight)throw Error("The graph container has no size.");
-    graphElement.replaceChildren();
-    graph=ForceGraph3D()(graphElement)
-      .width(graphElement.clientWidth).height(graphElement.clientHeight).backgroundColor("rgba(0,0,0,0)")
-      .nodeColor(diagnosticColorFor)
-      .nodeVal(n=>n.type==="macro"?64:n.type==="topic"?26:9).nodeLabel(n=>n.name)
-      .linkColor(l=>l.type==="containment"?"rgba(132,156,201,.26)":l.type==="useful"?"rgba(165,135,255,.55)":"rgba(105,168,255,.85)")
-      .linkWidth(l=>l.type==="containment"?.7:l.type==="useful"?1:1.5)
-      .linkDirectionalArrowLength(l=>l.type==="necessary"?4:0)
-      .linkDirectionalArrowRelPos(.84)
-      .onNodeClick(handleNodeClick)
-      .onNodeHover(n=>{graphElement.style.cursor=n?"pointer":"grab";});
-    // No custom Three.js objects or optional CDN labels; readable HTML topic buttons remain available.
-    graph.d3Force("charge").strength(0);
+    // The full Explorer is now one progressive 3D constellation, not the legacy
+    // structured-map / sidebar workspace. The legacy data engine remains for
+    // research, deep links, the learning studio and old progress records.
     enterGlobal();
+    if(window.AtlasConstellation){
+      constellation=window.AtlasConstellation.mount({
+        host:$("#constellation-shell"),macros:atlas.macros,topics:atlas.topics,
+        concepts,locationByConcept,
+        forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
+        openConcept:id=>{focusedHome?.selectConcept(id);setActiveView("home");},
+        openLesson:id=>openLearningUnit(id),
+        startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
+        hasLesson:id=>learningUnits.has(id)
+      });
+    }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
     firstRunLanding();
     console.info("[Research Atlas] Loaded "+concepts.length+" concepts across "+atlas.macros.length+" regions and "+atlas.topics.length+" curated topics.");
   }catch(error){showGraphError("Unable to render the knowledge graph.",error);}
@@ -944,14 +941,14 @@ searchInput.addEventListener("keydown",event=>{
   if(event.key==="Enter")searchResults.querySelector("button")?.click();
 });
 document.addEventListener("keydown",event=>{
-  if(event.key==="/" && document.activeElement!==searchInput){event.preventDefault();searchInput.focus();}
-  if(event.key==="Escape" && searchResults.hidden)goParent();
+  if(event.key==="/" && activeView==="explore" && document.activeElement!==searchInput){event.preventDefault();searchInput.focus();}
+  if(event.key==="Escape" && searchResults.hidden){if(activeView==="explore")constellation?.back();else goParent();}
 });
 document.addEventListener("click",event=>{if(!event.target.closest(".graph-toolbar"))searchResults.hidden=true;});
 $("#global-view").addEventListener("click",enterGlobal);
 $("#parent-view").addEventListener("click",goParent);
 $("#history-view").addEventListener("click",()=>{const prior=previousLocations.pop();if(prior)restoreLocation(prior);});
-$("#open-full-3d").addEventListener("click",()=>{scrollToExplorer();setDisplayMode("3d");});
+$("#open-full-3d").addEventListener("click",()=>{scrollToExplorer();});
 function continueRecommendedPath(){
   const diagnosticPick=diagnosticController?.snapshot?.()?.goal?.goalId;
   const next=(diagnosticPick&&byId(diagnosticPick)&&learningState(byId(diagnosticPick))!=="studied"?byId(diagnosticPick):null)||
@@ -970,7 +967,7 @@ $("#view-map").addEventListener("click",()=>setDisplayMode("map"));
 $("#view-3d").addEventListener("click",()=>setDisplayMode("3d"));
 $("#reset-view").addEventListener("click",()=>{if(displayMode==="3d")graph?.zoomToFit(lowerMotion()?0:700,72);});
 window.addEventListener("resize",()=>{
-  if(graph && displayMode==="3d")graph.width(graphElement.clientWidth).height(graphElement.clientHeight);
+  if(activeView==="explore")constellation?.ensureVisible();
   draw({frame:false});
 });
 initialise();

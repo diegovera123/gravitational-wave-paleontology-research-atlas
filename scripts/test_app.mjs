@@ -40,6 +40,7 @@ const selectors=[
   "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
   "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
   "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
+  "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
@@ -80,11 +81,12 @@ const context=vm.createContext({
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
+vm.runInContext(await fs.readFile("constellation.js","utf8"),context);
 vm.runInContext(await fs.readFile("app.js","utf8"),context);
 await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
-assert.equal(scene.nodes.length,navigation.macros.length,"Global view shows only macro regions");
+assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
 assert.ok(elements.get("#home-panel").classList.contains("guide-ready"),"Otto mission fallback remains mounted");
 assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Domain-first homepage replaces guide as the default");
 assert.equal(elements.get("#focus-domains").children.length,5,"One-field homepage shows five connected research parts");
@@ -119,22 +121,16 @@ assert.equal(elements.get("#paths-panel").hidden,false,"Pathways tab opens");
 run('setActiveView("explore",{scroll:false})');
 assert.equal(elements.get("#explore-panel").hidden,false,"Knowledge atlas tab opens");
 
-assert.ok(scene.nodes.every(node=>node.type==="macro"),"No meso/micro content leaks into global view");
-assert.equal(elements.get("#graph").hidden,true,"Structured map is displayed by default");
-assert.equal(elements.get("#graph-map").hidden,false,"Structured map is available");
-assert.equal(elements.get("#domain-cards").children.length,navigation.macros.length,"Dashboard renders region cards");
-assert.equal(elements.get("#dashboard-network-map").children.length,navigation.macros.length+1,"Visible graph includes directional edge layer and macro nodes");
+assert.equal(scene.nodes.length,6,"New full-screen 3D scene starts with one central node and five research clusters");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="chapter"),"Only macro clusters appear at first, not all 133 concepts");
+assert.equal(elements.get("#constellation-choices").children.length,5,"Accessible equivalent shows five cluster choices");
+assert.equal(elements.get("#domain-cards").children.length,navigation.macros.length,"Supporting research area cards remain present in Research");
 assert.ok(elements.get("#learning-progress").textContent.includes("0 / "+curriculum.concepts.length),"Initial self-reported progress is empty");
 run('openConcept("limits",true)');
-assert.equal(elements.get("#graph-map").children.length,3,"Selected concept displays a prerequisite → concept → downstream learning path");
-assert.match(elements.get("#details").innerHTML,/Guided path:/,"Necessary prerequisites lock the guided path without hiding content");
-assert.match(elements.get("#details").innerHTML,/Go to next recommended prerequisite/,"Locked concept links to a ready prerequisite");
 run('markUnderstood("functions")');
 assert.ok(stored.get("research-atlas-studied-v1").includes("functions"),"Study markers are saved locally");
-run('openConcept("limits",true)');
-assert.match(elements.get("#details").innerHTML,/Ready for guided study/,"Marking a necessary prerequisite unlocks the recommended next concept");
 run('markUnderstood("limits")');
-assert.ok(stored.get("research-atlas-studied-v1").includes("limits"),"Self-reported completed concept is persisted");
+assert.ok(stored.get("research-atlas-studied-v1").includes("limits"),"Self-reported study marker is persisted");
 
 assert.equal(elements.get("#question-cards").children.length,questions.questions.length,"Dashboard renders research questions");
 assert.equal(elements.get("#pilot-cards").children.length,3,"Dashboard renders three source-linked pilot learning units");
@@ -161,40 +157,26 @@ assert.match(elements.get("#lesson-content").innerHTML,/From position to velocit
 assert.match(elements.get("#lesson-content").innerHTML,/Defining the Derivative/,"Source and provenance are displayed");
 run('closeLearningUnit()');
 assert.equal(elements.get("#learning-studio").hidden,true,"Learning studio closes without removing atlas");
-run('openQuestion("binary-survival")');
-assert.match(elements.get("#details").innerHTML,/What determines whether a massive binary survives/);
-run('openConcept("supernova-kicks",true)');
-assert.match(elements.get("#details").innerHTML,/Back to research question/);
-run('setDisplayMode("3d")');
-assert.equal(elements.get("#graph").hidden,false,"3D mode is available on demand");
-assert.equal(elements.get("#graph-map").hidden,true,"Map is hidden when switching to 3D");
+run('setActiveView("explore",{scroll:false})');
+clickNode(scene.nodes.find(node=>node.id==="stellar-origins"));
+assert.equal(run('constellation.snapshot().stage'),"chapter","Clicking a large 3D cluster opens its scientific parts");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="macro"),"Chapter reveals only actual macro regions");
+clickNode(scene.nodes.find(node=>node.id==="binary-stellar-evolution"));
+assert.equal(run('constellation.snapshot().stage'),"macro");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="topic"),"Region opens only its own curated topics");
+clickNode(scene.nodes.find(node=>node.id==="topic-binary-stellar-evolution-compact-binary-formation"));
+assert.equal(run('constellation.snapshot().stage'),"topic");
+assert.ok(scene.nodes.slice(1).every(node=>node.type==="concept"),"Topic reveals its own concepts, not the complete graph");
+clickNode(scene.nodes.find(node=>node.id==="supernova-kicks"));
+assert.match(elements.get("#constellation-detail").innerHTML,/Supernova Natal Kicks/,"Concept opens small preview rather than old sidebar");
+run('constellation.back()');
+assert.equal(run('constellation.snapshot().selectedId'),null,"Back closes current concept");
+run('constellation.back()');
+assert.equal(run('constellation.snapshot().stage'),"macro","Back moves one level up the cluster hierarchy");
+run('openQuestion("binary-survival");scrollToExplorer()');
+assert.match(elements.get("#constellation-detail").innerHTML,/What determines whether a massive binary survives/,"Research questions still open in the visible constellation");
+run('openConcept("linear-momentum",true);scrollToExplorer()');
+assert.equal(run('constellation.snapshot().macroId'),"classical-mechanics","Cross-domain deep links reveal the real containing cluster");
+assert.ok(cameraFits>0,"3D camera framing is invoked");
 
-
-run('enterMacro("calculus")');
-assert.equal(scene.nodes[0].type,"macro");
-assert.ok(scene.nodes.slice(1).every(node=>node.type==="topic"),"Macro view contains only topic groups");
-const mathTopic=navigation.topics.find(t=>t.macroId==="calculus");
-run('enterTopic('+JSON.stringify(mathTopic.id)+')');
-assert.equal(scene.nodes[0].type,"topic");
-assert.ok(scene.nodes.slice(1).every(node=>node.type==="concept"),"Topic reveals only its immediate concepts");
-
-run('openConcept("supernova-kicks",true)');
-assert.equal(run('snapshot().macroId'),"binary-stellar-evolution");
-assert.ok(elements.get("#details").innerHTML.includes("Supernova Natal Kicks"));
-assert.ok(scene.nodes.every(node=>node.type!=="macro"),"Cross-domain concept jump does not expose global nodes");
-
-run('openConcept("linear-momentum",true)');
-assert.equal(run('snapshot().macroId'),"classical-mechanics");
-assert.ok(run('snapshot().topicId'));
-const prevTopic=navigation.topics.find(t=>t.conceptIds.includes("supernova-kicks")).id;
-run('restoreLocation({level:"meso",macroId:"binary-stellar-evolution",topicId:'+JSON.stringify(prevTopic)+',selectedId:"supernova-kicks"})');
-assert.equal(run('snapshot().selectedId'),"supernova-kicks");
-run("goParent()");
-assert.equal(run("snapshot().selectedId"),null);
-assert.equal(run("snapshot().level"),"meso");
-run('setDisplayMode("map")');
-assert.equal(elements.get("#graph").hidden,true,"Returning to structured mode hides 3D");
-assert.equal(elements.get("#graph-map").hidden,false,"Returning to structured mode shows the map");
-assert.ok(cameraFits>0,"3D camera framing was invoked");
-
-console.log("Passed: single-field GW paleontology journey, progressive chapters/topics/concepts, Otto fallback, diagnostic-first onboarding, optional knowledge graph, adaptive practice, and mocked 3D navigation.");
+console.log("Passed: single-field GWP journey, lazy 3D-only graph with 5 clusters and progressive navigation, diagnostic-first onboarding, adaptive drills, research deep links and mocked WebGL navigation.");
