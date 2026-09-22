@@ -45,7 +45,7 @@ const selectors=[
   "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
-  "#practice-summary","#practice-area-filter","#practice-search","#practice-objectives","#practice-case-studies","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
+  "#practice-summary","#practice-area-filter","#practice-search","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
@@ -86,6 +86,8 @@ const context=vm.createContext({
 });
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
 vm.runInContext(await fs.readFile("practice-catalog.js","utf8"),context);
+vm.runInContext(await fs.readFile("guided-practice.js","utf8"),context);
+vm.runInContext(await fs.readFile("literature-search.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
 vm.runInContext(await fs.readFile("constellation.js","utf8"),context);
@@ -140,6 +142,8 @@ assert.equal(elements.get("#practice-panel").hidden,false,"Practice is its own v
 assert.equal(elements.get("#explore-panel").hidden,true,"Knowledge Graph is hidden while practising");
 assert.equal(elements.get("#learning-studio").hidden,true,"Practice does not overlay the graph learning studio");
 assert.equal(elements.get("#practice-unit-cards").children.length,15,"Practice shows three pilot units plus twelve detailed science tracks");
+assert.match(elements.get("#practice-guided-prompts").innerHTML,/100 PROGRESSIVE GUIDED RESEARCH PROMPTS/,"Every opened practice track has 100 self-checked progressive prompts");
+assert.match(elements.get("#practice-literature").innerHTML,/OpenAlex/,"Every practice track offers live related scholarly metadata search");
 assert.match(elements.get("#practice-summary").textContent,/168 authored questions/,"Research practice lists the full authored question bank");
 assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point in Practice");
 run('startAdaptiveQuiz()');
@@ -194,6 +198,9 @@ clickNode(scene.nodes.find(node=>node.id==="supernova-kicks"));
 assert.match(elements.get("#constellation-detail").innerHTML,/Supernova Natal Kicks/,"Concept opens its integrated learning unit within Knowledge Graph");
 assert.match(elements.get("#constellation-detail").innerHTML,/Necessary background/,"Prerequisites live inside the opened learning unit");
 assert.match(elements.get("#constellation-detail").innerHTML,/Research resources/,"Concept-specific resources live inside Knowledge Graph");
+assert.match(elements.get("#constellation-detail").innerHTML,/Learning objectives/,"Concept learning objectives appear as their own section");
+assert.match(elements.get("#constellation-detail").innerHTML,/100 progressive guided practice prompts/,"Each concept links to its own 100 progressive prompts");
+assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/Connected research questions/,"The duplicate concept-level question group is gone");
 run('constellation.back()');
 assert.equal(run('constellation.snapshot().selectedId'),null,"Back closes current concept");
 run('constellation.back()');
