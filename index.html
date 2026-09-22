@@ -16,6 +16,8 @@
   <script defer src="diagnostic-ui.js"></script>
   <script defer src="guide.js"></script>
   <script defer src="focus-home.js"></script>
+  <script defer src="guided-practice.js"></script>
+  <script defer src="literature-search.js"></script>
   <script defer src="constellation.js"></script>
   <script defer src="app.js"></script>
 </head>
@@ -210,7 +212,7 @@
       <div id="lesson-content" class="lesson-content" aria-live="polite"></div>
     </section>
       <details id="constellation-research" class="constellation-research">
-        <summary>Research questions to explore</summary>
+        <summary>Research questions</summary>
         <div id="constellation-research-questions" class="constellation-questions"></div>
       </details>
       <div id="legacy-explorer" hidden aria-hidden="true">
@@ -281,6 +283,7 @@
           <h3 id="practice-selected-title">Choose a concept</h3></div>
           <button id="practice-return-graph" class="constellation-quiet" type="button">View in Knowledge Graph ↗</button></div>
         <div id="practice-objectives" class="practice-component-guide" aria-live="polite"></div>
+        <section id="practice-guided-prompts" class="practice-guided-prompts" aria-label="One hundred progressive guided research prompts"></section>
         <div id="adaptive-panel" class="lesson-assessment" aria-live="polite"></div>
         <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research cases" hidden></section>
       </section>
