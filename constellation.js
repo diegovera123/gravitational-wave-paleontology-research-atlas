@@ -111,13 +111,30 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    previousFocus?.focus?.();previousFocus=null;
  }
  function showDialog(){
-   previousFocus=document.activeElement||previousFocus;
+   if(!previousFocus||!detail.contains?.(document.activeElement))previousFocus=document.activeElement||previousFocus;
    detail.hidden=false;shade.hidden=false;
    detail.classList.remove("is-expanded");
+   detail.querySelector(".concept-dialog-body")?.scrollTo?.({top:0});
+   updateReadingProgress();
    detail.focus?.();
+ }
+ function updateReadingProgress(){
+   const body=detail.querySelector(".concept-dialog-body"),bar=detail.querySelector("#concept-read-progress");
+   if(!body||!bar)return;
+   const total=Math.max(0,(body.scrollHeight||0)-(body.clientHeight||0));
+   const percent=total?Math.min(100,Math.max(0,Math.round((body.scrollTop||0)*100/total))):100;
+   bar.style?.setProperty?.("--reading-progress",percent+"%");
+   bar.setAttribute?.("aria-valuenow",String(percent));
+   detail.querySelector("#concept-read-label").textContent=percent===100?"End of unit":percent+"% of unit";
  }
  function wireDialog(){
    detail.querySelector("#constellation-close-detail")?.addEventListener("click",closeDetail);
+   detail.querySelector(".concept-dialog-body")?.addEventListener("scroll",updateReadingProgress,{passive:true});
+   detail.querySelector("#concept-back-top")?.addEventListener("click",()=>{
+     const body=detail.querySelector(".concept-dialog-body");
+     body?.scrollTo?.({top:0,behavior:root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});
+     updateReadingProgress();
+   });
    detail.querySelector("#constellation-expand-detail")?.addEventListener("click",event=>{
      const expanded=detail.classList.toggle("is-expanded");
      event.currentTarget?.setAttribute?.("aria-pressed",String(expanded));
@@ -156,9 +173,10 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
      (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Open '+esc(concept.title)+' reference ↗</a>':"");
    detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">LEARNING UNIT · '+esc(concept.unit||"RESEARCH ATLAS")+'</span>'+
       '<h3 id="concept-dialog-heading">'+esc(concept.title)+'</h3>'+
-      '<p>'+esc(concept.whyItMatters||concept.researchApplication||"Follow this idea through the research field.")+'</p></div>'+
+      '<p class="concept-dialog-context">One continuous learning unit · Follow the physical reasoning, then explore connected research.</p></div>'+
       '<div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button>'+
       '<button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept dialog">Close ✕</button></div></div>'+
+      '<div class="concept-reading-track" id="concept-read-progress" role="progressbar" aria-label="Reading position within this unit" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="concept-reading-fill"></span><span class="concept-reading-label" id="concept-read-label">Start of unit</span></div>'+
       '<div class="concept-dialog-body concept-single-unit">'+
       '<section class="concept-unit-section concept-learning-goals" aria-labelledby="concept-learning-goals-title">'+
       '<h4 id="concept-learning-goals-title">Learning objectives</h4><ol class="constellation-objectives">'+(concept.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol></section>'+
@@ -179,7 +197,8 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
       (referenceList?'<div class="constellation-resource-list">'+referenceList+'</div>':
       '<p>No individual public references have been mapped to this concept yet.</p>')+
       '<h4>Discover related papers</h4><div id="constellation-literature"></div></section></div>'+
-      '<div class="concept-dialog-footer"><span>Work through problems in the dedicated Practice section.</span>'+
+      '<div class="concept-dialog-footer"><button type="button" id="concept-back-top" class="concept-back-top">↑ Back to top</button>'+
+      '<span>Work through problems in the dedicated Practice section.</span>'+
       '<button type="button" id="constellation-open-practice" class="focus-primary">Open practice for this concept →</button></div>';
    wireDialog();
    detail.querySelector("#constellation-open-practice")?.addEventListener("click",()=>{closeDetail();startPractice(id);});
