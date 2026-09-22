@@ -464,6 +464,7 @@ function openPracticeUnit(id,mode=null){
   renderPracticeCases(practiceUnits.get(id));
   const concept=byId(practiceUnits.get(id).conceptId);
   if(window.AtlasGuidedPractice&&concept)window.AtlasGuidedPractice.mount({host:$("#practice-guided-prompts"),concept,concepts});
+  if(window.AtlasLiterature&&concept)window.AtlasLiterature.mount({host:$("#practice-literature"),concept});
   if(mode)startAdaptiveQuiz(mode);
   else renderAdaptivePanel();
   $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
