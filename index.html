@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.77.0/dist/3d-force-graph.min.js"></script>
   <script defer src="adaptive.js"></script>
+  <script defer src="practice-catalog.js"></script>
   <script defer src="diagnostic.js"></script>
   <script defer src="diagnostic-ui.js"></script>
   <script defer src="guide.js"></script>
@@ -263,10 +264,12 @@
       <header class="practice-hero">
         <span class="focus-eyebrow">YOUR PRACTICE WORKSPACE</span>
         <h2>Put your understanding to the test.</h2>
-        <p>Choose a concept, practise with authored questions, and revisit learning objectives when a review is due.</p>
+        <p>Work through connected concepts, calculations, physical mechanisms and model critique across the entire gravitational-wave paleontology research pipeline.</p>
+        <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading research practice tracks…</p>
       </header>
       <section class="practice-library" aria-labelledby="practice-library-title">
-        <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice set</h3><span>Three complete pilot sets · More in development</span></div>
+        <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice track</h3><span>Concepts · calculations · causal reasoning · model critique</span></div>
+        <div class="practice-filters"><label for="practice-area-filter">Research area</label><select id="practice-area-filter"><option value="all">All areas</option></select><label for="practice-search">Find a track</label><input id="practice-search" type="search" placeholder="e.g. cosmic rates, orbits, selection"></div>
         <div id="practice-unit-cards" class="practice-unit-cards"></div>
       </section>
       <section class="practice-reviews" aria-labelledby="practice-reviews-title">
@@ -277,9 +280,11 @@
         <div class="practice-active-header"><div><span class="focus-eyebrow">SELECTED PRACTICE SET</span>
           <h3 id="practice-selected-title">Choose a concept</h3></div>
           <button id="practice-return-graph" class="constellation-quiet" type="button">View in Knowledge Graph ↗</button></div>
+        <div id="practice-objectives" class="practice-component-guide" aria-live="polite"></div>
         <div id="adaptive-panel" class="lesson-assessment" aria-live="polite"></div>
+        <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research cases" hidden></section>
       </section>
-      <p class="practice-scope">Current adaptive practice is available for the three authored pilot units. Other concepts retain their existing ungraded exercise prompts and authored single-question checks in Knowledge Graph. This workspace does not certify mastery.</p>
+      <p class="practice-scope">Questions and research cases are original educational exercises, not lab data or a calibrated proficiency exam. Revealed case solutions are self-checked, not automatically graded. Browser-local quiz history only; the graph retains additional ungraded exercises on other concepts.</p>
     </section>
     <section id="learn-panel" hidden aria-hidden="true">
       <div id="learn-hub" hidden><div id="learn-hub-cards"></div></div>
