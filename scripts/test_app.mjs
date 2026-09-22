@@ -11,6 +11,7 @@ const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questio
 const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-units.json","utf8"));
 const adaptiveBank = JSON.parse(await fs.readFile("knowledge-graph/adaptive-items.json","utf8"));
 const extendedPractice = JSON.parse(await fs.readFile("knowledge-graph/practice-sets.json","utf8"));
+const deepExplanations = JSON.parse(await fs.readFile("knowledge-graph/deep-explanations.json","utf8"));
 const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-questions.json","utf8"));
 
 class ElementStub {
@@ -73,6 +74,7 @@ const responseData={
   "knowledge-graph/learning-units.json":learningUnits,
   "knowledge-graph/adaptive-items.json":adaptiveBank,
   "knowledge-graph/practice-sets.json":extendedPractice,
+  "knowledge-graph/deep-explanations.json":deepExplanations,
   "knowledge-graph/diagnostic-questions.json":diagnosticBank
 };
 const stored=new Map();
@@ -208,7 +210,11 @@ assert.match(elements.get("#constellation-detail").innerHTML,/Necessary backgrou
 assert.match(elements.get("#constellation-detail").innerHTML,/Research resources/,"Concept-specific resources live inside Knowledge Graph");
 assert.match(elements.get("#constellation-detail").innerHTML,/Learning objectives/,"Concept learning objectives appear as their own section");
 assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/100 progressive guided practice prompts|constellation-guided-practice|Try an exercise/,"100-step trainer and exercise text do not appear in the graph drawer");
-assert.match(elements.get("#constellation-detail").innerHTML,/Intuition &amp; visuals|Intuition & visuals/,"Concept drawer has an intuition and visuals tab");
+assert.match(elements.get("#constellation-detail").innerHTML,/Understand the idea/,"One scrollable concept unit has a concrete explanation");
+assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/concept-dialog-tabs|data-concept-panel/,"The concept is not split into four tabs");
+assert.ok(elements.get("#constellation-detail").innerHTML.indexOf("Learning objectives")<elements.get("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Objectives come first");
+assert.ok(elements.get("#constellation-detail").innerHTML.indexOf("Research resources")>elements.get("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Resources come last");
+assert.match(elements.get("#constellation-detail").innerHTML,/data-deep-explanation="supernova-kicks"/,"A concrete, extended supernova explanation was loaded");
 assert.match(elements.get("#constellation-detail").innerHTML,/Conceptual schematic/,"Concept drawer includes an explanatory schematic");
 assert.equal(elements.get("#constellation-detail-shade").hidden,false,"Drawer opens over constellation, not below it");
 assert.doesNotMatch(elements.get("#constellation-detail").innerHTML,/Connected research questions/,"The duplicate concept-level question group is gone");
