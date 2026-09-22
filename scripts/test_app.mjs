@@ -47,7 +47,7 @@ const selectors=[
   "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
-for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#constellation-shell","#constellation-research"])elements.get(id).hidden=true;
+for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
 const document={
   activeElement:null,body:new ElementStub(),
   querySelector:selector=>elements.get(selector)||new ElementStub(),
