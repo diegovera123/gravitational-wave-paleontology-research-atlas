@@ -61,6 +61,9 @@ assert.match(get("home #focus-detail").innerHTML,/Gravitational-Wave Paleontolog
 const mapped=new Set([...navigation.macros.map(m=>m.id),...navigation.topics.flatMap(t=>t.conceptIds)]);
 assert.ok(concepts.every(c=>mapped.has(c.id)),"All 133 existing concepts remain reachable through parts, topics or their macro overview");
 const page=await fs.readFile("index.html","utf8");
-assert.ok(page.includes('id="focus-full-map" type="button" class="gw-constellation-link"')&&page.includes('id="constellation-shell"')&&page.includes('id="legacy-explorer" hidden'),"Homepage opens the full 3D constellation without displaying the old network map");
+assert.equal((page.match(/data-atlas-tab=/g)||[]).length,2,"The entire app exposes only Home and Knowledge Graph");
+assert.ok(page.includes('id="simple-home-graph"')&&page.includes('id="constellation-shell"')&&page.includes('id="legacy-explorer" hidden'),"Home opens the 3D constellation and never shows the old two-column explorer");
+assert.ok(page.indexOf('id="diagnostic-panel"')>page.indexOf('id="home-panel"'),"The optional diagnostic lives within Home");
+assert.ok(page.indexOf('id="learning-studio"')>page.indexOf('id="explore-panel"'),"Learning and practice are embedded within Knowledge Graph");
 assert.ok(!page.includes("Pick a field. Explore an idea."));
-console.log("Passed: one-field landing; 5 chapters; progressive chapter→topic→concept; all 133 concepts; typed prerequisites; real drills and checks; single-click immersive 3D graph.");
+console.log("Passed: one-field curriculum with 133 concepts, progressive graph, two top-level sections, optional Home diagnostic and learning/practice inside Graph.");

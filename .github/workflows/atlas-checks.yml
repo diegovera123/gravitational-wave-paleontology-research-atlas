@@ -1,0 +1,25 @@
+name: Research Atlas checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Curriculum integrity
+        run: python3 scripts/validate_curriculum.py
+      - name: Diagnostic and adaptive logic
+        run: |
+          node scripts/test_diagnostic.mjs
+          node scripts/test_adaptive.mjs
+      - name: Research atlas navigation and learning
+        run: |
+          node scripts/test_constellation.mjs
+          node scripts/test_single_field.mjs
+          node scripts/test_app.mjs
