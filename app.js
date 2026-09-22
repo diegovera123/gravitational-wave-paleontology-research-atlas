@@ -217,6 +217,7 @@ function setActiveView(view,options={}){
   if(!TAB_NAMES.includes(view))return;
   activeView=view;
   document.body?.classList?.toggle?.("mission-home",view==="home");
+  document.body?.classList?.toggle?.("constellation-mode",view==="explore");
   for(const name of TAB_NAMES){
     const panel=$("#"+name+"-panel"),tab=$("#tab-"+name);
     panel.hidden=name!==view;
