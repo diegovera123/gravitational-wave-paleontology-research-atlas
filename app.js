@@ -188,7 +188,7 @@ function mountFocusedHome(diagnosticQuestions){
       openLesson:id=>openLearningUnit(id),
       startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
       openDiagnostic:()=>diagnosticController?.open(),
-      openMap:()=>scrollToExplorer(),
+      openMap:()=>{constellation?.openOverview();setActiveView("explore");$("#constellation-shell")?.scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});},
       openRegion:id=>{enterMacro(id);scrollToExplorer();},
       openResearch:()=>setActiveView("paths"),
       openAllPractice:()=>setActiveView("learn"),
