@@ -1091,3 +1091,7 @@ body.mission-home .site-header{padding-bottom:11px;}
   .constellation-choice{max-width:100%;flex:1 1 auto;}
 }
 @media(prefers-reduced-motion:reduce){.constellation-shell *{scroll-behavior:auto!important;transition:none!important;}}
+
+body.constellation-mode .intro{display:none!important}
+body.constellation-mode .atlas-primary-nav{margin-top:4px;margin-bottom:12px}
+body.constellation-mode #explore-panel{margin-top:0}
