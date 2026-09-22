@@ -17,7 +17,7 @@ let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
 let learningUnits=new Map(), openUnitId=null;
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
-let activeView="home", diagnosticController=null, guideController=null;
+let activeView="home", diagnosticController=null, guideController=null, focusedHome=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
 const ONBOARDING_KEY="research-atlas-onboarding-seen-v1";
 let studiedIds=new Set(), progressAvailable=true;
@@ -170,6 +170,35 @@ function mountMissionGuide(){
   }catch(e){guideController=null;console.error("[Research Atlas] Guide unavailable; showing classic map-first home.",e);}
 }
 
+
+function mountFocusedHome(diagnosticQuestions){
+  if(!window.AtlasFocusedHome){
+    console.warn("[Research Atlas] Focused home unavailable; retaining guided fallback.");
+    return;
+  }
+  try{
+    focusedHome=window.AtlasFocusedHome.mount({
+      host:$("#focus-home"),macros:atlas.macros,topics:atlas.topics,
+      concepts,questions:diagnosticQuestions,learningUnits:[...learningUnits.values()],
+      locationByConcept,getProfile:()=>diagnosticController?.snapshot?.()||{},
+      getStudied:()=>[...studiedIds],
+      openConcept:id=>{openConcept(id,true);scrollToExplorer();},
+      openLesson:id=>openLearningUnit(id),
+      startDrill:id=>{openLearningUnit(id);startAdaptiveQuiz();},
+      openDiagnostic:()=>diagnosticController?.open(),
+      openMap:()=>scrollToExplorer(),
+      openRegion:id=>{enterMacro(id);scrollToExplorer();},
+      openResearch:()=>setActiveView("paths"),
+      openAllPractice:()=>setActiveView("learn"),
+      openLibrary:()=>setActiveView("library")
+    });
+    $("#home-panel").classList.add("focus-ready");
+  }catch(error){
+    focusedHome=null;
+    console.error("[Research Atlas] Focused home unavailable; retaining guided fallback.",error);
+  }
+}
+
 function firstRunLanding(){
   const done=diagnosticController?.hasCompleted?.()||onboardingSeen();
   if(done){
@@ -193,7 +222,7 @@ function setActiveView(view,options={}){
     tab.tabIndex=name===view?0:-1;
   }
   $("#dashboard").hidden=!["home","paths","library"].includes(view);
-  if(view==="home")guideController?.render();
+  if(view==="home"){focusedHome?.refresh();if(!focusedHome)guideController?.render();}
   if(options.scroll!==false)$("#tab-"+view).scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"nearest"});
   if(options.focus)$("#tab-"+view).focus();
   if(view==="explore" && graph && displayMode==="3d"){
@@ -279,6 +308,7 @@ function markUnderstood(id){
   updateLearningStats();
   renderDashboard();
   guideController?.render();
+  focusedHome?.refresh();
   const detailShown=detailsElement.querySelector("#mark-understood");
   if(selectedId===id || detailShown)showConceptDetails(byId(id));
   draw({frame:false});
@@ -854,12 +884,13 @@ async function initialise() {
         openLearningUnit:id=>openLearningUnit(id),
         onProfileChange:()=>{
           guideController?.render();
+          focusedHome?.refresh();
           renderDashboard();
           if(atlas)draw({frame:false});
           if(selectedId)showConceptDetails(byId(selectedId));
         },
-        onOnboardingComplete:()=>{markOnboardingSeen();guideController?.render();},
-        onSkipOnboarding:()=>{markOnboardingSeen();guideController?.render();},
+        onOnboardingComplete:()=>{markOnboardingSeen();focusedHome?.refresh();},
+        onSkipOnboarding:()=>{markOnboardingSeen();focusedHome?.refresh();},
         onStageChange:(stage,correct)=>{
           const title=$("#otto-coach-title"),line=$("#otto-coach-line");
           if(!title||!line)return;
@@ -881,7 +912,7 @@ async function initialise() {
       $("#tab-diagnostic").disabled=true;
       markOnboardingSeen();
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
     if(typeof ForceGraph3D!=="function") {
       console.warn("[Research Atlas] Optional 3D graph is unavailable. The structured map remains functional.");
       $("#view-3d").disabled=true;enterGlobal();firstRunLanding();return;
