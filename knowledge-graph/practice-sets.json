@@ -1945,6 +1945,978 @@
           "url": "https://doi.org/10.1007/s41114-021-00034-3"
         }
       ]
+    },
+    {
+      "id": "detection-selection",
+      "title": "Detector selection effects and observational bias",
+      "conceptId": "detector-selection-effects",
+      "area": "Observation",
+      "summary": "Correct observed GW catalogs for sensitive volume, duty cycle, orientation and mass-dependent selection.",
+      "objectives": [
+        {
+          "id": "selection-distinction",
+          "title": "Distinguish intrinsic and detected populations",
+          "component": "conceptual",
+          "evidence": "Define a selection function and identify why an observed histogram is not a birth histogram.",
+          "questions": [
+            {
+              "id": "selection-distinction-1",
+              "difficulty": 1,
+              "prompt": "A selection function p_det(θ) means:",
+              "choices": [
+                "The probability that an event with source parameters θ enters a specified search/catalog under stated conditions.",
+                "The fraction of all galaxies that form black holes.",
+                "The probability that a source is born in the Universe independent of detectors."
+              ],
+              "correctIndex": 0,
+              "hint": "Separate astrophysical abundance from recording probability.",
+              "feedback": "Detection efficiency is a conditional probability given source properties and a defined instrument/search; it filters the intrinsic population.",
+              "component": "conceptual"
+            },
+            {
+              "id": "selection-distinction-2",
+              "difficulty": 2,
+              "prompt": "Why can an observed compact-binary mass histogram differ from the intrinsic merger mass distribution?",
+              "choices": [
+                "Mass, distance, orientation and signal frequency can alter detectability.",
+                "Instruments select detections uniformly over all physical parameters.",
+                "Every black hole's mass increases by the same amount while travelling to Earth."
+              ],
+              "correctIndex": 0,
+              "hint": "Think of which systems produce signals detectable in a finite sensitivity band.",
+              "feedback": "Observed catalogs reflect the intrinsic distribution multiplied by the selection function and convolved with measurement uncertainty.",
+              "component": "conceptual"
+            },
+            {
+              "id": "selection-distinction-3",
+              "difficulty": 3,
+              "prompt": "Does observing no low-mass mergers prove none occur astrophysically?",
+              "choices": [
+                "No; sensitivity, exposure and statistical uncertainty matter.",
+                "Yes; detector downtime affects only high-mass events.",
+                "Yes; a nondetection implies exactly zero intrinsic probability."
+              ],
+              "correctIndex": 0,
+              "hint": "Compare physical rate with the number expected to be detected.",
+              "feedback": "An absence of detections constrains a model only in relation to its detection efficiency and observing time.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "selection-arithmetic",
+          "title": "Apply toy detection efficiencies",
+          "component": "quantitative",
+          "evidence": "Compute expected detected counts and transparent inverse-weight toy examples.",
+          "questions": [
+            {
+              "id": "selection-arithmetic-1",
+              "difficulty": 1,
+              "prompt": "A toy population has 100 intrinsic events of a class; each is independently detected with probability 0.2. What is the expected detected count?",
+              "choices": [
+                "20.",
+                "100.",
+                "5."
+              ],
+              "correctIndex": 0,
+              "hint": "Use N_expected=N_intrinsic×p_det.",
+              "feedback": "100×0.2=20 expected detections; the actual number fluctuates around the expectation.",
+              "component": "quantitative"
+            },
+            {
+              "id": "selection-arithmetic-2",
+              "difficulty": 2,
+              "prompt": "In an explicitly toy inverse-probability estimate, one detection with p_det=0.25 contributes an inverse-efficiency weight of:",
+              "choices": [
+                "4.",
+                "2.",
+                "0.25."
+              ],
+              "correctIndex": 0,
+              "hint": "Take 1 divided by the stated detection probability.",
+              "feedback": "1/0.25=4. Real GW rate inference also needs spacetime volume, time, uncertainties and the selection-normalized population likelihood.",
+              "component": "quantitative"
+            },
+            {
+              "id": "selection-arithmetic-3",
+              "difficulty": 3,
+              "prompt": "Two populations have equal intrinsic merger counts. Class A is detected with efficiency 0.8 and class B with efficiency 0.2. Their expected detected-count ratio A:B is:",
+              "choices": [
+                "4:1.",
+                "1:1.",
+                "1:4."
+              ],
+              "correctIndex": 0,
+              "hint": "Expected observed count is intrinsic count times detection efficiency.",
+              "feedback": "0.8/0.2=4; a catalog overrepresents A relative to the equal underlying counts.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "selection-causal",
+          "title": "Trace observational filtering",
+          "component": "causal",
+          "evidence": "Explain sensitivity-volume effects and why changing detectors changes the apparent population.",
+          "questions": [
+            {
+              "id": "selection-causal-1",
+              "difficulty": 1,
+              "prompt": "Under Euclidean uniform-density toy assumptions, doubling a detector's horizon distance increases the accessible volume by:",
+              "choices": [
+                "A factor of 8.",
+                "A factor of 4.",
+                "A factor of 2."
+              ],
+              "correctIndex": 0,
+              "hint": "Volume scales as radius cubed; this ignores cosmology, orientation and detector duty cycle.",
+              "feedback": "V∝D³, so 2³=8; a real cosmological sensitive spacetime volume needs more careful integration.",
+              "component": "causal"
+            },
+            {
+              "id": "selection-causal-2",
+              "difficulty": 2,
+              "prompt": "A second observing run has higher sensitivity but unchanged underlying astrophysical populations. What can change?",
+              "choices": [
+                "The observed mass/distance distributions and number of detections.",
+                "The emitted GW power of every existing binary.",
+                "The initial mass function of stars throughout cosmic history."
+              ],
+              "correctIndex": 0,
+              "hint": "Detection criteria act on different parameter regions at different sensitivities.",
+              "feedback": "Improved sensitivity can admit distant or weaker sources and alter apparent population composition.",
+              "component": "causal"
+            },
+            {
+              "id": "selection-causal-3",
+              "difficulty": 3,
+              "prompt": "Why can face-on circular binaries be more easily detected than otherwise identical edge-on binaries in many network geometries?",
+              "choices": [
+                "Inclination changes the GW polarization amplitudes projected onto detector responses.",
+                "Edge-on binaries never emit gravitational waves.",
+                "Inclination always changes source-frame component masses."
+              ],
+              "correctIndex": 0,
+              "hint": "Consider source orientation and detector antenna patterns.",
+              "feedback": "The GW strain observed by the network depends on inclination and polarization as well as intrinsic source properties.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "selection-methods",
+          "title": "Critique catalog-to-population claims",
+          "component": "model-critique",
+          "evidence": "Recognize detection cuts, uncertainty and changing observing exposure.",
+          "questions": [
+            {
+              "id": "selection-methods-1",
+              "difficulty": 1,
+              "prompt": "A report divides detected event count by calendar time and calls it a cosmic merger rate. What's missing?",
+              "choices": [
+                "Detection efficiency, surveyed spacetime volume, duty cycle and population definition.",
+                "An arbitrary larger sample count without selection corrections.",
+                "Only a conversion from seconds to minutes."
+              ],
+              "correctIndex": 0,
+              "hint": "A rate density needs the exposure over which each source could be detected.",
+              "feedback": "Detections per calendar year are not intrinsic events per comoving volume per source-frame time.",
+              "component": "model-critique"
+            },
+            {
+              "id": "selection-methods-2",
+              "difficulty": 2,
+              "prompt": "A model comparison fits observed masses but omits its detection selection function. What can go wrong?",
+              "choices": [
+                "The favored intrinsic distribution may simply reproduce instrument filtering rather than source physics.",
+                "Detector sensitivity cannot affect masses of detected signals.",
+                "Measurement uncertainty necessarily becomes zero."
+              ],
+              "correctIndex": 0,
+              "hint": "Observed and intrinsic distributions are different statistical objects.",
+              "feedback": "Hierarchical inference requires the modeled detection process when comparing intrinsic population predictions to detected catalogs.",
+              "component": "model-critique"
+            },
+            {
+              "id": "selection-methods-3",
+              "difficulty": 3,
+              "prompt": "A team mixes two catalogs with different search thresholds without tracking which threshold each event passed. What should be documented?",
+              "choices": [
+                "Catalog/search-specific detection rules and effective exposure or selection models.",
+                "An assumption that all runs have identical efficiency.",
+                "Only the total number of PDF pages."
+              ],
+              "correctIndex": 0,
+              "hint": "Selection conditioning depends on which events were eligible for inclusion.",
+              "feedback": "Ignoring changing cuts can bias population inference, especially for events near thresholds.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Correct two toy classes",
+          "scenario": "An idealized intrinsic population has 100 events in each class. Class A detection efficiency is 0.6, class B is 0.1.",
+          "task": "Compute expected observed counts and describe how a naive histogram distorts the intrinsic ratio.",
+          "steps": [
+            "A:100×0.6=60 expected observed events.",
+            "B:100×0.1=10 expected observed events.",
+            "Observed ratio is 6:1 while intrinsic ratio is 1:1."
+          ],
+          "solution": "Selection effects can masquerade as an astrophysical preference; any real inference must include detection efficiencies and uncertainties."
+        },
+        {
+          "title": "Volume scaling caution",
+          "scenario": "A detector's horizon distance improves from 100 Mpc to 200 Mpc under an idealized Euclidean, uniform-source toy model.",
+          "task": "Calculate the idealized volume ratio and explain two ways reality differs.",
+          "steps": [
+            "Volume ratio=(200/100)³=8.",
+            "Network antenna/orientation and duty cycle modify sensitive volume.",
+            "At greater redshift, cosmology and source-frame time dilation matter."
+          ],
+          "solution": "The factor eight is a local toy scaling, not a universal prediction for a real network's cosmological detection count."
+        }
+      ],
+      "sources": [
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        },
+        {
+          "title": "Gravitational Wave Open Science Center",
+          "url": "https://gwosc.org/"
+        }
+      ]
+    },
+    {
+      "id": "cosmic-history",
+      "title": "Cosmic star formation, delay times and merger rates",
+      "conceptId": "cosmic-merger-rates",
+      "area": "Cosmic history",
+      "summary": "Combine birth epochs, delay-time kernels, metallicity distributions and redshift conventions to interpret cosmic mergers.",
+      "objectives": [
+        {
+          "id": "cosmic-distinction",
+          "title": "Distinguish birth and merger epochs",
+          "component": "conceptual",
+          "evidence": "Define star-formation history, delay-time distribution and source-frame rate density.",
+          "questions": [
+            {
+              "id": "cosmic-distinction-1",
+              "difficulty": 1,
+              "prompt": "A binary forms at cosmic time t_form and merges at t_merge. Its total formation-to-merger delay is:",
+              "choices": [
+                "t_merge−t_form.",
+                "t_form/t_merge.",
+                "t_form+t_merge."
+              ],
+              "correctIndex": 0,
+              "hint": "Use elapsed time between two events.",
+              "feedback": "Delay time is an elapsed interval; a compact-binary inspiral delay can be only one part if stellar-evolution time is also included.",
+              "component": "conceptual"
+            },
+            {
+              "id": "cosmic-distinction-2",
+              "difficulty": 2,
+              "prompt": "What is a cosmic merger-rate density commonly expressed per unit of?",
+              "choices": [
+                "Comoving volume and source-frame time.",
+                "Initial stellar radius only.",
+                "Detector mirror surface area only."
+              ],
+              "correctIndex": 0,
+              "hint": "Distinguish event count per unit physical spacetime volume/time from an observing-run count.",
+              "feedback": "Rate density is often in Gpc⁻³ yr⁻¹ with source-frame years and comoving volume, with explicit redshift dependence.",
+              "component": "conceptual"
+            },
+            {
+              "id": "cosmic-distinction-3",
+              "difficulty": 3,
+              "prompt": "Why is observed merger redshift not necessarily a binary's formation redshift?",
+              "choices": [
+                "Stellar evolution and orbital inspiral can introduce long formation-to-merger delays.",
+                "Detector redshift always equals progenitor metallicity.",
+                "Stars and binaries cannot evolve after birth."
+              ],
+              "correctIndex": 0,
+              "hint": "The population's clocks run between birth and final coalescence.",
+              "feedback": "Long delays mean systems merging now can have formed at earlier cosmic epochs and different host-environment conditions.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "cosmic-arithmetic",
+          "title": "Compute time and rate toy values",
+          "component": "quantitative",
+          "evidence": "Apply event-time bookkeeping and explicit volume/time normalization.",
+          "questions": [
+            {
+              "id": "cosmic-arithmetic-1",
+              "difficulty": 1,
+              "prompt": "A toy system formed at cosmic time 3 Gyr and merged at 9 Gyr. Its delay is:",
+              "choices": [
+                "6 Gyr.",
+                "3 Gyr.",
+                "12 Gyr."
+              ],
+              "correctIndex": 0,
+              "hint": "Subtract formation time from merger time.",
+              "feedback": "9−3=6 Gyr; this arithmetic uses cosmic elapsed time rather than lookback time.",
+              "component": "quantitative"
+            },
+            {
+              "id": "cosmic-arithmetic-2",
+              "difficulty": 2,
+              "prompt": "A constant intrinsic toy rate density is 4 events Gpc⁻³ yr⁻¹ in a source-frame 2 Gpc³ volume over 3 source-frame years. Expected intrinsic count is:",
+              "choices": [
+                "24.",
+                "12.",
+                "8."
+              ],
+              "correctIndex": 0,
+              "hint": "Multiply density by volume and elapsed source-frame time.",
+              "feedback": "4×2×3=24 expected intrinsic events under uniform-rate and exposure assumptions, prior to instrument selection.",
+              "component": "quantitative"
+            },
+            {
+              "id": "cosmic-arithmetic-3",
+              "difficulty": 3,
+              "prompt": "For a source at z=1, one year of source-frame time corresponds to what observed interval due solely to cosmological time dilation?",
+              "choices": [
+                "2 years.",
+                "1 year.",
+                "0.5 year."
+              ],
+              "correctIndex": 0,
+              "hint": "Use Δt_obs=(1+z)Δt_source.",
+              "feedback": "At redshift one, (1+1)×1=2 observed years; real rate integrals include this factor explicitly.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "cosmic-causal",
+          "title": "Trace star formation to merger",
+          "component": "causal",
+          "evidence": "Explain why a convolution over progenitor births and delays creates a shifted merger history.",
+          "questions": [
+            {
+              "id": "cosmic-causal-1",
+              "difficulty": 1,
+              "prompt": "If most binaries merge only after long delays, how does their merger-rate peak tend to relate to the same population's formation-rate peak?",
+              "choices": [
+                "It can occur later in cosmic time, with shape depending on the delay distribution.",
+                "It is always earlier than every progenitor's birth.",
+                "It must occur at exactly the same cosmic time."
+              ],
+              "correctIndex": 0,
+              "hint": "Convolve births at earlier times with positive elapsed delays.",
+              "feedback": "The merger rate integrates progenitor formation at t−τ across possible delays τ and therefore need not track the instantaneous star-formation rate.",
+              "component": "causal"
+            },
+            {
+              "id": "cosmic-causal-2",
+              "difficulty": 2,
+              "prompt": "Why is metallicity evolution relevant for reconstructing gravitational-wave merger histories?",
+              "choices": [
+                "Binary formation efficiencies and outcomes can depend on progenitor birth metallicity, whose cosmic distribution evolves.",
+                "All stars at every cosmic epoch have identical metallicity by definition.",
+                "Merger GW frequency directly measures all natal abundances without a model."
+              ],
+              "correctIndex": 0,
+              "hint": "Combine formation channel dependence with birth environments.",
+              "feedback": "Population models integrate star formation over time and metallicity, then propagate histories through delay times and selection.",
+              "component": "causal"
+            },
+            {
+              "id": "cosmic-causal-3",
+              "difficulty": 3,
+              "prompt": "A model predicts an increased long-delay contribution while holding initial formation history fixed. What may happen to the local merger rate?",
+              "choices": [
+                "Earlier progenitor births can contribute differently to mergers today.",
+                "All mergers are instantly moved to the source's birth epoch.",
+                "The local rate must become exactly zero."
+              ],
+              "correctIndex": 0,
+              "hint": "A long delay changes the map from birth time to merger time.",
+              "feedback": "Changing the delay kernel redistributes the timing of mergers; its impact depends on formation history and normalization.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "cosmic-limits",
+          "title": "Critique cosmic-rate comparisons",
+          "component": "model-critique",
+          "evidence": "Identify missing time dilation, source-frame units, selection and normalization.",
+          "questions": [
+            {
+              "id": "cosmic-limits-1",
+              "difficulty": 1,
+              "prompt": "A researcher equates a detector's raw events per observed year with an intrinsic cosmic rate per source-frame year per Gpc³. What's missing?",
+              "choices": [
+                "Time dilation, volume, duty cycle and selection corrections.",
+                "A conversion from radians to degrees.",
+                "Only a plot of time on the horizontal axis."
+              ],
+              "correctIndex": 0,
+              "hint": "A detector count is not already a comoving rate density.",
+              "feedback": "Observed counts integrate redshift-dependent intrinsic rate, comoving volume element, 1/(1+z) time factor and detection efficiency.",
+              "component": "model-critique"
+            },
+            {
+              "id": "cosmic-limits-2",
+              "difficulty": 2,
+              "prompt": "Two cosmic merger-rate curves differ. Which controlled comparison helps isolate metallicity evolution?",
+              "choices": [
+                "Hold birth distributions, binary physics and delay prescriptions fixed while varying the star-formation metallicity distribution.",
+                "Infer one curve must be correct from its color.",
+                "Change all physics, cosmology and input samples simultaneously."
+              ],
+              "correctIndex": 0,
+              "hint": "Identify which ingredient directly changes between the models.",
+              "feedback": "Uncontrolled differences can arise from multiple formation/cosmic assumptions; matched calculations support sensitivity interpretation.",
+              "component": "model-critique"
+            },
+            {
+              "id": "cosmic-limits-3",
+              "difficulty": 3,
+              "prompt": "A model fits a local merger rate but mismatches rates at high redshift. Does the local match uniquely validate its formation history?",
+              "choices": [
+                "No; multiple combinations of formation efficiencies, metallicity and delay times can match one local constraint.",
+                "No; local rates contain no information whatsoever.",
+                "Yes; one scalar rate fixes the entire cosmic star-formation history."
+              ],
+              "correctIndex": 0,
+              "hint": "An inverse problem may be underdetermined by a single measurement.",
+              "feedback": "Redshift evolution and additional observables can help distinguish model families; the local normalization alone is not a unique reconstruction.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Births and delays",
+          "scenario": "A toy population has two formation cohorts: 10 systems born at cosmic time 2 Gyr and 20 born at 5 Gyr. All merge after 4 Gyr.",
+          "task": "At which cosmic times do mergers occur, and how many at each time?",
+          "steps": [
+            "Add 4 Gyr to each cohort's birth time.",
+            "10 systems merge at t=6 Gyr.",
+            "20 systems merge at t=9 Gyr."
+          ],
+          "solution": "Delayed mergers trace earlier formation epochs rather than instantaneously mirroring the birth curve."
+        },
+        {
+          "title": "Rate-count units",
+          "scenario": "A toy survey spans 1 Gpc³ with an intrinsic source-frame rate density of 2 Gpc⁻³ yr⁻¹ for 5 source-frame years and detection efficiency 0.25.",
+          "task": "Compute expected intrinsic and detected counts and explain what's deliberately omitted.",
+          "steps": [
+            "Intrinsic count=2×1×5=10.",
+            "Expected detected count=10×0.25=2.5 (an expectation, not an integer observation).",
+            "The toy ignores redshift evolution, orientation and changing sensitivity."
+          ],
+          "solution": "A physically normalized predicted count requires rate × volume × time × selection; more complete cosmological calculations use evolving integrals."
+        }
+      ],
+      "sources": [
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        },
+        {
+          "title": "Evolution of massive binary stars (review)",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        }
+      ]
+    },
+    {
+      "id": "hierarchical-gw",
+      "title": "Hierarchical inference and model comparison",
+      "conceptId": "population-inference",
+      "area": "Inference",
+      "summary": "Differentiate event likelihoods from population priors, selection-normalized hyperlikelihoods and formation-model conclusions.",
+      "objectives": [
+        {
+          "id": "inference-basics",
+          "title": "Name levels of inference",
+          "component": "conceptual",
+          "evidence": "Distinguish individual-event parameters θ, population hyperparameters Λ and selection-conditioned observations.",
+          "questions": [
+            {
+              "id": "inference-basics-1",
+              "difficulty": 1,
+              "prompt": "In hierarchical GW population inference, Λ usually denotes:",
+              "choices": [
+                "Parameters describing an assumed population distribution of event-level source properties.",
+                "The GPS timestamp of a single trigger.",
+                "One detector's current temperature only."
+              ],
+              "correctIndex": 0,
+              "hint": "Distinguish event parameters from hyperparameters of a population model.",
+              "feedback": "Mass-spectrum slopes, mixture fractions or rate parameters can enter Λ, while each event has its own θ.",
+              "component": "conceptual"
+            },
+            {
+              "id": "inference-basics-2",
+              "difficulty": 2,
+              "prompt": "Why is an individual-event posterior not generally the same object as the event's likelihood?",
+              "choices": [
+                "A posterior includes the analysis prior as well as the event likelihood.",
+                "A likelihood is always normalized as a probability density over model parameters.",
+                "A posterior is a list of impossible masses only."
+              ],
+              "correctIndex": 0,
+              "hint": "Use Bayes' rule: posterior ∝ likelihood × prior.",
+              "feedback": "Hierarchical reweighting must account for the prior used in the event-level analysis to avoid incorporating it twice.",
+              "component": "conceptual"
+            },
+            {
+              "id": "inference-basics-3",
+              "difficulty": 3,
+              "prompt": "What distinguishes a formation-channel hypothesis from a measured individual mass?",
+              "choices": [
+                "A channel is a model of progenitor history that predicts distributions of observables; mass is an inferred compact-object parameter.",
+                "Every formation channel has exactly the same event-level parameters by definition.",
+                "An observed mass is a deterministic label for one channel."
+              ],
+              "correctIndex": 0,
+              "hint": "Trace the forward model from progenitor physics to merger measurements.",
+              "feedback": "Formation-channel claims compare population predictions and uncertainties, not a unique lookup from a single measured mass.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "inference-arithmetic",
+          "title": "Compute simple posterior and mixture toy values",
+          "component": "quantitative",
+          "evidence": "Apply basic Bayes odds and selection normalization in transparent finite examples.",
+          "questions": [
+            {
+              "id": "inference-arithmetic-1",
+              "difficulty": 1,
+              "prompt": "A toy hypothesis has prior odds H1:H2=1:2 and the data Bayes factor favors H1 by 6. Posterior odds H1:H2 are:",
+              "choices": [
+                "3:1.",
+                "1:12.",
+                "6:1."
+              ],
+              "correctIndex": 0,
+              "hint": "Posterior odds = prior odds × likelihood ratio.",
+              "feedback": "(1/2)×6=3, giving posterior odds 3:1 for H1 over H2; the result remains conditional on stated hypotheses and priors.",
+              "component": "quantitative"
+            },
+            {
+              "id": "inference-arithmetic-2",
+              "difficulty": 2,
+              "prompt": "A population model predicts 60% channel A and 40% channel B intrinsically. If their toy detection efficiencies are 0.2 and 0.6, what fraction of expected detections is A?",
+              "choices": [
+                "1/3.",
+                "0.2.",
+                "0.6."
+              ],
+              "correctIndex": 0,
+              "hint": "Normalize 0.6×0.2 and 0.4×0.6.",
+              "feedback": "Expected detection contributions are 0.12 and 0.24, so A fraction=0.12/(0.12+0.24)=1/3.",
+              "component": "quantitative"
+            },
+            {
+              "id": "inference-arithmetic-3",
+              "difficulty": 3,
+              "prompt": "An event-level likelihood ratio favors model A over B by 2, but prior odds favor B over A by 5. Posterior odds A:B are:",
+              "choices": [
+                "2:5.",
+                "5:2.",
+                "10:1."
+              ],
+              "correctIndex": 0,
+              "hint": "Use odds multiplication and keep direction consistent.",
+              "feedback": "Prior A:B=1:5; likelihood ratio=2:1; posterior A:B=2:5. Data alone did not overcome the prior odds.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "inference-causal",
+          "title": "Explain selection and degeneracy",
+          "component": "causal",
+          "evidence": "Explain how the forward and observation models combine to constrain formation channels.",
+          "questions": [
+            {
+              "id": "inference-causal-1",
+              "difficulty": 1,
+              "prompt": "Why must the selection function appear in a likelihood conditioned on detection?",
+              "choices": [
+                "The probability of observing an event depends on source parameters and affects the normalization of the observed sample.",
+                "Conditioning on detection makes all intrinsic source distributions uniform.",
+                "Selection affects only the font size on a plot."
+              ],
+              "correctIndex": 0,
+              "hint": "Think of truncation and which events are eligible to appear in the catalog.",
+              "feedback": "Detection conditioning changes observed density and the likelihood normalization; omitting it can favor intrinsically incorrect parameter distributions.",
+              "component": "causal"
+            },
+            {
+              "id": "inference-causal-2",
+              "difficulty": 2,
+              "prompt": "Why can two different stellar formation channels produce overlapping GW mass/spin distributions?",
+              "choices": [
+                "Different progenitor histories can map through uncertain physics to similar compact-merger observables.",
+                "The inverse mapping from merger properties to birth history is always one-to-one.",
+                "Each channel writes a unique text label into the waveform."
+              ],
+              "correctIndex": 0,
+              "hint": "A many-to-one forward map cannot always be uniquely inverted.",
+              "feedback": "Shared observable regions cause model degeneracy; larger populations and other informative observables can help distinguish scenarios.",
+              "component": "causal"
+            },
+            {
+              "id": "inference-causal-3",
+              "difficulty": 3,
+              "prompt": "Why can changing event-level spin priors alter a population inference if not handled properly?",
+              "choices": [
+                "The event posteriors embed those priors, which must be accounted for in population reweighting.",
+                "A population model never uses event-level likelihood information.",
+                "The detector physically changes the spin after publication."
+              ],
+              "correctIndex": 0,
+              "hint": "Event posteriors contain more than the likelihood.",
+              "feedback": "Using posterior samples as if they were likelihood samples without prior correction can bias inferred hyperparameters.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "inference-critical",
+          "title": "Evaluate inferential claims",
+          "component": "model-critique",
+          "evidence": "Distinguish posterior support conditioned on a model family from discovery of uniquely true progenitor history.",
+          "questions": [
+            {
+              "id": "inference-critical-1",
+              "difficulty": 1,
+              "prompt": "A Bayesian model comparison reports a strong Bayes factor for one formation model over another. What should be stated?",
+              "choices": [
+                "The compared model definitions, priors, likelihood, selection treatment and scope of alternatives.",
+                "No sensitivity analysis is ever needed once a Bayes factor is computed.",
+                "The preferred model has been proven true among every possible physical history."
+              ],
+              "correctIndex": 0,
+              "hint": "A Bayes factor is conditional on specified models and data.",
+              "feedback": "The evidence ratio compares two explicitly defined hypotheses under their priors and assumptions; untested alternatives are not excluded.",
+              "component": "model-critique"
+            },
+            {
+              "id": "inference-critical-2",
+              "difficulty": 2,
+              "prompt": "A mixture analysis infers 70% dynamical events from a detected sample but does not model detection efficiency. Why is an intrinsic 70% claim unsupported?",
+              "choices": [
+                "Different channels may have different detectability, so observed fractions need not equal intrinsic fractions.",
+                "The detected sample is a census of every merger in the Universe.",
+                "Fractions must always equal 50% by symmetry."
+              ],
+              "correctIndex": 0,
+              "hint": "Separate mixing fractions before and after selection.",
+              "feedback": "Without the detection model and uncertainty, a detected fraction cannot be treated as an intrinsic formation-channel fraction.",
+              "component": "model-critique"
+            },
+            {
+              "id": "inference-critical-3",
+              "difficulty": 3,
+              "prompt": "Which result would most directly test whether a formation-model conclusion is robust to population prior choices?",
+              "choices": [
+                "Repeat the inference under justified alternative priors and report sensitivity.",
+                "Assume an extremely narrow prior without disclosure.",
+                "Replace posterior probabilities with raw detector strain values."
+              ],
+              "correctIndex": 0,
+              "hint": "Check whether reasonable prior changes materially alter inferred parameters.",
+              "feedback": "A sensitivity analysis helps distinguish data-constrained behavior from dependence on prior/model choices.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Detected mixture",
+          "scenario": "Hypothetical channels A and B have intrinsic fractions 0.3 and 0.7; their detection efficiencies are 0.9 and 0.1.",
+          "task": "Find A's expected fraction among detected events; explain whether the detector creates more intrinsic A births.",
+          "steps": [
+            "Detected A contribution=0.3×0.9=0.27.",
+            "Detected B contribution=0.7×0.1=0.07.",
+            "A fraction among detections=0.27/(0.27+0.07)≈0.794."
+          ],
+          "solution": "About 79% of detections would be A despite only 30% intrinsically; the instrument changes sampling, not the astrophysical birth fraction."
+        },
+        {
+          "title": "Prior and likelihood",
+          "scenario": "Two toy hypotheses start with prior odds H1:H2=1:4. Observations have a likelihood ratio of 3 in favor of H1.",
+          "task": "Calculate posterior odds and explain what the comparison cannot establish.",
+          "steps": [
+            "Posterior odds=prior odds×Bayes factor=(1/4)×3=3/4.",
+            "H2 still has greater posterior odds under these assumptions.",
+            "Neither hypothesis is uniquely proven; conclusions are conditional on model and prior definitions."
+          ],
+          "solution": "Posterior odds H1:H2 are 3:4, not 3:1, and do not assess alternatives outside the comparison."
+        }
+      ],
+      "sources": [
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        },
+        {
+          "title": "Gravitational Wave Open Science Center",
+          "url": "https://gwosc.org/"
+        }
+      ]
+    },
+    {
+      "id": "reproduce-a-result",
+      "title": "Research workflow, validation and reproducibility",
+      "conceptId": "reproducing-a-result",
+      "area": "Research practice",
+      "summary": "Audit data provenance, scientific claims, controls, uncertainty and real reproduction of a published result.",
+      "objectives": [
+        {
+          "id": "research-literacy",
+          "title": "Distinguish claims, data and assumptions",
+          "component": "conceptual",
+          "evidence": "Separate a published assertion, a raw observation, a model output and an educational toy example.",
+          "questions": [
+            {
+              "id": "research-literacy-1",
+              "difficulty": 1,
+              "prompt": "Which statement correctly distinguishes a synthetic classroom event table from real COMPAS output?",
+              "choices": [
+                "A toy table illustrates logic but cannot validate a published astrophysical numerical result.",
+                "A plausible-looking simulated value is equivalent to a telescope observation.",
+                "A toy table automatically inherits every versioned property of COMPAS."
+              ],
+              "correctIndex": 0,
+              "hint": "Ask whether records were actually generated and documented by the scientific code.",
+              "feedback": "Classroom examples can teach joins and counts but do not constitute a real simulation run or empirical evidence.",
+              "component": "conceptual"
+            },
+            {
+              "id": "research-literacy-2",
+              "difficulty": 2,
+              "prompt": "Which is closest to reproducibility of a published analysis using released data/code?",
+              "choices": [
+                "Re-running the stated workflow with documented inputs, versions and selections and comparing the specified result.",
+                "Repeating only the paper's abstract aloud.",
+                "Obtaining a visually similar graph from invented points."
+              ],
+              "correctIndex": 0,
+              "hint": "Reproduction requires a defined target and traceable computation.",
+              "feedback": "A reproducible analysis records code commit, environment, inputs, parameters, preprocessing and comparison criteria.",
+              "component": "conceptual"
+            },
+            {
+              "id": "research-literacy-3",
+              "difficulty": 3,
+              "prompt": "In a model study, 'validation' should not be conflated with:",
+              "choices": [
+                "Merely showing that a program executes without errors.",
+                "Testing a code implementation against known limiting cases.",
+                "Comparing predictions to independent constraints."
+              ],
+              "correctIndex": 0,
+              "hint": "Working software may still implement a scientifically inappropriate model.",
+              "feedback": "Execution checks assess software behavior; scientific validation requires fit-for-purpose comparison with observations, experiments or reliable benchmark cases.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "research-data",
+          "title": "Calculate counts, units and uncertainty",
+          "component": "quantitative",
+          "evidence": "Check event/system counting, unit conversion and finite-sample variability.",
+          "questions": [
+            {
+              "id": "research-data-1",
+              "difficulty": 1,
+              "prompt": "An event log lists system IDs [4,4,8,8,8,10]. What are the event-row and distinct-system counts?",
+              "choices": [
+                "6 event rows and 3 unique systems.",
+                "6 event rows and 6 unique systems.",
+                "3 event rows and 6 unique systems."
+              ],
+              "correctIndex": 0,
+              "hint": "Count records separately from unique identifiers.",
+              "feedback": "Six rows describe three distinct system labels (4,8,10); aggregation must match the scientific question.",
+              "component": "quantitative"
+            },
+            {
+              "id": "research-data-2",
+              "difficulty": 2,
+              "prompt": "An experiment has an estimated mean 20 with standard error 2 under a stated sampling model. An approximate mean ±2 SE interval is:",
+              "choices": [
+                "[16,24].",
+                "[10,30].",
+                "[18,22]."
+              ],
+              "correctIndex": 0,
+              "hint": "Compute 20−4 and 20+4.",
+              "feedback": "Mean ±2SE gives [16,24] numerically; coverage interpretations require distributional/design assumptions.",
+              "component": "quantitative"
+            },
+            {
+              "id": "research-data-3",
+              "difficulty": 3,
+              "prompt": "A published rate is in events Gpc⁻³ yr⁻¹. Which calculation gives an expected count under constant-rate toy assumptions?",
+              "choices": [
+                "Rate × comoving volume × source-frame duration × detection probability.",
+                "Rate × a single star's radius.",
+                "Rate ÷ source-frame duration × noise amplitude."
+              ],
+              "correctIndex": 0,
+              "hint": "Track dimensions and selection explicitly.",
+              "feedback": "The stated product yields dimensionless expected event count when volume/time units are consistent.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "research-controls",
+          "title": "Design controlled comparisons",
+          "component": "causal",
+          "evidence": "Select baseline, varied assumption, tracked outcomes and error bars.",
+          "questions": [
+            {
+              "id": "research-controls-1",
+              "difficulty": 1,
+              "prompt": "To isolate natal-kick effects in two runs, which design is most informative?",
+              "choices": [
+                "Keep initial draws and other prescriptions fixed while varying only the kick prescription, then quantify uncertainty.",
+                "Use unrelated output seeds with no controls or report of variability.",
+                "Change kicks, winds and selection thresholds all at once."
+              ],
+              "correctIndex": 0,
+              "hint": "Compare one causal input at a time where practical.",
+              "feedback": "Controlled comparison helps attribute output changes to the altered kick model rather than unrelated population inputs.",
+              "component": "causal"
+            },
+            {
+              "id": "research-controls-2",
+              "difficulty": 2,
+              "prompt": "Why are multiple Monte Carlo seeds or uncertainty estimates useful when a simulation predicts a rare merger channel?",
+              "choices": [
+                "Finite sampling can create fluctuations that otherwise look like physical model effects.",
+                "Increasing sample size guarantees every unusual channel must appear exactly once.",
+                "Random seeds make the Universe's physical merger rate fluctuate between runs."
+              ],
+              "correctIndex": 0,
+              "hint": "Distinguish numerical sample variability from astrophysical variation.",
+              "feedback": "Independent runs and variance estimates help quantify Monte Carlo error, especially for sparse and weighted outcomes.",
+              "component": "causal"
+            },
+            {
+              "id": "research-controls-3",
+              "difficulty": 3,
+              "prompt": "Why should a source-frame/cosmological convention be written beside merger-rate calculations?",
+              "choices": [
+                "A factor (1+z), volume definition or cosmology convention can change the interpretation of rates and times.",
+                "Physical rates can always be compared without matching units.",
+                "The choice only affects file extensions."
+              ],
+              "correctIndex": 0,
+              "hint": "Unit and frame conventions affect physically comparable quantities.",
+              "feedback": "Documenting frame and comoving volume conventions prevents hidden unit/time-dilation mismatches.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "research-integrity",
+          "title": "Critique claims and provenance",
+          "component": "model-critique",
+          "evidence": "Identify unsupported generalization, cherry-picking, licensing/provenance and publication-ready reporting.",
+          "questions": [
+            {
+              "id": "research-integrity-1",
+              "difficulty": 1,
+              "prompt": "A notebook reproduces only the plot that most resembles a paper and omits two failed parameter runs. What is the research-integrity concern?",
+              "choices": [
+                "Selective reporting hides sensitivity and gives a misleading view of robustness.",
+                "A plot can never be used in a research report.",
+                "Choosing a pretty plot proves all simulations converge."
+              ],
+              "correctIndex": 0,
+              "hint": "Report decision criteria, deviations and relevant negative results.",
+              "feedback": "Robust results require transparent parameter choices, failed attempts and complete relevant outcomes, not selecting only a favorable plot.",
+              "component": "model-critique"
+            },
+            {
+              "id": "research-integrity-2",
+              "difficulty": 2,
+              "prompt": "A result uses a public simulation dataset but gives no dataset version, filtering rule or random seed. What's missing?",
+              "choices": [
+                "The provenance and transformation details required for independent reproduction.",
+                "A universally agreed physical theory of dark matter.",
+                "Only a more colorful legend."
+              ],
+              "correctIndex": 0,
+              "hint": "Reproduction depends on actual inputs and analysis choices.",
+              "feedback": "Without versions and selection/transformation details, another researcher may unknowingly analyze a different sample.",
+              "component": "model-critique"
+            },
+            {
+              "id": "research-integrity-3",
+              "difficulty": 3,
+              "prompt": "A model matches the observed compact-binary mass distribution but the report ignores selection and uncertainty. How should the claim be phrased?",
+              "choices": [
+                "As a limited descriptive match requiring selection-aware uncertainty analysis before stronger astrophysical inference.",
+                "As proof that detectors never preferentially observe some masses.",
+                "As proof that the unique formation channel has been discovered."
+              ],
+              "correctIndex": 0,
+              "hint": "Identify what has and has not been compared.",
+              "feedback": "An apparent fit to detections is not a validated prediction of intrinsic populations without the observation model and uncertainties.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Reproduce a toy COMPAS figure",
+          "scenario": "A methods section specifies COMPAS version V, seed S, initial binary distribution P, kick prescription K, output selection F and weight method W.",
+          "task": "Draft a minimum reproducibility checklist and a criterion for comparison.",
+          "steps": [
+            "Record V and code commit/environment, S and P with sample size.",
+            "Record K and all other physics options, dataset identifiers and F.",
+            "Document W, plotted bins/units, uncertainties and a numerical comparison tolerance."
+          ],
+          "solution": "An independent run should match a stated target within justified stochastic/numerical tolerance; similar-looking plots alone are insufficient."
+        },
+        {
+          "title": "Confounded comparison",
+          "scenario": "Run A uses strong winds and weak kicks; Run B uses weak winds and strong kicks, and their merger rates differ.",
+          "task": "Can the difference be assigned to winds? Design a better comparison.",
+          "steps": [
+            "No: two physical inputs changed together.",
+            "Use a baseline then vary winds only while holding kicks and other inputs fixed.",
+            "Separately vary kicks and estimate Monte Carlo uncertainty with matched initial draws when possible."
+          ],
+          "solution": "A factorial or controlled design can test individual effects and interactions; the original comparison alone is confounded."
+        }
+      ],
+      "sources": [
+        {
+          "title": "COMPAS documentation",
+          "url": "https://compas.readthedocs.io/en/latest/"
+        },
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
     }
   ]
 }
