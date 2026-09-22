@@ -402,19 +402,52 @@ function renderFeaturedUnits(){
     }
   }
 }
+function renderPracticeFilters(){
+  const select=$("#practice-area-filter");if(!select)return;
+  const areas=[...new Set([...practiceUnits.values()].map(u=>u.area))].sort();
+  select.innerHTML='<option value="all">All research areas</option>'+
+    areas.map(area=>'<option value="'+html(area)+'">'+html(area)+'</option>').join("");
+  select.addEventListener("change",event=>{practiceArea=event.target.value;renderPracticeHub();});
+  $("#practice-search")?.addEventListener("input",event=>{practiceQuery=event.target.value.trim().toLowerCase();renderPracticeHub();});
+  const count=adaptiveItems.length,cases=[...practiceUnits.values()].reduce((n,u)=>n+(u.cases?.length||0),0);
+  $("#practice-summary").textContent=practiceUnits.size+" research tracks · "+count+
+    " authored questions · "+cases+" self-checked applied cases";
+}
 function renderPracticeHub(){
   const host=$("#practice-unit-cards");if(!host)return;
   host.replaceChildren();
-  for(const unit of learningUnits.values()){
-    const concept=byId(unit.id);
-    const attempts=unit.objectives.reduce((sum,o)=>sum+window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).attempts,0);
+  for(const unit of practiceUnits.values()){
+    if(practiceArea!=="all"&&unit.area!==practiceArea)continue;
+    if(practiceQuery&&!([unit.title,unit.area,unit.summary,...unit.objectives.map(o=>o.title)].join(" ").toLowerCase().includes(practiceQuery)))continue;
+    const attempted=unit.objectives.reduce((sum,o)=>sum+window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).attempts,0);
+    const items=adaptiveItems.filter(q=>q.unitId===unit.id).length;
     const card=button("",()=>openPracticeUnit(unit.id),"practice-unit-card"+(unit.id===openUnitId?" is-selected":""));
     card.setAttribute("aria-pressed",String(unit.id===openUnitId));
-    card.innerHTML='<span class="practice-card-kicker">FIVE-QUESTION PRACTICE</span>'+
-      '<strong>'+html(concept.title)+'</strong><span>'+html(unit.summary)+'</span>'+
-      '<small>'+(attempts?attempts+" previous objective responses":"Not attempted yet")+' · Open practice ↗</small>';
+    card.innerHTML='<span class="practice-card-kicker">'+html(unit.area)+' · '+items+' authored questions</span>'+
+      '<strong>'+html(unit.title)+'</strong><span>'+html(unit.summary)+'</span>'+
+      '<span class="practice-card-components">'+unit.objectives.length+" learning components"+(unit.cases?.length?" · "+unit.cases.length+" applied cases":" · full explanatory lesson")+'</span>'+
+      '<small>'+(attempted?attempted+" prior responses":"Not attempted yet")+' · Open assessment ↗</small>';
     host.appendChild(card);
   }
+  if(!host.children.length){
+    const p=document.createElement("p");p.className="practice-empty";
+    p.textContent="No tracks match these filters. Try another research area or search term.";host.appendChild(p);
+  }
+}
+function renderPracticeCases(unit){
+ const host=$("#practice-case-studies");if(!host)return;
+ const cases=unit.cases||[];host.hidden=!cases.length;
+ if(!cases.length){host.replaceChildren();return;}
+ const para=value=>'<p>'+html(value)+'</p>';
+ host.innerHTML='<div class="practice-section-heading"><h3>Apply it to a research scenario</h3><span>Work through the reasoning before revealing the solution · not graded</span></div>'+
+  cases.map((c,i)=>'<article class="practice-case"><span class="practice-card-kicker">CASE '+String(i+1).padStart(2,"0")+'</span>'+
+   '<h4>'+html(c.title)+'</h4>'+para(c.scenario)+'<p class="practice-case-task">'+html(c.task)+'</p>'+
+   '<label for="practice-case-answer-'+i+'">Your working (optional; not saved)</label>'+
+   '<textarea id="practice-case-answer-'+i+'" rows="4" placeholder="Write your assumptions, intermediate reasoning and conclusion..."></textarea>'+
+   '<details><summary>Reveal a worked solution for self-check</summary><ol>'+c.steps.map(step=>'<li>'+html(step)+'</li>').join("")+
+   '</ol>'+para(c.solution)+'</details></article>').join("")+
+   '<div class="practice-sources"><span class="lesson-kicker">PUBLIC READING · CHECK ORIGINAL SOURCES</span>'+
+   (unit.sources||[]).map(s=>'<a target="_blank" rel="noopener noreferrer" href="'+html(safeLink(s.url))+'">'+html(s.title)+' ↗</a>').join("")+'</div>';
 }
 function openPracticeUnit(id,mode=null){
   if(!practiceUnits.has(id))return;
@@ -424,6 +457,7 @@ function openPracticeUnit(id,mode=null){
   $("#practice-active").hidden=false;
   $("#practice-selected-title").textContent=practiceUnits.get(id).title;
   renderPracticeHub();
+  renderPracticeCases(practiceUnits.get(id));
   if(mode)startAdaptiveQuiz(mode);
   else renderAdaptivePanel();
   $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
@@ -431,6 +465,7 @@ function openPracticeUnit(id,mode=null){
 function closePracticeUnit(){
   openUnitId=null;
   $("#practice-active").hidden=true;
+  $("#practice-case-studies").hidden=true;
   renderPracticeHub();
   updateOtto();
 }
