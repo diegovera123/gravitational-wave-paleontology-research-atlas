@@ -1368,3 +1368,65 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
  .concept-deep-example{padding:16px;}
  .concept-deep-step{padding-left:13px;}
 }
+
+
+/* Second design pass: scientific explanations should read as one quiet article,
+   with a low-profile reading-position indicator rather than segmented content tabs. */
+#constellation-detail.constellation-detail{width:min(720px,calc(100vw - 20px));}
+.concept-dialog-header{padding:21px 26px 15px;}
+.concept-dialog-header h3{max-width:36ch;}
+.concept-dialog-context{font-size:11px!important;line-height:1.5!important;color:#9aafd1!important;}
+.concept-reading-track{--reading-progress:0%;position:relative;flex:0 0 auto;height:18px;
+ background:linear-gradient(180deg,rgba(28,41,68,.98),rgba(20,32,53,.96));
+ border-bottom:1px solid rgba(161,183,225,.13);}
+.concept-reading-fill{display:block;position:absolute;inset:0 auto auto 0;width:var(--reading-progress);height:3px;
+ border-radius:0 5px 5px 0;background:linear-gradient(90deg,#a7a1e1,#8dcbd6);transition:width .16s ease;}
+.concept-reading-label{position:absolute;right:18px;top:4px;color:#a0b4d1;font:500 9px/1.2 var(--font-body);}
+.concept-back-top{padding:8px 11px;border:1px solid rgba(151,177,218,.3);border-radius:9px;
+ background:rgba(42,56,84,.5);color:#c8dcf8;font:600 11px/1.5 var(--font-body);cursor:pointer;}
+.concept-back-top:hover,.concept-back-top:focus-visible{border-color:#c2d7f7;color:#f5f7ff;}
+.concept-single-unit{max-width:78ch;margin-inline:auto;scroll-padding-top:22px;}
+.concept-dialog-body.concept-single-unit{padding:27px clamp(17px,4.4vw,41px) 40px;}
+.concept-deep-opening{font-size:15px!important;line-height:1.87!important;}
+.concept-deep-step p,.concept-deep-example p{font-size:13px!important;line-height:1.86!important;}
+.concept-unit-section{margin-bottom:35px;padding-bottom:31px;}
+.concept-connection-group:last-child{border-bottom:0;}
+.concept-single-unit .constellation-resource-list{display:flex;flex-wrap:wrap;gap:10px;}
+.concept-single-unit .constellation-resource-list a{max-width:100%;overflow-wrap:anywhere;}
+
+/* Scientific drawings replace interchangeable three-node slides on developed units. */
+.physics-figure{padding:18px 18px 15px;margin:24px 0 29px;
+ border-radius:17px;border:1px solid rgba(138,174,216,.33);
+ background:radial-gradient(circle at 85% 15%,rgba(88,119,164,.13),transparent 45%),
+ linear-gradient(150deg,rgba(11,24,42,.97),rgba(14,22,38,.95));}
+.physics-figure svg{width:100%;height:auto;display:block;overflow:visible;}
+.physics-figure figcaption{margin:11px 0 0;color:#9bb2d3;font:400 11px/1.7 var(--font-body);}
+.physics-figure figcaption strong{color:#d6e7fd;font-weight:600;}
+.physics-figure figcaption span{display:block;margin-top:5px;font-size:10px;color:#8198ba;}
+.physics-figure .figure-label{fill:#d3e1f8;font:500 12px var(--font-body);}
+.physics-figure .figure-axis,.physics-figure .figure-link{stroke:#99accb;stroke-width:1.6;fill:none;opacity:.87;}
+.physics-figure .figure-orbit{stroke:#8298c7;stroke-width:2;fill:none;stroke-dasharray:6 5;}
+.physics-figure .figure-wave-ring{stroke:#a7c0ff;stroke-width:2.2;fill:rgba(148,176,241,.08);}
+.physics-figure .figure-particle{fill:#e4dafb;stroke:#657a9b;stroke-width:1;}
+.physics-figure .figure-star{fill:#d5a9c4;stroke:#eed3df;stroke-width:1.5;}
+.physics-figure .figure-remnant{fill:#8ccce0;stroke:#d0f4ff;stroke-width:1.5;}
+.physics-figure .figure-velocity{stroke:#b9ccff;stroke-width:2.5;}
+.physics-figure .figure-kick{stroke:#e5b8da;stroke-width:2.5;}
+.physics-figure .figure-result{stroke:#b1dcce;stroke-width:2.5;}
+.physics-figure .figure-flow{stroke:#cfafde;stroke-width:3;fill:none;}
+.physics-figure .figure-waveform{stroke:#aab6ff;stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round;}
+.physics-figure .figure-class-a{fill:#a3baff;stroke:#dbe5ff;stroke-width:1;}
+.physics-figure .figure-class-b{fill:#d4a4c8;stroke:#f5deec;stroke-width:1;}
+.physics-figure .figure-panel{fill:rgba(44,65,104,.75);stroke:rgba(157,181,221,.5);stroke-width:1.4;}
+.physics-figure .figure-lobe{stroke:#8298c7;stroke-width:1.7;fill:none;stroke-dasharray:5 5;}
+@media(max-width:760px){
+ .concept-dialog-body.concept-single-unit{padding:21px 17px 34px;}
+ .physics-figure{padding:12px 8px 13px;border-radius:12px;}
+ .concept-dialog-footer{gap:7px;}
+ .concept-dialog-footer span{display:none;}
+ .concept-dialog-footer button{flex:1 1 auto;}
+}
+@media(prefers-reduced-motion:reduce){
+ .concept-reading-fill{transition:none;}
+ .concept-single-unit{scroll-behavior:auto;}
+}
