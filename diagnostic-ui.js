@@ -242,7 +242,7 @@ function mount({host,overview,concepts,questions,questionPaths,macros,topics,eng
         '<small>'+esc(statusNames[item.status]||statusNames.unassessed)+'</small></span><span aria-hidden="true">↗</span></button>').join(""):
         '<p>Nothing is flagged in this short sample. Choose a goal in the Atlas, or assess more concepts to refine your starting point.</p>')+'</div>'+
       '<p class="diag-privacy">These are provisional, learner-controlled recommendations, not a calibrated score, a claim that you mastered untested prerequisites, or an official research-readiness assessment.</p>'+
-      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Meet Otto and start my mission →</button>'+
+      '<div class="diag-actions"><button id="diag-open-map" class="diag-primary" type="button">Explore my concepts →</button>'+
       '<button id="diag-repeat" class="diag-secondary" type="button">Explore another goal</button>'+
       '<button id="diag-clear" class="diag-text-action" type="button">Clear saved diagnostic</button></div>';
     host.querySelectorAll("[data-diagnostic-recommend]").forEach(b=>b.addEventListener("click",()=>openConcept(b.dataset.diagnosticRecommend)));
