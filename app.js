@@ -14,7 +14,8 @@ const questionCardsElement = $("#question-cards"), statsElement = $("#atlas-stat
 let graph, concepts=[], researchSources=[], atlas, macroById, topicById, locationByConcept;
 let level="global", macroId=null, topicId=null, selectedId=null, previousLocations=[];
 let fitToken=0, displayMode="map", researchQuestions=[], activeQuestionId=null;
-let learningUnits=new Map(), openUnitId=null;
+let learningUnits=new Map(), practiceUnits=new Map(), practiceByConcept=new Map(), openUnitId=null;
+let practiceArea="all",practiceQuery="";
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
 let activeView="home", diagnosticController=null, guideController=null, focusedHome=null, constellation=null;
@@ -249,7 +250,7 @@ function setActiveView(view,options={}){
     tab.tabIndex=name===view?0:-1;
   }
   $("#dashboard").hidden=view!=="home";
-  if(view==="practice"&&learningUnits.size)renderPracticeHub();
+  if(view==="practice"&&practiceUnits.size)renderPracticeHub();
   $("#diagnostic-panel").hidden=view!=="home"||!homeDiagnosticVisible;
   $("#simple-home").hidden=view!=="home"||homeDiagnosticVisible;
   $("#focus-home").hidden=true;
@@ -401,28 +402,62 @@ function renderFeaturedUnits(){
     }
   }
 }
+function renderPracticeFilters(){
+  const select=$("#practice-area-filter");if(!select)return;
+  const areas=[...new Set([...practiceUnits.values()].map(u=>u.area))].sort();
+  select.innerHTML='<option value="all">All research areas</option>'+
+    areas.map(area=>'<option value="'+html(area)+'">'+html(area)+'</option>').join("");
+  select.addEventListener("change",event=>{practiceArea=event.target.value;renderPracticeHub();});
+  $("#practice-search")?.addEventListener("input",event=>{practiceQuery=event.target.value.trim().toLowerCase();renderPracticeHub();});
+  const count=adaptiveItems.length,cases=[...practiceUnits.values()].reduce((n,u)=>n+(u.cases?.length||0),0);
+  $("#practice-summary").textContent=practiceUnits.size+" research tracks · "+count+
+    " authored questions · "+cases+" self-checked applied cases";
+}
 function renderPracticeHub(){
   const host=$("#practice-unit-cards");if(!host)return;
   host.replaceChildren();
-  for(const unit of learningUnits.values()){
-    const concept=byId(unit.id);
-    const attempts=unit.objectives.reduce((sum,o)=>sum+window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).attempts,0);
+  for(const unit of practiceUnits.values()){
+    if(practiceArea!=="all"&&unit.area!==practiceArea)continue;
+    if(practiceQuery&&!([unit.title,unit.area,unit.summary,...unit.objectives.map(o=>o.title)].join(" ").toLowerCase().includes(practiceQuery)))continue;
+    const attempted=unit.objectives.reduce((sum,o)=>sum+window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).attempts,0);
+    const items=adaptiveItems.filter(q=>q.unitId===unit.id).length;
     const card=button("",()=>openPracticeUnit(unit.id),"practice-unit-card"+(unit.id===openUnitId?" is-selected":""));
     card.setAttribute("aria-pressed",String(unit.id===openUnitId));
-    card.innerHTML='<span class="practice-card-kicker">FIVE-QUESTION PRACTICE</span>'+
-      '<strong>'+html(concept.title)+'</strong><span>'+html(unit.summary)+'</span>'+
-      '<small>'+(attempts?attempts+" previous objective responses":"Not attempted yet")+' · Open practice ↗</small>';
+    card.innerHTML='<span class="practice-card-kicker">'+html(unit.area)+' · '+items+' authored questions</span>'+
+      '<strong>'+html(unit.title)+'</strong><span>'+html(unit.summary)+'</span>'+
+      '<span class="practice-card-components">'+unit.objectives.length+" learning components"+(unit.cases?.length?" · "+unit.cases.length+" applied cases":" · full explanatory lesson")+'</span>'+
+      '<small>'+(attempted?attempted+" prior responses":"Not attempted yet")+' · Open assessment ↗</small>';
     host.appendChild(card);
   }
+  if(!host.children.length){
+    const p=document.createElement("p");p.className="practice-empty";
+    p.textContent="No tracks match these filters. Try another research area or search term.";host.appendChild(p);
+  }
+}
+function renderPracticeCases(unit){
+ const host=$("#practice-case-studies");if(!host)return;
+ const cases=unit.cases||[];host.hidden=!cases.length;
+ if(!cases.length){host.replaceChildren();return;}
+ const para=value=>'<p>'+html(value)+'</p>';
+ host.innerHTML='<div class="practice-section-heading"><h3>Apply it to a research scenario</h3><span>Work through the reasoning before revealing the solution · not graded</span></div>'+
+  cases.map((c,i)=>'<article class="practice-case"><span class="practice-card-kicker">CASE '+String(i+1).padStart(2,"0")+'</span>'+
+   '<h4>'+html(c.title)+'</h4>'+para(c.scenario)+'<p class="practice-case-task">'+html(c.task)+'</p>'+
+   '<label for="practice-case-answer-'+i+'">Your working (optional; not saved)</label>'+
+   '<textarea id="practice-case-answer-'+i+'" rows="4" placeholder="Write your assumptions, intermediate reasoning and conclusion..."></textarea>'+
+   '<details><summary>Reveal a worked solution for self-check</summary><ol>'+c.steps.map(step=>'<li>'+html(step)+'</li>').join("")+
+   '</ol>'+para(c.solution)+'</details></article>').join("")+
+   '<div class="practice-sources"><span class="lesson-kicker">PUBLIC READING · CHECK ORIGINAL SOURCES</span>'+
+   (unit.sources||[]).map(s=>'<a target="_blank" rel="noopener noreferrer" href="'+html(safeLink(s.url))+'">'+html(s.title)+' ↗</a>').join("")+'</div>';
 }
 function openPracticeUnit(id,mode=null){
-  if(!learningUnits.has(id))return;
+  if(!practiceUnits.has(id))return;
   openUnitId=id;
   $("#learning-studio").hidden=true;
   setActiveView("practice",{scroll:false});
   $("#practice-active").hidden=false;
-  $("#practice-selected-title").textContent=byId(id).title;
+  $("#practice-selected-title").textContent=practiceUnits.get(id).title;
   renderPracticeHub();
+  renderPracticeCases(practiceUnits.get(id));
   if(mode)startAdaptiveQuiz(mode);
   else renderAdaptivePanel();
   $("#practice-active").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
@@ -430,6 +465,7 @@ function openPracticeUnit(id,mode=null){
 function closePracticeUnit(){
   openUnitId=null;
   $("#practice-active").hidden=true;
+  $("#practice-case-studies").hidden=true;
   renderPracticeHub();
   updateOtto();
 }
@@ -470,110 +506,131 @@ function saveAdaptiveHistory(){
   catch(error){adaptiveStorageAvailable=false;console.warn("[Atlas] Could not save local practice history.",error);}
 }
 function updateReviewBadge(){
-  const all=[...learningUnits.values()];
+  const all=[...practiceUnits.values()];
   const due=window.AtlasAdaptive.dueObjectives(all,adaptiveHistory);
   const host=$("#due-practice");host.replaceChildren();
   const p=document.createElement("p");
   p.className="adaptive-due-info";
-  p.textContent=due.length?due.length+" learning objective"+(due.length===1?" is":"s are")+" ready for another review.":"No reviews due right now. Try a learning unit to get started.";
+  p.textContent=due.length?due.length+" learning objective"+(due.length===1?" is":"s are")+" ready for another review.":"No reviews due right now. Try a research practice track to get started.";
   host.appendChild(p);
   const shown=new Set();
   for(const x of due){
     if(shown.has(x.unitId))continue;shown.add(x.unitId);
-    const b=button("Review "+byId(x.unitId).title+" ↗",()=>{
+    const b=button("Review "+practiceUnits.get(x.unitId).title+" ↗",()=>{
       openPracticeUnit(x.unitId,"review");
     },"adaptive-due-button");
     host.appendChild(b);
   }
   const hint=$("#practice-due-summary");
-  if(hint)hint.textContent=due.length?due.length+" objective"+(due.length===1?"":"s")+" due for review":"Adaptive practice · 3 pilot lessons";
+  if(hint)hint.textContent=due.length?due.length+" objective"+(due.length===1?"":"s")+" due for review":"Adaptive practice · "+practiceUnits.size+" research tracks";
 }
-function startAdaptiveQuiz(mode="practice"){
-  const unit=learningUnits.get(openUnitId);if(!unit)return;
-  const dueObjectives=mode==="review"?unit.objectives.filter(o=>window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).due).map(o=>o.id):[];
-  const session={unitId:unit.id,mode,focusObjectiveIds:dueObjectives,results:[],current:null,choice:null,answered:false,done:false};
-  quizSessions.set(unit.id,session);
-  advanceAdaptiveQuiz();
-  renderAdaptivePanel();
+function startAdaptiveQuiz(mode="practice",objectiveId=null){
+ const unit=practiceUnits.get(openUnitId);if(!unit)return;
+ const dueObjectives=mode==="review"?unit.objectives.filter(o=>window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory).due).map(o=>o.id):[];
+ const restricted=mode==="component"&&unit.objectives.some(o=>o.id===objectiveId)?[objectiveId]:
+   mode==="review"?dueObjectives:[];
+ const available=adaptiveItems.filter(q=>q.unitId===unit.id&&(!restricted.length||restricted.includes(q.objectiveId))).length;
+ const length=mode==="component"?Math.min(3,available):
+   mode==="review"?Math.min(8,available):Math.min(unit.sessionLength||5,available);
+ if(!length)return;
+ const session={unitId:unit.id,mode,focusObjectiveIds:dueObjectives,restrictObjectiveIds:restricted,
+   targetLength:length,results:[],current:null,choice:null,answered:false,done:false};
+ quizSessions.set(unit.id,session);
+ advanceAdaptiveQuiz();renderAdaptivePanel();
 }
 function advanceAdaptiveQuiz(){
-  const unit=learningUnits.get(openUnitId),session=quizSessions.get(openUnitId);
-  if(!session||!unit)return;
-  if(session.results.length>=5){session.done=true;session.current=null;return;}
-  // Each result is already in the lifetime history. Exclude this session's records before
-  // passing them separately to the selector, avoiding double-counted evidence.
-  const lifetime=adaptiveHistory.filter(r=>!session.results.includes(r));
-  session.current=window.AtlasAdaptive.chooseNext(adaptiveItems,unit,lifetime,session.results,Date.now(),session.focusObjectiveIds);
-  session.choice=null;session.answered=false;
-  if(!session.current)session.done=true;
+ const unit=practiceUnits.get(openUnitId),session=quizSessions.get(openUnitId);
+ if(!session||!unit)return;
+ if(session.results.length>=session.targetLength){session.done=true;session.current=null;return;}
+ // Each result is in adaptiveHistory. Exclude current-session records before supplying them separately.
+ const lifetime=adaptiveHistory.filter(r=>!session.results.includes(r));
+ session.current=window.AtlasAdaptive.chooseNext(adaptiveItems,unit,lifetime,session.results,Date.now(),
+   session.focusObjectiveIds,session.restrictObjectiveIds);
+ session.choice=null;session.answered=false;
+ if(!session.current)session.done=true;
 }
 function answerAdaptiveQuiz(choice){
-  const s=quizSessions.get(openUnitId);
-  if(!s||!s.current||s.answered||!Number.isInteger(choice)||choice<0||choice>=s.current.choices.length)return;
-  s.choice=choice;s.answered=true;
-  const item=s.current;
-  const record={unitId:s.unitId,itemId:item.id,objectiveId:item.objectiveId,difficulty:item.difficulty,
-    correct:choice===item.correctIndex,at:Date.now()};
-  s.results.push(record);adaptiveHistory.push(record);
-  saveAdaptiveHistory();updateReviewBadge();renderPracticeHub();renderAdaptivePanel();
+ const session=quizSessions.get(openUnitId);
+ if(!session||!session.current||session.answered||!Number.isInteger(choice)||choice<0||choice>=session.current.choices.length)return;
+ session.choice=choice;session.answered=true;
+ const item=session.current;
+ const record={unitId:session.unitId,itemId:item.id,objectiveId:item.objectiveId,difficulty:item.difficulty,
+   correct:choice===item.correctIndex,at:Date.now()};
+ session.results.push(record);adaptiveHistory.push(record);
+ saveAdaptiveHistory();updateReviewBadge();renderPracticeHub();renderAdaptivePanel();
+}
+function renderPracticeObjectives(unit,session){
+ const host=$("#practice-objectives");if(!host)return;
+ const shown=session?.mode==="component"?"Targeted component check · ":session?.mode==="review"?"Due review · ":"";
+ host.innerHTML='<span class="lesson-kicker">'+shown+"KNOWLEDGE COMPONENTS"+'</span>'+
+ '<p>Each component is tested separately. Select one for a focused three-question check, or use the full assessment to connect all components.</p>'+
+ '<div class="practice-objective-grid">'+unit.objectives.map(o=>{
+   const hits=session?.results.filter(r=>r.objectiveId===o.id)||[];
+   const correct=hits.filter(r=>r.correct).length;
+   const status=hits.length?correct+" / "+hits.length+" this session":"Try a focused check";
+   return '<button type="button" class="practice-objective-button" data-practice-component="'+html(o.id)+'"'+
+    (session&&!session.done?" disabled":"")+'><span>'+html(o.component||"conceptual").replace(/-/g," ")+'</span>'+
+    '<strong>'+html(o.title)+'</strong><small>'+html(o.evidence||"")+'</small><em>'+status+' ↗</em></button>';
+ }).join("")+'</div>';
+ host.querySelectorAll("[data-practice-component]").forEach(btn=>btn.addEventListener("click",()=>startAdaptiveQuiz("component",btn.dataset.practiceComponent)));
 }
 function renderAdaptivePanel(){
-  const host=$("#adaptive-panel");if(!host||!openUnitId)return;
-  const unit=learningUnits.get(openUnitId),session=quizSessions.get(openUnitId);
-  const due=unit.objectives.map(o=>({objective:o,...window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory)}));
-  if(!session){
-    host.innerHTML='<span class="lesson-kicker">PERSONALIZED PRACTICE · PILOT</span>'+
-      '<h3>Check your understanding, one question at a time.</h3>'+
-      '<p>A short five-question session adjusts its objective and authored difficulty based on your previous answers. Hints and explanatory feedback are available; no calibrated mastery score or certificate is issued.</p>'+
-      '<p class="practice-readiness">'+due.map(x=>html(x.objective.title)+': '+x.attempts+" past responses"+(x.due?" · review due":"")).join(" · ")+'</p>'+
-      '<button id="practice-start" type="button" class="lesson-submit">Start adaptive practice →</button>'+
-      (due.some(x=>x.due)?'<button id="practice-review" type="button" class="lesson-back">Review due objectives →</button>':'')+
-      '<small class="practice-privacy">Answers remain in this browser when local storage is available. No account, server analysis, or automated grading of written work.</small>';
-    $("#practice-start").addEventListener("click",()=>startAdaptiveQuiz("practice"));
-    if(due.some(x=>x.due))$("#practice-review").addEventListener("click",()=>startAdaptiveQuiz("review"));
-    return;
-  }
-  if(session.done){
-    const correct=session.results.filter(r=>r.correct).length;
-    const summary=unit.objectives.map(o=>{
-      const rows=session.results.filter(r=>r.objectiveId===o.id);
-      return '<li>'+html(o.title)+': '+rows.filter(r=>r.correct).length+' / '+rows.length+' correct in this session</li>';
-    }).join("");
-    host.innerHTML='<span class="lesson-kicker">SESSION COMPLETE · FORMATIVE EVIDENCE</span>'+
-      '<h3>'+correct+" / "+session.results.length+' questions answered correctly</h3>'+
-      '<p>This brief check describes this attempt only. It does not certify proficiency or automatically unlock a level. Review the worked example before retrying if needed.</p>'+
-      '<ul class="practice-outcomes">'+summary+'</ul>'+
-      '<button id="practice-again" type="button" class="lesson-submit">Practise again with a new route →</button>'+
-      '<button id="practice-back" type="button" class="lesson-back">Back to practice sets</button>';
-    $("#practice-again").addEventListener("click",()=>startAdaptiveQuiz("practice"));
-    $("#practice-back").addEventListener("click",closePracticeUnit);
-    return;
-  }
-  const item=session.current;
-  const objective=unit.objectives.find(o=>o.id===item.objectiveId);
-  const progress=session.results.length+(session.answered?0:1);
-  const options=item.choices.map((choice,index)=>{
-    const selected=session.choice===index;
-    const css=session.answered?(index===item.correctIndex?" correct":selected?" incorrect":""):"";
-    return '<button type="button" class="lesson-option'+css+(selected?" selected":"")+
-      '" data-adaptive-choice="'+index+'" '+(session.answered?"disabled":"")+' aria-pressed="'+selected+'">'+html(choice)+'</button>';
-  }).join("");
-  const feedback=session.answered?'<div class="practice-feedback" role="status"><strong>'+
-    (session.choice===item.correctIndex?"Correct.":"Review this distinction.")+'</strong><p>'+html(item.feedback)+'</p>'+
-    '<p>Answer: '+html(item.choices[item.correctIndex])+'</p></div>':"";
-  host.innerHTML='<span class="lesson-kicker">'+(session.mode==="review"?"REVIEW SESSION":"ADAPTIVE PRACTICE")+' · '+progress+' / 5</span>'+
-    '<div class="practice-progress-track"><span style="width:'+(Math.min(progress,5)/5*100)+'%"></span></div>'+
-    '<p class="practice-objective">Objective: '+html(objective.title)+' · Authored difficulty '+item.difficulty+' / 3</p>'+
-    '<h3>'+html(item.prompt)+'</h3><div class="practice-choices">'+options+'</div>'+
-    (session.answered?feedback:'<details class="practice-hint"><summary>Need a hint?</summary><p>'+html(item.hint)+'</p></details>')+
-    (session.answered?'<button id="practice-next" class="lesson-submit" type="button">'+
-       (session.results.length>=5?"Finish this session":"Next question →")+'</button>':'')+
-    '<p class="practice-privacy">The next item is selected using objective coverage, recent answers and author-set difficulty; it is not a calibrated ability estimate.</p>';
-  if(session.answered){
-    $("#practice-next").addEventListener("click",()=>{advanceAdaptiveQuiz();renderAdaptivePanel();});
-  }else{
-    host.querySelectorAll("[data-adaptive-choice]").forEach(b=>b.addEventListener("click",()=>answerAdaptiveQuiz(Number(b.dataset.adaptiveChoice))));
-  }
+ const host=$("#adaptive-panel");if(!host||!openUnitId)return;
+ const unit=practiceUnits.get(openUnitId),session=quizSessions.get(openUnitId);if(!unit)return;
+ const due=unit.objectives.map(o=>({objective:o,...window.AtlasAdaptive.objectiveStats(unit.id,o.id,adaptiveHistory)}));
+ renderPracticeObjectives(unit,session);
+ if(!session){
+   host.innerHTML='<span class="lesson-kicker">RESEARCH PRACTICE · '+unit.objectives.length+' COMPONENTS</span>'+
+    '<h3>Test the connections, not just the vocabulary.</h3>'+
+    '<p>This track combines conceptual interpretation, worked calculations, causal reasoning and model critique when authored. A full assessment samples each objective without repeating an item within the session. Answers receive explanatory feedback; results are formative, not calibrated mastery estimates.</p>'+
+    '<p class="practice-readiness">'+due.map(x=>html(x.objective.title)+': '+x.attempts+" past responses"+(x.due?" · review due":"")).join(" · ")+'</p>'+
+    '<button id="practice-start" type="button" class="lesson-submit">Start adaptive practice · '+unit.sessionLength+' questions →</button>'+
+    (due.some(x=>x.due)?'<button id="practice-review" type="button" class="lesson-back">Review due objectives →</button>':"")+
+    '<small class="practice-privacy">Your graded answers stay in this browser when local storage is available. Applied research cases below are self-checked and not graded or stored.</small>';
+   $("#practice-start").addEventListener("click",()=>startAdaptiveQuiz("practice"));
+   if(due.some(x=>x.due))$("#practice-review").addEventListener("click",()=>startAdaptiveQuiz("review"));
+   return;
+ }
+ if(session.done){
+   const correct=session.results.filter(r=>r.correct).length;
+   const summary=unit.objectives.map(o=>{
+     const rows=session.results.filter(r=>r.objectiveId===o.id);
+     return '<li><strong>'+html(o.title)+'</strong> · '+rows.filter(r=>r.correct).length+' / '+rows.length+
+       ' correct in this session'+(rows.length?' · '+html(o.evidence):' · Not sampled in this session')+'</li>';
+   }).join("");
+   host.innerHTML='<span class="lesson-kicker">SESSION COMPLETE · FORMATIVE EVIDENCE</span>'+
+     '<h3>'+correct+" / "+session.results.length+' questions answered correctly</h3>'+
+     '<p>This is a record of these particular responses, not a mastery certificate. Compare the reasoning for each component, revisit the source and worked cases, then retest.</p>'+
+     '<ul class="practice-outcomes">'+summary+'</ul>'+
+     '<button id="practice-again" type="button" class="lesson-submit">Practise again with a new route →</button>'+
+     '<button id="practice-back" type="button" class="lesson-back">Back to practice sets</button>';
+   $("#practice-again").addEventListener("click",()=>startAdaptiveQuiz(session.mode==="component"?"component":"practice",session.restrictObjectiveIds[0]||null));
+   $("#practice-back").addEventListener("click",closePracticeUnit);
+   return;
+ }
+ const item=session.current,objective=unit.objectives.find(o=>o.id===item.objectiveId);
+ const progress=session.results.length+(session.answered?0:1);
+ const options=item.choices.map((choice,index)=>{
+   const selected=session.choice===index;
+   const css=session.answered?(index===item.correctIndex?" correct":selected?" incorrect":""):"";
+   return '<button type="button" class="lesson-option'+css+(selected?" selected":"")+
+     '" data-adaptive-choice="'+index+'" '+(session.answered?"disabled":"")+' aria-pressed="'+selected+'">'+html(choice)+'</button>';
+ }).join("");
+ const feedback=session.answered?'<div class="practice-feedback" role="status"><strong>'+
+   (session.choice===item.correctIndex?"Correct.":"Review this distinction.")+'</strong><p>'+html(item.feedback)+'</p>'+
+   '<p>Answer: '+html(item.choices[item.correctIndex])+'</p></div>':"";
+ host.innerHTML='<span class="lesson-kicker">'+(session.mode==="review"?"DUE REVIEW":session.mode==="component"?"COMPONENT CHECK":"CROSS-COMPONENT ASSESSMENT")+
+   ' · '+progress+' / '+session.targetLength+'</span>'+
+   '<div class="practice-progress-track"><span style="width:'+(Math.min(progress,session.targetLength)/session.targetLength*100)+'%"></span></div>'+
+   '<p class="practice-objective">'+html((objective.component||item.component||"conceptual").replace(/-/g," "))+' · '+html(objective.title)+
+   ' · Authored difficulty '+item.difficulty+' / 3</p>'+
+   '<h3>'+html(item.prompt)+'</h3><div class="practice-choices">'+options+'</div>'+
+   (session.answered?feedback:'<details class="practice-hint"><summary>Need a hint?</summary><p>'+html(item.hint)+'</p></details>')+
+   (session.answered?'<button id="practice-next" class="lesson-submit" type="button">'+
+      (session.results.length>=session.targetLength?"Finish this session":"Next question →")+'</button>':"")+
+   '<p class="practice-privacy">Item routing uses objective coverage, past answers and author-defined difficulty. No calibrated ability score is inferred.</p>';
+ if(session.answered)$("#practice-next").addEventListener("click",()=>{advanceAdaptiveQuiz();renderAdaptivePanel();});
+ else host.querySelectorAll("[data-adaptive-choice]").forEach(btn=>btn.addEventListener("click",()=>answerAdaptiveQuiz(Number(btn.dataset.adaptiveChoice))));
 }
 
 function renderLearningUnit(){
@@ -917,19 +974,21 @@ async function initialise() {
       fetch("knowledge-graph/research-questions.json"),
       fetch("knowledge-graph/learning-units.json"),
       fetch("knowledge-graph/adaptive-items.json"),
+      fetch("knowledge-graph/practice-sets.json"),
       fetch("knowledge-graph/diagnostic-questions.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
     researchQuestions=questionsData.questions;
     if(unitsData.schemaVersion!==1||!Array.isArray(unitsData.units))throw Error("Unsupported learning units.");
     learningUnits=new Map(unitsData.units.map(unit=>[unit.id,unit]));
-    if(!window.AtlasAdaptive)throw Error("The adaptive-practice module did not load.");
-    window.AtlasAdaptive.validateBank(adaptiveData,unitsData.units);
-    adaptiveItems=adaptiveData.items;
+    if(!window.AtlasAdaptive||!window.AtlasPractice)throw Error("A practice module did not load.");
+    const catalog=window.AtlasPractice.build(unitsData.units,adaptiveData,practiceData,concepts);
+    practiceUnits=catalog.units;practiceByConcept=catalog.byConcept;adaptiveItems=catalog.items;
+    window.AtlasAdaptive.validateBank({schemaVersion:1,items:adaptiveItems},[...practiceUnits.values()]);
     loadAdaptiveHistory();
     const conceptIds=new Set(concepts.map(c=>c.id)),sourceIds=new Set(researchSources.map(s=>s.id));
     for(const q of researchQuestions) {
@@ -977,7 +1036,7 @@ async function initialise() {
       $("#tab-diagnostic").disabled=true;
       markOnboardingSeen();
     }
-    renderDashboard();renderFeaturedUnits();updateReviewBadge();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
+    renderDashboard();renderFeaturedUnits();updateReviewBadge();renderPracticeFilters();renderPracticeHub();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
     // The full Explorer is now one progressive 3D constellation, not the legacy
     // structured-map / sidebar workspace. The legacy data engine remains for
     // research, deep links, the learning studio and old progress records.
@@ -990,7 +1049,9 @@ async function initialise() {
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,
         openConcept:id=>{constellation?.showConcept(id);setActiveView("explore");},
         openLesson:id=>openLearningUnit(id),
-        startDrill:id=>openPracticeUnit(id,"practice"),
+        startDrill:id=>openPracticeUnit(practiceByConcept.get(id),"practice"),
+        hasPractice:id=>practiceByConcept.has(id),
+        startPractice:id=>openPracticeUnit(practiceByConcept.get(id)),
         hasLesson:id=>learningUnits.has(id)
       });
     }else console.warn("[Research Atlas] Constellation unavailable; the normal learning journey remains accessible.");
@@ -1038,7 +1099,7 @@ $("#otto-helper-close").addEventListener("click",()=>{
 });
 $("#close-learning-studio").addEventListener("click",closeLearningUnit);
 $("#practice-return-graph").addEventListener("click",()=>{
-  const id=openUnitId;
+  const id=practiceUnits.get(openUnitId)?.conceptId;
   closePracticeUnit();
   if(id)openConcept(id,true);
   scrollToExplorer();

@@ -4,7 +4,7 @@
 const DAY=24*60*60*1000;
 const safeHistory=history=>Array.isArray(history)?history.filter(r=>
   r&&typeof r.unitId==="string"&&typeof r.itemId==="string"&&typeof r.objectiveId==="string"&&
-  typeof r.correct==="boolean"&&Number.isFinite(r.at)&&Number.isInteger(r.difficulty)&&r.difficulty>=1&&r.difficulty<=3).slice(-500):[];
+  typeof r.correct==="boolean"&&Number.isFinite(r.at)&&Number.isInteger(r.difficulty)&&r.difficulty>=1&&r.difficulty<=3).slice(-2000):[];
 function objectiveStats(unitId,objectiveId,history,now=Date.now()){
   const hits=safeHistory(history).filter(r=>r.unitId===unitId&&r.objectiveId===objectiveId);
   const recent=hits.slice(-3),last=hits.at(-1);
@@ -23,7 +23,7 @@ function targetDifficulty(stats){
   if(stats.recentSuccess>=2)return 2;
   return 1;
 }
-function chooseNext(items,unit,history,session=[],now=Date.now(),preferredObjectiveIds=[]){
+function chooseNext(items,unit,history,session=[],now=Date.now(),preferredObjectiveIds=[],restrictObjectiveIds=[]){
   const previous=safeHistory(history).concat(safeHistory(session));
   const seen=new Set(session.map(r=>r.itemId));
   const options=items.filter(q=>q.unitId===unit.id&&!seen.has(q.id));
@@ -31,8 +31,8 @@ function chooseNext(items,unit,history,session=[],now=Date.now(),preferredObject
   const objectives=unit.objectives.map(o=>o.id);
   const stats=Object.fromEntries(objectives.map(id=>[id,objectiveStats(unit.id,id,previous,now)]));
   const sessionCounts=Object.fromEntries(objectives.map(id=>[id,session.filter(r=>r.objectiveId===id).length]));
-  let viable=objectives.filter(id=>options.some(q=>q.objectiveId===id));
-  // In an explicit review session, cover each due objective before adding broader practice.
+  let viable=objectives.filter(id=>options.some(q=>q.objectiveId===id)&&(!restrictObjectiveIds.length||restrictObjectiveIds.includes(id)));
+  // A targeted or due-review session remains within explicitly selected objectives.
   const dueUncovered=viable.filter(id=>preferredObjectiveIds.includes(id)&&sessionCounts[id]===0);
   if(dueUncovered.length)viable=dueUncovered;
   viable.sort((a,b)=>{

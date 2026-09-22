@@ -10,6 +10,7 @@ const navigation = JSON.parse(await fs.readFile("knowledge-graph/navigation.json
 const questions = JSON.parse(await fs.readFile("knowledge-graph/research-questions.json","utf8"));
 const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-units.json","utf8"));
 const adaptiveBank = JSON.parse(await fs.readFile("knowledge-graph/adaptive-items.json","utf8"));
+const extendedPractice = JSON.parse(await fs.readFile("knowledge-graph/practice-sets.json","utf8"));
 const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-questions.json","utf8"));
 
 class ElementStub {
@@ -44,7 +45,7 @@ const selectors=[
   "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
-  "#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
+  "#practice-summary","#practice-area-filter","#practice-search","#practice-objectives","#practice-case-studies","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
@@ -71,6 +72,7 @@ const responseData={
   "knowledge-graph/research-questions.json":questions,
   "knowledge-graph/learning-units.json":learningUnits,
   "knowledge-graph/adaptive-items.json":adaptiveBank,
+  "knowledge-graph/practice-sets.json":extendedPractice,
   "knowledge-graph/diagnostic-questions.json":diagnosticBank
 };
 const stored=new Map();
@@ -83,6 +85,7 @@ const context=vm.createContext({
   setTimeout:fn=>fn()
 });
 vm.runInContext(await fs.readFile("adaptive.js","utf8"),context);
+vm.runInContext(await fs.readFile("practice-catalog.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
 vm.runInContext(await fs.readFile("constellation.js","utf8"),context);
@@ -136,7 +139,8 @@ run('openPracticeUnit("derivatives")');
 assert.equal(elements.get("#practice-panel").hidden,false,"Practice is its own visible top-level destination");
 assert.equal(elements.get("#explore-panel").hidden,true,"Knowledge Graph is hidden while practising");
 assert.equal(elements.get("#learning-studio").hidden,true,"Practice does not overlay the graph learning studio");
-assert.equal(elements.get("#practice-unit-cards").children.length,3,"Practice shows exactly the three authored pilot sets");
+assert.equal(elements.get("#practice-unit-cards").children.length,15,"Practice shows three pilot units plus twelve detailed science tracks");
+assert.match(elements.get("#practice-summary").textContent,/168 authored questions/,"Research practice lists the full authored question bank");
 assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point in Practice");
 run('startAdaptiveQuiz()');
 assert.match(elements.get("#adaptive-panel").innerHTML,/1 \/ 5/,"Adaptive quiz starts with an accessible item");
@@ -149,6 +153,26 @@ for(let i=1;i<5;i++){
 }
 run('advanceAdaptiveQuiz();renderAdaptivePanel()');
 assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Five-question quiz ends with session-level formative evidence");
+run('openPracticeUnit("cosmic-history")');
+assert.equal(elements.get("#practice-selected-title").textContent,"Cosmic star formation, delay times and merger rates");
+assert.match(elements.get("#practice-case-studies").innerHTML,/Births and delays/,"Applied research cases render independently of graded multiple-choice questions");
+assert.match(elements.get("#practice-objectives").innerHTML,/knowledge components|KNOWLEDGE COMPONENTS/i,"Four research knowledge components are visible");
+run('startAdaptiveQuiz("component","cosmic-arithmetic")');
+assert.equal(run('quizSessions.get("cosmic-history").targetLength'),3,"Focused assessment samples exactly three items");
+assert.equal(run('quizSessions.get("cosmic-history").current.objectiveId'),"cosmic-arithmetic","Focused assessment only tests the selected component");
+run('openPracticeUnit("detection-selection","practice")');
+assert.equal(run('quizSessions.get("detection-selection").targetLength'),12,"Extended cross-component session tests twelve distinct questions");
+const seen=new Set();
+for(let i=0;i<12;i++){
+ const id=run('quizSessions.get("detection-selection").current.id');
+ assert.ok(!seen.has(id),"Deep session does not repeat authored questions");
+ seen.add(id);
+ run('answerAdaptiveQuiz(quizSessions.get("detection-selection").current.correctIndex)');
+ run('advanceAdaptiveQuiz();renderAdaptivePanel()');
+}
+assert.equal(seen.size,12,"Full practice set spans twelve authored questions");
+assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Deep session completes with a component-by-component summary");
+assert.ok(stored.get("research-atlas-adaptive-evidence-v1").includes("detection-selection"),"Cross-field practice evidence is persisted under the same browser-local history key");
 
 assert.match(elements.get("#lesson-content").innerHTML,/From position to velocity/,"Worked example is rendered");
 assert.match(elements.get("#lesson-content").innerHTML,/Defining the Derivative/,"Source and provenance are displayed");

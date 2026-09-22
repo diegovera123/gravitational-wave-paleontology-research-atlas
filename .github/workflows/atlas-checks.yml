@@ -18,6 +18,7 @@ jobs:
         run: |
           node scripts/test_diagnostic.mjs
           node scripts/test_adaptive.mjs
+          node scripts/test_practice_catalog.mjs
       - name: Research atlas navigation and learning
         run: |
           node scripts/test_constellation.mjs

@@ -1201,3 +1201,43 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
 .practice-scope{font:400 11px/1.8 var(--font-body);color:#879cbd;max-width:750px;margin:20px 0;}
 @media(max-width:760px){.practice-unit-cards{grid-template-columns:1fr}.practice-unit-card{min-height:140px}
  .practice-hero{padding:27px 20px}.practice-active{padding:17px}.gw-three-tabs button{padding:12px 8px;font-size:12px;}}
+
+/* In-depth science practice: browse areas, assess components and self-check applied cases. */
+.practice-catalog-summary{display:inline-block;margin-top:17px!important;color:#c2d3f6!important;font:600 12px/1.7 var(--font-body)!important;}
+.practice-filters{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 24px;}
+.practice-filters label{font:600 11px var(--font-body);color:#aabddd;}
+.practice-filters select,.practice-filters input{min-width:130px;max-width:100%;border:1px solid rgba(149,177,221,.36);border-radius:10px;
+ background:#18243c;color:#e5efff;padding:12px 13px;font:500 12px var(--font-body);}
+.practice-filters input{flex:1 1 220px;}
+.practice-filters select:focus-visible,.practice-filters input:focus-visible,
+.practice-case textarea:focus-visible{outline:2px solid #a9c6ff;outline-offset:2px;}
+.practice-card-components{display:block!important;color:#b1c2f3!important;font-weight:600!important;font-size:11px!important;}
+.practice-empty{font:400 13px/1.65 var(--font-body);color:#a8bbd9;}
+.practice-component-guide{padding:18px 0 5px;}
+.practice-component-guide>p{max-width:750px;color:#a9bbd6;font:400 12px/1.7 var(--font-body);}
+.practice-objective-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:16px 0 22px;}
+.practice-objective-button{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-align:left;padding:18px;
+ border:1px solid rgba(139,164,212,.27);border-radius:12px;background:rgba(23,38,66,.82);color:#eaf2ff;cursor:pointer;}
+.practice-objective-button>span{color:#afc4ec;font:600 10px var(--font-body);text-transform:uppercase;letter-spacing:.08em;}
+.practice-objective-button strong{font:600 14px/1.45 var(--font-display);}
+.practice-objective-button small{font:400 11px/1.6 var(--font-body);color:#a4b8d5;}
+.practice-objective-button em{font:600 11px var(--font-body);color:#abd7d0;margin-top:auto;}
+.practice-objective-button:not(:disabled):hover,.practice-objective-button:not(:disabled):focus-visible{border-color:#a9c8ff;outline:2px solid transparent;background:rgba(46,67,105,.82);}
+.practice-objective-button:disabled{opacity:.64;cursor:default;}
+.practice-case-studies{padding:17px 0 8px;margin-top:12px;}
+.practice-case{border:1px solid rgba(147,171,214,.28);border-radius:15px;background:rgba(22,35,59,.83);
+ padding:clamp(17px,3vw,29px);margin:17px 0;color:#d9e4f6;}
+.practice-case h4{font:600 20px/1.35 var(--font-display);margin:10px 0;}
+.practice-case p{font:400 12px/1.8 var(--font-body);color:#afc1db;}
+.practice-case .practice-case-task{color:#edf4ff;font-weight:600;}
+.practice-case label{display:block;color:#b8cae9;font:600 11px var(--font-body);margin:16px 0 8px;}
+.practice-case textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;resize:vertical;border-radius:10px;
+ border:1px solid rgba(143,169,214,.37);background:#101b2e;color:#ebf3ff;padding:12px;font:400 12px/1.65 var(--font-body);}
+.practice-case details{margin-top:16px;border-top:1px solid rgba(142,166,209,.23);padding-top:16px;}
+.practice-case summary{cursor:pointer;font:600 12px var(--font-body);color:#bed7ff;}
+.practice-case li{margin:11px 0;color:#bfcee5;font:400 12px/1.7 var(--font-body);}
+.practice-sources{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0;}
+.practice-sources a{color:#c6d9fb;text-decoration:none;border:1px solid rgba(147,171,214,.34);border-radius:999px;padding:9px 12px;font:500 11px/1.4 var(--font-body);}
+.practice-sources a:hover,.practice-sources a:focus-visible{border-color:#c4d7ff;color:#fff;}
+@media(max-width:760px){.practice-objective-grid{grid-template-columns:1fr;}.practice-filters{align-items:stretch;flex-direction:column;}
+.practice-filters label,.practice-filters select,.practice-filters input{width:100%;flex:auto;box-sizing:border-box;}}
