@@ -842,3 +842,10 @@ body.onboarding-first .intro{display:none!important;}
  body.onboarding-first #diagnostic-panel{margin:7px auto 22px;}
 }
 @media(prefers-reduced-motion:reduce){.otto-planet{transition:none;}.otto-primary:hover{transform:none;}}
+
+
+/* One-line lesson coaching, not another instruction panel. */
+.otto-learning-tip{display:flex;align-items:center;gap:8px;margin:0 0 19px;padding:0 2px;
+  color:#a6bbd9;font-size:11px;line-height:1.55;}
+.otto-learning-tip img{flex:0 0 48px;height:auto;}
+body.mission-home .site-header .status{display:none;}
