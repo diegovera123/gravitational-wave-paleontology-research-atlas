@@ -74,7 +74,10 @@ assert.match(element("#constellation-detail").innerHTML,/Necessary background/,"
 assert.match(element("#constellation-detail").innerHTML,/Research resources/,"Unit includes concept-specific links");
 assert.match(element("#constellation-detail").innerHTML,/Learning objectives/,"Concept offers explicit objectives as a distinct section");
 assert.doesNotMatch(element("#constellation-detail").innerHTML,/100 progressive guided practice prompts|guided-working/,"Guided written work is absent from Knowledge Graph");
-assert.match(element("#constellation-detail").innerHTML,/Intuition &amp; visuals|Intuition & visuals/,"Concept information opens in tabbed drawer");
+assert.match(element("#constellation-detail").innerHTML,/Understand the idea/,"Concept opens a continuous explanation section");
+assert.equal((element("#constellation-detail").innerHTML.match(/data-concept-tab/g)||[]).length,0,"No segmented concept tabs remain");
+assert.ok(element("#constellation-detail").innerHTML.indexOf("Learning objectives")<element("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Objectives precede the explanation");
+assert.ok(element("#constellation-detail").innerHTML.indexOf("Research resources")>element("#constellation-detail").innerHTML.indexOf("Understand the idea"),"Research resources appear after the explanation");
 assert.match(element("#constellation-detail").innerHTML,/How can one stellar explosion change an entire binary orbit/,"Intuitive physical explanation is shown");
 assert.match(element("#constellation-detail").innerHTML,/Conceptual schematic/,"Diagram is explicitly illustrative");
 assert.equal(element("#constellation-detail-shade").hidden,false,"Drawer backdrop opens on concept selection");
@@ -119,4 +122,4 @@ fallback.initialize();
 assert.equal(fallback.snapshot().has3D,false);
 assert.equal(element("#constellation-fallback").hidden,false);
 assert.equal(fallback.scene().items.length,5,"No-WebGL fallback still exposes every research cluster");
-console.log("Passed: 3D navigation, intuitive tabbed and expandable concept drawer, Practice-only exercise routing, curated references and no-WebGL fallback (DOM stub).");
+console.log("Passed: 3D navigation, one continuous expandable concept unit, objectives first, bottom resources, Practice-only exercises and no-WebGL fallback (DOM stub).");
