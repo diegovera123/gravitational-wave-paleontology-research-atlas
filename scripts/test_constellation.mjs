@@ -87,6 +87,7 @@ element("#constellation-expand-detail").handlers.click({currentTarget:{setAttrib
 assert.equal(element("#constellation-detail").classList.contains("is-expanded"),true,"Concept drawer can expand");
 element("#constellation-close-detail").handlers.click();
 assert.equal(element("#constellation-detail-shade").hidden,true,"Closing drawer returns to graph");
+ui.showConcept("supernova-kicks");
 ui.back();assert.equal(ui.snapshot().selectedId,null,"First back closes concept preview");
 ui.back();assert.equal(ui.snapshot().stage,"macro","Next back opens containing region");
 ui.back();assert.equal(ui.snapshot().stage,"chapter");
