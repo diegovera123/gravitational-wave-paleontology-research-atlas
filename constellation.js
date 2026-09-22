@@ -124,6 +124,22 @@ function mount({host,macros,topics,concepts,locationByConcept,forceGraph,openCon
    if(hasLesson(id))detail.querySelector("#constellation-lesson").addEventListener("click",()=>openLesson(id));
    detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});
  }
+ function showQuestion(q){
+   if(!q)return;
+   openOverview();
+   detail.hidden=false;
+   detail.innerHTML='<div class="constellation-detail-top"><span class="focus-eyebrow">RESEARCH QUESTION</span>'+
+     '<button type="button" id="constellation-close-detail" class="constellation-quiet">Close ✕</button></div>'+
+     '<h3>'+esc(q.title)+'</h3><p>'+esc(q.summary||"")+'</p>'+
+     '<p class="constellation-prereq">Investigate: '+esc(q.activity||"")+'</p>'+
+     '<div class="constellation-choices">'+(q.conceptIds||[]).filter(id=>byConcept.has(id)).map(id=>
+     '<button type="button" class="constellation-choice" data-question-concept="'+esc(id)+'">'+
+     esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div>';
+   detail.querySelector("#constellation-close-detail").addEventListener("click",()=>{detail.hidden=true;});
+   detail.querySelectorAll("[data-question-concept]").forEach(b=>
+     b.addEventListener("click",()=>showConcept(b.dataset.questionConcept)));
+   detail.scrollIntoView?.({behavior:"smooth",block:"nearest"});
+ }
  function ensureVisible(){
    if(!graph)return;
    const w=canvas.clientWidth,h=canvas.clientHeight;
@@ -164,7 +180,7 @@ function mount({host,macros,topics,concepts,locationByConcept,forceGraph,openCon
  $("#constellation-back").addEventListener("click",back);
  $("#constellation-reset").addEventListener("click",()=>{if(graph)graph.zoomToFit(450,92);});
  render();
- return {initialize,ensureVisible,openOverview,openChapter,openMacro,openTopic,showConcept,back,
+ return {initialize,ensureVisible,openOverview,openChapter,openMacro,openTopic,showConcept,showQuestion,back,
    snapshot:()=>({stage,chapterId,macroId,topicId,selectedId,has3D:!!graph}),
    scene:()=>sceneData()};
 }
