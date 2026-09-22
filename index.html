@@ -15,6 +15,7 @@
   <script defer src="diagnostic-ui.js"></script>
   <script defer src="guide.js"></script>
   <script defer src="focus-home.js"></script>
+  <script defer src="constellation.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -42,7 +43,7 @@
       <button type="button" role="tab" id="tab-diagnostic" aria-controls="diagnostic-panel" aria-selected="false" data-atlas-tab="diagnostic" tabindex="-1">Starting point</button>
       <button type="button" role="tab" id="tab-paths" aria-controls="paths-panel" aria-selected="false" data-atlas-tab="paths" tabindex="-1">Research</button>
       <button type="button" role="tab" id="tab-learn" aria-controls="learn-panel" aria-selected="false" data-atlas-tab="learn" tabindex="-1">Learn &amp; practice</button>
-      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">Knowledge map</button>
+      <button type="button" role="tab" id="tab-explore" aria-controls="explore-panel" aria-selected="false" data-atlas-tab="explore" tabindex="-1">3D constellation</button>
       <button type="button" role="tab" id="tab-library" aria-controls="library-panel" aria-selected="false" data-atlas-tab="library" tabindex="-1">Resources</button>
     </nav>
 
@@ -83,11 +84,9 @@
           <div id="focus-detail" class="focus-detail" hidden aria-live="polite"></div>
           <div id="focus-quiz" class="focus-quiz" hidden aria-live="polite"></div>
         </section>
-        <details id="focus-graph-toggle" class="focus-graph-toggle">
-          <summary><span class="focus-graph-symbol" aria-hidden="true">◎</span> See how it all connects <small>Optional · knowledge graph</small></summary>
-          <div class="focus-graph-scroll"><div id="dashboard-network-map" class="dashboard-network-map" aria-label="Expandable knowledge graph of connected research domains"></div></div>
-          <button id="focus-full-map" type="button" class="focus-text-button">Open detailed knowledge map ↗</button>
-        </details>
+        <div id="focus-graph-toggle" class="focus-graph-toggle gw-open-constellation">
+          <button id="focus-full-map" type="button" class="gw-constellation-link"><span aria-hidden="true">◎</span><span>Explore the 3D knowledge constellation<small>Open big clusters, then zoom into topics and concepts</small></span><span aria-hidden="true">↗</span></button>
+        </div>
         <div class="focus-bottom-links">
           <button type="button" id="focus-research" class="focus-text-button">Research questions ↗</button>
           <button type="button" id="focus-all-practice" class="focus-text-button">Lessons & exercises ↗</button>
@@ -110,7 +109,7 @@
             <button type="button" id="open-full-3d" class="network-expand">Open full graph ↗</button>
           </div>
         </div>
-        <div id="legacy-dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
+        <div id="dashboard-network-map" class="dashboard-network-map" aria-label="Interactive overview of knowledge regions and their prerequisite connections">
           <p class="dashboard-loading">Loading the knowledge graph…</p>
         </div>
       </section>
@@ -166,6 +165,33 @@
     </section>
 
     <section id="explore-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-explore" hidden>
+      <section id="constellation-shell" class="constellation-shell" aria-label="Interactive three-dimensional knowledge constellation">
+        <header class="constellation-header">
+          <div><span class="focus-eyebrow">GRAVITATIONAL-WAVE PALEONTOLOGY</span>
+            <h2>Explore the constellation.</h2>
+            <p>Click a large cluster to reveal its smaller parts. Keep clicking to reach individual scientific ideas.</p>
+          </div>
+          <button id="constellation-home" class="constellation-quiet" type="button">← All clusters</button>
+        </header>
+        <div class="constellation-stage">
+          <div id="constellation-canvas" aria-label="Rotatable three-dimensional concept network">
+            <div class="constellation-loading">Preparing the constellation…</div>
+          </div>
+          <div id="constellation-fallback" class="constellation-fallback" hidden role="status"></div>
+          <div class="constellation-stage-top">
+            <button id="constellation-back" class="constellation-quiet" type="button" disabled>← Back</button>
+            <span id="constellation-location" class="constellation-location" aria-live="polite">Entire research field</span>
+            <button id="constellation-reset" class="constellation-quiet" type="button">Recenter ↗</button>
+          </div>
+          <p class="constellation-hint">Drag to rotate · Scroll to zoom · Click a sphere to open it</p>
+        </div>
+        <div class="constellation-navigation">
+          <h3 id="constellation-prompt">Explore a cluster</h3>
+          <div id="constellation-choices" class="constellation-choices" aria-label="Accessible constellation nodes"></div>
+        </div>
+        <section id="constellation-detail" class="constellation-detail" hidden aria-live="polite"></section>
+      </section>
+      <div id="legacy-explorer" hidden aria-hidden="true">
     <section id="explorer" class="workspace" aria-label="Knowledge graph explorer">
       <div class="graph-panel">
         <div class="graph-toolbar">
@@ -211,7 +237,9 @@
       </aside>
     </section>
     </section>
-    <section id="learn-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-learn" hidden>
+      </div>
+    </section>
+        <section id="learn-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-learn" hidden>
       <div id="learn-hub" class="learn-hub">
         <p class="eyebrow">Learning Studio</p><h2>Learn a concept, then check your understanding.</h2>
         <p>Choose an original learning unit. Adaptive practice responds to your answers and recommends review. These pilot questions provide formative evidence, not a calibrated mastery score.</p>
