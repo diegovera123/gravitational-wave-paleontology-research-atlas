@@ -1,0 +1,978 @@
+{
+  "schemaVersion": 1,
+  "description": "Independently authored cross-disciplinary gravitational-wave paleontology practice sets. Explanations and toy cases are educational, not new lab data or calibrated examinations.",
+  "sets": [
+    {
+      "id": "orbit-dynamics",
+      "title": "Binary orbits and binding energy",
+      "conceptId": "orbital-energy",
+      "area": "Foundations",
+      "summary": "Relate orbital energy, angular momentum, period, eccentricity and survival without confusing one body's speed with relative motion.",
+      "objectives": [
+        {
+          "id": "orbital-concepts",
+          "title": "Interpret energy and eccentricity",
+          "component": "conceptual",
+          "evidence": "Separate bound Keplerian orbits, total orbital energy, and orbital shape.",
+          "questions": [
+            {
+              "id": "orbital-concepts-1",
+              "difficulty": 1,
+              "prompt": "In the Newtonian point-mass two-body problem, a bound elliptical orbit has which relative mechanical energy?",
+              "choices": [
+                "Positive",
+                "Negative",
+                "Exactly zero"
+              ],
+              "correctIndex": 1,
+              "hint": "Use the gravitational potential energy convention U(∞)=0.",
+              "feedback": "Relative orbital energy is negative for bound ellipses; zero is the parabolic threshold and positive corresponds to hyperbolic unbound motion.",
+              "component": "conceptual"
+            },
+            {
+              "id": "orbital-concepts-2",
+              "difficulty": 2,
+              "prompt": "Two bound binaries have the same component masses and semi-major axis but different eccentricities. Their Keplerian orbital energies are:",
+              "choices": [
+                "Different because an eccentric orbit always has more binding energy",
+                "Equal",
+                "Undetermined without the period"
+              ],
+              "correctIndex": 1,
+              "hint": "Recall E=−Gm₁m₂/(2a) for point masses.",
+              "feedback": "At fixed masses and semi-major axis, total Keplerian orbital energy is equal even though angular momentum and speed as a function of position differ.",
+              "component": "conceptual"
+            },
+            {
+              "id": "orbital-concepts-3",
+              "difficulty": 3,
+              "prompt": "A test particle passes through pericentre on a bound eccentric Keplerian orbit. Which statement is supported?",
+              "choices": [
+                "Its total orbital energy suddenly increases at pericentre.",
+                "Its orbital speed is greatest there, although its total orbital energy is constant.",
+                "Its radial velocity is largest at pericentre."
+              ],
+              "correctIndex": 1,
+              "hint": "Use energy conservation and the fact that separation is smallest at pericentre.",
+              "feedback": "A smaller separation corresponds to a more negative potential energy and larger kinetic energy; the radial velocity vanishes at a turning point.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "energy-calculation",
+          "title": "Calculate energies and speeds",
+          "component": "quantitative",
+          "evidence": "Interpret E=−Gm₁m₂/(2a) and the vis-viva relation with correct held-fixed quantities.",
+          "questions": [
+            {
+              "id": "energy-calculation-1",
+              "difficulty": 1,
+              "prompt": "For the same component masses, a circular binary's semi-major axis halves. Its binding-energy magnitude changes by what factor?",
+              "choices": [
+                "It halves.",
+                "It doubles.",
+                "It quadruples."
+              ],
+              "correctIndex": 1,
+              "hint": "Binding-energy magnitude is proportional to 1/a.",
+              "feedback": "|E|=Gm₁m₂/(2a); halving a doubles |E| under the stated assumptions.",
+              "component": "quantitative"
+            },
+            {
+              "id": "energy-calculation-2",
+              "difficulty": 2,
+              "prompt": "A test body's circular orbital speed at radius r around a fixed central point mass M satisfies which relation?",
+              "choices": [
+                "v²=GMr",
+                "v²=GM/r",
+                "v²=GM/r²"
+              ],
+              "correctIndex": 1,
+              "hint": "Balance GMm/r² with mv²/r.",
+              "feedback": "The centripetal acceleration is v²/r, giving v²=GM/r. G M/r² instead has acceleration units.",
+              "component": "quantitative"
+            },
+            {
+              "id": "energy-calculation-3",
+              "difficulty": 3,
+              "prompt": "Two point masses stay fixed while semi-major axis increases from a to 2a. E₂/E₁ equals:",
+              "choices": [
+                "2",
+                "1/2",
+                "4"
+              ],
+              "correctIndex": 1,
+              "hint": "Write both total orbital energies with their negative signs.",
+              "feedback": "E₂=−Gm₁m₂/(4a), E₁=−Gm₁m₂/(2a), hence E₂/E₁=1/2: the final orbit is less tightly bound.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "perturbations",
+          "title": "Reason about sudden orbital changes",
+          "component": "causal",
+          "evidence": "Use instantaneous separation, relative velocity and final masses to reason about a bound or unbound outcome.",
+          "questions": [
+            {
+              "id": "perturbations-1",
+              "difficulty": 1,
+              "prompt": "At an instantaneous symmetric mass-loss event, which quantities determine the immediately post-event point-mass relative orbital energy?",
+              "choices": [
+                "The kick magnitude alone",
+                "Post-event total mass, separation and relative speed",
+                "Only the pre-event orbital period"
+              ],
+              "correctIndex": 1,
+              "hint": "Use ε=v_rel²/2−G M_after/r.",
+              "feedback": "The sign of ε depends jointly on post-event gravitational mass and the relative orbit at the event, not on one speed alone.",
+              "component": "causal"
+            },
+            {
+              "id": "perturbations-2",
+              "difficulty": 2,
+              "prompt": "Two identical pre-event binaries lose equal mass at different phases of their eccentric orbits. Why can outcomes differ?",
+              "choices": [
+                "Eccentric orbits have no conserved energy.",
+                "Instantaneous separation and relative speed differ by orbital phase.",
+                "Mass loss always unbinds every eccentric binary."
+              ],
+              "correctIndex": 1,
+              "hint": "Evaluate the energy immediately after the event using each event's r and v_rel.",
+              "feedback": "For equal mass changes, different event-phase values of r and relative velocity can change post-event energy and eccentricity.",
+              "component": "causal"
+            },
+            {
+              "id": "perturbations-3",
+              "difficulty": 3,
+              "prompt": "An initially bound binary receives a kick that reduces its relative speed, with masses and instantaneous separation fixed. Its immediate relative orbital energy:",
+              "choices": [
+                "Must become positive.",
+                "Decreases (becomes more negative).",
+                "Is unchanged because the period has not updated."
+              ],
+              "correctIndex": 1,
+              "hint": "Only the kinetic term changes at that instant.",
+              "feedback": "ε=v_rel²/2−GM/r: lowering speed lowers kinetic energy at fixed gravitational potential, while the new orbit can then be computed.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "assumption-check",
+          "title": "Check limits of the orbital model",
+          "component": "model-critique",
+          "evidence": "Identify when simplified Keplerian formulae do not by themselves justify a physical conclusion.",
+          "questions": [
+            {
+              "id": "assumption-check-1",
+              "difficulty": 1,
+              "prompt": "Can the circular-orbit relation v²=GM/r determine the speed at every point of an eccentric orbit?",
+              "choices": [
+                "Yes; only r matters and energy is identical for every orbit.",
+                "No; use an eccentric-orbit relation such as vis-viva.",
+                "No; speed on an eccentric orbit is always constant."
+              ],
+              "correctIndex": 1,
+              "hint": "Ask whether the trajectory is constrained to be circular.",
+              "feedback": "For an eccentric orbit, v²=GM(2/r−1/a) for relative motion; its semi-major axis also matters.",
+              "component": "model-critique"
+            },
+            {
+              "id": "assumption-check-2",
+              "difficulty": 2,
+              "prompt": "Why is a remnant's velocity in the observer's frame insufficient to decide whether the binary survives?",
+              "choices": [
+                "The observer's frame determines the gravitational constant.",
+                "Binding depends on the companion-relative velocity, masses and separation.",
+                "A positive absolute velocity makes every orbit unbound."
+              ],
+              "correctIndex": 1,
+              "hint": "Switch to relative orbital coordinates.",
+              "feedback": "Bulk centre-of-mass motion can change individual frame velocities without changing the internal bound/unbound state.",
+              "component": "model-critique"
+            },
+            {
+              "id": "assumption-check-3",
+              "difficulty": 3,
+              "prompt": "When using Keplerian orbital energy for a common-envelope interaction, what limitation should be stated?",
+              "choices": [
+                "The point-mass formula exactly captures all envelope hydrodynamics.",
+                "Gas drag, mass exchange and energy transfer can invalidate isolated two-point-mass conservation during the interaction.",
+                "Conservation of energy never applies to gas."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish total energy conservation from constancy of the binary orbital energy alone.",
+              "feedback": "The orbital energy can transfer into gas and heat; isolated binary orbital energy need not remain constant during dissipative envelope evolution.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Energy at a supernova",
+          "scenario": "A pre-event binary has r=1 (toy units), relative speed v=1, and post-event GM=0.6. Define ε=v²/2−GM/r.",
+          "task": "Compute ε and decide whether the post-event point-mass orbit is bound.",
+          "steps": [
+            "Kinetic term is 1²/2=0.5.",
+            "Potential term is −0.6/1=−0.6.",
+            "ε=−0.1<0 in these units."
+          ],
+          "solution": "The two-body orbit is bound in this idealized instantaneous model; an actual binary also requires the correct post-event relative velocity and masses."
+        },
+        {
+          "title": "Same energy, different shape",
+          "scenario": "Two point-mass binaries have identical m₁,m₂,a but eccentricities 0 and 0.7.",
+          "task": "Compare total energy, pericentre distance and angular momentum.",
+          "steps": [
+            "Energy depends on a, not e: E=−Gm₁m₂/(2a) for both.",
+            "Pericentre is a(1−e): a versus 0.3a.",
+            "Angular momentum magnitude at fixed a is proportional to sqrt(1−e²)."
+          ],
+          "solution": "Same orbital energy does not mean same closest approach or same angular momentum; eccentricity determines the latter two."
+        }
+      ],
+      "sources": [
+        {
+          "title": "The Evolution of Massive Binary Stars (review)",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        },
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
+    },
+    {
+      "id": "massive-star-life",
+      "title": "Massive-star evolution and metallicity",
+      "conceptId": "massive-star-evolution",
+      "area": "Stellar evolution",
+      "summary": "Follow fuel burning, stellar winds, core collapse and metallicity-dependent pathways to remnants.",
+      "objectives": [
+        {
+          "id": "stellar-concepts",
+          "title": "Build the stellar lifecycle",
+          "component": "conceptual",
+          "evidence": "Differentiate main-sequence burning, post-main-sequence stages and compact-remnant formation.",
+          "questions": [
+            {
+              "id": "stellar-concepts-1",
+              "difficulty": 1,
+              "prompt": "What powers a massive star throughout most of its main-sequence lifetime?",
+              "choices": [
+                "A stable black-hole accretion disc.",
+                "Core hydrogen fusion.",
+                "Continuous helium fusion in the core from birth."
+              ],
+              "correctIndex": 1,
+              "hint": "Name the defining nuclear-burning stage of the main sequence.",
+              "feedback": "Hydrogen fusion dominates the energy generation of main-sequence stars; later core burning stages follow after core hydrogen exhaustion.",
+              "component": "conceptual"
+            },
+            {
+              "id": "stellar-concepts-2",
+              "difficulty": 2,
+              "prompt": "Why do more massive stars generally have shorter main-sequence lifetimes despite more fuel?",
+              "choices": [
+                "Their initial hydrogen abundance is always zero.",
+                "Their luminosities and fuel-consumption rates increase strongly with mass.",
+                "They do not undergo hydrogen burning."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare available nuclear fuel with the rate of energy production.",
+              "feedback": "Main-sequence lifetime scales roughly as fuel divided by luminosity, and luminosity rises steeply with mass over much of the massive-star regime.",
+              "component": "conceptual"
+            },
+            {
+              "id": "stellar-concepts-3",
+              "difficulty": 3,
+              "prompt": "A star's photospheric radius increases after it leaves the main sequence. Does that alone prove its helium core is already fusing?",
+              "choices": [
+                "Yes; radius uniquely identifies the active core fuel.",
+                "No; shell burning and structural readjustment can expand the envelope before stable core helium ignition.",
+                "No; expansion always means no nuclear fusion anywhere."
+              ],
+              "correctIndex": 1,
+              "hint": "Distinguish surface observables from the burning stage of the core.",
+              "feedback": "Post-main-sequence expansion can occur while hydrogen-shell burning supports luminosity; radius alone does not uniquely reveal central burning.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "stellar-quantities",
+          "title": "Compute timescale and mass budgets",
+          "component": "quantitative",
+          "evidence": "Use mass-loss rates and dimensional reasoning without assuming a constant rate in a real star.",
+          "questions": [
+            {
+              "id": "stellar-quantities-1",
+              "difficulty": 1,
+              "prompt": "A toy star loses 2 solar masses per million years for 3 million years at a constant rate. How much mass is lost?",
+              "choices": [
+                "2/3 solar mass.",
+                "6 solar masses.",
+                "1.5 solar masses."
+              ],
+              "correctIndex": 1,
+              "hint": "Multiply rate by duration; this is a deliberately constant-rate toy model.",
+              "feedback": "ΔM=2 M☉/Myr ×3 Myr=6 M☉, assuming the rate is constant over the interval.",
+              "component": "quantitative"
+            },
+            {
+              "id": "stellar-quantities-2",
+              "difficulty": 2,
+              "prompt": "If a star's luminosity is multiplied by 4 while its available nuclear fuel remains fixed, the fuel/L timescale becomes:",
+              "choices": [
+                "Four times as long.",
+                "One quarter.",
+                "Unchanged."
+              ],
+              "correctIndex": 1,
+              "hint": "Use timescale ≈ available energy / luminosity.",
+              "feedback": "With the same energy reservoir and four times the rate of release, the approximate timescale is divided by four.",
+              "component": "quantitative"
+            },
+            {
+              "id": "stellar-quantities-3",
+              "difficulty": 3,
+              "prompt": "A star starts at 30 M☉, loses 8 M☉ in winds, then transfers 4 M☉ to its companion. Its remaining mass in this accounting toy model is:",
+              "choices": [
+                "26 M☉.",
+                "18 M☉.",
+                "42 M☉."
+              ],
+              "correctIndex": 1,
+              "hint": "Subtract both mass-loss channels from the initial mass.",
+              "feedback": "30−8−4=18 M☉; real binary mass changes can also involve accretion and additional outflows.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "metallicity-causes",
+          "title": "Trace metallicity and wind effects",
+          "component": "causal",
+          "evidence": "Explain conditional effects of line-driven winds and why metallicity is not a deterministic remnant label.",
+          "questions": [
+            {
+              "id": "metallicity-causes-1",
+              "difficulty": 1,
+              "prompt": "Under otherwise comparable massive-star conditions, lower metallicity often weakens which mass-loss channel?",
+              "choices": [
+                "Gravitational-wave emission from a single noncompact star.",
+                "Metal-line-driven stellar winds.",
+                "The definition of initial binary separation."
+              ],
+              "correctIndex": 1,
+              "hint": "Recall that metallic absorption lines transfer radiative momentum to outer layers.",
+              "feedback": "Fewer heavy-element line absorbers often reduce line-driven wind efficiency, leaving more stellar mass available for later evolution under a specified model.",
+              "component": "causal"
+            },
+            {
+              "id": "metallicity-causes-2",
+              "difficulty": 2,
+              "prompt": "Why is 'low metallicity guarantees a heavier black hole' too strong?",
+              "choices": [
+                "Metallicity does not influence any wind model.",
+                "Binary interactions, rotation, explosion prescriptions and other mass-loss channels also influence the final remnant.",
+                "Every low-metallicity massive star collapses directly into a black hole of its birth mass."
+              ],
+              "correctIndex": 1,
+              "hint": "Look for multiple evolutionary mechanisms affecting the final core and envelope.",
+              "feedback": "Metallicity can affect wind mass loss, but outcomes depend on initial mass, binary interaction, remnant prescriptions and other assumptions.",
+              "component": "causal"
+            },
+            {
+              "id": "metallicity-causes-3",
+              "difficulty": 3,
+              "prompt": "Why must a population model track star-formation metallicity rather than only present-day metallicity?",
+              "choices": [
+                "Every star changes its birth metallicity to the current cosmic mean.",
+                "Progenitors formed earlier under the metallicity distribution at their formation epoch.",
+                "Gravitational waves directly measure the host's birth metallicity without inference."
+              ],
+              "correctIndex": 1,
+              "hint": "Merger time can be long after the binary formed.",
+              "feedback": "Compact binaries encode delayed stellar histories; their birth metallicity distribution can differ from the environment at merger time.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "stellar-models",
+          "title": "Critique stellar-to-remnant inference",
+          "component": "model-critique",
+          "evidence": "Separate an observable, a simulation prescription and an uncertain inferred physical outcome.",
+          "questions": [
+            {
+              "id": "stellar-models-1",
+              "difficulty": 1,
+              "prompt": "Two simulations give different black-hole masses from the same zero-age mass. What should be checked first?",
+              "choices": [
+                "Which output filename is shorter.",
+                "Wind, mixing, binary-interaction and remnant-formation prescriptions.",
+                "Whether both simulations obey identical black-hole mass distributions by definition."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare assumptions and evolutionary histories, not just their final scalar output.",
+              "feedback": "Massive-star evolution depends on multiple prescriptions; differences do not alone identify which code or physics is correct.",
+              "component": "model-critique"
+            },
+            {
+              "id": "stellar-models-2",
+              "difficulty": 2,
+              "prompt": "Can one infer a star's full evolution uniquely from one point on an H–R diagram?",
+              "choices": [
+                "Yes; temperature and luminosity fix all historical parameters exactly.",
+                "No; multiple masses, ages and evolutionary tracks can occupy similar locations.",
+                "Only if distance is measured to the nearest metre."
+              ],
+              "correctIndex": 1,
+              "hint": "Consider age, composition, extinction and binary contamination.",
+              "feedback": "Luminosity and temperature are useful constraints but do not generally identify a unique evolutionary history.",
+              "component": "model-critique"
+            },
+            {
+              "id": "stellar-models-3",
+              "difficulty": 3,
+              "prompt": "A toy calculation assigns every massive star the same wind mass loss independent of composition. What scientific question does it fail to explore?",
+              "choices": [
+                "The number of rows in an output table.",
+                "Sensitivity of final masses to metallicity-dependent wind prescriptions.",
+                "Whether all stars have identical initial masses."
+              ],
+              "correctIndex": 1,
+              "hint": "Ask which physical variable the prescription deliberately ignores.",
+              "feedback": "Holding mass loss constant across metallicity removes that pathway from the model and cannot test its impact on remnant populations.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Two birth environments",
+          "scenario": "Two otherwise comparable toy massive stars start at 35 M☉. Model A loses 15 M☉ in winds and Model B loses 5 M☉.",
+          "task": "Calculate pre-collapse masses and explain why final remnant masses still cannot be read off directly.",
+          "steps": [
+            "A has 20 M☉ remaining and B has 30 M☉ remaining.",
+            "Wind mass loss changes the pre-collapse budget.",
+            "Explosion, fallback, binary interaction and remnant prescription are unprovided."
+          ],
+          "solution": "The model suggests a possible effect of wind prescriptions, not a one-to-one black-hole mass prediction."
+        },
+        {
+          "title": "Observed hot star",
+          "scenario": "An H–R diagram places a hot luminous star near two model tracks with different mass and binary histories.",
+          "task": "List evidence needed before assigning a unique progenitor path.",
+          "steps": [
+            "Check observational uncertainties in luminosity/temperature and distance/extinction.",
+            "Inspect metallicity, rotation and possible binary contamination.",
+            "Compare multiple evolutionary tracks and quantify model uncertainty."
+          ],
+          "solution": "A single location in an H–R diagram constrains, but does not by itself uniquely reconstruct, stellar history."
+        }
+      ],
+      "sources": [
+        {
+          "title": "The Evolution of Massive Binary Stars (review)",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        },
+        {
+          "title": "Rates of compact-object coalescences (review)",
+          "url": "https://doi.org/10.1007/s41114-021-00034-3"
+        }
+      ]
+    },
+    {
+      "id": "roche-transfer",
+      "title": "Roche geometry and mass-transfer stability",
+      "conceptId": "mass-transfer-stability",
+      "area": "Binary evolution",
+      "summary": "Distinguish overflow onset, transfer rate, stability response and angular-momentum changes.",
+      "objectives": [
+        {
+          "id": "roche-concepts",
+          "title": "Identify when transfer begins",
+          "component": "conceptual",
+          "evidence": "Connect Roche-lobe filling with binary separation and the donor's radius.",
+          "questions": [
+            {
+              "id": "roche-concepts-1",
+              "difficulty": 1,
+              "prompt": "What is the usual geometric trigger for Roche-lobe overflow in a binary model?",
+              "choices": [
+                "The companion's radius must be exactly zero.",
+                "The donor expands to fill or overfill its Roche lobe.",
+                "The binary must first become unbound."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare donor radius with its effective Roche-lobe radius.",
+              "feedback": "Roche-lobe overflow begins when the donor fills its effective equipotential boundary, allowing material to pass toward its companion.",
+              "component": "conceptual"
+            },
+            {
+              "id": "roche-concepts-2",
+              "difficulty": 2,
+              "prompt": "Does filling a Roche lobe alone determine whether mass transfer is dynamically stable?",
+              "choices": [
+                "Yes; all overflowing donors transfer stably forever.",
+                "No; compare how donor radius and Roche-lobe radius respond to mass loss.",
+                "Yes; every overflowing donor instantly enters a common envelope."
+              ],
+              "correctIndex": 1,
+              "hint": "Onset geometry and dynamical stability are separate questions.",
+              "feedback": "Stability depends on structural response, orbital evolution, mass ratio and timescale, not on geometry alone.",
+              "component": "conceptual"
+            },
+            {
+              "id": "roche-concepts-3",
+              "difficulty": 3,
+              "prompt": "In the usual binary-star terminology, the donor is:",
+              "choices": [
+                "Always the initially less massive star.",
+                "The star losing mass to the other component or out of the system.",
+                "The remnant formed at the end of every binary simulation."
+              ],
+              "correctIndex": 1,
+              "hint": "Define the direction of mass exchange at the current episode.",
+              "feedback": "Donor and accretor identify instantaneous mass-transfer roles; roles may change in complex histories.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "transfer-budget",
+          "title": "Calculate mass and orbit budgets",
+          "component": "quantitative",
+          "evidence": "Apply simple conservative-transfer accounting before considering non-conservative loss.",
+          "questions": [
+            {
+              "id": "transfer-budget-1",
+              "difficulty": 1,
+              "prompt": "In a conservative transfer episode, donor mass drops from 10 to 8 M☉ and the companion began at 6 M☉. The companion ends at:",
+              "choices": [
+                "6 M☉.",
+                "8 M☉.",
+                "10 M☉."
+              ],
+              "correctIndex": 1,
+              "hint": "Mass lost by the donor is gained by the companion if the system loses none.",
+              "feedback": "The donor loses 2 M☉, so the accretor gains 2 M☉ and ends at 8 M☉.",
+              "component": "quantitative"
+            },
+            {
+              "id": "transfer-budget-2",
+              "difficulty": 2,
+              "prompt": "A donor loses 3 M☉; the companion gains 1 M☉. With no other mass changes, how much leaves the binary?",
+              "choices": [
+                "4 M☉.",
+                "2 M☉.",
+                "0 M☉."
+              ],
+              "correctIndex": 1,
+              "hint": "Subtract accreted material from donor mass loss.",
+              "feedback": "The remaining 2 M☉ leaves the modeled binary; this is non-conservative mass transfer.",
+              "component": "quantitative"
+            },
+            {
+              "id": "transfer-budget-3",
+              "difficulty": 3,
+              "prompt": "A 12 M☉ donor transfers 4 M☉ conservatively to a 5 M☉ companion. The final donor-to-accretor mass ratio is:",
+              "choices": [
+                "12/5.",
+                "8/9.",
+                "16/1."
+              ],
+              "correctIndex": 1,
+              "hint": "Update both masses before taking their ratio.",
+              "feedback": "The donor ends at 8 M☉ and companion at 9 M☉, so q=8/9 under this toy accounting.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "transfer-causality",
+          "title": "Reason about stability and feedback",
+          "component": "causal",
+          "evidence": "Compare donor shrinkage/expansion with Roche-lobe change and timescale.",
+          "questions": [
+            {
+              "id": "transfer-causality-1",
+              "difficulty": 1,
+              "prompt": "Suppose mass loss causes the donor to expand faster than its Roche lobe. What feedback can occur?",
+              "choices": [
+                "Overflow necessarily stops immediately.",
+                "Overfilling grows and mass transfer can run away.",
+                "The Roche lobe ceases to exist."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare the two evolving radii rather than a fixed-radius snapshot.",
+              "feedback": "If donor radius increases relative to the Roche boundary, overflow deepens; the resulting runaway can occur on short timescales, depending on the model.",
+              "component": "causal"
+            },
+            {
+              "id": "transfer-causality-2",
+              "difficulty": 2,
+              "prompt": "Why can a convective-envelope giant be more vulnerable to unstable transfer in some mass-ratio regimes?",
+              "choices": [
+                "Convective envelopes guarantee conservative transfer.",
+                "Its structural radius response to mass loss can worsen overflow.",
+                "Convection prevents all Roche-lobe overflow."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about the donor's response to rapid stripping.",
+              "feedback": "A donor's adiabatic radius response and the Roche-lobe response govern stability; extended convective giants can expand under rapid mass loss in relevant regimes.",
+              "component": "causal"
+            },
+            {
+              "id": "transfer-causality-3",
+              "difficulty": 3,
+              "prompt": "A binary changes its mass ratio during transfer. Why may the orbit's evolution change sign?",
+              "choices": [
+                "The orbit has a fixed direction of change independent of initial masses.",
+                "Mass transfer redistributes masses and angular momentum; the orbital response depends on their evolving values.",
+                "Mass ratio cannot change during transfer."
+              ],
+              "correctIndex": 1,
+              "hint": "Track the component masses and any angular momentum carried away.",
+              "feedback": "Conservative transfer and non-conservative outflows can shrink or widen an orbit under different mass ratios and angular-momentum prescriptions.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "transfer-inference",
+          "title": "Inspect assumptions in a transfer model",
+          "component": "model-critique",
+          "evidence": "Identify missing angular momentum, timescale or accretion efficiency assumptions.",
+          "questions": [
+            {
+              "id": "transfer-inference-1",
+              "difficulty": 1,
+              "prompt": "A simulation says 'stable transfer' but gives only the initial mass ratio. What else is needed to evaluate this claim?",
+              "choices": [
+                "Only the initial component labels.",
+                "Donor evolutionary state, response to mass loss and Roche-lobe/orbital prescription.",
+                "A detector noise spectrum at merger."
+              ],
+              "correctIndex": 1,
+              "hint": "Stability thresholds depend on stellar structure and response, not just q.",
+              "feedback": "Mass ratio is one input; stellar-envelope structure, timescales, accretion and angular-momentum loss can affect the stability criterion.",
+              "component": "model-critique"
+            },
+            {
+              "id": "transfer-inference-2",
+              "difficulty": 2,
+              "prompt": "A model assumes fully conservative transfer but its reported total binary mass decreases with no other process. What is the immediate issue?",
+              "choices": [
+                "The star-formation history is always wrong.",
+                "Mass accounting contradicts the stated assumption.",
+                "Conservative transfer requires the donor and accretor to have equal mass."
+              ],
+              "correctIndex": 1,
+              "hint": "Total mass is fixed during the idealized conservative transfer episode.",
+              "feedback": "Under genuinely conservative transfer with no other process, the donor's lost mass should equal the companion's gain.",
+              "component": "model-critique"
+            },
+            {
+              "id": "transfer-inference-3",
+              "difficulty": 3,
+              "prompt": "Two models predict different post-transfer separations. Which comparison can isolate the effect of angular-momentum loss?",
+              "choices": [
+                "Change winds, kicks, transfer efficiency and initial binaries simultaneously.",
+                "Hold other assumptions fixed and vary the outflow's specific-angular-momentum prescription.",
+                "Ignore separation and compare only model names."
+              ],
+              "correctIndex": 1,
+              "hint": "Use one-change-at-a-time sensitivity checks where possible.",
+              "feedback": "Changing multiple inputs at once confounds the physical cause; controlled model comparisons clarify parameter sensitivity.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Mass-transfer ledger",
+          "scenario": "A 14 M☉ donor loses 5 M☉; a 9 M☉ companion accretes 3 M☉; all other changes are neglected.",
+          "task": "Compute final masses, mass lost to the surroundings and whether the episode is conservative.",
+          "steps": [
+            "Donor: 14−5=9 M☉.",
+            "Companion: 9+3=12 M☉.",
+            "2 M☉ was not accreted and is lost to the surroundings."
+          ],
+          "solution": "The binary total decreases from 23 to 21 M☉; this is non-conservative transfer and its orbital impact additionally needs the angular momentum carried by escaping matter."
+        },
+        {
+          "title": "Geometry versus stability",
+          "scenario": "A donor just fills its Roche lobe. A model predicts that after small mass loss its radius increases by 3% but its Roche radius increases by 1%.",
+          "task": "Predict the qualitative overflow response and name missing information.",
+          "steps": [
+            "Donor radius grows relative to its Roche boundary.",
+            "Overflow therefore deepens in this local comparison.",
+            "Further stability analysis needs the response over appropriate timescales and the mass-transfer prescription."
+          ],
+          "solution": "The local response suggests positive feedback; it does not uniquely establish the eventual outcome from one step alone."
+        }
+      ],
+      "sources": [
+        {
+          "title": "The Evolution of Massive Binary Stars (review)",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        },
+        {
+          "title": "COMPAS documentation",
+          "url": "https://compas.readthedocs.io/en/latest/"
+        }
+      ]
+    },
+    {
+      "id": "common-envelope-case",
+      "title": "Common-envelope energetics and channels",
+      "conceptId": "common-envelope",
+      "area": "Binary evolution",
+      "summary": "Test drag, envelope binding, efficiency assumptions and why short-period survivors matter.",
+      "objectives": [
+        {
+          "id": "ce-concepts",
+          "title": "Describe the interaction",
+          "component": "conceptual",
+          "evidence": "Distinguish common-envelope evolution from ordinary stable transfer.",
+          "questions": [
+            {
+              "id": "ce-concepts-1",
+              "difficulty": 1,
+              "prompt": "A common-envelope episode usually involves:",
+              "choices": [
+                "Two unrelated stars separated by many parsecs.",
+                "A companion moving within a shared stellar envelope while drag exchanges orbital energy and angular momentum with gas.",
+                "A stable empty cavity that cannot exchange energy."
+              ],
+              "correctIndex": 1,
+              "hint": "Look for the phase involving an envelope shared with the companion.",
+              "feedback": "Envelope gas can drain orbital energy and angular momentum, potentially ejecting gas and dramatically tightening the binary.",
+              "component": "conceptual"
+            },
+            {
+              "id": "ce-concepts-2",
+              "difficulty": 2,
+              "prompt": "Does a common-envelope episode necessarily end with two surviving compact remnants?",
+              "choices": [
+                "Yes; every episode produces two black holes immediately.",
+                "No; the binary may merge during the envelope phase or emerge as a tighter noncompact/compact pair.",
+                "Yes; envelope ejection is guaranteed if the donor fills its lobe."
+              ],
+              "correctIndex": 1,
+              "hint": "Consider ejection versus in-envelope merger and later stellar evolution.",
+              "feedback": "CE outcomes depend on envelope binding, energy transfer and stellar structure; any later compact-object formation is a separate evolutionary step.",
+              "component": "conceptual"
+            },
+            {
+              "id": "ce-concepts-3",
+              "difficulty": 3,
+              "prompt": "Which feature often motivates a common-envelope phase in compact-binary formation models?",
+              "choices": [
+                "It turns the system into a three-body orbit by definition.",
+                "It can reduce orbital separation enough to enable a later merger within a cosmic time.",
+                "It removes the need for any subsequent supernova or remnant evolution."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about long inspiral times at large separation.",
+              "feedback": "Orbital tightening in some surviving systems can greatly shorten eventual gravitational-wave inspiral times.",
+              "component": "conceptual"
+            }
+          ]
+        },
+        {
+          "id": "ce-energy",
+          "title": "Apply a simplified energy budget",
+          "component": "quantitative",
+          "evidence": "Distinguish released orbital-energy magnitude from ejection efficiency and binding energy.",
+          "questions": [
+            {
+              "id": "ce-energy-1",
+              "difficulty": 1,
+              "prompt": "In a toy energy formalism, an envelope needs 6 energy units to unbind and the usable fraction of released orbital energy is 0.5. What released energy is needed if no other source contributes?",
+              "choices": [
+                "3 units.",
+                "12 units.",
+                "6.5 units."
+              ],
+              "correctIndex": 1,
+              "hint": "Solve α ΔE_release≥E_bind for ΔE_release.",
+              "feedback": "At efficiency α=0.5, at least 6/0.5=12 released-energy units are required under the model.",
+              "component": "quantitative"
+            },
+            {
+              "id": "ce-energy-2",
+              "difficulty": 2,
+              "prompt": "If a binary's orbital energy changes from −4 to −10 units during shrinkage, the orbital energy released in magnitude is:",
+              "choices": [
+                "−14 units.",
+                "6 units.",
+                "14 units."
+              ],
+              "correctIndex": 1,
+              "hint": "Released energy is the drop in orbital energy magnitude: E_initial−E_final.",
+              "feedback": "The orbital energy decreases by 6 units, releasing 6 units to other degrees of freedom in this simplified account.",
+              "component": "quantitative"
+            },
+            {
+              "id": "ce-energy-3",
+              "difficulty": 3,
+              "prompt": "A toy envelope's binding energy magnitude doubles at unchanged available released orbital energy and α. Ejection in the same energy-budget model becomes:",
+              "choices": [
+                "Guaranteed to be easier.",
+                "More difficult.",
+                "Unaffected by binding energy."
+              ],
+              "correctIndex": 1,
+              "hint": "Compare required energy with accessible energy.",
+              "feedback": "Doubling the required energy while holding supply fixed makes the toy inequality α ΔE_release≥E_bind harder to satisfy.",
+              "component": "quantitative"
+            }
+          ]
+        },
+        {
+          "id": "ce-causal",
+          "title": "Trace orbital shrinkage and outcomes",
+          "component": "causal",
+          "evidence": "Connect drag, available energy and post-envelope binary evolution.",
+          "questions": [
+            {
+              "id": "ce-causal-1",
+              "difficulty": 1,
+              "prompt": "What is a direct channel by which an embedded companion can lose orbital energy?",
+              "choices": [
+                "A compulsory increase in the companion's rest mass.",
+                "Dynamical interaction and drag with surrounding envelope gas.",
+                "The instantaneous absence of any force."
+              ],
+              "correctIndex": 1,
+              "hint": "The envelope is not dynamically inert.",
+              "feedback": "The companion's motion through gas excites flows and transfers orbital energy and angular momentum into the envelope.",
+              "component": "causal"
+            },
+            {
+              "id": "ce-causal-2",
+              "difficulty": 2,
+              "prompt": "If the envelope is ejected before the cores merge, the remnant binary is commonly:",
+              "choices": [
+                "Forced to have exactly its initial separation.",
+                "Much more compact than before the interaction.",
+                "Always a pair of already formed black holes."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about the energy source used to help eject gas.",
+              "feedback": "Shrinking orbital separation can release orbital energy and leave a closer pair of stellar cores/remnants; later evolution is model-dependent.",
+              "component": "causal"
+            },
+            {
+              "id": "ce-causal-3",
+              "difficulty": 3,
+              "prompt": "Why can stronger assumed envelope binding increase predicted merger-within-envelope outcomes?",
+              "choices": [
+                "More binding energy guarantees that the envelope escapes spontaneously.",
+                "More orbital energy must be transferred before ejection, potentially requiring a smaller separation than survival allows.",
+                "Envelope binding energy is unrelated to any ejection model."
+              ],
+              "correctIndex": 1,
+              "hint": "Think about competition between envelope ejection and core coalescence.",
+              "feedback": "In a simple budget, a more tightly bound envelope needs more accessible energy; the companion may spiral in too far before successful ejection.",
+              "component": "causal"
+            }
+          ]
+        },
+        {
+          "id": "ce-uncertainty",
+          "title": "Critique an efficiency prescription",
+          "component": "model-critique",
+          "evidence": "Recognize that an energy parameter is an approximation rather than a directly observed universal constant.",
+          "questions": [
+            {
+              "id": "ce-uncertainty-1",
+              "difficulty": 1,
+              "prompt": "A model claims that a single chosen CE efficiency parameter is a measured universal constant for all stellar envelopes. What is the concern?",
+              "choices": [
+                "The common-envelope concept cannot be modeled numerically.",
+                "The parameter is a simplified and uncertain prescription that may vary with system properties.",
+                "Efficiency automatically equals the donor-to-companion mass ratio."
+              ],
+              "correctIndex": 1,
+              "hint": "Separate parameterized modeling from universal measurement.",
+              "feedback": "CE evolution is multidimensional and uncertain; one energy-efficiency parameter is not established as a universal measured constant.",
+              "component": "model-critique"
+            },
+            {
+              "id": "ce-uncertainty-2",
+              "difficulty": 2,
+              "prompt": "Can successful energy-budget ejection alone prove a realistic post-envelope binary survives?",
+              "choices": [
+                "Yes; a positive energy budget guarantees no core collision.",
+                "No; final core radii, orbital separation and merger conditions also need checking.",
+                "No; conservation of energy is invalid for any binary."
+              ],
+              "correctIndex": 1,
+              "hint": "Satisfying a necessary toy inequality may not be sufficient for physical survival.",
+              "feedback": "A model must also check whether the post-spiral-in separation accommodates the surviving objects and whether other losses occur.",
+              "component": "model-critique"
+            },
+            {
+              "id": "ce-uncertainty-3",
+              "difficulty": 3,
+              "prompt": "What should accompany a comparison of predicted merger rates under two CE prescriptions?",
+              "choices": [
+                "Only the higher rate with no uncertainties.",
+                "A statement of the changed parameters and which other binary and cosmic assumptions were held fixed.",
+                "A claim that both outputs are direct measurements of the real Universe."
+              ],
+              "correctIndex": 1,
+              "hint": "Rates mix binary-physics assumptions with population weighting and cosmic history.",
+              "feedback": "Documenting assumptions and controlled variations is essential to interpret an uncertain evolutionary pathway.",
+              "component": "model-critique"
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "title": "Envelope energy audit",
+          "scenario": "A toy CE event has |E_bind|=10 units, ΔE_release=15 units and α=0.6, with no other energy source.",
+          "task": "Does the elementary budget predict enough usable energy for ejection, and what does it not establish?",
+          "steps": [
+            "Available useful energy =0.6×15=9 units.",
+            "9<10, so this toy budget does not reach the required envelope binding energy.",
+            "Other physical energy sources and hydrodynamic outcomes are outside the simplified model."
+          ],
+          "solution": "The simple α-energy budget fails its ejection inequality; this alone cannot establish the physical result of a complete hydrodynamic CE simulation."
+        },
+        {
+          "title": "Outcome dependence",
+          "scenario": "Two models use the same pre-CE binary but assign different donor envelope binding energies.",
+          "task": "State a controlled comparison and two outcomes to track.",
+          "steps": [
+            "Hold initial masses, separation and other prescriptions fixed.",
+            "Vary only binding-energy evaluation or efficiency.",
+            "Record ejected envelope versus core merger and surviving post-CE separation."
+          ],
+          "solution": "The experiment identifies sensitivity to CE energetics without claiming that one prescription is observationally proven."
+        }
+      ],
+      "sources": [
+        {
+          "title": "The Evolution of Massive Binary Stars (review)",
+          "url": "https://doi.org/10.1146/annurev-astro-052722-102936"
+        },
+        {
+          "title": "COMPAS documentation",
+          "url": "https://compas.readthedocs.io/en/latest/"
+        }
+      ]
+    }
+  ]
+}
