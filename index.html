@@ -13,12 +13,13 @@
   <script defer src="adaptive.js"></script>
   <script defer src="diagnostic.js"></script>
   <script defer src="diagnostic-ui.js"></script>
+  <script defer src="guide.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
   <div class="star-field" aria-hidden="true"></div>
   <header class="site-header">
-    <a class="brand" href="#" aria-label="Research Atlas home">
+    <a class="brand" href="#home" id="brand-home" aria-label="Return to your mission">
       <span class="brand-mark" aria-hidden="true"><i></i></span>
       <span><strong>Research Atlas</strong><small>Gravitational-wave paleontology</small></span>
     </a>
@@ -45,6 +46,8 @@
     </nav>
 
     <section id="diagnostic-panel" class="atlas-tab-panel diagnostic-shell" role="tabpanel" aria-labelledby="tab-diagnostic" hidden>
+      <div class="otto-onboarding-intro"><img src="assets/otto-orbit.svg" alt="Otto the otter astronaut waves hello" width="125" height="135"/>
+        <div><p class="otto-eyebrow">MEET OTTO, YOUR COSMIC GUIDE</p><h2>What would you like to discover?</h2><p>Pick a mission. I’ll help you find a starting point, one idea at a time.</p></div></div>
       <div id="diagnostic-root" class="diagnostic-root" aria-live="polite">
         <p class="dashboard-loading">Preparing your concept-based diagnostic…</p>
       </div>
@@ -52,6 +55,8 @@
 
     <section id="dashboard" class="dashboard" aria-label="Research workspace">
       <div id="home-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-home">
+      <div id="otto-guide" class="otto-guide" hidden aria-live="polite"></div>
+      <div id="legacy-home">
       <div class="home-map-heading">
         <div><p class="eyebrow">Your Atlas</p><h2 id="dashboard-title">Start from the map.</h2>
           <p>Your diagnostic shapes the overlay. Open a region, continue a recommendation, or jump into a lesson.</p></div>
@@ -90,6 +95,7 @@
           <span class="pilot-note">Three instructional pilots · More in development</span></div>
         <div id="pilot-cards" class="pilot-cards"><p class="dashboard-loading">Loading learning units…</p></div>
       </section>
+      </div>
       </div>
       <div id="paths-panel" class="atlas-tab-panel" role="tabpanel" aria-labelledby="tab-paths" hidden>
         <header class="tab-panel-header"><p class="eyebrow">Research pathways</p><h2>Start with a question or a field.</h2><p>Select an investigation to reveal the concepts behind it, or enter a knowledge region to browse its topics.</p></header>
