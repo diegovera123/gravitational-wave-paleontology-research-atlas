@@ -74,6 +74,61 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
    '<label class="research-control"><span>'+esc(label)+'</span><strong data-value="'+esc(key)+'">'+fmt(+values[key])+'</strong>'+
    '<input type="range" data-lab-input="'+esc(key)+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+esc(values[key])+'"></label>').join("")+'</div>';
  }
+ function visualization(m){
+  const text=(x,y,s)=>'<text x="'+x+'" y="'+y+'" class="research-svg-text">'+esc(s)+'</text>';
+  const line=(x1,y1,x2,y2,k)=>'<path d="M'+x1+" "+y1+" L"+x2+" "+y2+'" class="'+k+'" marker-end="url(#research-arrow)"/>';
+  let content="",title="",caption="";
+  if(lab==="kick"){
+    const x=156,y=164,s=36,fx=x+m.vx*s,fy=y-m.vy*s;
+    title="Vector addition for the toy natal-kick orbit";
+    caption="Blue: original relative orbital velocity (0,1). Pink: kick vector. Teal: resultant. Angles are measured from the original velocity direction.";
+    content='<circle cx="'+x+'" cy="'+y+'" r="5" class="research-svg-point"/>'+line(x,y,x,y-s,"research-svg-first")+
+      line(x,y-s,fx,fy,"research-svg-second")+line(x,y,fx,fy,"research-svg-result")+
+      text(24,30,"Pre-event relative orbit r=(1,0), v=(0,1)")+
+      text(24,219,"Specific energy: |v + w|² / 2 − GM_after / r")+
+      text(288,95,"v′x = "+fmt(m.vx))+text(288,117,"v′y = "+fmt(m.vy))+
+      text(288,139,"GM_after = "+fmt(m.mu));
+  }else if(lab==="chirp"){
+    title="Local schematic strain oscillations for the selected binary";
+    caption="An educational local-phase illustration using f(t)≈f₀+ḟ₀t. Not a complete merger waveform or numerical-relativity prediction.";
+    const windowSec=2.5/m.fgw,acc=Math.max(-1,Math.min(1,m.fDot*windowSec/m.fgw));
+    let d="";for(let i=0;i<=200;i++){
+     const u=i/200,cycles=2.5*u+1.25*acc*u*u;
+     const x=32+425*u,y=112-(17+33*u)*Math.sin(2*Math.PI*cycles);
+     d+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1);
+    }
+    content='<path d="'+d+'" class="research-svg-wave"/>'+text(32,36,"Earlier time")+text(362,36,"Later time")+
+      text(32,208,"f_GW ≈ "+fmt(m.fgw)+" Hz; ḟ ≈ "+fmt(m.fDot)+" Hz/s");
+  }else if(lab==="envelope"){
+    title="Illustrative orbital-energy budget";caption="This comparison only checks an assumed energy inequality. Surviving cores and envelope dynamics are not modeled.";
+    const max=Math.max(1,m.required,m.usable);
+    content=text(22,47,"Usable energy: "+fmt(m.usable))+
+      '<rect x="22" y="58" width="'+(400*m.usable/max)+'" height="24" rx="6" class="research-svg-result-fill"/>'+
+      text(22,117,"Envelope binding requirement: "+fmt(m.required))+
+      '<rect x="22" y="130" width="'+(400*m.required/max)+'" height="24" rx="6" class="research-svg-second-fill"/>';
+  }else if(lab==="roche"){
+    title="Effective Roche-lobe radius versus donor radius";
+    caption="The dashed circle is a spherical-equivalent Roche-lobe radius, not the exact equipotential geometry. This only tests onset of overflow.";
+    const scale=65/Math.max(.01,m.radius,m.lobe),a=Math.max(3,m.radius*scale),b=Math.max(3,m.lobe*scale);
+    content='<circle cx="145" cy="115" r="'+b+'" class="research-svg-lobe"/>'+
+      '<circle cx="145" cy="115" r="'+a+'" class="research-svg-donor"/>'+
+      text(267,101,"Donor radius: "+fmt(m.radius))+
+      text(267,124,"Roche lobe: "+fmt(m.lobe))+
+      text(267,147,m.overflow?"Geometry indicates overflow":"Donor remains inside lobe");
+  }else if(lab==="selection"||lab==="population"){
+    title=lab==="selection"?"Intrinsic events versus expected detected events":"Distinct toy simulation outcomes";
+    caption=lab==="selection"?"Bar lengths show expected counts only; real detections fluctuate.":"All systems and classifications are generated using the seeded, deliberately unitless toy impulse model.";
+    const counts=lab==="selection"?[["Intrinsic A",m.a],["Intrinsic B",m.b],["Expected detected A",m.da],["Expected detected B",m.db]]:
+      [["Bound close toy candidates",m.candidate],["Unbound",m.unbound],["Other bound / unclassified",m.wide]];
+    const mx=Math.max(1,...counts.map(x=>x[1]));
+    content=counts.map(([name,value],i)=>text(22,30+i*53,name+" · "+fmt(value))+
+      '<rect x="22" y="'+(39+i*53)+'" width="'+(385*value/mx)+'" height="12" rx="5" class="'+(i%2?"research-svg-second-fill":"research-svg-result-fill")+'"/>').join("");
+  }
+  return '<figure class="research-live-figure"><svg viewBox="0 0 480 238" role="img" aria-label="'+esc(title)+'" xmlns="http://www.w3.org/2000/svg">'+
+    '<title>'+esc(title)+'</title><desc>'+esc(caption)+'</desc>'+
+    '<defs><marker id="research-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c8dbff"/></marker></defs>'+
+    content+'</svg><figcaption>'+esc(caption)+'</figcaption></figure>';
+ }
  function result(){
   const m=model[lab](draft.params[lab]);if(!m)return "";
   let cells=[];
@@ -83,7 +138,7 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   if(lab==="roche")cells=[["Donor/accretor mass ratio q",fmt(m.q)],["Effective Roche-lobe radius",fmt(m.lobe)],["Roche geometry overflow?",m.overflow?"Yes":"No"]];
   if(lab==="population")cells=[["Distinct sampled binaries",fmt(m.n)],["Toy close bound candidates",fmt(m.candidate)],["Unbound",fmt(m.unbound)],["Other bound / unclassified",fmt(m.wide)],["Toy candidate fraction",fmt(m.p)],["Illustrative binomial standard error",fmt(m.binomialSE)]];
   if(lab==="selection")cells=[["Expected detected A",fmt(m.da)],["Expected detected B",fmt(m.db)],["Intrinsic A fraction",fmt(m.intrinsic)],["Expected detected A fraction",fmt(m.detected)]];
-  return '<div class="research-results">'+cells.map(([name,value])=>'<div><span>'+esc(name)+'</span><strong>'+esc(value)+'</strong></div>').join("")+'</div>'+
+  return visualization(m)+'<div class="research-results">'+cells.map(([name,value])=>'<div><span>'+esc(name)+'</span><strong>'+esc(value)+'</strong></div>').join("")+'</div>'+
    '<p class="research-caveat">'+esc(m.caveat)+'</p>'+
    (lab==="population"?'<details><summary>Inspect the first 25 synthetic system records</summary><pre class="research-data">'+
     esc(["id,synthetic_mass_lost,kick,kick_angle_deg,epsilon,toy_candidate",...m.rows.map(r=>[r.id,r.f,r.k,r.angle,r.energy,r.candidate].join(","))].join("\n"))+
