@@ -251,6 +251,246 @@
         "Observation and intrinsic population separated",
         "Limits of simple inverse weighting stated"
       ]
+    },
+    {
+      "id": "eccentricity-geometry",
+      "conceptId": "orbital-eccentricity",
+      "component": "geometry + quantitative",
+      "title": "Recover orbital shape from the two turning points",
+      "scenario": "A Newtonian two-body orbit has relative pericentre distance r_p=3 toy length units and apocentre distance r_a=9. The orbital ellipse is Keplerian and neither mass changes during an orbit.",
+      "task": "Calculate semi-major axis and eccentricity, then explain whether two ellipses with the same a but different e can have the same total orbital energy.",
+      "steps": [
+        "Use r_p=a(1−e) and r_a=a(1+e), so r_p+r_a=2a and a=(3+9)/2=6.",
+        "Subtract the equations: r_a−r_p=2ae, giving e=(9−3)/(9+3)=1/2.",
+        "For fixed m₁ and m₂, E=−Gm₁m₂/(2a); eccentricity changes angular momentum and turning points but not this energy at fixed a.",
+        "Identify the limitations: point masses, Newtonian potential and a bound Kepler ellipse, not a dissipative stellar interaction."
+      ],
+      "rubric": [
+        "Correct formulas and dimensions",
+        "Semi-major axis and eccentricity calculated",
+        "Energy interpretation distinguished from orbital shape",
+        "Assumptions stated"
+      ]
+    },
+    {
+      "id": "orbit-impulse",
+      "conceptId": "orbital-perturbations",
+      "component": "vector reasoning",
+      "title": "A purely radial impulse can change orbit shape without increasing angular momentum",
+      "scenario": "Consider the relative orbit immediately after an impulsive event. Set r=(1,0), GM_after=1, and start from v=(0,1) in dimensionless Newtonian units. Apply an instantaneous radial velocity impulse Δv=(0.3,0).",
+      "task": "Compute the new specific energy and angular momentum magnitude. Decide whether the new orbit remains bound and explain why the radial impulse changes energy but not angular momentum about the origin.",
+      "steps": [
+        "After the impulse v′=(0.3,1), so |v′|²=0.3²+1²=1.09.",
+        "The specific orbital energy is ε=1.09/2−1=−0.455, so the post-event orbit is bound in this model.",
+        "The specific angular momentum h=|r×v′|=|1×1−0×0.3|=1; the radial velocity component contributes no cross product at the instant of impulse.",
+        "The new eccentricity follows e²=1+2εh²/(GM_after)²=1−0.91=0.09, hence e=0.3. State that the event is instantaneous and point-mass."
+      ],
+      "rubric": [
+        "Correct vector addition and speed",
+        "Energy and bound classification correct",
+        "Cross product isolates tangential component",
+        "Eccentricity and model limit correct"
+      ]
+    },
+    {
+      "id": "wind-integration",
+      "conceptId": "stellar-winds",
+      "component": "calculation + model limits",
+      "title": "Integrate a prescribed time-varying stellar wind",
+      "scenario": "A hypothetical star starts at 35 solar masses. For the first million years it loses mass at 2×10⁻⁶ solar masses per year; for the next half-million years the prescribed loss rate is 6×10⁻⁶ solar masses per year.",
+      "task": "Compute the total wind mass lost and final mass; identify why this alone cannot determine the final black-hole remnant mass.",
+      "steps": [
+        "The first interval loses (2×10⁻⁶)(10⁶)=2 solar masses.",
+        "The second loses (6×10⁻⁶)(0.5×10⁶)=3 solar masses.",
+        "Total prescribed wind loss is 5 solar masses; final toy stellar mass is 30 solar masses.",
+        "Remnant mass also depends on subsequent stellar evolution, collapse, fallback/ejecta, neutrino losses, binary interaction and the remnant prescription; wind integration alone does not specify it."
+      ],
+      "rubric": [
+        "Each interval integrated with correct units",
+        "Total and final masses correct",
+        "Time-dependent prescribed rates interpreted",
+        "Collapse and binary uncertainties distinguished"
+      ]
+    },
+    {
+      "id": "roche-contact",
+      "conceptId": "roche-lobe",
+      "component": "model-based quantitative",
+      "title": "Determine whether a donor fills its Roche lobe",
+      "scenario": "An idealized circular synchronized equal-mass binary has separation a=20 solar radii. The donor's radius is 8 solar radii. Use Eggleton's volume-equivalent Roche-lobe ratio R_L/a≈0.379 when q=1.",
+      "task": "Calculate R_L and the fractional overfill (R_d−R_L)/R_L. Does this prove that mass transfer will be unstable?",
+      "steps": [
+        "The donor's approximate Roche radius is 0.379×20=7.58 solar radii.",
+        "Its radius exceeds the lobe by 8−7.58=0.42 solar radii.",
+        "The fractional geometric overfill is 0.42/7.58≈0.0554, or about 5.5%.",
+        "This indicates a toy geometric overflow condition, not a stability criterion; that additionally needs stellar structural and Roche-lobe responses during mass loss."
+      ],
+      "rubric": [
+        "Roche-ratio calculation correct",
+        "Dimensionless overfill correctly normalized",
+        "Onset separated from transfer rate",
+        "Stability requires independent modeling"
+      ]
+    },
+    {
+      "id": "symmetric-mass-loss",
+      "conceptId": "supernova-kicks",
+      "component": "proof + limiting cases",
+      "title": "Derive the sudden mass-loss disruption threshold",
+      "scenario": "A circular Newtonian pre-event relative orbit has initial gravitational parameter GM_i and separation r, so v_i²=GM_i/r. An instantaneous symmetric explosion removes gravitational mass without a natal kick or position change.",
+      "task": "Express the post-event specific orbital energy using f=M_lost/M_i. Derive the condition for an unbound post-event orbit and interpret the equality case.",
+      "steps": [
+        "After the event GM_f=(1−f)GM_i while separation and relative speed are frozen in the impulse approximation.",
+        "ε_f=v_i²/2−GM_f/r=GM_i/(2r)−(1−f)GM_i/r=(GM_i/r)(f−1/2).",
+        "If f<1/2, ε_f<0 and the toy pair stays bound. At f=1/2, ε_f=0 (parabolic threshold); at f>1/2 it becomes unbound.",
+        "Specify that this half-mass threshold assumes an initially circular orbit, no kick, instantaneous symmetric loss and isolated point masses; it is not a universal disruption rule."
+      ],
+      "rubric": [
+        "Correct expression for post-event mass",
+        "Energy algebra shown",
+        "Bound, marginal and unbound cases distinguished",
+        "Assumptions carefully stated"
+      ]
+    },
+    {
+      "id": "natal-angular-momentum",
+      "conceptId": "supernova-kicks",
+      "component": "vector + geometric",
+      "title": "Find eccentricity from a directional kick",
+      "scenario": "In post-event toy units, r=(1,0), GM_f=1 and v′=(0.3,0.8). Treat the orbit as Newtonian after the impulse, with no further drag.",
+      "task": "Calculate ε, specific angular momentum h and eccentricity e from e²=1+2εh²/(GM_f)². Distinguish the radial and tangential velocity contributions.",
+      "steps": [
+        "Compute |v′|²=0.3²+0.8²=0.73, so ε=0.73/2−1=−0.635: the orbit is bound.",
+        "The cross product is h=|r×v′|=|1×0.8−0×0.3|=0.8; the radial component does not add instantaneous angular momentum.",
+        "e²=1+2(−0.635)(0.8²)=1−0.8128=0.1872, so e≈0.433.",
+        "A bound orbit's shape follows energy and angular momentum together; an energy sign alone does not specify eccentricity."
+      ],
+      "rubric": [
+        "Specific orbital energy correct",
+        "Angular momentum uses vector cross product",
+        "Eccentricity arithmetic and range correct",
+        "Classification and assumptions expressed"
+      ]
+    },
+    {
+      "id": "inspiral-scaling",
+      "conceptId": "compact-binary-inspiral",
+      "component": "mathematical scaling",
+      "title": "Prove the fourth-power separation dependence of inspiral time",
+      "scenario": "For fixed component masses in a leading-order circular point-mass model, the orbit shrinks according to da/dt=−K/a³ with K>0 constant.",
+      "task": "Separate variables and integrate to the formal a=0 limit. Then compare the leading times at separations a and 1.5a.",
+      "steps": [
+        "Rearrange dt=−a³da/K.",
+        "Integrating from a₀ to 0 gives t=(1/K)∫₀^a₀a³da=a₀⁴/(4K).",
+        "At the same masses, t(1.5a)/t(a)=1.5⁴=5.0625.",
+        "The integral extrapolates a weak-field leading approximation to zero separation; near merger, full strong-field and spin effects replace it."
+      ],
+      "rubric": [
+        "Correct separation of variables",
+        "Integral and factor 1/4 correct",
+        "Scaling ratio calculated",
+        "Formal-limit caveat stated"
+      ]
+    },
+    {
+      "id": "interferometer-scale",
+      "conceptId": "interferometric-detectors",
+      "component": "units + interpretation",
+      "title": "Estimate a strain-to-length scale without mistaking it for a detector output",
+      "scenario": "An idealized interferometer has an arm length of L=4 km, and a passing wave has characteristic dimensionless strain h=2×10⁻²¹. Assume favorable geometry and only calculate the order-of-magnitude scale hL.",
+      "task": "Convert the length into SI units, compute hL and explain why this simple number is not an actual calibrated detector measurement.",
+      "steps": [
+        "Convert 4 km to 4000 m.",
+        "Multiply hL=(2×10⁻²¹)(4×10³ m)=8×10⁻¹⁸ m.",
+        "Strain is dimensionless, so the product has length units; the simple calculation is an order-of-magnitude differential displacement scale.",
+        "Real interferometers measure optical-phase response with frequency dependence, arm geometry, polarization, noise and calibration. One cannot claim a GW detection from hL alone."
+      ],
+      "rubric": [
+        "Correct unit conversion",
+        "Result and scientific notation correct",
+        "Dimensional interpretation clear",
+        "Calibration and noise limitations stated"
+      ]
+    },
+    {
+      "id": "importance-weighting",
+      "conceptId": "population-weights",
+      "component": "statistical reasoning",
+      "title": "Calculate a weighted yield and effective sample size",
+      "scenario": "Three independently simulated toy binaries have outcome indicators (1,0,1) and nonnegative target-population weights (1,2,7). All weights use the same target-distribution convention.",
+      "task": "Calculate the raw successful-system fraction, normalized weighted fraction and N_eff=(Σw)²/Σw². Explain whether any of these is a physical merger rate.",
+      "steps": [
+        "Two of three distinct systems succeed, giving an unweighted fraction 2/3.",
+        "The weighted successful sum is 1+7=8, while total weight is 1+2+7=10; the normalized weighted success fraction is 0.8.",
+        "The effective-size diagnostic is N_eff=10²/(1²+2²+7²)=100/54≈1.85; unequal weights concentrate information relative to three equal-weight draws.",
+        "A physical formation efficiency requires consistent represented formed-stellar-mass normalization; a cosmic merger rate additionally requires history and delays, and detections require selection."
+      ],
+      "rubric": [
+        "Distinct systems, not event rows",
+        "Both fractions correctly separated",
+        "Effective sample size calculation",
+        "No false identification with physical rate"
+      ]
+    },
+    {
+      "id": "finite-sample",
+      "conceptId": "monte-carlo-methods",
+      "component": "statistical uncertainty",
+      "title": "Separate Monte Carlo variation from modeling uncertainty",
+      "scenario": "You simulate N=400 independent Bernoulli toy systems under a fixed model and find that 100 meet a stated criterion. A second model has not yet been tested.",
+      "task": "Estimate p̂ and its plug-in binomial standard error. What happens to the standard error if the simulation size is quadrupled but the underlying success probability stays the same?",
+      "steps": [
+        "p̂=100/400=0.25.",
+        "The plug-in standard error is sqrt(0.25×0.75/400)=sqrt(0.00046875)≈0.02165, about 2.17 percentage points.",
+        "At N=1600 with the same underlying probability, standard error is halved to about 0.01083 because it scales as 1/√N.",
+        "Larger samples reduce sampling noise but do not correct a wrong kick prescription, selection function, dependence between samples or inconsistent sampling weights."
+      ],
+      "rubric": [
+        "Correct success fraction",
+        "Standard error expression and value",
+        "N-scaling explained",
+        "Sampling and model uncertainty distinguished"
+      ]
+    },
+    {
+      "id": "cosmic-delay-cohorts",
+      "conceptId": "cosmic-star-formation",
+      "component": "convolution + interpretation",
+      "title": "Trace two stellar-birth cohorts into a delayed merger history",
+      "scenario": "In a toy cosmic-time model, 1000 solar masses of stars form at t=2 Gyr and 2000 solar masses form at t=5 Gyr. Formation efficiency is one merger-capable compact binary per 1000 solar masses, and each surviving system merges exactly 3 Gyr after stellar birth.",
+      "task": "Determine the merger epochs and counts and explain why a detected-event histogram would require additional conversions.",
+      "steps": [
+        "The first cohort represents one merger-capable binary and the second two, under the specified toy efficiency.",
+        "Add the 3-Gyr delay to each birth time: the toy mergers occur at t=5 Gyr (one) and t=8 Gyr (two).",
+        "The intrinsic merger history is shifted relative to the two birth spikes even though their input star-formation counts are unchanged.",
+        "Cosmological volume, source/observer time conversion, source-parameter-dependent detection probabilities and observational exposure would be needed before predicting a detected histogram."
+      ],
+      "rubric": [
+        "Formation efficiency applied to masses",
+        "Both merger epochs and counts correct",
+        "Delay interpretation explicit",
+        "Intrinsic vs detected histories separated"
+      ]
+    },
+    {
+      "id": "selection-likelihood",
+      "conceptId": "population-inference",
+      "component": "Bayesian + selection critique",
+      "title": "Why an observed majority need not be an intrinsic majority",
+      "scenario": "Class A makes up 30% of a hypothetical intrinsic compact-merger population and class B 70%. Class A has detection probability 0.9 while class B has probability 0.1 over the same toy observing window.",
+      "task": "Compute the expected detected class-A fraction and explain which ingredient must enter a population analysis before interpreting the observed class ratio.",
+      "steps": [
+        "Expected detected fractions before renormalizing are 0.3×0.9=0.27 for A and 0.7×0.1=0.07 for B.",
+        "Total expected detected fraction is 0.34; among detections A contributes 0.27/0.34≈0.794, or 79.4%.",
+        "A would dominate the toy catalog even though its intrinsic share is only 30%. This alone does not determine a formation-channel fraction for a real dataset.",
+        "Population inference requires a forward likelihood with parameter-dependent detection selection and appropriate event measurement uncertainty, not a histogram of detected-event medians alone."
+      ],
+      "rubric": [
+        "Detected fraction correctly normalized",
+        "Intrinsic and detected population distinguished",
+        "Inference requires selection correction",
+        "No astrophysical conclusions from toy assumptions"
+      ]
     }
   ],
   "relationships": [
