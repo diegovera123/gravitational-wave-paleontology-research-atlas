@@ -12,7 +12,8 @@ const M=win.AtlasResearchModels,X=win.AtlasResearchExperience;
 assert.equal(X.validate(journey,conceptData.concepts,sourceData.sources),true);
 assert.equal(journey.stages.length,6);
 assert.equal(new Set(journey.stages.flatMap(s=>s.conceptIds)).size>18,true,"One pathway connects many actual mapped concepts");
-assert.equal(journey.problems.length>=6,true,"Every stage receives an independently authored research reasoning problem");
+assert.equal(journey.problems.length,18,"Six research stages each have three independently authored reasoning problems");
+for(const s of journey.stages)assert.equal(journey.problems.filter(p=>s.conceptIds.includes(p.conceptId)).length,3,"Exactly three authored deep problems for "+s.id);
 assert.ok(journey.relationships.some(e=>e.kind==="causal")&&journey.relationships.some(e=>e.kind==="application")&&journey.relationships.some(e=>e.kind==="prerequisite"));
 let r=M.kick({k:0,f:0,angle:0});
 assert.equal(r.bound,true);assert.ok(Math.abs(r.energy+.5)<1e-12);assert.ok(Math.abs(r.ecc)<1e-10);assert.ok(Math.abs(r.a-1)<1e-10);
@@ -67,4 +68,4 @@ assert.ok(before.includes('id="research-experience"')&&before.indexOf('id="resea
 assert.equal((before.match(/data-atlas-tab=/g)||[]).length,3,"No unnecessary fourth tab");
 const graph=await fs.readFile("constellation.js","utf8");
 assert.ok(graph.includes("relationData")&&graph.includes("scientific-relations")&&graph.includes("type:\"prerequisite\""),"Graph distinguishes typed scientific relations from containment");
-console.log("Passed: six connected research stages, six worked reasoning problems, typed science edges, six transparent toy models, deterministic sampling, component evidence, local research notebook and integration inside the existing Practice tab.");
+console.log("Passed: six connected research stages, eighteen worked reasoning problems, typed science edges, six toy models, deterministic sampling, component evidence and local notebook inside Practice.");

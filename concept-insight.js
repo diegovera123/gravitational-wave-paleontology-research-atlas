@@ -94,6 +94,14 @@ function visual(kind){
    '<span class="concept-schematic-number">0'+(i+1)+'</span><span>'+escape(x)+'</span></div>').join(arrows)+
    '</div><figcaption>Conceptual schematic · relationships shown are illustrative, not a simulation or observation.</figcaption></figure>';
 }
+const DEEP_VISUALS={
+ "orbital-energy":"orbitalEnergy","roche-lobe":"transfer","stellar-winds":"wind",
+ "compact-binary-inspiral":"chirp","interferometric-detectors":"detector",
+ "monte-carlo-methods":"pipeline","population-weights":"weights",
+ "delay-time-distributions":"cosmic","formation-efficiency":"weights",
+ "bayesian-inference":"bayesian","reproducible-workflows":"pipeline",
+ "cosmic-star-formation":"cosmic","mass-transfer-stability":"transfer"
+};
 let deepUnits=new Map();
 function load(data,concepts=[]){
  if(data?.schemaVersion!==1||!Array.isArray(data.units))throw Error("Unsupported deep-explanation schema.");
@@ -109,7 +117,7 @@ function load(data,concepts=[]){
 function render(concept){
  const deep=deepUnits.get(concept.id);
  if(deep){
-   const kind=NOTES[concept.id]?.visual||"pipeline";
+   const kind=DEEP_VISUALS[concept.id]||NOTES[concept.id]?.visual||"pipeline";
    return '<article class="concept-deep-lesson" data-deep-explanation="'+escape(concept.id)+'">'+
      '<p class="concept-deep-opening">'+escape(deep.opening)+'</p>'+
      '<div class="concept-deep-steps">'+deep.steps.map((step,i)=>

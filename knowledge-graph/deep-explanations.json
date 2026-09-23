@@ -325,6 +325,357 @@
         "text": "An initial binary has 10 and 8 solar masses. The donor loses 3, the companion accretes 2, and 1 escapes, leaving masses 7 and 10. You can calculate this mass ledger exactly, but the final separation still depends on the angular momentum carried by the escaping mass and the interaction history."
       },
       "boundary": "Isolated Keplerian conservation cannot simply be applied to an interacting two-star subsystem without accounting for energy and angular momentum exchanged with gas or other bodies."
+    },
+    {
+      "id": "orbital-energy",
+      "opening": "Picture two stars moving in a wide orbit. You want to know how much energy the binary must lose before its orbit can become tight enough to make a compact merger plausible. Rather than adding two unrelated stellar kinetic energies, describe the motion of one star relative to the other.",
+      "steps": [
+        {
+          "heading": "Replace two trajectories by their relative motion",
+          "text": "Let r be the separation and v the relative velocity. For two Newtonian point masses m₁ and m₂, define total mass M=m₁+m₂ and reduced mass μ=m₁m₂/M. The relative kinetic energy is μv²/2, while the interaction potential, with zero chosen at infinite separation, is −Gm₁m₂/r."
+        },
+        {
+          "heading": "Find the circular reference orbit",
+          "text": "For a circular relative orbit, the gravitational attraction Gm₁m₂/r² provides the reduced-mass centripetal force μv²/r. Cancel μ and rearrange to obtain v²=GM/r. Substituting into K=μv²/2 gives K=Gm₁m₂/(2r), exactly half the magnitude of the interaction potential in this idealized circular case."
+        },
+        {
+          "heading": "Generalize energy to the size of a bound Kepler orbit",
+          "text": "Adding the circular terms gives E=−Gm₁m₂/(2r). For a bound Keplerian ellipse, the time-independent orbital energy is E=−Gm₁m₂/(2a), where a is the semi-major axis; it does not depend on the eccentricity at fixed component masses and a. More negative E describes a more tightly bound binary under the stated potential convention."
+        },
+        {
+          "heading": "Connect the ledger to binary evolution",
+          "text": "If the orbit shrinks from aᵢ to a𝒇 at fixed masses, ΔE_orb=−Gm₁m₂(1/a𝒇−1/aᵢ)/2. This is negative, meaning orbital energy decreased; a gas envelope or gravitational radiation may receive the released positive energy. If masses change or gas exerts drag, you must account for their energy and angular-momentum exchange rather than applying isolated-orbit conservation blindly."
+        }
+      ],
+      "example": {
+        "title": "Why halving the orbit releases energy",
+        "text": "In units with Gm₁m₂=1, the energy at aᵢ=4 is −1/8. At a𝒇=2 it is −1/4. The change in orbital energy is −1/8, so 1/8 unit of positive energy was released to another part of the system in an energy-conserving account. The more negative final energy is not a claim that physical energy disappeared; it reflects the chosen zero of gravitational potential."
+      },
+      "boundary": "Newtonian two-point-mass energy assumes the masses are sufficiently compact, the interaction is approximately isolated and gravity is represented by −Gm₁m₂/r. A common envelope, mass ejection and strong-field inspiral require additional physics and do not preserve binary orbital energy separately."
+    },
+    {
+      "id": "roche-lobe",
+      "opening": "Picture a giant donor star in a close binary. As it expands, gas near the point between the stars begins to feel the companion's gravity strongly. To predict when matter can begin streaming toward the companion, you need a boundary defined by the binary's combined gravity and rotation, not merely the donor's isolated surface escape speed.",
+      "steps": [
+        {
+          "heading": "Adopt the rotating point of view",
+          "text": "In a frame rotating with a nearly circular binary, the stars are approximately stationary while a test parcel experiences gravitational attraction toward both masses together with a centrifugal contribution. These define an effective Roche potential. Surfaces of equal effective potential can enclose regions around each star."
+        },
+        {
+          "heading": "Locate the critical passage between the stars",
+          "text": "The inner Lagrange point L₁ lies between the bodies where the effective potential has a saddle. The critical equipotential passing through L₁ defines a lobe around each star. When a donor expands toward that boundary, gas near L₁ can follow a flow toward the companion rather than remain confined around the donor."
+        },
+        {
+          "heading": "Replace the complicated lobe shape by a useful radius",
+          "text": "For an idealized circular synchronized binary, Eggleton's fitting expression gives the donor's volume-equivalent Roche radius: R_L/a≈0.49q^(2/3)/[0.6q^(2/3)+ln(1+q^(1/3))], where q=M_donor/M_accretor and a is the instantaneous separation. This is a geometric approximation, not a claim that the lobe is literally a sphere."
+        },
+        {
+          "heading": "Separate the onset of overflow from its dynamical fate",
+          "text": "Compare R_donor and R_L. When R_donor reaches or exceeds the effective boundary, Roche-lobe overflow can begin. To predict whether the exchange stabilizes or accelerates, compare how the donor's structure responds to mass loss with how the lobe radius changes through mass and angular-momentum transfer; the overflow condition alone does not decide stability."
+        }
+      ],
+      "example": {
+        "title": "Equal-mass lobe size",
+        "text": "For q=1, q^(1/3)=q^(2/3)=1, giving R_L/a≈0.49/(0.6+ln2)≈0.379. At separation a=10 solar radii, each volume-equivalent Roche radius is about 3.79 solar radii. A donor radius of 4 solar radii therefore exceeds its approximate lobe radius in this idealized configuration, suggesting overflow may begin; a full interaction calculation is still needed."
+      },
+      "boundary": "The fitting formula assumes an equilibrium Roche geometry for a circular synchronized point-mass binary. Strong eccentricity, rapid non-synchronous rotation, extended atmospheres and dynamical gas flows complicate this picture; lobe contact does not quantify a transfer rate or guarantee a common envelope."
+    },
+    {
+      "id": "stellar-winds",
+      "opening": "Imagine two otherwise similar massive stars born with different abundances of elements heavier than helium. Before either collapses, its radiation can push on ions in the atmosphere and carry material away. Over millions of years, those winds can change the mass that reaches core collapse and therefore the possible compact-remnant population.",
+      "steps": [
+        {
+          "heading": "Follow the outgoing light rather than naming a wind rate",
+          "text": "Photons carry momentum. In a hot luminous star, many metal ions absorb and scatter radiation through spectral lines, allowing radiative momentum to accelerate atmospheric material. The collective transfer of momentum can sustain an outflow; metal-line opacity therefore connects chemical composition to a star's ability to drive some types of winds."
+        },
+        {
+          "heading": "Track the evolving stellar mass",
+          "text": "Define a positive mass-loss rate Ṁ_loss=−dM_star/dt. The stellar mass remaining after an interval is M(t)=M₀−∫Ṁ_loss(t′)dt′. A model may compute Ṁ_loss from luminosity, temperature, composition and other properties; it should not silently hold a time-dependent stellar parameter constant over an entire evolutionary history."
+        },
+        {
+          "heading": "Connect winds to orbit and collapse",
+          "text": "Matter lost from the star changes its envelope and its pre-collapse mass. If the material escapes the binary it can also carry orbital angular momentum, possibly widening or otherwise changing the orbit depending on the loss geometry and timescale. For a compact-remnant prediction, distinguish material ejected in winds before collapse from mass lost and neutrinos emitted during the collapse event itself."
+        },
+        {
+          "heading": "Treat metallicity dependence as a conditional physical claim",
+          "text": "Hot-star line-driven wind prescriptions often describe stronger winds at higher metallicity within a specified temperature and evolutionary regime. Different wind mechanisms, ionization states, clumping corrections and evolutionary phases need not obey one universal power law. In population synthesis, vary the adopted prescription before attributing a predicted remnant-mass difference solely to metallicity."
+        }
+      ],
+      "example": {
+        "title": "Integrate a prescribed toy wind",
+        "text": "A toy star begins at 30 solar masses and loses mass at a constant positive rate of 10⁻⁶ solar masses per year for 2×10⁶ years. The prescribed wind removes 2 solar masses, giving 28 solar masses remaining. This calculation does not predict the actual star's luminosity, fuel use, collapse time or remnant mass: its rate and duration were hypothetical fixed inputs."
+      },
+      "boundary": "Do not infer a universal metallicity exponent from this explanation. Line-driven winds are best understood within their stellar-temperature and luminosity regimes, while cool-star and eruptive outflows may depend on different mechanisms. Real stellar tracks solve coupled structure and composition evolution."
+    },
+    {
+      "id": "compact-binary-inspiral",
+      "opening": "Imagine a compact binary whose stars have already collapsed into two black holes. Unlike an isolated Kepler orbit, the binary loses energy and angular momentum by producing gravitational waves. The crucial research question is whether the pair spirals together on a time scale comparable to its age or remains too widely separated to merge.",
+      "steps": [
+        {
+          "heading": "Calculate how orbital energy depends on separation",
+          "text": "For a Newtonian quasi-circular pair of point masses, E_orb=−Gm₁m₂/(2a). A reduction in a makes E more negative. Gravitational radiation carries positive energy away, so dE_orb/dt is negative; by the chain rule dE/dt=(dE/da)(da/dt), where dE/da=Gm₁m₂/(2a²)>0."
+        },
+        {
+          "heading": "Use the leading quadrupolar energy-loss approximation",
+          "text": "At lowest order for a circular point-mass binary, the gravitational-wave power is P_GW=(32/5)G⁴ μ²M³/(c⁵a⁵), with M=m₁+m₂ and μ=m₁m₂/M. Equate dE/dt=−P_GW and solve for da/dt=−(64/5)G³m₁m₂M/(c⁵a³). The negative sign shows separation shrinks in this isolated model."
+        },
+        {
+          "heading": "Integrate the remaining time carefully",
+          "text": "Separate variables: a³ da=−K dt where K=(64/5)G³m₁m₂M/c⁵. Integrating from initial a₀ to the formal a=0 limit gives t_leading=5c⁵a₀⁴/[256G³m₁m₂M]. This quartic dependence means that moderately wider systems can have much longer leading-order inspiral times."
+        },
+        {
+          "heading": "Distinguish a merger candidate from a surviving binary",
+          "text": "Formation calculations may produce a bound double compact object with a separation too wide for it to merge within a chosen cosmic horizon. Apply an inspiral-time criterion separately from bound survival. For eccentric orbits, radiation losses and the merger time depend on eccentricity as well as the initial semi-major axis; the circular expression is not a general eccentric-binary formula."
+        }
+      ],
+      "example": {
+        "title": "Why modestly changing separation matters",
+        "text": "Hold both compact masses fixed and compare circular pairs at a and 2a. Since the leading time scales as a⁴, the pair at 2a has 2⁴=16 times the inspiral time of the pair at a. If the first toy system has a calculated leading time of 0.5 Gyr, the second has 8 Gyr under the same approximation. This is why the post-common-envelope separation strongly affects merger predictions."
+      },
+      "boundary": "The leading quadrupole and Newtonian orbital-energy treatment breaks down close to merger, and real sources can be eccentric or spinning. The a→0 integral is a convenient leading-order extrapolation, not an exact strong-field plunge or ringdown time. Cosmological age comparisons require formation epoch and redshift."
+    },
+    {
+      "id": "interferometric-detectors",
+      "opening": "Imagine a passing gravitational wave arriving at a detector with two perpendicular arms. A test mass in each arm is suspended so that, over the measurement band, the interferometer can compare how the passing wave changes the relative light-travel times along the two directions. The recorded signal is not a photograph of a black hole orbit.",
+      "steps": [
+        {
+          "heading": "Start with the laser phase difference",
+          "text": "A laser beam is split between two long arms, reflected from test masses and recombined. The returning light waves interfere according to their relative phase. A change in the differential optical path length changes that interference and can be inferred from the measured light signal."
+        },
+        {
+          "heading": "Relate strain to differential arm response",
+          "text": "For a suitable wave orientation and polarization in a simple long-wavelength picture, a dimensionless strain h corresponds to an order-h fractional differential length change: ΔL/L≈h up to the interferometer response convention. The antenna response depends on source direction, polarization and detector orientation. A single measured differential signal does not separately reveal every source and sky parameter."
+        },
+        {
+          "heading": "Distinguish a signal from detector noise",
+          "text": "The measured strain channel contains instrument noise as well as any astrophysical signal. Seismic motion, thermal noise and quantum measurement noise dominate different frequency ranges. Searching for a compact-binary waveform therefore requires calibrated instrument response, noise modeling and a detection procedure rather than inspecting one oscillation by eye."
+        },
+        {
+          "heading": "Connect measured strain to astrophysical inference",
+          "text": "Waveform templates predict the time-dependent strain for source parameters such as masses, spins, distance and orientation. Comparing calibrated data with a waveform model constrains those parameters with uncertainty; a population analysis must also account for sources whose strain patterns would not meet the detection threshold."
+        }
+      ],
+      "example": {
+        "title": "An order-of-magnitude arm displacement",
+        "text": "For an illustrative arm length L=4 km and a strain scale h=10⁻²¹, the product hL is 4×10⁻¹⁸ m. This is only a scale estimate for a favorable response, not the actual optical signal in a LIGO detector: mirror response, light storage, frequency, direction and polarization modify the measurement."
+      },
+      "boundary": "A real detector does not simply read one permanent ruler change; it is a calibrated dynamic optical instrument with frequency-dependent response and noise. The arm-length product is an intuition, not a complete interferometer transfer function or an argument for a detection claim."
+    },
+    {
+      "id": "monte-carlo-methods",
+      "opening": "Imagine you want to estimate what fraction of a large hypothetical binary population survives a supernova. You cannot evolve every conceivable combination of masses and kicks. Instead, you draw a finite collection of initial conditions from specified distributions, run a model on each, and use the outcomes as a sample.",
+      "steps": [
+        {
+          "heading": "Define the population before drawing numbers",
+          "text": "A random sample is only meaningful relative to a chosen probability model. Specify distributions for each variable, such as component masses, orbital separation, kick magnitude and kick direction. If you deliberately oversample rare progenitors, record the sampling design and weights rather than treating the raw simulated frequencies as the birth frequencies."
+        },
+        {
+          "heading": "Make the random experiment repeatable",
+          "text": "Use a documented pseudo-random-number generator and record its seed, software version, input distributions and filtering rules. The same seed reproduces the same toy draws with the same implementation, which is useful for debugging; it does not make the modeled physics correct or establish that one seed represents the full uncertainty."
+        },
+        {
+          "heading": "Estimate a proportion and its sampling variability",
+          "text": "For N independent Bernoulli outcomes Xᵢ∈{0,1} under simple random sampling, p̂=(∑Xᵢ)/N estimates the underlying model probability. Its estimated standard error is approximately sqrt[p̂(1−p̂)/N]. The formula assumes independent identically distributed indicator draws and ignores additional model, weighting and measurement uncertainty."
+        },
+        {
+          "heading": "Compare model assumptions without confusing noise for physics",
+          "text": "When testing two kick prescriptions, hold the physical question and relevant inputs constant while varying the prescription. Compare their outcome distributions over enough independent samples; common random numbers may help reduce Monte Carlo variation in paired designs. Report effect sizes and sampling variability before interpreting a small difference as a physical consequence."
+        }
+      ],
+      "example": {
+        "title": "A reproducible toy survival estimate",
+        "text": "Draw N=100 independent toy systems and suppose 36 meet the stipulated survival condition. Then p̂=36/100=0.36 and the plug-in standard error is sqrt(0.36×0.64/100)=0.048. Reporting 36%±4.8 percentage points as an approximate one-standard-error sampling summary does not account for the uncertainty in the selected astrophysical model or any oversampling weights."
+      },
+      "boundary": "The binomial standard-error formula is not generally correct for correlated trajectories, importance sampling, clustered draws or uncertain weights. The sample distribution models only the assumptions entered; increasing N reduces Monte Carlo noise but cannot eliminate systematic model misspecification."
+    },
+    {
+      "id": "population-weights",
+      "opening": "Imagine you deliberately simulate many rare massive binaries because those are the systems most likely to produce the mergers you care about. If you simply count simulated rows, the rare systems may look much more common than they are among genuinely forming stars. Sampling weights are the bridge between your simulation design and the target population.",
+      "steps": [
+        {
+          "heading": "Distinguish sample frequency from population frequency",
+          "text": "A simulation may draw initial states from a proposal distribution q(x) while the intended birth population follows p(x). If the support is appropriate, a standard importance weight is proportional to p(x)/q(x). The exact normalized weight convention depends on the simulation design and whether the target is an expectation, a rate or a mass-normalized yield."
+        },
+        {
+          "heading": "Keep system identifiers separate from event rows",
+          "text": "An evolutionary history can contain many rows for one binary, corresponding to wind, transfer, collapse and compact-binary stages. Counting rows as if they were independently sampled systems overweights systems with more recorded events. First identify distinct simulated binaries and define one outcome and one consistent statistical weight per system for the summary of interest."
+        },
+        {
+          "heading": "Compute weighted summaries with an explicit denominator",
+          "text": "For systems i with outcome indicator Iᵢ and nonnegative population weights wᵢ, a normalized weighted fraction is p̂_w=(∑wᵢIᵢ)/(∑wᵢ). A mass-normalized formation efficiency instead requires a denominator representing formed stellar mass under the target population; ∑wᵢ alone may not have the units or normalization required."
+        },
+        {
+          "heading": "Treat uncertainty and normalization separately",
+          "text": "A highly uneven weight distribution can make the effective sample size much smaller than the number of simulated systems. One diagnostic is N_eff=(∑wᵢ)²/∑wᵢ². This is an indicator of weight concentration, not a complete uncertainty estimate; astrophysical prescription uncertainty and output-selection effects need separate study."
+        }
+      ],
+      "example": {
+        "title": "Why an unweighted fraction can be misleading",
+        "text": "Two distinct systems have outcomes I₁=1 and I₂=0 and target-population weights w₁=1 and w₂=9. The unweighted success fraction is 1/2=50%, but the normalized weighted fraction is (1×1+9×0)/(1+9)=0.10, or 10%. Neither number alone is a physical merger rate: the target birth normalization and relevant delays and detection selection are still missing."
+      },
+      "boundary": "Never assign weights without defining the sampling and target distributions. The normalized weighted fraction assumes each system’s weight represents its intended share of the target population. A physical rate per formed stellar mass and a detected-event count have different denominators and cannot be substituted for each other."
+    },
+    {
+      "id": "delay-time-distributions",
+      "opening": "Imagine a star-forming region that produces many binary progenitors in a short burst. Some compact pairs merge relatively quickly; others take billions of years. Even though all progenitors formed together, their mergers are spread across cosmic time because every surviving system has its own evolutionary and inspiral delay.",
+      "steps": [
+        {
+          "heading": "Put birth and merger on a common time axis",
+          "text": "Let t_b be a progenitor formation time and t_m its merger time. Define the delay τ=t_m−t_b, with τ≥0 under the model. State whether τ includes both stellar evolution and post-compact-object inspiral; mixing a compact-binary-only delay with a birth-to-merger delay shifts predicted merger epochs."
+        },
+        {
+          "heading": "Turn many delays into a distribution",
+          "text": "For a population capable of merging, a normalized delay-time density p(τ) specifies how the eventual merger probability is distributed across delays. If some simulated systems never merge within the adopted horizon, either account for them in an overall formation efficiency or work with an explicitly conditional density over the systems that do merge."
+        },
+        {
+          "heading": "Combine one birth cohort with its later outcomes",
+          "text": "For a single cohort born at t_b, the distribution of its merger times is the same delay distribution shifted by t_b: t_m=t_b+τ. For an extended formation history F(t), a simplified merger-rate expression is R(t)=∫₀ᵗF(t−τ)η(t−τ)p(τ|t−τ)dτ, with η representing formation-to-merger yield under the chosen population convention."
+        },
+        {
+          "heading": "Connect the distribution to observed detections",
+          "text": "Real predictions may require metallicity dependence, binary formation efficiency, comoving volume, source-to-observer time conversion and detector selection. A late merger does not prove a late progenitor birth; multiple formation histories combined with different delay distributions can lead to similar merger-rate histories."
+        }
+      ],
+      "example": {
+        "title": "Shift a concrete birth cohort",
+        "text": "Suppose 100 merger-capable binaries form at cosmic time t_b=2 Gyr and, under a toy model, exactly 30 have delay τ=1 Gyr while 70 have delay τ=4 Gyr. Their merger times are t_m=3 Gyr and t_m=6 Gyr respectively, not 2 Gyr. The two spikes are a discrete toy approximation, not a continuous inferred delay-time density."
+      },
+      "boundary": "Delay distributions depend strongly on which initial population and merger horizon were selected. A τ⁻¹-style illustrative distribution requires explicit lower and upper cutoffs before normalization, and observed cosmic rates additionally require cosmology and detection efficiency."
+    },
+    {
+      "id": "formation-efficiency",
+      "opening": "Imagine running a population-synthesis model twice, once for low-metallicity progenitors and once for higher-metallicity progenitors. In each run you get a number of compact binaries that merge within a specified horizon. What you need for a fair comparison is not the raw count but the number of qualifying systems per amount of newly formed stellar mass that your simulation represents.",
+      "steps": [
+        {
+          "heading": "Define the numerator before calculating anything",
+          "text": "Choose the event class: for example, distinct black-hole binaries that merge within a stated time horizon. A binary that appears on ten event-log rows still contributes at most one qualifying system to a simple distinct-system numerator; a wide, bound double black hole may fail the merger-within-horizon criterion."
+        },
+        {
+          "heading": "Find the physical denominator",
+          "text": "Let M_formed be the total formed stellar mass represented by the sampled birth population, including any prescribed correction for incomplete initial-mass or binary ranges. The formation efficiency η=N_merger/M_formed then has units of mergers per unit formed stellar mass. It is not dimensionless and is not automatically equal to a fraction of simulated systems."
+        },
+        {
+          "heading": "Include weights and metallicity consistently",
+          "text": "If the sample uses proposal weights, compute a consistently weighted merger yield and the corresponding represented formed mass at each metallicity. Comparing η(Z₁) with η(Z₂) requires compatible birth distributions, outcome definitions, delay horizons and sample normalization; otherwise an apparent trend may reflect different simulation designs."
+        },
+        {
+          "heading": "Do not skip the cosmic-rate and detector stages",
+          "text": "Formation efficiency answers how many merging systems arise per unit star formation under the model. To predict mergers per comoving volume per source-frame year, integrate it with cosmic star formation, birth-metallicity distributions and delay times. To predict detections, subsequently apply detector selection and observing exposure."
+        }
+      ],
+      "example": {
+        "title": "Counts alone are not efficiencies",
+        "text": "A toy low-metallicity model yields 20 qualifying mergers representing 10,000 solar masses formed, giving η_low=20/10,000=0.002 mergers per solar mass. A higher-metallicity model yields 10 representing 20,000 solar masses, giving η_high=0.0005 mergers per solar mass. The yield ratio is four in this toy comparison, although the raw counts differ by only a factor of two."
+      },
+      "boundary": "The numerical comparison is constructed for teaching, not empirical evidence that low metallicity universally produces four times as many mergers. To interpret a physical efficiency, audit the initial-mass coverage, binary fraction, birth distributions, sample weights, metallicity modeling and the exact definition of a successful merger."
+    },
+    {
+      "id": "bayesian-inference",
+      "opening": "Imagine an observed gravitational-wave signal that could have come from binaries with several plausible masses. You already have an astrophysical model specifying which masses are common, and you have a detector model telling you how well each candidate mass predicts the measured data. Bayesian inference combines the prior assumptions with the data likelihood.",
+      "steps": [
+        {
+          "heading": "Specify a parameter and what counts as data",
+          "text": "Let θ denote an unknown source parameter or a vector of masses, spins and distance, and d denote calibrated detector data. A likelihood p(d|θ) describes how probable the data would be under θ and the specified noise and waveform models. It is not a probability distribution over θ until you include a prior and normalize appropriately."
+        },
+        {
+          "heading": "Use the prior explicitly rather than hiding it",
+          "text": "A prior p(θ) encodes assumptions about parameter values before conditioning on this particular data set. Bayes' theorem gives p(θ|d)=p(d|θ)p(θ)/p(d), where p(d)=∫p(d|θ)p(θ)dθ is the evidence for the specified model. A posterior summarizes updated uncertainty conditional on both likelihood and prior."
+        },
+        {
+          "heading": "Interpret uncertainty and sensitivity",
+          "text": "A narrow posterior interval can result from informative data, a restrictive prior or both. Test sensitivity to defensible prior alternatives when drawing conclusions. Distinguish the posterior distribution for one event's parameters from a hierarchical population distribution whose hyperparameters describe a collection of events."
+        },
+        {
+          "heading": "Connect posterior samples to population research",
+          "text": "A population model may reuse individual event samples, but the event-level priors used to generate those samples must be accounted for appropriately. A detected-event population likelihood also needs selection normalization; multiplying event posteriors without handling their priors and detection process can double-count assumptions or misrepresent the intrinsic population."
+        }
+      ],
+      "example": {
+        "title": "A discrete prior and likelihood update",
+        "text": "Suppose a toy model has two possible states A and B with prior probabilities P(A)=0.2 and P(B)=0.8. An observation is three times as likely under A as under B: P(d|A)=0.6 and P(d|B)=0.2. Then P(A|d)=0.6×0.2/[0.6×0.2+0.2×0.8]=0.12/0.28≈0.429. The data moved A's probability from 20% to about 42.9%, but did not make A certain."
+      },
+      "boundary": "Bayesian probabilities are conditional on the stated hypothesis space, likelihood and prior. The discrete toy example is not a calibrated interpretation of detector strain or a proof of a physical formation channel; real analyses must handle waveform uncertainty, noise calibration and selection."
+    },
+    {
+      "id": "reproducible-workflows",
+      "opening": "Imagine opening a colleague's population-synthesis plot showing a steep decline in merger yield at high metallicity. You want to know whether you could obtain the same figure from the same inputs, and whether you could change one model assumption without accidentally changing five others. Reproducibility begins with knowing exactly what produced every data point.",
+      "steps": [
+        {
+          "heading": "Record the complete computational provenance",
+          "text": "For each run, record software and dependency versions, relevant model-prescription switches, random seeds, input-file identifiers, sample selection, units, analysis scripts and the environment needed to execute them. A screenshot of a plot or a link to an unspecified repository revision cannot establish which code and inputs created a result."
+        },
+        {
+          "heading": "Track one system through the data model",
+          "text": "Before calculating rates, inspect the output schema and confirm what one row means. Event histories can have multiple entries per simulated binary, while outcome tables may have one row per system. Define distinct-system identifiers, join keys, sampling weights, formation metallicity and the field used to determine the merger outcome."
+        },
+        {
+          "heading": "Reproduce a baseline before modifying assumptions",
+          "text": "Run the documented baseline with the available authorized inputs, recover a target quantity within stated numerical and stochastic tolerance, then change one independent variable at a time. Compare both raw diagnostics and normalized outcomes; any apparent physical trend could otherwise be a change in selection, data joins or units."
+        },
+        {
+          "heading": "Describe discrepancies instead of making them vanish",
+          "text": "If your result differs from the documented reference, retain the discrepancy. Check units, missing values, seeds, version drift, event selection, binning, weighting and plotting code. Present a short evidence trail identifying which changes alter the result and which remain unexplained."
+        }
+      ],
+      "example": {
+        "title": "A single duplicate-ID bug can double a yield",
+        "text": "Suppose an event log has IDs [11,11,11,19,23] and only system 11 meets the specified success condition. Counting successful rows gives 3, but counting successful distinct systems gives 1 out of 3 represented systems. A reproducible analysis should document the unit of observation and show how the data were deduplicated before normalizing by the represented formed stellar mass."
+      },
+      "boundary": "Reproducing a published or documented figure does not validate the underlying astrophysical model. Licensed datasets and authorized lab notebooks must be handled under their own access conditions. The Atlas cannot infer file schema, run COMPAS or certify reproducibility from a hypothetical example."
+    },
+    {
+      "id": "cosmic-star-formation",
+      "opening": "Imagine looking backward through cosmic history and finding that the Universe formed stars at different rates at different epochs. A compact binary merging at one redshift may have come from stars born much earlier. To predict how many merging systems originate at each epoch, you need a formation history rather than a single present-day star-formation number.",
+      "steps": [
+        {
+          "heading": "Define what is being measured over cosmic time",
+          "text": "A cosmic star-formation-rate density ρ̇★(z) commonly denotes stellar mass formed per unit comoving volume per unit source-frame time at redshift z. Its units may be solar masses per year per cubic comoving megaparsec. That number differs from a galaxy's own star-formation rate because it describes the summed activity of a cosmic population per volume."
+        },
+        {
+          "heading": "Separate birth rate from compact-binary formation efficiency",
+          "text": "A unit of newly formed stellar mass does not guarantee a compact binary will form and merge. Stellar initial masses, binary fraction, separation, metallicity and evolutionary prescriptions all influence how many successful merger-capable systems emerge. A formation efficiency per formed mass connects the cosmic birth history to the population model's yield."
+        },
+        {
+          "heading": "Account for the time between birth and merger",
+          "text": "Each successful binary has a formation-to-merger delay, so mergers observed at one cosmic epoch receive contributions from several earlier birth epochs. A simple convolution of the formation history with a delay-time density illustrates this shift; a metallicity-dependent model integrates the birth-metallicity distribution at each formation epoch as well."
+        },
+        {
+          "heading": "Convert the intrinsic merger history into observations",
+          "text": "An intrinsic comoving merger-rate density has units of mergers per comoving volume per source-frame time. Predicted detector counts need cosmological volume, the source-to-observer time factor, the observation duration and sensitivity to binary parameters; a direct comparison between a plotted cosmic star-formation curve and a detected-event histogram misses these transformations."
+        }
+      ],
+      "example": {
+        "title": "A deliberately discrete formation-to-merger example",
+        "text": "A toy volume forms 1000 solar masses of stars at cosmic time 3 Gyr and 2000 solar masses at 6 Gyr. Suppose one merging compact binary forms per 1000 solar masses in each cohort and all such systems merge after a fixed 4-Gyr delay. The model produces one merger at 7 Gyr and two at 10 Gyr. This toy is a delayed accounting exercise, not a claim about actual cosmic star-formation rates or continuous merger-rate densities."
+      },
+      "boundary": "Published cosmic star-formation reconstructions depend on luminosity conversion, dust attenuation, stellar initial-mass functions and survey selection, among other choices. The rate density, cosmic-time/redshift conversion and detector selection must use mutually consistent cosmological and population conventions."
+    },
+    {
+      "id": "mass-transfer-stability",
+      "opening": "Picture a donor star that has just begun losing material through its Roche-lobe boundary. There are two competing responses: the star itself changes radius as mass is removed, and the size of the gravitational region confining it also changes as mass ratio and orbit evolve. The difference between those responses can decide whether overflow settles down or accelerates.",
+      "steps": [
+        {
+          "heading": "Track donor-radius and Roche-radius changes separately",
+          "text": "Let R_d be the donor's radius and R_L its volume-equivalent Roche radius. Define logarithmic responses ζ_d=dlnR_d/dlnM_d and ζ_L=dlnR_L/dlnM_d for a specified mass-transfer timescale and orbital prescription. Because the donor is losing mass, dlnM_d is negative; the sign of a radius response must be interpreted with that negative change in mind."
+        },
+        {
+          "heading": "Derive the local stability comparison",
+          "text": "Define overfill by the logarithmic ratio D=ln(R_d/R_L). For a small donor mass change, dD=(ζ_d−ζ_L)dlnM_d. If ζ_d>ζ_L and dlnM_d<0, the overfill decreases after the perturbation, a local stabilizing tendency under the chosen assumptions. If ζ_d<ζ_L, the donor increases its overfill and transfer may run away."
+        },
+        {
+          "heading": "Specify which stellar response you are comparing",
+          "text": "A donor's immediate adiabatic response can differ markedly from its thermal-equilibrium radius adjustment. The Roche-radius response also depends on how much material the accretor retains and the angular momentum carried away by escaping gas. Stability therefore cannot be read from mass ratio alone without defining timescale, stellar structure and mass-transfer prescription."
+        },
+        {
+          "heading": "Translate the local criterion into evolutionary possibilities",
+          "text": "An instability can lead to rapid mass loss, a common-envelope episode or a merger, but the local exponent comparison does not uniquely specify the final outcome. Stable transfer can strip a donor and modify its core and companion mass. Population-synthesis prescriptions approximate these pathways and should be tested against detailed stellar models where possible."
+        }
+      ],
+      "example": {
+        "title": "Read logarithmic radius exponents with the correct sign",
+        "text": "Take a hypothetical mass decrement dlnM_d=−0.01, donor response ζ_d=+1 and Roche response ζ_L=−1. Then dD=(1−(−1))(−0.01)=−0.02: the logarithmic overfill decreases in this local toy model. Reversing the responses to ζ_d=−1 and ζ_L=+1 gives dD=+0.02, meaning overfill increases. These values are invented to explain signs, not tabulated exponents for any particular star."
+      },
+      "boundary": "The local ζ comparison is neither a complete dynamical calculation nor a universal critical-mass-ratio formula. The stellar envelope, thermal and dynamical timescales, spin, orbital evolution and matter-loss geometry determine which response is physically appropriate."
     }
   ]
 }
