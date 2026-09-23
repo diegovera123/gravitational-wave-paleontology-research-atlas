@@ -116,7 +116,75 @@ function cosmic(){
  "Three milestones along cosmic time: birth of the progenitor stars, coalescence after a modeled delay and arrival of emitted radiation at a distant detector.",
  s,"The intrinsic merger-rate history depends on progenitor birth epochs and delay times; cosmological propagation and detector selection enter the observed count.");
 }
-const figures={wave,kick,chirp,selection,transfer,pipeline:synthesis,binary:synthesis,cosmic};
+
+function orbitalEnergy(){
+ const shape='<ellipse cx="301" cy="113" rx="234" ry="72" class="figure-orbit"/>'+
+ '<circle cx="175" cy="113" r="17" class="figure-star"/>'+
+ '<circle cx="67" cy="113" r="7" class="figure-remnant"/>'+
+ '<circle cx="535" cy="113" r="7" class="figure-remnant"/>'+
+ L(67,113,535,113,"figure-axis")+L(301,113,301,185,"figure-axis")+
+ T(301,33,"Semi-major axis a = (r_peri + r_apo)/2",'text-anchor="middle"')+
+ T(67,96,"Pericentre",'text-anchor="start"')+
+ T(535,96,"Apocentre",'text-anchor="end"')+
+ T(301,218,"At fixed masses and a: E = −G m₁ m₂ / (2a)",'text-anchor="middle"');
+ return base("An elliptical Newtonian binary orbit with pericentre, apocentre and semi-major axis",
+ "Schematic ellipse with a focus at a star and marked pericentre and apocentre. The orbital energy is determined by semi-major axis for fixed Newtonian point masses.",
+ shape,"The two stars orbit their center of mass; this drawing uses a simplified focus picture for relative motion. Equal semi-major axes imply equal Keplerian energy at fixed component masses.");
+}
+function detector(){
+ const s='<rect x="247" y="98" width="30" height="30" rx="5" class="figure-panel"/>'+
+ L(262,113,262,39,"figure-velocity")+L(262,113,464,113,"figure-velocity")+
+ '<rect x="249" y="28" width="26" height="10" rx="3" class="figure-panel"/>'+
+ '<rect x="463" y="101" width="10" height="25" rx="3" class="figure-panel"/>'+
+ '<path d="M 228 140 L 260 140 L 260 127" class="figure-flow"/>'+
+ T(262,20,"Arm Y",'text-anchor="middle"')+T(468,92,"Arm X",'text-anchor="end"')+
+ T(154,156,"Laser + readout",'text-anchor="middle"')+
+ T(330,182,"Compare returning light phases",'text-anchor="middle"')+
+ T(262,219,"Differential optical path responds to projected strain",'text-anchor="middle"');
+ return base("Simplified two-arm laser interferometer with differential optical phase readout",
+ "A laser readout connects to a central beam splitter; two perpendicular light paths terminate at suspended test masses and recombine for differential measurement.",
+ s,"The interferometer measures a calibrated differential response. Antenna orientation, storage time and frequency-dependent transfer functions are not represented here.");
+}
+function wind(){
+ let s='<circle cx="205" cy="119" r="52" class="figure-star"/>';
+ for(let i=0;i<8;i++){
+  const a=i*Math.PI/4,x1=205+60*Math.cos(a),y1=119+60*Math.sin(a),x2=205+96*Math.cos(a),y2=119+96*Math.sin(a);
+  s+=L(x1.toFixed(1),y1.toFixed(1),x2.toFixed(1),y2.toFixed(1),"figure-flow",true);
+ }
+ s+=T(205,124,"Hot star",'text-anchor="middle"')+
+ '<rect x="385" y="63" width="205" height="116" rx="12" class="figure-panel"/>'+
+ T(401,90,"Photon momentum → ions")+T(401,117,"Outflow carries mass away")+T(401,145,"Ṁ_loss = −dM_star/dt")+
+ T(205,225,"Schematic line-driven outflow",'text-anchor="middle"');
+ return base("Line-driven stellar wind schematic with radiation transferring momentum to atmospheric matter",
+ "A hot luminous star is surrounded by outward arrows representing radiatively driven mass loss; a note shows the positive loss-rate convention.",
+ s,"Atmospheric spectral-line interactions can accelerate outflow. This is not a wind hydrodynamics solution or a universal metallicity scaling.");
+}
+function weights(){
+ let s=T(22,25,"Two distinct simulated systems: one outcome each");
+ for(const [i,y,weight,success] of [[0,74,1,true],[1,143,9,false]]){
+  s+='<circle cx="44" cy="'+y+'" r="10" class="'+(success?"figure-class-a":"figure-class-b")+'"/>'+
+   T(64,y+4,"System "+(i+1)+(success?" · success":" · no success"))+
+   '<rect x="296" y="'+(y-10)+'" width="'+(weight*26)+'" height="20" rx="5" class="'+(success?"figure-class-a":"figure-class-b")+'"/>'+
+   T(545,y+4,"w = "+weight,'text-anchor="end"');
+ }
+ s+=T(305,207,"Raw success: 1/2 · weighted success: 1/10",'text-anchor="middle"');
+ return base("Why sampling weights change a population summary",
+ "Two simulated systems have equal raw sample frequency but population weights one and nine. The successful system has weight one; the weighted fraction is one tenth.",
+ s,"A raw count of distinct sampled systems and a target-population weighted fraction answer different questions; neither alone defines a merger rate.");
+}
+function bayesian(){
+ let s=T(55,30,"Prior for A: 0.20")+T(340,30,"Posterior for A: 0.43")+
+ '<rect x="55" y="60" width="84" height="94" rx="5" class="figure-class-a"/>'+
+ '<rect x="340" y="60" width="180" height="94" rx="5" class="figure-class-a"/>'+
+ T(55,188,"Likelihood ratio A:B = 3:1")+
+ L(160,107,306,107,"figure-link",true)+
+ T(310,219,"Posterior depends on both prior and likelihood",'text-anchor="middle"');
+ return base("A discrete Bayesian update from prior to posterior probability for one hypothesis",
+ "An illustrative two-hypothesis example: A has prior 0.2; evidence three times as likely under A as under B increases its posterior to approximately 0.429.",
+ s,"Bayes' theorem updates a stated hypothesis model. The bar areas are qualitative indicators of a numerical toy example, not measured astrophysical probabilities.");
+}
+
+const figures={wave,kick,chirp,selection,transfer,pipeline:synthesis,binary:synthesis,cosmic,orbitalEnergy,detector,wind,weights,bayesian};
 function render(kind){return (figures[kind]||synthesis)();}
 root.AtlasScientificFigures={render,figures};
 })(typeof window!=="undefined"?window:globalThis);
