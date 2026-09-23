@@ -252,5 +252,73 @@
         "Limits of simple inverse weighting stated"
       ]
     }
+  ],
+  "relationships": [
+    {
+      "from": "orbital-energy",
+      "to": "supernova-kicks",
+      "kind": "prerequisite",
+      "why": "Orbital binding energy provides the post-explosion bound/unbound criterion."
+    },
+    {
+      "from": "metallicity",
+      "to": "stellar-winds",
+      "kind": "causal",
+      "why": "Metallicity can change metal-line-driven wind strength under otherwise comparable massive-star conditions."
+    },
+    {
+      "from": "stellar-winds",
+      "to": "compact-remnants",
+      "kind": "causal",
+      "why": "Stellar-wind mass loss changes the pre-collapse mass budget and can affect remnant masses in a specified model."
+    },
+    {
+      "from": "roche-lobe",
+      "to": "mass-transfer",
+      "kind": "prerequisite",
+      "why": "Filling an effective Roche boundary provides a geometric condition for overflow."
+    },
+    {
+      "from": "mass-transfer-stability",
+      "to": "common-envelope",
+      "kind": "causal",
+      "why": "In some binary configurations unstable transfer can initiate common-envelope evolution."
+    },
+    {
+      "from": "supernova-kicks",
+      "to": "compact-binary-formation",
+      "kind": "causal",
+      "why": "Natal kicks change post-collapse relative velocity, survival and orbital elements, conditional on mass loss and kick orientation."
+    },
+    {
+      "from": "chirp-mass",
+      "to": "gravitational-waveforms",
+      "kind": "application",
+      "why": "Chirp mass enters the leading-order frequency evolution and phase of a quasi-circular inspiral waveform."
+    },
+    {
+      "from": "monte-carlo-methods",
+      "to": "binary-population-synthesis",
+      "kind": "application",
+      "why": "Sampling initial binaries allows population synthesis to approximate distributions of evolutionary outcomes."
+    },
+    {
+      "from": "population-weights",
+      "to": "formation-efficiency",
+      "kind": "application",
+      "why": "A formation-efficiency estimate must account for the sampled population's weights and normalization."
+    },
+    {
+      "from": "cosmic-star-formation",
+      "to": "cosmic-merger-rates",
+      "kind": "causal",
+      "why": "Earlier star formation contributes to mergers after the modeled formation-to-merger delay distribution."
+    },
+    {
+      "from": "detector-selection-effects",
+      "to": "population-inference",
+      "kind": "prerequisite",
+      "why": "Selection-aware normalization is required when inferring intrinsic properties from a detected catalog."
+    }
   ]
 }
