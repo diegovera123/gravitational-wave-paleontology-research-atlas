@@ -40,7 +40,7 @@ function population(x={}){
   const f=.05+.45*rand(),k=1.25*rand(),angle=360*rand()-180,res=kick({f,k,angle});
   const yes=res.bound===true&&res.a<=2;
   if(res.bound===false)unbound++;else if(yes)candidate++;else wide++;
-  if(id<=25)rows.push({id,f:Number(f.toFixed(3)),k:Number(k.toFixed(3)),angle:Number(angle.toFixed(1)),energy:Number(res.energy.toFixed(3)),candidate:yes});
+  rows.push({id,f:Number(f.toFixed(3)),k:Number(k.toFixed(3)),angle:Number(angle.toFixed(1)),energy:Number(res.energy.toFixed(3)),candidate:yes});
  }
  const p=candidate/n;
  return {n,seed,candidate,unbound,wide,p,binomialSE:Math.sqrt(p*(1-p)/n),rows,
