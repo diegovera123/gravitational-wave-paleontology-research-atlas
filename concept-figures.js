@@ -119,7 +119,7 @@ function cosmic(){
 
 function orbitalEnergy(){
  const shape='<ellipse cx="301" cy="113" rx="234" ry="72" class="figure-orbit"/>'+
- '<circle cx="175" cy="113" r="17" class="figure-star"/>'+
+ '<circle cx="78" cy="113" r="10" class="figure-star"/>'+
  '<circle cx="67" cy="113" r="7" class="figure-remnant"/>'+
  '<circle cx="535" cy="113" r="7" class="figure-remnant"/>'+
  L(67,113,535,113,"figure-axis")+L(301,113,301,185,"figure-axis")+
