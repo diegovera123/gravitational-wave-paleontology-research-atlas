@@ -11,7 +11,7 @@ const CHAPTERS=[
  {id:"research-tools",name:"Foundations & research tools",macros:["calculus","research-practice"],color:"#b49bf0"}
 ];
 const esc=value=>String(value??"").replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
-function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson,hasPractice=()=>false,startPractice=()=>{}}){
+function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],relationData=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson,hasPractice=()=>false,startPractice=()=>{}}){
  if(!host)throw Error("3D constellation mount missing");
  const $=sel=>host.querySelector(sel);
  const canvas=$("#constellation-canvas"),detail=$("#constellation-detail"),shade=$("#constellation-detail-shade"),choices=$("#constellation-choices");
@@ -53,6 +53,25 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
    const nodes=[position(centerId,centerName,"center",color,0,1,0,true),
      ...items.map((item,i)=>position(item.id,item.name,item.type,item.color,i,items.length,radius))];
    const links=items.map(item=>({source:centerId,target:item.id,type:"containment"}));
+   if(stage==="topic"){
+     const visible=new Set(items.map(item=>item.id)),mapped=new Set();
+     // Containment edges are never described as prerequisite or causal relationships.
+     for(const relation of relationData){
+       if(visible.has(relation.from)&&visible.has(relation.to)){
+         links.push({source:relation.from,target:relation.to,type:relation.kind,explanation:relation.why});
+         mapped.add(relation.from+"|"+relation.to);
+       }
+     }
+     for(const concept of concepts){
+       if(!visible.has(concept.id))continue;
+       for(const e of concept.prerequisites||[]){
+         const id=e.id+"|"+concept.id;
+         if(e.kind==="necessary"&&visible.has(e.id)&&!mapped.has(id)){
+           links.push({source:e.id,target:concept.id,type:"prerequisite",explanation:"This concept is listed as necessary background for "+concept.title+"."});
+         }
+       }
+     }
+   }
    return {nodes,links,items};
  }
  function description(){
@@ -168,6 +187,10 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
      esc(byConcept.get(edge.id).title)+' ↗</button>').join("");
    const relatedSection=(title,edges)=>edges.length?
      '<section class="concept-connection-group"><h4>'+title+'</h4><div class="constellation-related-list">'+links(edges)+'</div></section>':"";
+   const scientific=relationData.filter(e=>e.from===id||e.to===id).map(e=>
+     '<div class="scientific-relation"><span class="scientific-relation-kind">'+esc(e.kind)+'</span>'+
+     '<button type="button" class="constellation-related" data-related="'+esc(e.from===id?e.to:e.from)+'">'+
+     esc(byConcept.get(e.from).title)+" → "+esc(byConcept.get(e.to).title)+' ↗</button><p>'+esc(e.why)+'</p></div>').join("");
    const referenceList=references.map(ref=>
      '<a href="'+esc(safeUrl(ref.url))+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title||ref.citation)+' ↗</a>').join("")+
      (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Open '+esc(concept.title)+' reference ↗</a>':"");
@@ -190,6 +213,7 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
       relatedSection("Necessary background",necessary)+
       relatedSection("Useful context",useful)+
       relatedSection("What this helps you learn next",downstream.map(x=>({id:x.id})))+
+      (scientific?'<h4>Why these scientific relationships matter</h4><div class="scientific-relations">'+scientific+'</div>':"")+
       (!necessary.length&&!useful.length&&!downstream.length?'<p>No other concept connections have been mapped here yet.</p>':"")+
       '</section>'+
       '<section class="concept-unit-section concept-unit-resources" aria-labelledby="concept-resources-title">'+
@@ -243,8 +267,9 @@ function mount({host,macros,topics,concepts,locationByConcept,researchSources=[]
        .nodeColor(n=>n.color)
        .nodeVal(n=>n.type==="center"?95:n.type==="chapter"?56:n.type==="macro"?45:n.type==="topic"?32:17)
        .nodeLabel(n=>n.name)
-       .linkColor(()=>"rgba(151,180,229,.38)").linkWidth(1.3)
-       .linkDirectionalParticles(2).linkDirectionalParticleWidth(1.2)
+       .linkColor(l=>l.type==="causal"?"#dcb1d2":l.type==="prerequisite"?"#b3bbff":l.type==="application"?"#83d6c5":"rgba(151,180,229,.38)")
+       .linkWidth(l=>l.type==="containment"?1.3:2.25)
+       .linkDirectionalParticles(l=>l.type==="causal"?2:0).linkDirectionalParticleWidth(1.2)
        .linkDirectionalParticleSpeed(.0019)
        .onNodeClick(n=>navigate(n))
        .onNodeHover(n=>{canvas.style.cursor=n?"pointer":"grab";});
