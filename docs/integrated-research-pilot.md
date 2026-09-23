@@ -1,0 +1,30 @@
+# Integrated research-learning pilot
+
+## Navigation and intended outcome
+The Atlas still uses Home, Knowledge Graph and Practice only. An additional internal experience **inside Practice** now links six scientific stages: (1) binary orbits and energy; (2) stellar and binary interactions; (3) supernova kicks and survival; (4) GW waveforms and chirp mass; (5) seeded toy population analysis; (6) selection-aware cosmic population inference. The pathway is optional, stage completion is **only self-marked exploration**, and no lesson/assessment is locked behind an unvalidated proficiency threshold.
+
+Each stage links to real existing concept IDs, an authored assessment track, one independently written multi-step mathematical or research-reasoning exercise with a revealable solution and rubric, a research investigation prompt and an intended artifact. The existing authored question bank has not been multiplied by generic templates or fabricated claims of scientific mastery. The 100-stage self-check prompts and established 15 tracks remain in Practice. The Knowledge Graph remains a continuous conceptual reader.
+
+## Six transparent interactive models
+The separate `research-models.js` implements reusable pure functions; `research-experience.js` binds sliders, dynamic model-dependent SVGs and displayed quantities:
+
+- **Natal kicks:** dimensionless pre-event circular relative orbit r=(1,0), v=(0,1), GM_before=1, frozen separation, instantaneous post-collapse mass loss and vector kick. Computes specific orbital energy, bound/unbound classification, eccentricity from specific angular momentum and bound semi-major axis. Does not include ejecta drag, finite-duration collapse or collision.
+- **Chirp:** leading quasi-circular point-mass source-frame relations for chirp mass, dominant quadrupole frequency, df/dt and formal leading-order inspiral time; not valid as a full strong-field merger or waveform inference model.
+- **Common envelope:** the elementary α-energy inequality only. Meeting the budget is not a proof of ejection or survival.
+- **Roche-lobe geometry:** the Eggleton approximation for an idealized circular synchronized binary. Geometric overfilling does not decide mass-transfer stability.
+- **Synthetic population:** seeded Park–Miller pseudorandom generator draws arbitrary unitless kick and mass-loss parameters and applies the simplified two-body impulse model. A deliberately arbitrary cut a≤2 labels close bound *toy candidates*. All unique system records can be exported to CSV with model provenance and seed. The output is **not COMPAS**, stellar evolution, physically sampled formation efficiency, actual coalescence time or detector prediction.
+- **Selection:** expected counts N_detected=N_intrinsic p_det for two synthetic classes; does not replace a real GW sensitive spacetime-volume calculation or hierarchical likelihood.
+
+All visualizations distinguish schematic explanations from measured data and give accessible textual descriptions. Model limits are displayed alongside every result. Increasing a parameter is not equivalent to inferring an empirical causal law.
+
+## Scientific links and reading
+The graph still has distinct containment edges. A small explicitly written set of physics links is additionally typed prerequisite, causal or application, shown only when both nodes occur in the visible topic. The concept reader explains each mapped link in text; an unlabeled or arbitrary correlation is never silently converted to a scientific causal edge. The research pathway sequences **already-listed public sources** with broad questions to ask while reading. It does not assert checked page numbers or invent hundreds of hand-verified papers. Existing on-demand OpenAlex discovery remains uncurated.
+
+## Learner evidence and research notebook
+An evidence display aggregates actual correctness/attempt counts for existing authored adaptive items by conceptual, quantitative, causal and model-critique components. Due flags reuse the existing explicitly heuristic review schedule. These are *not* psychometrically calibrated ability scores, real grades, forecasts of memory, research qualifications or mastery decisions. The research notebook allows a question, testable hypothesis, input/provenance list, reproducible method, results, uncertainty/alternatives and next investigation. It is saved only in the user's browser if local storage is available and can be exported to Markdown. It cannot run Python/COMPAS, retrieve or submit any connected notebook, check the written work or publish scientific results.
+
+## Research-group bridge
+The first stage suggests reflecting on the group's own introductory material; the population stage suggests running any official notebook under **the group's own supplied instructions** and comparing its data provenance to the Atlas's transparent toy model. No private lab material is copied or accessed. These are *independent, optional study suggestions*, not RAKIURA-endorsed onboarding or an assertion of access to a lab environment.
+
+## Verification and remaining work
+GitHub Actions runs `scripts/test_research_experience.mjs` alongside existing curriculum, diagnostic, adaptive-bank, graph, scientific-diagram, full-lesson and app-integration regressions. Tests cover scientific toy invariants, known limit cases, fixed-seed repeatability, source and relation mappings, valid stage order, existing three-top-level-section navigation, local notebook stage persistence and direct concept/practice routing. Mocked DOM tests are not a substitute for browser interaction, keyboard/screen-reader evaluation, mobile/WebGL inspection, expert checking of scientific figures and numerical assumptions, or external empirical validity. Scaling all 133 concepts to long expert-authored lessons, calibrating a learner model, building actual COMPAS/HDF5 post-processing with authorized data and curating hundreds of papers require separate substantive research and editorial work.
