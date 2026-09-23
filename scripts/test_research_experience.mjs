@@ -30,7 +30,7 @@ const p=M.population({n:100,seed:42}),p2=M.population({n:100,seed:42});
 assert.equal(p.candidate+p.unbound+p.wide,100);
 assert.deepEqual(JSON.parse(JSON.stringify(p.rows)),JSON.parse(JSON.stringify(p2.rows)),"Same seed reproduces synthetic records");
 assert.notDeepEqual(JSON.parse(JSON.stringify(p.rows)),JSON.parse(JSON.stringify(M.population({n:100,seed:43}).rows)));
-assert.equal(p.rows.length,25);assert.ok(/not|Not/.test(p.caveat),"Toy outcomes do not claim real simulated binaries");
+assert.equal(p.rows.length,100,"Every synthetic system is retained for reproducible export");assert.ok(/not|Not/.test(p.caveat),"Toy outcomes do not claim real simulated binaries");
 const units=[{id:"unit",objectives:[{id:"a",component:"conceptual"},{id:"b",component:"quantitative"}]}];
 const now=1_000_000_000;
 const e=M.evidence([{unitId:"unit",objectiveId:"a",correct:false,at:now-2*86400000},{unitId:"unit",objectiveId:"b",correct:true,at:now}],units,now);
@@ -43,6 +43,7 @@ let instance=X.mount({host,data:journey,concepts:conceptData.concepts,sources:so
  model:M,storage,getEvidence:()=>e,openConcept:id=>selectedConcept=id,openPractice:id=>openedPractice=id});
 assert.match(host.innerHTML,/FIELD-TO-RESEARCH PATHWAY/);
 assert.match(host.innerHTML,/INTERACTIVE PHYSICS LAB/);
+assert.match(host.innerHTML,/role="img"/,"Live laboratory renders a model-dependent explanatory SVG");
 assert.match(host.innerHTML,/BROWSER-LOCAL RESEARCH WORKSPACE/);
 assert.match(host.innerHTML,/CURATED READING SEQUENCE/);
 assert.match(host.innerHTML,/RESEARCH REASONING/);
