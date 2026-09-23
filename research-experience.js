@@ -141,8 +141,8 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   return visualization(m)+'<div class="research-results">'+cells.map(([name,value])=>'<div><span>'+esc(name)+'</span><strong>'+esc(value)+'</strong></div>').join("")+'</div>'+
    '<p class="research-caveat">'+esc(m.caveat)+'</p>'+
    (lab==="population"?'<details><summary>Inspect the first 25 synthetic system records</summary><pre class="research-data">'+
-    esc(["id,synthetic_mass_lost,kick,kick_angle_deg,epsilon,toy_candidate",...m.rows.map(r=>[r.id,r.f,r.k,r.angle,r.energy,r.candidate].join(","))].join("\n"))+
-    '</pre><p class="research-caveat">These rows were generated in your browser, not imported from COMPAS or a laboratory dataset.</p></details>':"");
+    esc(["id,synthetic_mass_lost,kick,kick_angle_deg,epsilon,toy_candidate",...m.rows.slice(0,25).map(r=>[r.id,r.f,r.k,r.angle,r.energy,r.candidate].join(","))].join("\n"))+
+    '</pre><p class="research-caveat">These rows were generated in your browser, not imported from COMPAS or a laboratory dataset.</p></details><button type="button" class="research-export-data" data-action="export-toy">Export all synthetic system rows (.csv) ↓</button>':"");
  }
  function labView(){
   return '<section class="research-module research-lab"><div class="research-section-head"><span class="lesson-kicker">INTERACTIVE PHYSICS LAB</span><h3>Change an assumption. Inspect the consequence.</h3></div>'+
@@ -202,6 +202,16 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   else if(t.dataset.concept){openConcept?.(t.dataset.concept);}
   else if(t.dataset.action==="practice"){openPractice?.(stageData().practiceConceptId);}
   else if(t.dataset.action==="done"){draft.done=draft.done.includes(stage)?draft.done.filter(id=>id!==stage):[...draft.done,stage];persist();render();}
+  else if(t.dataset.action==="export-toy"&&lab==="population"){
+   const m=model.population(draft.params.population);
+   const csv=["# Synthetic, educational, dimensionless impulse model; NOT COMPAS or real lab data",
+    "# seed="+m.seed+", distinct_systems="+m.n+", classification=bound and post-event a<=2 (toy)",
+    "system_id,synthetic_mass_lost,kick_norm,kick_angle_deg,post_event_specific_energy,toy_candidate",
+    ...m.rows.map(r=>[r.id,r.f,r.k,r.angle,r.energy,r.candidate].join(","))].join("\n");
+   try{const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+    const a=document.createElement("a");a.href=url;a.download="synthetic-binary-toy-seed-"+m.seed+".csv";a.click();URL.revokeObjectURL(url);
+   }catch{const status=host.querySelector("#research-save-status");if(status)status.textContent="Synthetic CSV export unavailable. Copy the preview data if needed.";}
+  }
   else if(t.dataset.action==="export"){
    const lines=["# Research investigation · "+stageData().name,"","Educational self-study notes; not validated research data.",""];
    for(const k of fields)lines.push("## "+labels[k],"",draft.notes[stage]?.[k]||"Not recorded.","");
