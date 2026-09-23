@@ -21,6 +21,8 @@
   <script defer src="concept-figures.js"></script>
   <script defer src="concept-insight.js"></script>
   <script defer src="constellation.js"></script>
+  <script defer src="research-models.js"></script>
+  <script defer src="research-experience.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -198,6 +200,7 @@
             <button id="constellation-reset" class="constellation-quiet" type="button">Recenter ↗</button>
           </div>
           <p class="constellation-hint">Drag to rotate · Scroll to zoom · Click a sphere to open it</p>
+          <div class="research-edge-legend" aria-label="Knowledge graph edge meanings"><span>Cluster grouping</span><span class="edge-prerequisite">Prerequisite</span><span class="edge-causal">Physical influence</span><span class="edge-application">Application</span><small>Scientific links appear between concepts when mapped, not as mastery scores.</small></div>
         </div>
         <div class="constellation-navigation">
           <h3 id="constellation-prompt">Explore a cluster</h3>
@@ -272,6 +275,7 @@
         <p>Work through connected concepts, calculations, physical mechanisms and model critique across the entire gravitational-wave paleontology research pipeline.</p>
         <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading research practice tracks…</p>
       </header>
+      <section id="research-experience" aria-label="Connected research learning pathway"><p>Preparing the six-stage research pathway…</p></section>
       <section class="practice-library" aria-labelledby="practice-library-title">
         <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice track</h3><span>Concepts · calculations · causal reasoning · model critique</span></div>
         <div class="practice-filters"><label for="practice-area-filter">Research area</label><select id="practice-area-filter"><option value="all">All areas</option></select><label for="practice-search">Find a track</label><input id="practice-search" type="search" placeholder="e.g. cosmic rates, orbits, selection"></div>

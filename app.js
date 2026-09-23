@@ -18,7 +18,7 @@ let learningUnits=new Map(), practiceUnits=new Map(), practiceByConcept=new Map(
 let practiceArea="all",practiceQuery="";
 const quizSessions=new Map();
 let adaptiveItems=[], adaptiveHistory=[], adaptiveStorageAvailable=true;
-let activeView="home", diagnosticController=null, guideController=null, focusedHome=null, constellation=null;
+let activeView="home", diagnosticController=null, guideController=null, focusedHome=null, constellation=null, researchController=null;
 const PROGRESS_KEY="research-atlas-studied-v1";
 const ONBOARDING_KEY="research-atlas-onboarding-seen-v1";
 let studiedIds=new Set(), progressAvailable=true;
@@ -589,7 +589,7 @@ function answerAdaptiveQuiz(choice){
  const record={unitId:session.unitId,itemId:item.id,objectiveId:item.objectiveId,difficulty:item.difficulty,
    correct:choice===item.correctIndex,at:Date.now()};
  session.results.push(record);adaptiveHistory.push(record);
- saveAdaptiveHistory();updateReviewBadge();renderPracticeHub();renderAdaptivePanel();
+ saveAdaptiveHistory();updateReviewBadge();renderPracticeHub();renderAdaptivePanel();researchController?.refresh();
 }
 function renderPracticeObjectives(unit,session){
  const host=$("#practice-objectives");if(!host)return;
@@ -1008,12 +1008,15 @@ async function initialise() {
       fetch("knowledge-graph/adaptive-items.json"),
       fetch("knowledge-graph/practice-sets.json"),
       fetch("knowledge-graph/deep-explanations.json"),
+      fetch("knowledge-graph/research-journey.json"),
       fetch("knowledge-graph/diagnostic-questions.json")
     ]);
     if(responses.some(r=>!r.ok))throw Error("A curriculum or navigation file failed to load.");
-    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,deepData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
+    const [curriculum,sources,navigation,questionsData,unitsData,adaptiveData,practiceData,deepData,journeyData,diagnosticData]=await Promise.all(responses.map(r=>r.json()));
     if(curriculum.schemaVersion!==4 || navigation.schemaVersion!==1)throw Error("Unsupported curriculum/navigation schema.");
     concepts=curriculum.concepts; researchSources=sources.sources||[];atlas=navigation;
+    if(!window.AtlasResearchExperience||!window.AtlasResearchModels)throw Error("The research-learning modules did not load.");
+    window.AtlasResearchExperience.validate(journeyData,concepts,researchSources);
     if(!window.AtlasConceptInsight)throw Error("The concept explanation module did not load.");
     window.AtlasConceptInsight.load(deepData,concepts);
     if(questionsData.schemaVersion!==1 || !Array.isArray(questionsData.questions))throw Error("Unsupported research question data.");
@@ -1072,6 +1075,14 @@ async function initialise() {
       markOnboardingSeen();
     }
     renderDashboard();renderFeaturedUnits();updateReviewBadge();renderPracticeFilters();renderPracticeHub();mountMissionGuide();mountFocusedHome(diagnosticData.questions);
+    researchController=window.AtlasResearchExperience.mount({
+      host:$("#research-experience"),data:journeyData,concepts,sources:researchSources,
+      model:window.AtlasResearchModels,
+      openConcept:id=>{setActiveView("explore",{scroll:false});constellation?.showConcept(id);},
+      openPractice:id=>openConceptPractice(id),
+      getEvidence:()=>window.AtlasResearchModels.evidence(adaptiveHistory,[...practiceUnits.values()]),
+      storage:window.localStorage
+    });
     // The full Explorer is now one progressive 3D constellation, not the legacy
     // structured-map / sidebar workspace. The legacy data engine remains for
     // research, deep links, the learning studio and old progress records.
@@ -1079,6 +1090,7 @@ async function initialise() {
     if(window.AtlasConstellation){
       constellation=window.AtlasConstellation.mount({
         host:$("#constellation-shell"),macros:atlas.macros,topics:atlas.topics,
+        relationData:journeyData.relationships,
         concepts,locationByConcept,researchSources,researchQuestions,diagnosticQuestions:diagnosticData.questions,
         onConceptSelected:id=>{updateOtto();renderGraphResearchQuestions(id);},
         forceGraph:()=>typeof ForceGraph3D==="function"?ForceGraph3D():null,

@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent educational pilot pathway, not official RAKIURA onboarding and not a validated research qualification.",
+  "stages": [
+    {
+      "id": "orbit",
+      "name": "01 · Start with a real binary",
+      "question": "When is a binary gravitationally bound, and what makes its orbit change?",
+      "conceptIds": [
+        "keplerian-orbits",
+        "orbital-energy",
+        "orbital-eccentricity",
+        "orbital-perturbations"
+      ],
+      "practiceConceptId": "orbital-energy",
+      "simulation": "kick",
+      "readingIds": [
+        "marchant-bodensteiner-2024",
+        "mandel-broekgaarden-2022"
+      ],
+      "researchTask": "For a bound point-mass binary, compare the orbital energies at a and 2a and explain why eccentricity affects pericentre without changing energy at fixed a.",
+      "deliverable": "A one-page orbit-energy argument, with a labeled diagram and explicit assumptions.",
+      "prior": null
+    },
+    {
+      "id": "evolution",
+      "name": "02 · Follow the progenitor stars",
+      "question": "How can interactions between two massive stars alter the compact remnants they leave?",
+      "conceptIds": [
+        "stellar-evolution",
+        "metallicity",
+        "stellar-winds",
+        "roche-lobe",
+        "mass-transfer",
+        "common-envelope"
+      ],
+      "practiceConceptId": "common-envelope",
+      "simulation": "envelope",
+      "readingIds": [
+        "marchant-bodensteiner-2024",
+        "han-2020"
+      ],
+      "researchTask": "Compare two toy mass-transfer histories and list what is needed to infer final separation. Distinguish a mass ledger from an orbital-angular-momentum budget.",
+      "deliverable": "A two-column comparison of evolutionary mechanisms and stated model limitations.",
+      "prior": "orbit"
+    },
+    {
+      "id": "remnants",
+      "name": "03 · Test compact-binary survival",
+      "question": "Can a supernova turn the same initial binary into a survivor or an unbound pair?",
+      "conceptIds": [
+        "core-collapse-supernovae",
+        "compact-remnants",
+        "supernova-kicks",
+        "compact-binary-formation"
+      ],
+      "practiceConceptId": "supernova-kicks",
+      "simulation": "kick",
+      "readingIds": [
+        "marchant-bodensteiner-2024",
+        "han-2020"
+      ],
+      "researchTask": "For fixed separation and post-explosion masses, vary kick orientation and compute specific orbital energy to classify whether a surviving binary is bound.",
+      "deliverable": "A table of toy post-supernova orbital energies with reasoning about kick direction.",
+      "prior": "evolution"
+    },
+    {
+      "id": "signals",
+      "name": "04 · Connect the merger to its waveform",
+      "question": "Why does the emitted wave chirp, and what does its phase reveal?",
+      "conceptIds": [
+        "compact-binary-inspiral",
+        "chirp-mass",
+        "gravitational-waveforms",
+        "interferometric-detectors"
+      ],
+      "practiceConceptId": "chirp-mass",
+      "simulation": "chirp",
+      "readingIds": [
+        "abbott-2016",
+        "mandel-broekgaarden-2022"
+      ],
+      "researchTask": "Derive the equal-mass chirp-mass expression and connect an increasing orbital frequency to the increasing dominant GW frequency.",
+      "deliverable": "A worked derivation that distinguishes observed detector-frame masses from source-frame masses.",
+      "prior": "remnants"
+    },
+    {
+      "id": "population",
+      "name": "05 · Model a population, not one anecdote",
+      "question": "How do sampled initial binaries become a distribution of merger candidates?",
+      "conceptIds": [
+        "monte-carlo-methods",
+        "binary-population-synthesis",
+        "simulation-outputs",
+        "population-weights",
+        "formation-efficiency",
+        "delay-time-distributions"
+      ],
+      "practiceConceptId": "binary-population-synthesis",
+      "simulation": "population",
+      "readingIds": [
+        "han-2020",
+        "compas-demos",
+        "mandel-broekgaarden-2022"
+      ],
+      "researchTask": "Generate a transparent toy sample, count distinct systems rather than event rows, record the seed and normalize a selected yield by the stated sample denominator.",
+      "deliverable": "A reproducible toy-data analysis with sampling assumptions and an uncertainty paragraph.",
+      "prior": "signals"
+    },
+    {
+      "id": "inference",
+      "name": "06 · Confront a detected population",
+      "question": "Which progenitor assumptions are constrained by detections after selection effects and cosmic delays?",
+      "conceptIds": [
+        "cosmic-star-formation",
+        "cosmic-metallicity",
+        "cosmic-merger-rates",
+        "detector-selection-effects",
+        "population-inference",
+        "reproducing-a-result"
+      ],
+      "practiceConceptId": "detector-selection-effects",
+      "simulation": "selection",
+      "readingIds": [
+        "mandel-broekgaarden-2022",
+        "abbott-2016",
+        "compas-demos"
+      ],
+      "researchTask": "Compare a two-class intrinsic population with its expected detected catalog, showing how detection efficiency changes apparent class fractions.",
+      "deliverable": "A brief research memo distinguishing formation, merger, detection and inference assumptions.",
+      "prior": "population"
+    }
+  ],
+  "problems": [
+    {
+      "id": "bound",
+      "conceptId": "orbital-energy",
+      "component": "mathematical derivation",
+      "title": "Derive the circular-binary binding-energy expression",
+      "scenario": "Two Newtonian point masses m₁ and m₂ orbit their common center of mass on a circular orbit with separation a.",
+      "task": "Starting from force balance for relative motion and the reduced mass, derive E = −Gm₁m₂/(2a). Explain which assumptions would fail during a common-envelope episode.",
+      "steps": [
+        "Write μ=m₁m₂/(m₁+m₂) for the reduced mass and M=m₁+m₂ for total mass.",
+        "Relative circular motion obeys μv_rel²/a=Gm₁m₂/a², hence v_rel²=GM/a.",
+        "K=μv_rel²/2=Gm₁m₂/(2a) and U=−Gm₁m₂/a.",
+        "Add K+U=−Gm₁m₂/(2a); a dissipative envelope can exchange orbital energy with gas."
+      ],
+      "rubric": [
+        "Correct reduced-mass treatment",
+        "Force balance and algebra shown",
+        "Energy terms and signs correct",
+        "Scope of isolated point-mass assumptions identified"
+      ]
+    },
+    {
+      "id": "kick",
+      "conceptId": "supernova-kicks",
+      "component": "causal + quantitative",
+      "title": "Compare two equal natal kicks with different directions",
+      "scenario": "In toy units, immediately after mass loss r=1, GM_final=1, and the pre-kick relative speed is 1 along the +y direction. A kick of magnitude 0.5 is applied parallel or antiparallel to the motion.",
+      "task": "Compute the new relative speed and ε=v²/2−GM/r for both cases. Classify binding and explain why magnitude alone is insufficient.",
+      "steps": [
+        "Parallel: v=1.5, so ε=1.5²/2−1=+0.125; this toy post-event orbit is unbound.",
+        "Antiparallel: v=0.5, so ε=0.5²/2−1=−0.875; this toy orbit is bound.",
+        "Separation is frozen during the instantaneous impulse; changing the kick direction changes the post-event relative kinetic energy.",
+        "To infer eccentricity also compute angular momentum from r × v and the updated gravitational parameter."
+      ],
+      "rubric": [
+        "Signs and vector directions correct",
+        "Both specific orbital energies calculated",
+        "Binding classifications justified",
+        "Impulse-model limitations stated"
+      ]
+    },
+    {
+      "id": "transfer",
+      "conceptId": "mass-transfer",
+      "component": "model critique",
+      "title": "Audit a non-conservative mass-transfer budget",
+      "scenario": "A donor of 12 M☉ loses 4 M☉, while its 6 M☉ companion accretes 3 M☉.",
+      "task": "Calculate final masses and lost mass, then explain precisely why the separation cannot be deduced from this ledger alone.",
+      "steps": [
+        "The donor ends at 8 M☉ and the accretor at 9 M☉.",
+        "One solar mass leaves the binary, so the episode is non-conservative.",
+        "The orbital response depends on angular momentum carried by lost material and other exchanges as well as on mass redistribution.",
+        "A transfer-stability conclusion additionally requires stellar structure and Roche-lobe response."
+      ],
+      "rubric": [
+        "Both final masses correct",
+        "Escaping mass accounted for",
+        "Angular momentum explicitly addressed",
+        "Onset distinguished from stability"
+      ]
+    },
+    {
+      "id": "chirp",
+      "conceptId": "chirp-mass",
+      "component": "mathematical derivation",
+      "title": "Simplify chirp mass for two equal masses",
+      "scenario": "Two compact objects have equal source-frame masses m₁=m₂=m. The chirp-mass definition is M_c=(m₁m₂)^(3/5)/(m₁+m₂)^(1/5).",
+      "task": "Derive M_c=m/2^(1/5), compute it for m=10 M☉, and state how detector-frame mass differs at redshift z.",
+      "steps": [
+        "Substitute m₁=m₂=m: numerator (m²)^(3/5)=m^(6/5).",
+        "Denominator (2m)^(1/5)=2^(1/5)m^(1/5).",
+        "Cancel powers to obtain m/2^(1/5)≈0.87055m, hence ≈8.71 M☉ for m=10 M☉.",
+        "At redshift z, the waveform constrains M_c,det=(1+z)M_c,source; this is redshift of the waveform, not physical growth of source mass."
+      ],
+      "rubric": [
+        "Powers simplified step by step",
+        "Numerical factor calculated",
+        "Units specified",
+        "Redshift-frame caveat correct"
+      ]
+    },
+    {
+      "id": "sampling",
+      "conceptId": "binary-population-synthesis",
+      "component": "procedural + statistical",
+      "title": "Distinguish event rows from distinct simulated binaries",
+      "scenario": "A toy event log contains IDs [4,4,8,8,8,10]. Only systems 8 and 10 reach the specified merger outcome, and their sampling weights are 2 and 5.",
+      "task": "Count event rows and distinct simulated systems, calculate the raw success fraction and weighted success yield, then identify which normalization is missing for a physical formation efficiency.",
+      "steps": [
+        "There are 6 recorded events but only 3 distinct sampled binaries: 4, 8 and 10.",
+        "Two out of three distinct systems succeed, giving an unweighted toy fraction 2/3.",
+        "The weighted successful-system yield is 2+5=7 arbitrary weight units.",
+        "A mass-normalized formation efficiency additionally requires the represented formed stellar mass and a consistent sampling-weight convention."
+      ],
+      "rubric": [
+        "Distinct IDs counted rather than rows",
+        "Raw success fraction correct",
+        "Weighted sum correct",
+        "Physical normalization limitation stated"
+      ]
+    },
+    {
+      "id": "selection",
+      "conceptId": "detector-selection-effects",
+      "component": "statistical inference",
+      "title": "Recover the meaning of a selection-biased catalog",
+      "scenario": "Two astrophysical classes have equal intrinsic expected counts, 100 each. A search detects class A with probability 0.8 and B with probability 0.2.",
+      "task": "Find expected observed counts, compare observed and intrinsic ratios, and explain why simply reading the detected catalog can mislead formation-channel inference.",
+      "steps": [
+        "Expected detected A=100×0.8=80 and B=100×0.2=20.",
+        "The intrinsic class ratio is 1:1, whereas the expected detected ratio is 4:1.",
+        "Detected counts must be compared to a forward prediction that includes the selection function.",
+        "An actual GW rate estimate also requires sensitive spacetime volume, observation time, measurement uncertainty and the population likelihood."
+      ],
+      "rubric": [
+        "Expected counts correct",
+        "Both ratios compared",
+        "Observation and intrinsic population separated",
+        "Limits of simple inverse weighting stated"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "orbital-energy",
+      "to": "supernova-kicks",
+      "kind": "prerequisite",
+      "why": "Orbital binding energy provides the post-explosion bound/unbound criterion."
+    },
+    {
+      "from": "metallicity",
+      "to": "stellar-winds",
+      "kind": "causal",
+      "why": "Metallicity can change metal-line-driven wind strength under otherwise comparable massive-star conditions."
+    },
+    {
+      "from": "stellar-winds",
+      "to": "compact-remnants",
+      "kind": "causal",
+      "why": "Stellar-wind mass loss changes the pre-collapse mass budget and can affect remnant masses in a specified model."
+    },
+    {
+      "from": "roche-lobe",
+      "to": "mass-transfer",
+      "kind": "prerequisite",
+      "why": "Filling an effective Roche boundary provides a geometric condition for overflow."
+    },
+    {
+      "from": "mass-transfer-stability",
+      "to": "common-envelope",
+      "kind": "causal",
+      "why": "In some binary configurations unstable transfer can initiate common-envelope evolution."
+    },
+    {
+      "from": "supernova-kicks",
+      "to": "compact-binary-formation",
+      "kind": "causal",
+      "why": "Natal kicks change post-collapse relative velocity, survival and orbital elements, conditional on mass loss and kick orientation."
+    },
+    {
+      "from": "chirp-mass",
+      "to": "gravitational-waveforms",
+      "kind": "application",
+      "why": "Chirp mass enters the leading-order frequency evolution and phase of a quasi-circular inspiral waveform."
+    },
+    {
+      "from": "monte-carlo-methods",
+      "to": "binary-population-synthesis",
+      "kind": "application",
+      "why": "Sampling initial binaries allows population synthesis to approximate distributions of evolutionary outcomes."
+    },
+    {
+      "from": "population-weights",
+      "to": "formation-efficiency",
+      "kind": "application",
+      "why": "A formation-efficiency estimate must account for the sampled population's weights and normalization."
+    },
+    {
+      "from": "cosmic-star-formation",
+      "to": "cosmic-merger-rates",
+      "kind": "causal",
+      "why": "Earlier star formation contributes to mergers after the modeled formation-to-merger delay distribution."
+    },
+    {
+      "from": "detector-selection-effects",
+      "to": "population-inference",
+      "kind": "prerequisite",
+      "why": "Selection-aware normalization is required when inferring intrinsic properties from a detected catalog."
+    }
+  ]
+}

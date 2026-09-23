@@ -12,6 +12,7 @@ const learningUnits = JSON.parse(await fs.readFile("knowledge-graph/learning-uni
 const adaptiveBank = JSON.parse(await fs.readFile("knowledge-graph/adaptive-items.json","utf8"));
 const extendedPractice = JSON.parse(await fs.readFile("knowledge-graph/practice-sets.json","utf8"));
 const deepExplanations = JSON.parse(await fs.readFile("knowledge-graph/deep-explanations.json","utf8"));
+const journeyData = JSON.parse(await fs.readFile("knowledge-graph/research-journey.json","utf8"));
 const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-questions.json","utf8"));
 
 class ElementStub {
@@ -46,7 +47,7 @@ const selectors=[
   "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-detail-shade","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
-  "#practice-summary","#practice-area-filter","#practice-search","#practice-concept-picker","#practice-open-concept","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
+  "#research-experience","#practice-summary","#practice-area-filter","#practice-search","#practice-concept-picker","#practice-open-concept","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
 for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
@@ -75,6 +76,7 @@ const responseData={
   "knowledge-graph/adaptive-items.json":adaptiveBank,
   "knowledge-graph/practice-sets.json":extendedPractice,
   "knowledge-graph/deep-explanations.json":deepExplanations,
+  "knowledge-graph/research-journey.json":journeyData,
   "knowledge-graph/diagnostic-questions.json":diagnosticBank
 };
 const stored=new Map();
@@ -95,12 +97,18 @@ vm.runInContext(await fs.readFile("concept-insight.js","utf8"),context);
 vm.runInContext(await fs.readFile("guide.js","utf8"),context);
 vm.runInContext(await fs.readFile("focus-home.js","utf8"),context);
 vm.runInContext(await fs.readFile("constellation.js","utf8"),context);
+vm.runInContext(await fs.readFile("research-models.js","utf8"),context);
+vm.runInContext(await fs.readFile("research-experience.js","utf8"),context);
 vm.runInContext(await fs.readFile("app.js","utf8"),context);
 await new Promise(resolve=>setImmediate(resolve));
 const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
 assert.equal(run('TAB_NAMES.length'),3,"Home, Knowledge Graph, and Practice are the three main destinations");
+assert.match(elements.get("#research-experience").innerHTML,/six-stage research pathway|FIELD-TO-RESEARCH PATHWAY|Follow one binary/i,"Integrated research pathway mounts inside Practice");
+assert.match(elements.get("#research-experience").innerHTML,/INTERACTIVE PHYSICS LAB/,"Research pathway contains an operational toy physics laboratory");
+assert.match(elements.get("#research-experience").innerHTML,/RESEARCH WORKSPACE/,"Research notebook is part of the same Practice experience");
+assert.equal(run("researchController.snapshot().stage"),"orbit","The research pathway starts with orbital foundations");
 assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Existing curriculum controller stays available for deep links");
 assert.equal(elements.get("#focus-domains").children.length,5,"All research sections remain in the existing curriculum");
 assert.equal(elements.get("#constellation-research-questions").children.length,questions.questions.length,"Research questions move inside Knowledge Graph");

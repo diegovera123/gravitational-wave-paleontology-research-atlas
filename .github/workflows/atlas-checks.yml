@@ -22,6 +22,7 @@ jobs:
           node scripts/test_guided_literature.mjs
           node scripts/test_deep_explanations.mjs
           node scripts/test_scientific_figures.mjs
+          node scripts/test_research_experience.mjs
       - name: Research atlas navigation and learning
         run: |
           node scripts/test_constellation.mjs
