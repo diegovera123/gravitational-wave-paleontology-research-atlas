@@ -126,6 +126,8 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
    '<section class="research-module research-stage-detail"><span class="lesson-kicker">CURRENT STAGE</span><h3>'+esc(s.name)+'</h3>'+
     '<p class="research-stage-question">'+esc(s.question)+'</p>'+
     (prior?'<p class="research-caveat">Suggested earlier stage: '+esc(data.stages.find(x=>x.id===s.prior).name)+'. This is guidance, not a prerequisite lock.</p>':"")+
+    (s.id==="orbit"?'<p class="research-caveat">Optional study-group bridge: after listening to your group’s introductory gravitational-wave paleontology material, list three unfamiliar concepts and locate their actual prerequisites in the graph. This independent Atlas is not official onboarding.</p>':"")+
+    (s.id==="population"?'<p class="research-caveat">If your research group has provided a simulation onboarding notebook, run that notebook under its own instructions separately. Compare its real version, seed, input files and provenance with this Atlas’s deliberately synthetic toy model; do not present toy results as COMPAS output.</p>':"")+
     '<div class="research-concept-chips">'+s.conceptIds.map(id=>'<button type="button" data-concept="'+esc(id)+'">'+esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div>'+
     '<p><strong>Investigation:</strong> '+esc(s.researchTask)+'</p><p><strong>Suggested artifact:</strong> '+esc(s.deliverable)+'</p>'+
     '<div class="research-stage-actions"><button type="button" data-action="practice">Open linked Practice →</button>'+
