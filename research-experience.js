@@ -66,7 +66,13 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
    return '<div class="research-evidence-card"><strong>'+esc(k.replace("-"," "))+'</strong>'+
     '<span>'+(e.attempts?e.correct+" / "+e.attempts+" authored question responses correct":"No scored responses yet")+'</span>'+
     '<small>'+(e.due?e.due+" objective(s) due for review":"No due objective flagged")+'</small></div>';
-  }).join("")+'</div><p class="research-caveat">These are counts of responses and a transparent review heuristic, NOT calibrated ability estimates, mastery percentages or eligibility to conduct research. Try problems in Practice to gather relevant evidence.</p>';
+  }).join("")+'</div><p class="research-caveat">These are counts of responses and a transparent review heuristic, NOT calibrated ability estimates, mastery percentages or eligibility to conduct research. Try problems in Practice to gather relevant evidence.</p>'+
+   '<p class="research-evidence-next">'+
+   (["conceptual","quantitative","causal","model-critique"].some(k=>(score[k]?.due||0)>0)?
+      "Suggested next action: revisit objectives with due-review flags using an authored practice set. The flag is a scheduling heuristic, not a diagnosis of what you know.":
+      ["conceptual","quantitative","causal","model-critique"].some(k=>!(score[k]?.attempts||0))?
+        "Suggested next action: try an authored question in a component with no responses yet, then examine its explanatory feedback.":
+        "Suggested next action: attempt a harder worked case and examine any reasoning steps you cannot justify.")+'</p>';
  }
  function labControls(){
   const c=configs[lab],values=draft.params[lab];
