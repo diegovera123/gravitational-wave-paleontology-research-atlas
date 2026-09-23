@@ -622,6 +622,60 @@
         "text": "Suppose an event log has IDs [11,11,11,19,23] and only system 11 meets the specified success condition. Counting successful rows gives 3, but counting successful distinct systems gives 1 out of 3 represented systems. A reproducible analysis should document the unit of observation and show how the data were deduplicated before normalizing by the represented formed stellar mass."
       },
       "boundary": "Reproducing a published or documented figure does not validate the underlying astrophysical model. Licensed datasets and authorized lab notebooks must be handled under their own access conditions. The Atlas cannot infer file schema, run COMPAS or certify reproducibility from a hypothetical example."
+    },
+    {
+      "id": "cosmic-star-formation",
+      "opening": "Imagine looking backward through cosmic history and finding that the Universe formed stars at different rates at different epochs. A compact binary merging at one redshift may have come from stars born much earlier. To predict how many merging systems originate at each epoch, you need a formation history rather than a single present-day star-formation number.",
+      "steps": [
+        {
+          "heading": "Define what is being measured over cosmic time",
+          "text": "A cosmic star-formation-rate density ρ̇★(z) commonly denotes stellar mass formed per unit comoving volume per unit source-frame time at redshift z. Its units may be solar masses per year per cubic comoving megaparsec. That number differs from a galaxy's own star-formation rate because it describes the summed activity of a cosmic population per volume."
+        },
+        {
+          "heading": "Separate birth rate from compact-binary formation efficiency",
+          "text": "A unit of newly formed stellar mass does not guarantee a compact binary will form and merge. Stellar initial masses, binary fraction, separation, metallicity and evolutionary prescriptions all influence how many successful merger-capable systems emerge. A formation efficiency per formed mass connects the cosmic birth history to the population model's yield."
+        },
+        {
+          "heading": "Account for the time between birth and merger",
+          "text": "Each successful binary has a formation-to-merger delay, so mergers observed at one cosmic epoch receive contributions from several earlier birth epochs. A simple convolution of the formation history with a delay-time density illustrates this shift; a metallicity-dependent model integrates the birth-metallicity distribution at each formation epoch as well."
+        },
+        {
+          "heading": "Convert the intrinsic merger history into observations",
+          "text": "An intrinsic comoving merger-rate density has units of mergers per comoving volume per source-frame time. Predicted detector counts need cosmological volume, the source-to-observer time factor, the observation duration and sensitivity to binary parameters; a direct comparison between a plotted cosmic star-formation curve and a detected-event histogram misses these transformations."
+        }
+      ],
+      "example": {
+        "title": "A deliberately discrete formation-to-merger example",
+        "text": "A toy volume forms 1000 solar masses of stars at cosmic time 3 Gyr and 2000 solar masses at 6 Gyr. Suppose one merging compact binary forms per 1000 solar masses in each cohort and all such systems merge after a fixed 4-Gyr delay. The model produces one merger at 7 Gyr and two at 10 Gyr. This toy is a delayed accounting exercise, not a claim about actual cosmic star-formation rates or continuous merger-rate densities."
+      },
+      "boundary": "Published cosmic star-formation reconstructions depend on luminosity conversion, dust attenuation, stellar initial-mass functions and survey selection, among other choices. The rate density, cosmic-time/redshift conversion and detector selection must use mutually consistent cosmological and population conventions."
+    },
+    {
+      "id": "mass-transfer-stability",
+      "opening": "Picture a donor star that has just begun losing material through its Roche-lobe boundary. There are two competing responses: the star itself changes radius as mass is removed, and the size of the gravitational region confining it also changes as mass ratio and orbit evolve. The difference between those responses can decide whether overflow settles down or accelerates.",
+      "steps": [
+        {
+          "heading": "Track donor-radius and Roche-radius changes separately",
+          "text": "Let R_d be the donor's radius and R_L its volume-equivalent Roche radius. Define logarithmic responses ζ_d=dlnR_d/dlnM_d and ζ_L=dlnR_L/dlnM_d for a specified mass-transfer timescale and orbital prescription. Because the donor is losing mass, dlnM_d is negative; the sign of a radius response must be interpreted with that negative change in mind."
+        },
+        {
+          "heading": "Derive the local stability comparison",
+          "text": "Define overfill by the logarithmic ratio D=ln(R_d/R_L). For a small donor mass change, dD=(ζ_d−ζ_L)dlnM_d. If ζ_d>ζ_L and dlnM_d<0, the overfill decreases after the perturbation, a local stabilizing tendency under the chosen assumptions. If ζ_d<ζ_L, the donor increases its overfill and transfer may run away."
+        },
+        {
+          "heading": "Specify which stellar response you are comparing",
+          "text": "A donor's immediate adiabatic response can differ markedly from its thermal-equilibrium radius adjustment. The Roche-radius response also depends on how much material the accretor retains and the angular momentum carried away by escaping gas. Stability therefore cannot be read from mass ratio alone without defining timescale, stellar structure and mass-transfer prescription."
+        },
+        {
+          "heading": "Translate the local criterion into evolutionary possibilities",
+          "text": "An instability can lead to rapid mass loss, a common-envelope episode or a merger, but the local exponent comparison does not uniquely specify the final outcome. Stable transfer can strip a donor and modify its core and companion mass. Population-synthesis prescriptions approximate these pathways and should be tested against detailed stellar models where possible."
+        }
+      ],
+      "example": {
+        "title": "Read logarithmic radius exponents with the correct sign",
+        "text": "Take a hypothetical mass decrement dlnM_d=−0.01, donor response ζ_d=+1 and Roche response ζ_L=−1. Then dD=(1−(−1))(−0.01)=−0.02: the logarithmic overfill decreases in this local toy model. Reversing the responses to ζ_d=−1 and ζ_L=+1 gives dD=+0.02, meaning overfill increases. These values are invented to explain signs, not tabulated exponents for any particular star."
+      },
+      "boundary": "The local ζ comparison is neither a complete dynamical calculation nor a universal critical-mass-ratio formula. The stellar envelope, thermal and dynamical timescales, spin, orbital evolution and matter-loss geometry determine which response is physically appropriate."
     }
   ]
 }
