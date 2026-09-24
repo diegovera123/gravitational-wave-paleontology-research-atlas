@@ -216,14 +216,14 @@ function quadrupole(){
  const shapes='<ellipse cx="155" cy="115" rx="82" ry="60" class="figure-orbit"/>'+
  '<circle cx="237" cy="115" r="12" class="figure-star"/><circle cx="73" cy="115" r="10" class="figure-remnant"/>'+
  L(259,115,354,115,"figure-link",true)+
- '<ellipse cx="466" cy="115" rx="50" ry="78" class="figure-wave-ring"/>'+
- '<circle cx="466" cy="37" r="11" class="figure-star"/>'+
- '<circle cx="466" cy="193" r="10" class="figure-remnant"/>'+
+ '<ellipse cx="466" cy="115" rx="82" ry="60" class="figure-wave-ring"/>'+
+ '<circle cx="384" cy="115" r="12" class="figure-star"/>'+
+ '<circle cx="548" cy="115" r="10" class="figure-remnant"/>'+
  T(155,27,"Orientation at t",'text-anchor="middle"')+
  T(466,22,"After half an orbit",'text-anchor="middle"')+
  T(310,218,"Quadrupole repeats: f_GW ≈ 2 f_orb",'text-anchor="middle"');
  return base("Two opposite binary orientations that repeat the mass-quadrupole pattern after half an orbit",
- "Two binary-orbit orientations show a horizontal pair followed by a vertically separated pair; the mass quadrupole's rotation yields a leading double-orbital-frequency wave.",
+ "Two opposite relative-orbit configurations after half a period illustrate invariance of the quadratic mass-quadrupole tensor under reversal of the relative separation vector; this yields the leading double-orbital-frequency wave.",
  shapes,"This schematic is about the leading quadrupole time dependence, not identical mass positions after half an orbit. Higher harmonics and eccentric orbits need additional modeling.");
 }
 function spacetime(){
