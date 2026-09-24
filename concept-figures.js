@@ -184,7 +184,105 @@ function bayesian(){
  s,"Bayes' theorem updates a stated hypothesis model. The bar areas are qualitative indicators of a numerical toy example, not measured astrophysical probabilities.");
 }
 
-const figures={wave,kick,chirp,selection,transfer,pipeline:synthesis,binary:synthesis,cosmic,orbitalEnergy,detector,wind,weights,bayesian};
+
+function imf(){
+ let curve="";for(let i=0;i<=120;i++){const m=1+9*i/120,x=74+470*i/120,y=184-143*Math.pow(m,-1.8);curve+=(i?" L":"M")+x.toFixed(1)+" "+y.toFixed(1);}
+ const shapes=L(74,35,74,184,"figure-axis")+L(74,184,550,184,"figure-axis",true)+
+ '<path d="'+curve+'" class="figure-waveform"/>'+
+ T(80,28,"Number density (arbitrary units)")+T(366,216,"Initial stellar mass →")+
+ T(89,200,"lower mass")+T(473,200,"higher mass")+
+ T(220,66,"p(m) ∝ m^(−α)");
+ return base("Illustrative declining stellar initial-mass probability density across a limited mass interval",
+ "A descending power-law-shaped curve plots toy number density versus initial stellar mass, with more low-mass stars per unit mass interval. Axes have no empirical survey units.",
+ shapes,"An IMF is a birth-number density, not a distribution of detected mergers. Normalize it over the chosen mass interval and distinguish number-weighted from mass-weighted fractions.");
+}
+function collapse(){
+ const shapes='<circle cx="92" cy="119" r="49" class="figure-star"/>'+
+ L(148,119,205,119,"figure-link",true)+
+ '<circle cx="259" cy="119" r="24" class="figure-remnant"/>'+
+ '<circle cx="259" cy="119" r="43" class="figure-orbit"/>'+
+ L(305,119,368,119,"figure-link",true)+
+ '<rect x="380" y="70" width="205" height="99" rx="12" class="figure-panel"/>'+
+ T(92,191,"Evolved core",'text-anchor="middle"')+
+ T(259,190,"Core collapse",'text-anchor="middle"')+
+ T(483,96,"Possible outcomes",'text-anchor="middle"')+
+ T(395,123,"• Neutron-star remnant")+T(395,146,"• Black hole / fallback")+
+ T(105,33,"Support changes → rapid contraction");
+ return base("Conceptual progression from an evolved massive stellar core to compact-remnant alternatives",
+ "A large stellar core contracts to a smaller high-density object, with divergent final outcomes marked as model-dependent neutron-star or black-hole possibilities.",
+ shapes,"Collapse, bounce, explosion and fallback need detailed physical calculations. The diagram does not imply every core explodes or each initial mass maps uniquely to one remnant type.");
+}
+function quadrupole(){
+ const shapes='<ellipse cx="155" cy="115" rx="82" ry="60" class="figure-orbit"/>'+
+ '<circle cx="237" cy="115" r="12" class="figure-star"/><circle cx="73" cy="115" r="10" class="figure-remnant"/>'+
+ L(259,115,354,115,"figure-link",true)+
+ '<ellipse cx="466" cy="115" rx="82" ry="60" class="figure-wave-ring"/>'+
+ '<circle cx="384" cy="115" r="12" class="figure-star"/>'+
+ '<circle cx="548" cy="115" r="10" class="figure-remnant"/>'+
+ T(155,27,"Orientation at t",'text-anchor="middle"')+
+ T(466,22,"After half an orbit",'text-anchor="middle"')+
+ T(310,218,"Quadrupole repeats: f_GW ≈ 2 f_orb",'text-anchor="middle"');
+ return base("Two opposite binary orientations that repeat the mass-quadrupole pattern after half an orbit",
+ "Two opposite relative-orbit configurations after half a period illustrate invariance of the quadratic mass-quadrupole tensor under reversal of the relative separation vector; this yields the leading double-orbital-frequency wave.",
+ shapes,"This schematic is about the leading quadrupole time dependence, not identical mass positions after half an orbit. Higher harmonics and eccentric orbits need additional modeling.");
+}
+function spacetime(){
+ const shapes=L(65,177,553,177,"figure-axis",true)+L(65,177,65,29,"figure-axis",true)+
+ L(93,163,490,47,"figure-result",true)+
+ '<path d="M93 163 Q262 57 490 47" class="figure-flow"/>'+
+ T(69,23,"ct ↑")+T(510,201,"x →")+
+ T(296,40,"Two timelike paths between events",'text-anchor="middle"')+
+ '<circle cx="93" cy="163" r="5" class="figure-particle"/><circle cx="490" cy="47" r="5" class="figure-particle"/>'+
+ T(105,151,"A")+T(476,35,"B")+
+ T(309,222,"Clock time = integral of proper time along a path",'text-anchor="middle"');
+ return base("Two illustrative worldlines joining the same spacetime events",
+ "A spacetime coordinate diagram shows two distinct timelike paths between events A and B, whose accumulated proper times can differ even when endpoints agree.",
+ shapes,"Coordinate paths are illustrative; proper time is computed with a specified metric, not by visually measuring the Euclidean drawn line length.");
+}
+function metallicity(){
+ const shapes='<rect x="31" y="58" width="258" height="133" rx="11" class="figure-panel"/>'+
+ '<rect x="330" y="58" width="258" height="133" rx="11" class="figure-panel"/>'+
+ T(45,43,"Birth cohort A")+T(345,43,"Birth cohort B")+
+ '<rect x="47" y="87" width="202" height="24" rx="4" class="figure-class-a"/>'+
+ '<rect x="47" y="126" width="40" height="24" rx="4" class="figure-class-b"/>'+
+ '<rect x="346" y="87" width="72" height="24" rx="4" class="figure-class-a"/>'+
+ '<rect x="346" y="126" width="170" height="24" rx="4" class="figure-class-b"/>'+
+ T(49,176,"More low-Z births")+T(348,176,"More high-Z births")+
+ T(310,224,"Equal total star formation ≠ equal metal distribution",'text-anchor="middle"');
+ return base("Two hypothetical stellar birth cohorts with different low- and high-metallicity mixtures",
+ "Two birth populations have illustrative opposite metallicity mixtures even if they contain the same total formed stellar mass.",
+ shapes,"Merger production depends on how each metallicity bin is weighted by its conditional binary-formation yield and the distribution of delays.");
+}
+function cluster(){
+ let s='<circle cx="153" cy="111" r="83" class="figure-orbit"/>';
+ for(const [x,y] of [[113,65],[190,62],[99,120],[167,157],[200,130],[150,100],[116,166],[214,91]])s+='<circle cx="'+x+'" cy="'+y+'" r="7" class="figure-particle"/>';
+ s+=L(244,113,351,113,"figure-link",true)+
+ '<ellipse cx="465" cy="113" rx="86" ry="46" class="figure-orbit"/>'+
+ '<circle cx="382" cy="113" r="12" class="figure-remnant"/>'+
+ '<circle cx="548" cy="113" r="11" class="figure-remnant"/>'+
+ T(153,24,"Dense cluster",'text-anchor="middle"')+
+ T(466,43,"Reconfigured binary",'text-anchor="middle"')+
+ T(309,220,"Close encounters can exchange partners and orbital energy",'text-anchor="middle"');
+ return base("Dense stellar environment with encounters that can reconfigure compact-object binaries",
+ "Several objects in a schematic cluster lead to a later compact binary assembled or hardened through interactions; the illustration does not simulate encounter probabilities.",
+ s,"Dynamical formation depends on encounter rates and multi-body energy exchange; a merger waveform alone rarely identifies a unique historical encounter sequence.");
+}
+function sampling(){
+ const shapes=L(49,181,574,181,"figure-axis",true)+L(49,181,49,29,"figure-axis",true)+
+ '<path d="M49 163 L165 161 L165 45 L330 44 L330 146 L460 144 L460 79 L569 78" class="figure-waveform"/>'+
+ '<circle cx="49" cy="163" r="5" class="figure-particle"/>'+
+ '<circle cx="165" cy="45" r="5" class="figure-particle"/>'+
+ '<circle cx="330" cy="146" r="5" class="figure-particle"/>'+
+ '<circle cx="460" cy="79" r="5" class="figure-particle"/>'+
+ T(61,23,"Rapid transitions can fall between stored samples")+
+ T(57,217,"Time →")+
+ T(310,198,"Only selected event snapshots shown",'text-anchor="middle"');
+ return base("An illustrative rapidly changing state sampled at sparse times",
+ "A schematic state history has rapid transitions between a few marked output snapshots, showing why evenly spaced records can fail to capture events.",
+ shapes,"Interpolating sparse stored points cannot recover an unrecorded supernova, mass-transfer onset or short-lived orbital transition.");
+}
+
+const figures={wave,kick,chirp,selection,transfer,pipeline:synthesis,binary:synthesis,cosmic,orbitalEnergy,detector,wind,weights,bayesian,imf,collapse,quadrupole,spacetime,metallicity,cluster,sampling};
 function render(kind){return (figures[kind]||synthesis)();}
 root.AtlasScientificFigures={render,figures};
 })(typeof window!=="undefined"?window:globalThis);

@@ -100,7 +100,12 @@ const DEEP_VISUALS={
  "monte-carlo-methods":"pipeline","population-weights":"weights",
  "delay-time-distributions":"cosmic","formation-efficiency":"weights",
  "bayesian-inference":"bayesian","reproducible-workflows":"pipeline",
- "cosmic-star-formation":"cosmic","mass-transfer-stability":"transfer"
+ "cosmic-star-formation":"cosmic","mass-transfer-stability":"transfer",
+ "keplerian-orbits":"orbitalEnergy","stellar-evolution":"wind","initial-mass-function":"imf",
+ "metallicity":"metallicity","core-collapse-supernovae":"collapse","compact-remnants":"collapse",
+ "quadrupole-radiation":"quadrupole","spacetime-geometry":"spacetime",
+ "binary-initial-conditions":"imf","cosmic-metallicity":"metallicity",
+ "dynamical-formation":"cluster","temporal-sampling":"sampling"
 };
 let deepUnits=new Map();
 function load(data,concepts=[]){

@@ -6,7 +6,7 @@ const curriculum=JSON.parse(await fs.readFile("knowledge-graph/concepts.json","u
 const data=JSON.parse(await fs.readFile("knowledge-graph/deep-explanations.json","utf8"));
 const known=new Set(curriculum.map(c=>c.id));
 assert.equal(data.schemaVersion,1);
-assert.equal(data.units.length,25,"The deep content library now has 25 individually authored science and research lessons");
+assert.equal(data.units.length,37,"The deep content library now has 37 individually authored science and research lessons");
 const seen=new Set();
 for(const lesson of data.units){
  assert.ok(known.has(lesson.id)&&!seen.has(lesson.id),"Every lesson maps uniquely to an existing graph concept");
@@ -23,7 +23,7 @@ const context={window:{},console};
 vm.runInNewContext(await fs.readFile("concept-figures.js","utf8"),context);
 vm.runInNewContext(await fs.readFile("concept-insight.js","utf8"),context);
 const insight=context.window.AtlasConceptInsight;
-insight.load(data,curriculum);assert.equal(insight.deepCount(),25);
+insight.load(data,curriculum);assert.equal(insight.deepCount(),37);
 for(const item of data.units){
  const c=curriculum.find(x=>x.id===item.id),markup=insight.render(c);
  assert.ok(markup.includes('data-deep-explanation="'+item.id+'"'),"Deep content used rather than generic orientation");
@@ -39,4 +39,4 @@ const i=graph.indexOf("concept-learning-goals-title"),j=graph.indexOf("concept-e
  k=graph.indexOf("concept-resources-title");
 assert.ok(i>=0&&i<j&&j<k,"One ordered learning unit has objectives, explanation, and bottom resources");
 assert.ok(!graph.includes("concept-dialog-tabs")&&!graph.includes("switchTab("),"Concept instruction is not fragmented into four tabs");
-console.log("Passed: 25 original concrete lessons, stepwise scientific reasoning, worked examples and limitations; one continuous unit with goals first and resources last.");
+console.log("Passed: 37 original concrete lessons with physical situations, worked examples, equations and limitations; continuous reader goals first, resources last.");

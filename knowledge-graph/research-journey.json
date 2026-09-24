@@ -491,6 +491,246 @@
         "Inference requires selection correction",
         "No astrophysical conclusions from toy assumptions"
       ]
+    },
+    {
+      "id": "kepler-period",
+      "conceptId": "keplerian-orbits",
+      "component": "quantitative + assumptions",
+      "title": "Use Kepler's third law without confusing mass and separation",
+      "scenario": "Two isolated circular point-mass binaries have the same total mass, but binary B has twice the separation of binary A. No mass exchange or third-body interactions occur during the comparison.",
+      "task": "Find the ratio of orbital periods and speeds. Explain why the total mass, not just the primary mass, appears in the relative two-body calculation.",
+      "steps": [
+        "Kepler's third law gives T²=4π²a³/(GM), with M=m₁+m₂.",
+        "With M fixed, T_B/T_A=(a_B/a_A)^(3/2)=2^(3/2)=√8≈2.828.",
+        "The relative circular speed obeys v²=GM/a, so v_B/v_A=1/√2≈0.707.",
+        "Both stars contribute to the gravitational parameter for relative motion; the planet-around-fixed-sun approximation is only a limiting case."
+      ],
+      "rubric": [
+        "Correct total-mass parameter",
+        "Period ratio",
+        "Relative speed ratio",
+        "Scope of the isolated circular model"
+      ]
+    },
+    {
+      "id": "orbit-mass-change",
+      "conceptId": "orbital-energy",
+      "component": "causal + quantitative",
+      "title": "Distinguish energy changes caused by separation and changing masses",
+      "scenario": "In toy units G=1, a binary starts with m₁=2, m₂=1 and semi-major axis a=4. A later isolated-point-mass snapshot has m₁=1.5, m₂=1 and a=2. Assume each snapshot can separately be modeled as Keplerian; do not assume orbital energy was conserved through the intervening mass loss.",
+      "task": "Compute the two total orbital energies and explain what cannot be concluded from them about energy carried by the escaping gas.",
+      "steps": [
+        "Initially Eᵢ=−Gm₁m₂/(2a)=−(2×1)/(2×4)=−0.25.",
+        "Finally E𝒇=−(1.5×1)/(2×2)=−0.375.",
+        "The orbital-energy difference is E𝒇−Eᵢ=−0.125 in the chosen zero-potential convention.",
+        "The gas can carry mass, energy and angular momentum. Two end-state orbital energies do not uniquely specify the mechanisms, the gas energy budget or whether an intermediate orbit remained bound."
+      ],
+      "rubric": [
+        "Both energies calculated using their own masses",
+        "Signed difference correct",
+        "Energy zero stated",
+        "No unjustified inference about gas"
+      ]
+    },
+    {
+      "id": "imf-fraction",
+      "conceptId": "stellar-evolution",
+      "component": "statistics + interpretation",
+      "title": "Distinguish the fraction of stars from the fraction of stellar mass",
+      "scenario": "For a toy IMF p(m)=C m^(−2) on 1≤m≤10, a population-synthesis study restricts its tracked primaries to 5≤m≤10. C has been normalized so that p is a number-density probability over the full interval.",
+      "task": "Calculate the number fraction of stars in the tracked interval and explain why that is not the fraction of formed mass represented by the tracked stars.",
+      "steps": [
+        "Normalizing gives C=10/9 since ∫₁¹⁰m^(−2)dm=0.9.",
+        "The tracked number fraction is (10/9)(1/5−1/10)=1/9≈0.1111.",
+        "The formed-mass fraction instead integrates m p(m): ∫₅¹⁰(C/m)dm / ∫₁¹⁰(C/m)dm=ln(10/5)/ln(10/1)=ln2/ln10≈0.3010.",
+        "A mass-normalized compact-binary formation efficiency requires a represented formed-mass convention, not simply the sampled primary count."
+      ],
+      "rubric": [
+        "Normalization correct",
+        "Number fraction correct",
+        "Mass-weighted ratio computed",
+        "Count versus formed mass interpreted"
+      ]
+    },
+    {
+      "id": "transfer-stability-sign",
+      "conceptId": "mass-transfer",
+      "component": "mechanistic reasoning",
+      "title": "Determine how a donor's overfilling changes when it loses mass",
+      "scenario": "For a local toy episode, the donor loses a logarithmic mass increment dlnM_d=−0.02. Its radius response is ζ_d=+0.5 and its Roche radius response is ζ_L=−1.5. Define D=ln(R_d/R_L).",
+      "task": "Compute dD and interpret whether the geometric overfilling tends to increase or decrease; explain whether this calculation alone determines the ultimate outcome.",
+      "steps": [
+        "Use dD=(ζ_d−ζ_L)dlnM_d.",
+        "The response difference is +0.5−(−1.5)=2.",
+        "Thus dD=2(−0.02)=−0.04; overfilling decreases under these specific local responses.",
+        "This is a stabilizing local tendency, not proof of long-term survival; stellar response timescales, angular momentum loss and subsequent evolution matter."
+      ],
+      "rubric": [
+        "Sign of mass decrement retained",
+        "Difference and dD correct",
+        "Local stability interpretation",
+        "No claim of global survival"
+      ]
+    },
+    {
+      "id": "remnant-binary-threshold",
+      "conceptId": "supernova-kicks",
+      "component": "derivation + limiting case",
+      "title": "Find the critical symmetric explosion mass loss for a circular binary",
+      "scenario": "Before an instantaneous symmetric mass-loss event, relative orbital speed satisfies v²=GM_i/r. There is no natal kick and the orbital separation does not change during the impulse. Let f=(M_i−M_f)/M_i.",
+      "task": "Derive the post-event specific relative orbital energy as a function of f and give the bound, parabolic and unbound ranges.",
+      "steps": [
+        "Write GM_f=(1−f)GM_i and keep the pre-event circular speed v²=GM_i/r.",
+        "Then ε_f=GM_i/(2r)−(1−f)GM_i/r=(GM_i/r)(f−1/2).",
+        "For 0≤f<1/2, ε_f<0 (bound); f=1/2 gives ε_f=0 (parabolic threshold); f>1/2 gives ε_f>0 (unbound).",
+        "This threshold depends on the initially circular impulsive symmetric model. Initial eccentricity, explosion orbital phase or a kick changes the result."
+      ],
+      "rubric": [
+        "Mass fraction and parameter definitions",
+        "Energy derivation",
+        "All three cases classified",
+        "Conditions for the half-mass rule stated"
+      ]
+    },
+    {
+      "id": "compact-remnant-degeneracy",
+      "conceptId": "compact-remnants",
+      "component": "research interpretation",
+      "title": "Show why remnant mass does not uniquely reconstruct stellar history",
+      "scenario": "Two simulated progenitor pathways each leave one black hole of 10 solar masses. In model A the stellar envelope was removed mainly through winds; in model B it was stripped by Roche-lobe mass transfer. A merger measurement later constrains one component mass close to 10 solar masses.",
+      "task": "Identify which inference about the progenitor is supported and which is not; propose two additional population-level observables that might help distinguish the modeled histories.",
+      "steps": [
+        "The measured component mass constrains the late compact object, conditional on the waveform and redshift inference.",
+        "It does not uniquely tell whether winds or binary transfer removed the earlier stellar envelope, because both toy models predict that same late mass.",
+        "Possible additional observables include population distributions of component masses and spins, redshift-dependent merger rates or host-environment clues, provided models predict different distributions.",
+        "Compare forward models after selection effects and measurement uncertainty. A favorable fit cannot by itself establish a unique formation channel if alternative models remain compatible."
+      ],
+      "rubric": [
+        "Observed late properties distinguished from progenitor history",
+        "Two plausible added observables",
+        "Forward-model comparison proposed",
+        "Uncertainty and selection addressed"
+      ]
+    },
+    {
+      "id": "quadrupole-frequency",
+      "conceptId": "chirp-mass",
+      "component": "causal + harmonic",
+      "title": "Derive the leading two-cycles-per-orbit waveform intuition",
+      "scenario": "Two point masses follow an idealized circular orbit of orbital frequency f_orb=25 Hz. The leading far-field radiation is quadrupolar; assume weak-field, slowly evolving motion for this exercise.",
+      "task": "Determine the leading dominant gravitational-wave frequency and explain the geometric symmetry that creates the factor of two.",
+      "steps": [
+        "The binary's mass quadrupole is unchanged after a half-turn because the relative mass distribution repeats under a 180-degree rotation.",
+        "The leading quadrupolar pattern therefore oscillates at approximately twice the orbital frequency.",
+        "The predicted dominant f_GW≈2×25=50 Hz for this illustrative instant.",
+        "Real signals can include higher modes, eccentric harmonics, spin and strong-field effects; not every observed feature lies at 2f_orb."
+      ],
+      "rubric": [
+        "Geometric symmetry identified",
+        "Numerical frequency correct",
+        "Quadrupolar approximation explicit",
+        "Alternative waveform content acknowledged"
+      ]
+    },
+    {
+      "id": "strain-frequency-vs-time",
+      "conceptId": "gravitational-waveforms",
+      "component": "mathematical interpretation",
+      "title": "Connect a faster chirp to its lower-order mass dependence",
+      "scenario": "Assume the leading quasi-circular source-frame inspiral relation ḟ=C M_c^(5/3) f^(11/3), with constant C>0 independent of the masses. Compare two idealized binaries at the same gravitational-wave frequency, where system B has twice the chirp mass of system A.",
+      "task": "Find the ratio of instantaneous frequency derivatives and explain why this does not guarantee the complete observed signals are otherwise identical.",
+      "steps": [
+        "At fixed f and C, ḟ_B/ḟ_A=(M_c,B/M_c,A)^(5/3).",
+        "For a chirp-mass ratio 2, the result is 2^(5/3)≈3.175.",
+        "This compares a leading-order source-frame phase evolution at the same wave frequency, not an exact elapsed time to merger.",
+        "Distance, orientation, redshift, spins, eccentricity and the detector response can change the observed waveform and parameter inference."
+      ],
+      "rubric": [
+        "Correct exponent extracted",
+        "Numerical ratio",
+        "Fixed-frequency comparison clear",
+        "Source-frame and waveform limitations"
+      ]
+    },
+    {
+      "id": "weighted-efficiency",
+      "conceptId": "formation-efficiency",
+      "component": "normalization + units",
+      "title": "Convert a weighted synthetic count into a mass-normalized yield",
+      "scenario": "A hypothetical simulator reports three distinct successful merger candidates with weights 2, 3 and 5. Its documented normalization convention states that the corresponding weighted birth ensemble represents 20,000 solar masses of formed stars.",
+      "task": "Compute the weighted yield per unit formed stellar mass and explain why it is not yet the observed merger rate.",
+      "steps": [
+        "The weighted successful-system sum is 2+3+5=10 in the stipulated consistent weight convention.",
+        "Divide by represented formed stellar mass: η=10/20,000=5×10⁻⁴ qualifying systems per solar mass.",
+        "The unit is inverse formed stellar mass, not inverse time or inverse volume. A merger horizon and success definition must also be specified.",
+        "Cosmic star-formation history, progenitor metallicity, delays and detector sensitivity are needed to infer intrinsic merger-rate density and detectable-event counts."
+      ],
+      "rubric": [
+        "Weighted sum correctly calculated",
+        "Mass denominator and units",
+        "Qualification criterion understood",
+        "Rates not equated to formation yield"
+      ]
+    },
+    {
+      "id": "seed-and-variance",
+      "conceptId": "monte-carlo-methods",
+      "component": "research reproducibility",
+      "title": "Distinguish a repeated seed from an independent uncertainty study",
+      "scenario": "A toy binary-population model uses a fixed pseudorandom seed and generates N=1000 independent input systems. A colleague reruns the same model with the same seed and receives identical rows, then claims this proves that the merger-yield estimate has zero uncertainty.",
+      "task": "Explain exactly what the identical records establish and design a minimal check of sampling variability without changing the physical prescription.",
+      "steps": [
+        "The identical seeded run supports reproducibility of the generator, code, inputs and deterministic analysis in the same computing context.",
+        "It does not create an independent replicate and does not remove finite Monte Carlo sampling variability.",
+        "Run the same input distribution and physics prescription using several different independently chosen seeds, then compare the distribution of yield estimates.",
+        "Report the sampling spread separately from model-prescription, initial-distribution, normalization and detector-selection uncertainties."
+      ],
+      "rubric": [
+        "Identical seed interpreted",
+        "Independent repeats specified",
+        "Uncertainty decomposition",
+        "Controls maintained"
+      ]
+    },
+    {
+      "id": "birth-metal-mixture",
+      "conceptId": "cosmic-metallicity",
+      "component": "weighted integration",
+      "title": "Mix birth metallicity bins before interpreting predicted mergers",
+      "scenario": "A toy cosmic star-formation cohort forms 1000 solar masses, half at metallicity Z₁ and half at Z₂. A fixed binary model has hypothetical efficiencies η₁=0.004 and η₂=0.001 qualifying mergers per solar mass, with compatible outcome definitions and timescales.",
+      "task": "Calculate the expected intrinsic number of qualifying systems from each bin and the effective cohort formation efficiency. Explain what is still needed to predict detected events.",
+      "steps": [
+        "Each metallicity bin represents 500 solar masses of births.",
+        "The first bin contributes 500×0.004=2 expected qualifying systems and the second 500×0.001=0.5, for 2.5 expected systems in the toy ensemble.",
+        "The effective efficiency is 2.5/1000=0.0025 qualifying systems per solar mass; expected counts need not be integers.",
+        "Actual merger epochs additionally require delay distributions, cosmic time conventions and observation requires cosmological volume, time conversion and detector selection."
+      ],
+      "rubric": [
+        "Mass divided between bins",
+        "Expected counts and fractional expectation",
+        "Effective efficiency and units",
+        "Intrinsic versus detected distinguished"
+      ]
+    },
+    {
+      "id": "selection-and-priors",
+      "conceptId": "population-inference",
+      "component": "hierarchical model critique",
+      "title": "Explain why event posteriors cannot simply be multiplied to infer a population",
+      "scenario": "Several gravitational-wave events were analyzed using individual-event priors π_event(θ), producing posterior samples p(θ|d_i). A student multiplies posterior density curves and interprets the result as an intrinsic mass-population distribution, without accounting for selection.",
+      "task": "Identify both the reused-prior issue and detection-selection issue, and outline a more defensible schematic population likelihood.",
+      "steps": [
+        "An event posterior is proportional to event likelihood p(d_i|θ) times the event analysis prior π_event(θ), normalized by evidence.",
+        "Multiplying posteriors generally reuses the event prior repeatedly and does not represent a generative model for the source population.",
+        "A population model p(θ|Λ) must connect event likelihoods (or reweighted posterior samples accounting for their original priors) to hyperparameters Λ, with an appropriate detection-selection normalization.",
+        "Depending on whether an overall rate is modeled or conditioned upon, the likelihood also needs the corresponding Poisson count/exposure treatment. Inferences remain conditional on model family, prior and calibrated selection."
+      ],
+      "rubric": [
+        "Event likelihood and prior distinguished",
+        "Double prior use explained",
+        "Selection normalization included",
+        "Count/rate conventions acknowledged"
+      ]
     }
   ],
   "relationships": [

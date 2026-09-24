@@ -1535,3 +1535,21 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
 .research-edge-legend .edge-prerequisite::before{background:#b3bbff;}
 .research-edge-legend .edge-causal::before{background:#dcb1d2;}
 .research-edge-legend .edge-application::before{background:#83d6c5;}
+
+/* Five authored scientific problems per research stage: disclosure avoids a long
+   wall of prompts and keeps the first task available immediately. */
+.research-problem{display:block;border:1px solid rgba(148,174,219,.31);border-radius:12px;
+ margin:11px 0!important;padding:0!important;background:rgba(24,39,66,.46);}
+.research-problem[open]{border-color:rgba(171,190,237,.59);background:rgba(29,44,70,.7);}
+.research-problem-summary{display:flex;flex-direction:column;gap:7px;cursor:pointer;padding:17px 18px;list-style:none;}
+.research-problem-summary::-webkit-details-marker{display:none;}
+.research-problem-summary::after{content:"Open question ↓";font:500 10px var(--font-body);color:#b6caec;}
+.research-problem[open]>.research-problem-summary::after{content:"Hide question ↑";}
+.research-problem-summary>span{font:600 10px/1.5 var(--font-body);letter-spacing:.05em;color:#aec6eb;}
+.research-problem-summary>strong{font:600 15px/1.55 var(--font-display);color:#eef3ff;}
+.research-problem-body{padding:0 18px 20px;}
+.research-problem-concept{border:1px solid rgba(147,181,228,.36);border-radius:9px;
+ background:rgba(42,60,95,.57);color:#d1e2fc;cursor:pointer;
+ padding:9px 12px;font:600 11px/1.5 var(--font-body);margin:0 0 10px;}
+.research-problem-concept:focus-visible,.research-problem-summary:focus-visible{outline:2px solid #c4d7ff;outline-offset:2px;}
+.research-problem-solution{background:rgba(16,29,48,.6);padding:14px!important;}

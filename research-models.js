@@ -46,6 +46,13 @@ function population(x={}){
  return {n,seed,candidate,unbound,wide,p,binomialSE:Math.sqrt(p*(1-p)/n),rows,
  caveat:"Seeded toy 2-body impulse simulation with arbitrarily chosen unitless birth distributions; 'candidate' means bound with post-event a≤2 only. Not a physical formation efficiency, merger forecast, COMPAS run or real research dataset."};
 }
+function delays(x={}){
+ const t1=num(x.t1,0,13),t2=num(x.t2,0,13),delay=num(x.delay,0,13);
+ const mass1=num(x.mass1,0,5000),mass2=num(x.mass2,0,5000),yieldPer1000=num(x.yieldPer1000,0,5);
+ const count1=mass1/1000*yieldPer1000,count2=mass2/1000*yieldPer1000;
+ return {t1,t2,delay,mass1,mass2,yieldPer1000,count1,count2,merge1:t1+delay,merge2:t2+delay,
+  caveat:"Two discrete synthetic birth cohorts, fixed formation-to-merger delay and stipulated yield per 1000 toy solar masses. These expected counts are not a continuous cosmic merger-rate density or observed detections. No cosmological volume, redshift/time conversion, metallicity spread or selection function is included."};
+}
 function evidence(history=[],units=[],now=Date.now()){
  const out=Object.fromEntries(["conceptual","quantitative","causal","model-critique"].map(k=>[k,{attempts:0,correct:0,due:0}]));
  const unitMap=new Map(units.map(u=>[u.id,u]));
@@ -64,5 +71,5 @@ function evidence(history=[],units=[],now=Date.now()){
  }
  return out;
 }
-root.AtlasResearchModels={kick,chirp,envelope,roche,selection,population,evidence};
+root.AtlasResearchModels={kick,chirp,envelope,roche,selection,population,delays,evidence};
 })(typeof window!=="undefined"?window:globalThis);

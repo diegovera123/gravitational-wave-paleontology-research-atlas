@@ -676,6 +676,330 @@
         "text": "Take a hypothetical mass decrement dlnM_d=−0.01, donor response ζ_d=+1 and Roche response ζ_L=−1. Then dD=(1−(−1))(−0.01)=−0.02: the logarithmic overfill decreases in this local toy model. Reversing the responses to ζ_d=−1 and ζ_L=+1 gives dD=+0.02, meaning overfill increases. These values are invented to explain signs, not tabulated exponents for any particular star."
       },
       "boundary": "The local ζ comparison is neither a complete dynamical calculation nor a universal critical-mass-ratio formula. The stellar envelope, thermal and dynamical timescales, spin, orbital evolution and matter-loss geometry determine which response is physically appropriate."
+    },
+    {
+      "id": "keplerian-orbits",
+      "opening": "Imagine receiving a simulated record of a binary containing only its component masses, separation and relative velocity at one instant. You want to predict the orbit it would follow if the two bodies were isolated point masses. Newton's gravitational force gives you a way to transform that snapshot into the shape and timing of an entire orbit.",
+      "steps": [
+        {
+          "heading": "Use the relative separation rather than following two trajectories independently",
+          "text": "Define r=r₂−r₁, M=m₁+m₂ and μ=m₁m₂/M. The relative separation obeys r̈=−GM r/r³ in the isolated Newtonian model, while the two stars move around their common center of mass. A plot centered on one of the stars is not a trajectory in a generally inertial frame."
+        },
+        {
+          "heading": "Determine energy and angular momentum from a snapshot",
+          "text": "At separation r with relative velocity v, calculate the specific orbital energy ε=v²/2−GM/r and specific angular momentum h=|r×v|. Their values distinguish bound from unbound Kepler trajectories and, together with GM, determine the ellipse's semi-major axis and eccentricity when ε<0."
+        },
+        {
+          "heading": "Connect orbital shape to the period",
+          "text": "For a bound ellipse, ε=−GM/(2a) and e²=1+2εh²/(GM)². The orbital period obeys T²=4π²a³/(GM), so doubling a at fixed masses lengthens the period by 2^(3/2), not by a factor of two. The orbital speed changes along an eccentric ellipse: the star moves faster near pericentre."
+        },
+        {
+          "heading": "Check when this orbit model stops describing the binary",
+          "text": "Mass transfer, stellar winds, tides, supernova mass loss and gravitational radiation can modify the masses, orbital energy and angular momentum. Treat a Kepler ellipse as a useful instantaneous reference, then introduce those physical mechanisms to calculate how its orbital elements evolve."
+        }
+      ],
+      "example": {
+        "title": "Recover the period ratio for two binaries",
+        "text": "Take two otherwise identical isolated circular binaries with separations a and 2a. Kepler's third law gives T₂/T₁=(2a/a)^(3/2)=√8≈2.828. Because the gravitational parameter GM is unchanged, an orbit twice as wide takes nearly three times as long. The numerical ratio does not depend on the individual masses as long as the same total mass is used in both cases."
+      },
+      "boundary": "Point-mass Kepler dynamics neglects the finite sizes of stars, hydrodynamic interaction, third bodies and gravitational-wave radiation. It does not supply a physical stellar-evolution history or guarantee that a compact pair with a particular semi-major axis will merge."
+    },
+    {
+      "id": "stellar-evolution",
+      "opening": "Imagine following a massive star from the moment its core begins fusing hydrogen until its remaining core reaches a terminal state. The star does not stay in a single equilibrium configuration: energy generation, fuel depletion, changing composition, gravity and transport continually alter its internal structure and radius.",
+      "steps": [
+        {
+          "heading": "Identify which region is producing energy",
+          "text": "During core hydrogen burning, nuclear reactions convert hydrogen into helium and release energy that helps support the star against gravity. The balance is not simply that the surface is on fire: temperature, pressure, composition and energy transport through the interior determine the star's structure."
+        },
+        {
+          "heading": "Follow core fuel depletion rather than only its surface color",
+          "text": "As the core's available hydrogen changes, the burning core's structure and the surrounding layers adjust. In later phases, shells can burn around a contracting core, and the outer envelope may expand. The evolution of a massive star depends on the coupled pressure, energy, composition and transport equations, not on a fixed sequence of surface labels."
+        },
+        {
+          "heading": "Connect the star to its binary companion",
+          "text": "As the donor radius increases, it may reach the Roche-lobe boundary before completing its isolated-star evolution. Mass transfer can strip the envelope, alter the core-growth history and change the companion's mass. Tides, winds and orbital angular-momentum exchange may change whether that interaction begins at all."
+        },
+        {
+          "heading": "Interpret the endpoint conditionally",
+          "text": "A massive star's final compact remnant depends on its evolved core, mass-loss history, composition, rotation, collapse and possible binary interaction. An initial mass by itself cannot uniquely specify a neutron-star or black-hole outcome; population synthesis uses explicit prescriptions or detailed-track interpolations to make that prediction."
+        }
+      ],
+      "example": {
+        "title": "A surface radius is enough to change the binary pathway",
+        "text": "In an illustrative circular binary with an effective donor Roche-lobe radius of 40 solar radii, a star that expands from 20 to 50 solar radii crosses the geometric boundary during its evolution. A single-star track might have followed a different envelope history, but this binary can now transfer mass. Those radii alone do not determine whether transfer is stable or how much core mass survives."
+      },
+      "boundary": "Evolutionary stages and lifetimes depend on mass, composition, rotation, mixing and whether the star exchanges matter with a companion. This explanation is not a complete stellar structure calculation or a deterministic initial-mass-to-remnant-mass conversion."
+    },
+    {
+      "id": "initial-mass-function",
+      "opening": "Imagine creating initial conditions for one million simulated binaries. If you draw primary masses uniformly between two limits, you will generally obtain a different population than if you sample the masses according to a power-law stellar birth distribution. The initial-mass function, or IMF, tells you how the assumed abundance of newly formed stars varies with mass.",
+      "steps": [
+        {
+          "heading": "Specify what a probability density means",
+          "text": "For a stellar mass m restricted to [m_min,m_max], let p(m) be a normalized density: ∫p(m)dm=1 across that interval. A common illustrative family is p(m)=C m^(−α). The constant C cannot be chosen until the lower and upper mass limits and the exponent are specified."
+        },
+        {
+          "heading": "Normalize before sampling",
+          "text": "For α≠1, ∫m^(−α)dm=(m^(1−α))/(1−α), so C=(1−α)/(m_max^(1−α)−m_min^(1−α)). For α=1 the normalization is logarithmic. A density per unit mass is different from a density per logarithmic mass interval: dN/dlnm=m dN/dm."
+        },
+        {
+          "heading": "Convert a fraction of stars into a mass normalization",
+          "text": "The number fraction in a mass interval is ∫p(m)dm over that interval. The expected formed mass per sampled star is E[m]=∫m p(m)dm; it is not the same as the number fraction. A simulation restricted to high-mass primaries may need a consistent correction for the lower-mass stars represented by the target star-forming population."
+        },
+        {
+          "heading": "Connect birth masses to compact-object yield",
+          "text": "The IMF supplies one component of the initial binary distribution; you must separately specify binary fraction, mass ratio, period, eccentricity and correlations. Stellar and binary evolution convert these initial conditions to remnant outcomes. A high initial stellar mass increases neither survival nor detection probability by itself."
+        }
+      ],
+      "example": {
+        "title": "Normalize a very simple power law",
+        "text": "Let p(m)=C m^(−2) for 1≤m≤10 in arbitrary mass units. Since ∫₁¹⁰m^(−2)dm=1−1/10=0.9, C=1/0.9=10/9. The number fraction in [5,10] is (10/9)∫₅¹⁰m^(−2)dm=(10/9)(1/5−1/10)=1/9≈11.1%. This toy IMF is not a claim about an observed stellar population."
+      },
+      "boundary": "An IMF is a model of births, not a distribution of present-day luminous stars or detected gravitational-wave sources. Its normalization and weighting conventions must match the binary-sampling scheme and any represented stellar-mass denominator."
+    },
+    {
+      "id": "metallicity",
+      "opening": "Imagine two massive stars born with the same initial mass but different chemical mixtures. In one of them, spectral-line absorption can transfer radiation momentum to atmospheric ions more efficiently, changing its wind history and pre-collapse mass. Metallicity is a useful part of this story, but it is not a unique label for every property of a star.",
+      "steps": [
+        {
+          "heading": "Define the composition precisely",
+          "text": "Astronomers often denote the hydrogen, helium and heavier-element mass fractions by X, Y and Z, with X+Y+Z=1. Here Z represents total mass fraction in elements heavier than helium. A reported oxygen abundance, iron abundance or logarithmic [Fe/H] is a different quantity and requires a composition model to translate into total Z."
+        },
+        {
+          "heading": "Connect composition to a mechanism rather than a slogan",
+          "text": "In hot line-driven stellar winds, a variety of metal ions supply bound-bound transitions that can absorb/scatter stellar radiation and transfer momentum to gas. Under a specified range of stellar parameters, changing their abundance can alter mass-loss rates; which lines dominate depends on temperature and ionization. Metallicity also changes opacity and the stellar interior's evolutionary path."
+        },
+        {
+          "heading": "Separate evolution of one star from the birth population",
+          "text": "A simulation's birth metallicity is an input condition; it may track surface and core abundances that change during evolution. The cosmic metallicity distribution is yet another object: a distribution of environments in which stars form at a given epoch. Using one representative metallicity at all redshifts can hide important population variation."
+        },
+        {
+          "heading": "Trace how a metallicity assumption reaches merger predictions",
+          "text": "A different wind history can change the pre-collapse mass, envelope structure, orbital interaction and remnant mass. That may alter compact-binary survival and eventual gravitational-wave parameters. The path contains several model-dependent steps, so an observed high-mass merger cannot by itself uniquely establish the progenitor birth metallicity."
+        }
+      ],
+      "example": {
+        "title": "Mass fraction versus logarithmic abundance",
+        "text": "Suppose a model changes total heavy-element mass fraction from Z=0.02 to Z=0.01 while keeping its defined reference composition otherwise fixed. It has halved this mass fraction, but that fact alone does not imply [Fe/H] fell by exactly log₁₀(2): the iron-to-hydrogen ratio and the assumed abundance pattern must also be specified. Do not interchange the two metallicity measures without a declared conversion."
+      },
+      "boundary": "Different abundance scales and wind prescriptions may use different solar reference mixtures, ionization regimes and metallicity variables. A simple metal-line wind scaling does not universally describe cool-star winds, eruptions, binary mass transfer or stellar-remnant formation."
+    },
+    {
+      "id": "core-collapse-supernovae",
+      "opening": "Imagine the iron-rich core of an evolved massive star no longer producing enough nuclear energy to support itself through further ordinary fusion. The core contracts under gravity, reaches extreme density and can form a proto-neutron star. The subsequent explosion and remnant properties depend on complicated neutrino transport, fluid dynamics and progenitor structure.",
+      "steps": [
+        {
+          "heading": "Understand the loss of support in the collapsing core",
+          "text": "A stellar core's pressure normally resists gravitational compression. In late burning stages, electron capture, photodisintegration and changes in the effective pressure response can contribute to collapse under suitable core conditions. This is not simply a star running out of every form of energy; the core's composition and equation of state matter."
+        },
+        {
+          "heading": "Separate core bounce from a successful explosion",
+          "text": "Collapse is halted or strongly modified when the inner core reaches nuclear densities, producing a rebound and shock. The outgoing shock can lose energy to nuclear dissociation and neutrino emission. In many models, neutrino heating and multi-dimensional hydrodynamic instabilities help revive the shock; not every modeled core produces the same explosion."
+        },
+        {
+          "heading": "Track what the binary experiences",
+          "text": "From a distant companion's perspective, the collapsed star's gravitational mass may decrease as matter and energy leave the system, and the new compact remnant can receive a recoil. Whether the binary stays bound depends on its pre-event relative orbit, the lost gravitational mass and the magnitude and direction of any natal kick."
+        },
+        {
+          "heading": "Keep remnant predictions conditional",
+          "text": "A successful explosion, fallback, weak explosion or failed explosion may leave a neutron star or black hole depending on the progenitor core, equation of state and collapse prescription. The mapping from initial mass to remnant mass need not be monotonic across uncertain evolutionary and explosion regimes."
+        }
+      ],
+      "example": {
+        "title": "Apply only the post-event binary energy ledger",
+        "text": "Consider a toy circular binary with initial GM=1 and r=1, so its relative speed is v=1. If a sudden symmetric collapse lowers the combined gravitational parameter to GM_final=0.6 and there is no kick, the post-event specific energy is ε=1/2−0.6=−0.1: it remains bound in the instantaneous point-mass toy model. This energy result does not predict the explosion's neutrino emission or ejecta dynamics."
+      },
+      "boundary": "Real core-collapse explosions are not instantaneous point-mass substitutions, and kicks can arise from asymmetric mass ejection or neutrino emission in model-dependent ways. Explosion mechanism, fallback and remnant identity require specialized simulations and observational constraints."
+    },
+    {
+      "id": "compact-remnants",
+      "opening": "Imagine returning to a binary after both original stars have ended their ordinary nuclear-burning evolution. The remaining objects could be white dwarfs, neutron stars or black holes. They are not interchangeable labels: their structure, compactness and maximum sustainable mass depend on distinct physical support mechanisms.",
+      "steps": [
+        {
+          "heading": "Start from what supports an ordinary star versus a remnant",
+          "text": "An ordinary star uses thermal and radiation pressure maintained through its evolutionary energy sources. A white dwarf is supported primarily by electron degeneracy pressure in its usual equilibrium regime. A neutron star involves dense nuclear matter and pressure from highly degenerate constituents, described by a relativistic equation of state."
+        },
+        {
+          "heading": "Explain what makes a black hole qualitatively different",
+          "text": "A black hole possesses an event horizon beyond which outgoing signals cannot reach distant observers. The horizon is a causal boundary, not a solid surface in the stellar sense. A black hole's externally inferred mass and spin do not reveal a unique detailed record of the stellar envelope or collapse mechanism that produced it."
+        },
+        {
+          "heading": "Connect progenitor evolution to the remnant distribution",
+          "text": "Core mass, composition, winds, mass transfer and collapse physics alter which remnant type and mass a progenitor yields. Binary interactions can strip a massive star or accrete material onto an existing remnant. For population predictions, clearly separate the modeled progenitor distribution from the predicted remnant distribution."
+        },
+        {
+          "heading": "Distinguish remnant formation from compact-merger formation",
+          "text": "Producing two compact objects in the same binary is not sufficient for a gravitational-wave merger within a finite cosmic age. The post-collapse system must remain bound and have an appropriate orbit. Its inspiral time depends strongly on separation and potentially eccentricity, while detection further depends on distance, masses and orientation."
+        }
+      ],
+      "example": {
+        "title": "The same remnant masses do not imply the same past",
+        "text": "Two toy pathways may each produce a 10-solar-mass black hole: one via a single-star-like wind history and another after binary-envelope stripping followed by collapse. If a later gravitational-wave measurement constrains that black hole's mass near 10 solar masses, it has not directly distinguished these two histories. Additional distributions, spins, merger rates and population assumptions would be needed."
+      },
+      "boundary": "White-dwarf, neutron-star and black-hole outcome boundaries depend on the physical model and are not determined by one universal initial-mass threshold. Real remnant structure needs equations of state or strong-field gravity beyond this conceptual comparison."
+    },
+    {
+      "id": "quadrupole-radiation",
+      "opening": "Imagine a pair of compact bodies orbiting around their common center of mass. Their overall center of mass may remain stationary, yet the arrangement of mass continually changes direction. In general relativity, the leading gravitational radiation for a slowly moving isolated source is connected to changes in its mass quadrupole rather than to an oscillating total mass.",
+      "steps": [
+        {
+          "heading": "Ask which mass moments can actually radiate",
+          "text": "For an isolated system, total mass-energy conservation constrains a time-varying mass monopole, while momentum conservation constrains the time evolution of the mass dipole associated with the center of mass. These conservation laws eliminate the corresponding leading radiation from those moments in the weak-field slow-motion treatment."
+        },
+        {
+          "heading": "Construct an intuitive quadrupole tensor",
+          "text": "A quadrupole moment describes how mass is distributed with respect to two spatial directions. For point masses at positions x_A relative to a chosen origin, a trace-free form is Q_ij=Σ_A m_A(x_Ai x_Aj−δ_ij r_A²/3). As the binary rotates, this tensor changes even though its total mass and center-of-mass position remain constant."
+        },
+        {
+          "heading": "Connect a time-changing moment to the distant wave",
+          "text": "In the leading weak-field transverse-traceless approximation, the far-zone radiative metric perturbation scales like h_ij^TT≈(2G/c⁴D) d²Q_ij^TT/dt² at retarded time, with conventions absorbed into the quadrupole definition. A circular binary's quadrupole orientation repeats after half an orbit, producing dominant wave frequency approximately twice the orbital frequency."
+        },
+        {
+          "heading": "Follow the consequences of emitting radiation",
+          "text": "A changing quadrupole sends positive energy outward in gravitational waves. The orbit's energy becomes more negative as a quasi-circular compact binary inspirals, so the orbital frequency rises and its waveform chirps. More complete post-Newtonian and numerical-relativity calculations become necessary in stronger-field regimes."
+        }
+      ],
+      "example": {
+        "title": "Why the dominant wave cycles twice per orbit",
+        "text": "For an idealized circular orbit, rotating both masses by 180 degrees returns the binary's mass-quadrupole pattern to the same orientation even though the bodies have each moved half an orbit. Therefore the leading quadrupolar waveform repeats twice per orbital period, and its leading gravitational-wave frequency is f_GW≈2f_orb. This is not a claim that every higher multipole or eccentric harmonic has that same frequency."
+      },
+      "boundary": "The quadrupole formula is a leading weak-field slow-motion approximation evaluated in an appropriate far-zone, transverse-traceless description. It cannot on its own reproduce the full merger-ringdown waveform or justify a gravitational-wave detection without an instrument and noise model."
+    },
+    {
+      "id": "spacetime-geometry",
+      "opening": "Imagine two astronauts carrying clocks along different routes between the same pair of spacetime events. The elapsed proper time they record may differ even though both begin and end at the same events. A metric describes how spacetime intervals are assigned to infinitesimal displacements and lets you integrate each clock's elapsed time along its worldline.",
+      "steps": [
+        {
+          "heading": "Treat coordinates as labels, not physical rulers",
+          "text": "An event has coordinate labels x^μ, but a coordinate difference does not by itself equal a measured spatial distance or elapsed clock time. The metric tensor g_μν(x) supplies the local relationship ds²=g_μν dx^μ dx^ν. Its components change when the coordinate system changes, while invariant intervals along physical paths retain their geometric meaning."
+        },
+        {
+          "heading": "Follow a timelike worldline with a clock",
+          "text": "In the common signature (−,+,+,+), a timelike path satisfies ds²<0 and the clock's proper time obeys dτ=√(−ds²)/c. To find accumulated time, integrate dτ along the path; the result depends on the worldline, not only on differences between coordinate labels."
+        },
+        {
+          "heading": "Use flat spacetime before introducing curvature",
+          "text": "In inertial Cartesian coordinates in flat spacetime, ds²=−c²dt²+dx²+dy²+dz². A clock moving at constant speed v relative to that frame accumulates dτ=dt√(1−v²/c²), illustrating why two differently moving clocks may record different proper times between events."
+        },
+        {
+          "heading": "Connect geometry to gravitational waves without confusing positions with directions",
+          "text": "In curved spacetime, the metric varies with position and is determined dynamically by gravitational field equations under specified matter and boundary conditions. A gravitational wave is a propagating weak geometrical perturbation under appropriate conditions. Its predicted effect on separated freely falling bodies is connected to curvature and tidal relative acceleration, not to treating the position vector as the direction of the field."
+        }
+      ],
+      "example": {
+        "title": "Calculate a simple flat-spacetime clock reading",
+        "text": "A spacecraft travels at v=0.6c for 10 years of inertial-coordinate time, with constant velocity during the interval. Its proper time is τ=10√(1−0.6²)=10×0.8=8 years. This is a simplified inertial-segment calculation; comparing clocks between the same departure and reunion events also requires accounting for the return route and any acceleration."
+      },
+      "boundary": "Metric-component values depend on coordinates, and a coordinate displacement is not generally a physical separation. The flat-spacetime example does not calculate curvature, strong-field clock behavior or a detector's real response to gravitational waves."
+    },
+    {
+      "id": "binary-initial-conditions",
+      "opening": "Imagine asking a rapid population-synthesis code to create one hundred thousand newborn binaries. Before any star evolves, you must decide what combinations of primary mass, mass ratio, orbital period, eccentricity and metallicity enter the calculation. The distribution from which you sample these properties is already a physical assumption that can change the eventual merger predictions.",
+      "steps": [
+        {
+          "heading": "Write down the joint initial distribution",
+          "text": "Let θ_birth=(m₁,q,P,e,Z), where q=m₂/m₁ may be restricted by a declared primary-mass convention. A joint density p(θ_birth) describes the target birth population. Setting p(θ_birth)=p(m₁)p(q)p(P)p(e)p(Z) is an independence assumption, not a general statistical identity."
+        },
+        {
+          "heading": "Check correlations and physical constraints",
+          "text": "Realistic or chosen binary distributions may correlate period and mass ratio, and eccentricity may depend on separation or stellar type. Some sampled combinations can violate Roche geometry or represent contact systems at birth. Define how the sampling method handles rejection, resampling or early interaction, since removing invalid draws changes the effective sample."
+        },
+        {
+          "heading": "Track sample design versus intended population",
+          "text": "To increase computational efficiency, a code may oversample massive primaries or select only periods of interest. If the actual proposal distribution differs from the target population, attach weights or a documented normalization correction. Counting unweighted successful draws will then describe the simulation sampling strategy rather than the target birth distribution."
+        },
+        {
+          "heading": "Propagate birth assumptions to observable predictions",
+          "text": "Evolving the draws through winds, transfer, collapse, kicks and inspiral produces remnant and merger distributions. Applying cosmic formation and detector selection then produces expected detections. A disagreement with observations cannot automatically be attributed to a late-stage physics prescription when the initial joint distribution is uncertain."
+        }
+      ],
+      "example": {
+        "title": "Independent sampling can forbid or invent a correlation",
+        "text": "Suppose a toy birth model has two period categories, short and long, and two mass-ratio categories, equal and unequal, each marginally 50%. If you sample independently, each of the four combinations occurs with probability 25%. A different joint model may put 50% on short/equal and 50% on long/unequal, with zero probability for the other two combinations despite identical marginals. Such a difference can change which binaries interact."
+      },
+      "boundary": "An initial distribution cannot be inferred from its separate marginal histograms alone. Observational binary surveys have their own selection effects, and the code's proposal population, physical birth population and detector-selected merger population are distinct statistical objects."
+    },
+    {
+      "id": "cosmic-metallicity",
+      "opening": "Imagine two cosmic epochs with the same total amount of star formation but different mixtures of metal-poor and metal-rich birth environments. If black-hole formation efficiency varies with the progenitor composition, the two epochs can produce different future merger histories even when their total new stellar mass is identical.",
+      "steps": [
+        {
+          "heading": "Represent metallicity as a distribution at each epoch",
+          "text": "Rather than assigning every newborn star one metallicity, define p(Z|t_birth) or a discrete weighted set of birth-metallicity bins. This distribution describes the fraction of star formation associated with each assumed composition at that epoch. A mean metallicity alone generally does not determine the effect of a nonlinear formation-efficiency function."
+        },
+        {
+          "heading": "Weight each metallicity bin by its modeled yield",
+          "text": "Let η(Z) denote a compact-merger formation efficiency per unit formed stellar mass, under one specified population and delay convention. An epoch's effective yield is η_eff(t)=∫η(Z)p(Z|t)dZ. That integrates an astrophysical prescription over the birth-environment distribution; it is not an observed merger rate yet."
+        },
+        {
+          "heading": "Add delay times and the cosmic formation history",
+          "text": "Progenitors born at one epoch can merge much later, so the modeled intrinsic merger-rate history combines the star-formation density, metallicity-dependent efficiency and delay-time distribution. The observable catalog further depends on detector selection and cosmological source-to-observer time conversion."
+        },
+        {
+          "heading": "Identify what can and cannot be inferred",
+          "text": "Different metallicity histories, wind prescriptions and binary-interaction rules can produce overlapping merger-mass and rate predictions. Compare models across multiple observables and report degeneracies, rather than asserting a unique metallicity of birth for a single observed merger."
+        }
+      ],
+      "example": {
+        "title": "Why averaging metallicity before applying the yield can be wrong",
+        "text": "Consider equal stellar-mass fractions at two toy metallicities Z₁ and Z₂ with efficiencies η(Z₁)=4 and η(Z₂)=1 in arbitrary mergers per mass units. The correct mixture yield is η_eff=0.5×4+0.5×1=2.5 units. Evaluating η only at the average metallicity (Z₁+Z₂)/2 need not equal 2.5 if η(Z) is nonlinear; the average of a function generally differs from the function of an average."
+      },
+      "boundary": "Metallicity distributions are model-dependent and may be uncertain in their low-metallicity tails. Yield values here are illustrative arbitrary units, and real predictions require consistent abundance definitions, normalization, star-formation history, delays and observational selection."
+    },
+    {
+      "id": "dynamical-formation",
+      "opening": "Imagine compact objects moving in a dense star cluster, where close gravitational encounters are common. Two black holes that did not originate as the original components of one stellar binary may eventually become bound and merge after exchanges, binary hardening or other multi-body interactions. Their observed waveform can resemble a merger from an isolated binary, so formation history is an inference problem.",
+      "steps": [
+        {
+          "heading": "Distinguish pair formation from original stellar companionship",
+          "text": "In an isolated-binary channel, two stars evolve together through winds, transfer and collapse. In a dense dynamical environment, compact objects can interact after their progenitor stars have evolved, exchange partners in a pre-existing binary, form new bound systems and experience further encounters."
+        },
+        {
+          "heading": "Follow the role of repeated gravitational interactions",
+          "text": "A binary passing near a third object can exchange energy and angular momentum. Under some encounter conditions a hard binary can become harder, transferring orbital energy to other bodies. Encounter rates depend on number density, velocity distribution, cluster structure and binary population rather than only on component masses."
+        },
+        {
+          "heading": "Connect dynamics to the late inspiral",
+          "text": "An exchanged or hardened compact binary may later inspiral through gravitational-wave emission. Some dynamical encounters can produce eccentric sources or repeated mergers in suitable environments, but no one property uniquely proves dynamical formation. Stellar evolution, hierarchical mergers and detector selection introduce additional degeneracies."
+        },
+        {
+          "heading": "Compare hypotheses through populations and environment",
+          "text": "Test predicted distributions of masses, spins, eccentricity, redshift and merger rates against observations under stated dynamical and isolated-channel models. An individual waveform constrains the merger's compact objects, not the full preceding chain of encounters; channels should be compared statistically and with careful selection modeling."
+        }
+      ],
+      "example": {
+        "title": "A toy energy transfer in a cluster encounter",
+        "text": "Take an isolated Newtonian equal-mass compact binary with initial orbital energy E₁=−1 unit. After a hypothetical encounter, suppose its binary energy is E₂=−1.5 units. The binary has lost 0.5 unit of orbital energy; for total energy to balance, other components such as a recoiling intruder or the surrounding cluster must gain the corresponding energy, subject to any radiated losses. These arbitrary units illustrate an energy ledger, not an encounter simulation."
+      },
+      "boundary": "The frequency and outcomes of dynamical encounters require multi-body orbital integration and environmental modeling. A single merger mass or spin estimate does not determine its formation channel, and a simplified binary-energy comparison cannot predict a real cluster merger rate."
+    },
+    {
+      "id": "temporal-sampling",
+      "opening": "Imagine animating an evolving binary using a simulation that records its state once every million years. A short supernova event or rapid mass-transfer episode could happen entirely between two saved snapshots. The animation may look smooth, yet the stored output could miss precisely the mechanism that changed the orbit.",
+      "steps": [
+        {
+          "heading": "Separate physical evolution from sampled records",
+          "text": "A model evolves state variables in time, but a stored output table only records selected timestamps. The spacing Δt between recorded states is an analysis choice and need not match the numerical solver's internal adaptive time steps. An event log can record abrupt transitions that a coarse regularly sampled history cannot resolve."
+        },
+        {
+          "heading": "Understand the aliasing problem in a simple oscillation",
+          "text": "For a band-limited sinusoidal signal of frequency f, a uniform sampling rate f_s must exceed 2f to avoid the elementary Nyquist ambiguity under ideal reconstruction assumptions. Sampling exactly at the boundary is not a robust practical design. Stellar evolution is not generally a periodic band-limited signal, so the Nyquist criterion alone cannot guarantee that an impulsive binary transition has been captured."
+        },
+        {
+          "heading": "Compare timescales before choosing a visualization strategy",
+          "text": "An orbit may evolve slowly for millions of years and change abruptly around a collapse or unstable interaction. To show the physically relevant sequence, combine coarse long-term snapshots with high-resolution output around known events, preserving the order and provenance of those events rather than linearly interpolating across an unrecorded explosion."
+        },
+        {
+          "heading": "Report what interpolation invents",
+          "text": "Drawing intermediate points between two stored states can improve a display, but interpolation is not new simulation data. Across a discontinuous kick, smooth interpolation may suggest a gradual acceleration that the instantaneous-impulse model never predicted. Mark modeled event times explicitly and distinguish true recorded states from display-only connecting curves."
+        }
+      ],
+      "example": {
+        "title": "A narrow event missed by coarse sampling",
+        "text": "Suppose a toy simulation records binary separation at t=0, 1, 2 and 3 Myr, while a rapid modeled transition occurs at t=1.40 Myr and completes by t=1.41 Myr. None of the regular snapshots falls inside the 0.01-Myr interval. If a separate event log stores t=1.40 Myr and the pre/post-event values, an animation can display the discontinuity accurately rather than inventing a 1-Myr gradual change."
+      },
+      "boundary": "For recorded gravitational-wave strain, detector sampling and filtering require signal-processing considerations beyond a simple stellar-history display. For population-synthesis timelines, storage cadence, solver time step and event-log resolution are different quantities, and a plotted interpolation is not evidence that an unresolved physical process happened smoothly."
     }
   ]
 }
