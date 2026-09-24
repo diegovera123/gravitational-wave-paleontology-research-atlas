@@ -27,6 +27,9 @@ assert.equal(M.envelope({released:15,required:10,alpha:.6}).budgetMet,false);
 assert.ok(Math.abs(M.roche({donor:10,accretor:10,radius:1,a:10}).lobe/10-.37892)<.002);
 const selected=M.selection({a:100,b:100,pa:.8,pb:.2});
 assert.equal(selected.da,80);assert.equal(selected.db,20);assert.equal(selected.intrinsic,.5);assert.ok(Math.abs(selected.detected-.8)<1e-12);
+const d=M.delays({t1:2,t2:5,delay:3,mass1:1000,mass2:2000,yieldPer1000:1});
+assert.equal(d.count1,1);assert.equal(d.count2,2);assert.equal(d.merge1,5);assert.equal(d.merge2,8);
+assert.equal(M.delays({t1:2,t2:5,delay:0}).merge1,2,"A zero-delay cohort merges at its birth epoch in this discrete toy limit");
 const p=M.population({n:100,seed:42}),p2=M.population({n:100,seed:42});
 assert.equal(p.candidate+p.unbound+p.wide,100);
 assert.deepEqual(JSON.parse(JSON.stringify(p.rows)),JSON.parse(JSON.stringify(p2.rows)),"Same seed reproduces synthetic records");
@@ -44,6 +47,7 @@ let instance=X.mount({host,data:journey,concepts:conceptData.concepts,sources:so
  model:M,storage,getEvidence:()=>e,openConcept:id=>selectedConcept=id,openPractice:id=>openedPractice=id});
 assert.match(host.innerHTML,/FIELD-TO-RESEARCH PATHWAY/);
 assert.match(host.innerHTML,/INTERACTIVE PHYSICS LAB/);
+assert.ok(host.innerHTML.includes("Cosmic birth-to-merger delays"),"Seventh interactive physical model is available from the lab selector");
 assert.match(host.innerHTML,/role="img"/,"Live laboratory renders a model-dependent explanatory SVG");
 assert.match(host.innerHTML,/BROWSER-LOCAL RESEARCH WORKSPACE/);
 assert.match(host.innerHTML,/CURATED READING SEQUENCE/);
