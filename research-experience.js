@@ -159,12 +159,14 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
  function problemView(){
   const matches=data.problems.filter(p=>stageData().conceptIds.includes(p.conceptId));
   return '<section class="research-module"><div class="research-section-head"><span class="lesson-kicker">AUTHORED RESEARCH REASONING</span><h3>Show the actual reasoning</h3></div>'+
-   (matches.length?matches.map(p=>'<article class="research-problem"><span>'+esc(p.component)+'</span><h4>'+esc(p.title)+'</h4>'+
+   (matches.length?matches.map((p,index)=>'<details class="research-problem"'+(index===0?' open':'')+'><summary class="research-problem-summary">'+
+    '<span>PROBLEM '+(index+1)+' / '+matches.length+' · '+esc(p.component)+'</span><strong>'+esc(p.title)+'</strong></summary>'+
+    '<div class="research-problem-body"><button type="button" class="research-problem-concept" data-concept="'+esc(p.conceptId)+'">Review '+esc(byConcept.get(p.conceptId)?.title||"the concept")+' in the Knowledge Graph ↗</button>'+
     '<p>'+esc(p.scenario)+'</p><strong>'+esc(p.task)+'</strong>'+
     '<label for="research-problem-'+esc(p.id)+'">Work it out (scratchpad not stored)</label>'+
     '<textarea id="research-problem-'+esc(p.id)+'" rows="4" placeholder="Show your assumptions, algebra, units and conclusion."></textarea>'+
-    '<details><summary>Reveal an authored worked solution and self-check rubric</summary><ol>'+p.steps.map(x=>'<li>'+esc(x)+'</li>').join("")+
-    '</ol><h5>Check your reasoning</h5><ul>'+p.rubric.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></details></article>').join(""):
+    '<details class="research-problem-solution"><summary>Reveal an authored worked solution and self-check rubric</summary><ol>'+p.steps.map(x=>'<li>'+esc(x)+'</li>').join("")+
+    '</ol><h5>Check your reasoning</h5><ul>'+p.rubric.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></details></div></details>').join(""):
     '<p>Use the connected concept’s authored assessment. Additional derivation problems are still being written for this stage.</p>')+'</section>';
  }
  function notebook(){
