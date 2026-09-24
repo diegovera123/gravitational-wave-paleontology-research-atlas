@@ -5,14 +5,15 @@ const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const safe=u=>{try{const x=new URL(u);return x.protocol==="https:"?x.href:null;}catch{return null;}};
 const fields=["question","hypothesis","inputs","method","evidence","uncertainty","next"];
 const labels={question:"Research question",hypothesis:"Testable hypothesis",inputs:"Inputs, provenance and assumptions",method:"Reproducible method and controls",evidence:"Results and interpretation",uncertainty:"Uncertainty, alternatives and limitations",next:"Next investigation"};
-const labNames={kick:"Natal-kick orbit",chirp:"Inspiral chirp",envelope:"Common-envelope energy",roche:"Roche-lobe geometry",population:"Toy binary population",selection:"Detection bias"};
+const labNames={kick:"Natal-kick orbit",chirp:"Inspiral chirp",envelope:"Common-envelope energy",roche:"Roche-lobe geometry",population:"Toy binary population",selection:"Detection bias",delays:"Cosmic birth-to-merger delays"};
 const configs={
  kick:[["k","Kick / original orbital speed",0,2,.05,.5],["angle","Kick angle to orbital motion (degrees)",-180,180,15,0],["f","Fraction of initial gravitational mass lost",0,.9,.05,.1]],
  chirp:[["m1","First mass (solar masses)",1,100,1,10],["m2","Second mass (solar masses)",1,100,1,10],["forb","Orbital frequency (Hz)",.1,150,.1,20]],
  envelope:[["released","Released orbital energy (toy units)",0,100,1,15],["required","Envelope binding energy (toy units)",0,100,1,10],["alpha","Usable efficiency α",0,1,.05,.6]],
  roche:[["donor","Donor mass (solar masses)",1,100,1,12],["accretor","Accretor mass (solar masses)",1,100,1,6],["radius","Donor radius (toy distance units)",.1,100,.1,4],["a","Separation (same distance units)",.1,100,.1,10]],
  population:[["n","Number of distinct toy binaries",10,1000,10,100],["seed","Reproducible random seed",1,10000,1,42]],
- selection:[["a","Intrinsic class A count",0,1000,10,100],["b","Intrinsic class B count",0,1000,10,100],["pa","A detection probability",0,1,.05,.8],["pb","B detection probability",0,1,.05,.2]]
+ selection:[["a","Intrinsic class A count",0,1000,10,100],["b","Intrinsic class B count",0,1000,10,100],["pa","A detection probability",0,1,.05,.8],["pb","B detection probability",0,1,.05,.2]],
+ delays:[["t1","Cohort A birth time (Gyr)",0,13,1,2],["t2","Cohort B birth time (Gyr)",0,13,1,5],["delay","Fixed formation-to-merger delay (Gyr)",0,13,.5,3],["mass1","Formed stellar mass A (toy solar masses)",0,5000,250,1000],["mass2","Formed stellar mass B (toy solar masses)",0,5000,250,2000],["yieldPer1000","Expected mergers per 1000 toy solar masses",0,5,.25,1]]
 };
 const defaultLab=Object.fromEntries(Object.entries(configs).map(([k,v])=>[k,Object.fromEntries(v.map(c=>[c[0],c[5]]))]));
 const fmt=v=>v==null?"Not determined":typeof v==="boolean"?(v?"Yes":"No"):Number.isFinite(v)?(Math.abs(v)>9999||Math.abs(v)<.001&&v!==0?v.toExponential(3):Number(v.toPrecision(5)).toString()):esc(v);
@@ -121,6 +122,21 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
       text(267,101,"Donor radius: "+fmt(m.radius))+
       text(267,124,"Roche lobe: "+fmt(m.lobe))+
       text(267,147,m.overflow?"Geometry indicates overflow":"Donor remains inside lobe");
+  }else if(lab==="delays"){
+    title="Two stellar birth cohorts shifted to their merger epochs";
+    caption="Horizontal axis is illustrative cosmic time in Gyr. Cohort markers and expected merger counts derive only from a fixed toy delay and stipulated yield, not from observational data.";
+    const x=time=>32+416*time/26;
+    const a=x(m.t1),b=x(m.t2),ma=x(m.merge1),mb=x(m.merge2);
+    content='<path d="M32 170 L448 170" class="research-svg-first" />'+
+      '<path d="M'+a+' 66 L'+ma+' 66" class="research-svg-second" />'+
+      '<path d="M'+b+' 113 L'+mb+' 113" class="research-svg-result" />'+
+      '<circle cx="'+a+'" cy="66" r="6" class="research-svg-point" />'+
+      '<circle cx="'+ma+'" cy="66" r="6" class="research-svg-point" />'+
+      '<circle cx="'+b+'" cy="113" r="6" class="research-svg-point" />'+
+      '<circle cx="'+mb+'" cy="113" r="6" class="research-svg-point" />'+
+      text(20,34,"Cohort A: "+fmt(m.count1)+" expected toy mergers")+
+      text(20,98,"Cohort B: "+fmt(m.count2)+" expected toy mergers")+
+      text(20,202,"Birth times → shifted merger times; fixed delay "+fmt(m.delay)+" Gyr");
   }else if(lab==="selection"||lab==="population"){
     title=lab==="selection"?"Intrinsic events versus expected detected events":"Distinct toy simulation outcomes";
     caption=lab==="selection"?"Bar lengths show expected counts only; real detections fluctuate.":"All systems and classifications are generated using the seeded, deliberately unitless toy impulse model.";
@@ -144,6 +160,7 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   if(lab==="roche")cells=[["Donor/accretor mass ratio q",fmt(m.q)],["Effective Roche-lobe radius",fmt(m.lobe)],["Roche geometry overflow?",m.overflow?"Yes":"No"]];
   if(lab==="population")cells=[["Distinct sampled binaries",fmt(m.n)],["Toy close bound candidates",fmt(m.candidate)],["Unbound",fmt(m.unbound)],["Other bound / unclassified",fmt(m.wide)],["Toy candidate fraction",fmt(m.p)],["Illustrative binomial standard error",fmt(m.binomialSE)]];
   if(lab==="selection")cells=[["Expected detected A",fmt(m.da)],["Expected detected B",fmt(m.db)],["Intrinsic A fraction",fmt(m.intrinsic)],["Expected detected A fraction",fmt(m.detected)]];
+  if(lab==="delays")cells=[["Cohort A expected toy mergers",fmt(m.count1)],["Cohort A merger epoch (Gyr)",fmt(m.merge1)],["Cohort B expected toy mergers",fmt(m.count2)],["Cohort B merger epoch (Gyr)",fmt(m.merge2)]];
   return visualization(m)+'<div class="research-results">'+cells.map(([name,value])=>'<div><span>'+esc(name)+'</span><strong>'+esc(value)+'</strong></div>').join("")+'</div>'+
    '<p class="research-caveat">'+esc(m.caveat)+'</p>'+
    (lab==="population"?'<details><summary>Inspect the first 25 synthetic system records</summary><pre class="research-data">'+
