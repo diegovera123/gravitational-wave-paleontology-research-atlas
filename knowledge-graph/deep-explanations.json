@@ -973,6 +973,33 @@
         "text": "Take an isolated Newtonian equal-mass compact binary with initial orbital energy E₁=−1 unit. After a hypothetical encounter, suppose its binary energy is E₂=−1.5 units. The binary has lost 0.5 unit of orbital energy; for total energy to balance, other components such as a recoiling intruder or the surrounding cluster must gain the corresponding energy, subject to any radiated losses. These arbitrary units illustrate an energy ledger, not an encounter simulation."
       },
       "boundary": "The frequency and outcomes of dynamical encounters require multi-body orbital integration and environmental modeling. A single merger mass or spin estimate does not determine its formation channel, and a simplified binary-energy comparison cannot predict a real cluster merger rate."
+    },
+    {
+      "id": "temporal-sampling",
+      "opening": "Imagine animating an evolving binary using a simulation that records its state once every million years. A short supernova event or rapid mass-transfer episode could happen entirely between two saved snapshots. The animation may look smooth, yet the stored output could miss precisely the mechanism that changed the orbit.",
+      "steps": [
+        {
+          "heading": "Separate physical evolution from sampled records",
+          "text": "A model evolves state variables in time, but a stored output table only records selected timestamps. The spacing Δt between recorded states is an analysis choice and need not match the numerical solver's internal adaptive time steps. An event log can record abrupt transitions that a coarse regularly sampled history cannot resolve."
+        },
+        {
+          "heading": "Understand the aliasing problem in a simple oscillation",
+          "text": "For a band-limited sinusoidal signal of frequency f, a uniform sampling rate f_s must exceed 2f to avoid the elementary Nyquist ambiguity under ideal reconstruction assumptions. Sampling exactly at the boundary is not a robust practical design. Stellar evolution is not generally a periodic band-limited signal, so the Nyquist criterion alone cannot guarantee that an impulsive binary transition has been captured."
+        },
+        {
+          "heading": "Compare timescales before choosing a visualization strategy",
+          "text": "An orbit may evolve slowly for millions of years and change abruptly around a collapse or unstable interaction. To show the physically relevant sequence, combine coarse long-term snapshots with high-resolution output around known events, preserving the order and provenance of those events rather than linearly interpolating across an unrecorded explosion."
+        },
+        {
+          "heading": "Report what interpolation invents",
+          "text": "Drawing intermediate points between two stored states can improve a display, but interpolation is not new simulation data. Across a discontinuous kick, smooth interpolation may suggest a gradual acceleration that the instantaneous-impulse model never predicted. Mark modeled event times explicitly and distinguish true recorded states from display-only connecting curves."
+        }
+      ],
+      "example": {
+        "title": "A narrow event missed by coarse sampling",
+        "text": "Suppose a toy simulation records binary separation at t=0, 1, 2 and 3 Myr, while a rapid modeled transition occurs at t=1.40 Myr and completes by t=1.41 Myr. None of the regular snapshots falls inside the 0.01-Myr interval. If a separate event log stores t=1.40 Myr and the pre/post-event values, an animation can display the discontinuity accurately rather than inventing a 1-Myr gradual change."
+      },
+      "boundary": "For recorded gravitational-wave strain, detector sampling and filtering require signal-processing considerations beyond a simple stellar-history display. For population-synthesis timelines, storage cadence, solver time step and event-log resolution are different quantities, and a plotted interpolation is not evidence that an unresolved physical process happened smoothly."
     }
   ]
 }
