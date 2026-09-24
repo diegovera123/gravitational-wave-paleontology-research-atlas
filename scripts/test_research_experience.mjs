@@ -48,6 +48,9 @@ assert.match(host.innerHTML,/role="img"/,"Live laboratory renders a model-depend
 assert.match(host.innerHTML,/BROWSER-LOCAL RESEARCH WORKSPACE/);
 assert.match(host.innerHTML,/CURATED READING SEQUENCE/);
 assert.match(host.innerHTML,/RESEARCH REASONING/);
+assert.equal((host.innerHTML.match(/class="research-problem"/g)||[]).length,5,"Each stage shows five authored problems as separate disclosure cards");
+assert.equal((host.innerHTML.match(/class="research-problem" open/g)||[]).length,1,"Only the first authored problem starts expanded");
+assert.match(host.innerHTML,/data-concept="orbital-energy"/,"Research problems link back to their specific concept explanations");
 assert.equal(instance.snapshot().stage,"orbit");
 instance.selectStage("population");
 assert.equal(instance.snapshot().stage,"population");
