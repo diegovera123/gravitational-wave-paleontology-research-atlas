@@ -23,7 +23,7 @@ function validate(data,concepts,sources){
  const ids=new Set();
  for(const s of data.stages){
   if(!s.id||ids.has(s.id)||s.conceptIds.length<3||s.conceptIds.some(id=>!known.has(id))||!known.has(s.practiceConceptId)||!labNames[s.simulation]||s.readingIds.some(id=>!refs.has(id)||!safe(refs.get(id).url))||!s.deliverable)throw Error("Invalid research stage "+s.id);
-  if(s.prior&&!ids.has(s.prior))throw Error("Research-stage order invalid "+s.id);ids.add(s.id);
+  ids.add(s.id);
  }
  for(const p of data.problems)if(!known.has(p.conceptId)||p.steps?.length<3||!p.rubric?.length)throw Error("Incomplete authored research problem "+p.id);
  for(const e of data.relationships)if(!known.has(e.from)||!known.has(e.to)||!["causal","application","prerequisite"].includes(e.kind)||!e.why)throw Error("Unverified relation data "+e.from);
@@ -33,17 +33,17 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
  validate(data,concepts,sources);
  if(!host)return null;
  const byConcept=new Map(concepts.map(c=>[c.id,c])),bySource=new Map(sources.map(s=>[s.id,s]));
- const KEY="research-atlas-research-workspace-v1",draft={done:[],notes:{},stage:"orbit",lab:"kick",params:defaultLab};
+ const KEY="research-atlas-research-workspace-v1",draft={done:[],notes:{},lab:"kick",params:defaultLab};
  try{const p=JSON.parse(storage?.getItem?.(KEY)||"null");if(p&&typeof p==="object"){
   draft.done=Array.isArray(p.done)?p.done.filter(id=>data.stages.some(s=>s.id===id)):[];
   draft.notes=p.notes&&typeof p.notes==="object"?p.notes:{};
-  draft.stage=data.stages.some(s=>s.id===p.stage)?p.stage:"orbit";
   draft.lab=labNames[p.lab]?p.lab:data.stages[0].simulation;
   if(p.params&&typeof p.params==="object")for(const key of Object.keys(defaultLab)){
     draft.params[key]={...defaultLab[key],...(p.params[key]||{})};
   }
  }}catch{/* Browser storage may be blocked. Session still works. */}
- let stage=draft.stage,lab=draft.lab;
+ // Do not reopen a previous question automatically; keep saved notes and explored flags.
+ let stage=null,lab=draft.lab;
  const persist=()=>{try{storage?.setItem?.(KEY,JSON.stringify({
   done:draft.done,notes:draft.notes,stage,lab,params:draft.params}));return true;}catch{return false;}};
  const stageData=()=>data.stages.find(s=>s.id===stage);
@@ -56,9 +56,9 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   }).join("");
  }
  function stageCards(){
-  return data.stages.map((s,i)=>'<button type="button" data-stage="'+esc(s.id)+'" class="research-stage-card'+(stage===s.id?" is-current":"")+'" aria-pressed="'+(stage===s.id)+'">'+
-   '<span class="research-stage-number">'+String(i+1).padStart(2,"0")+(draft.done.includes(s.id)?" · explored ✓":"")+'</span>'+
-   '<strong>'+esc(s.name.replace(/^\d+ · /,""))+'</strong><small>'+esc(s.question)+'</small></button>').join("");
+  return data.stages.map(s=>'<button type="button" data-stage="'+esc(s.id)+'" class="research-stage-card'+(stage===s.id?" is-current":"")+'" aria-pressed="'+(stage===s.id)+'">'+
+   '<span class="research-stage-number">'+(draft.done.includes(s.id)?"Explored ✓":"Research question")+'</span>'+
+   '<strong>'+esc(s.name)+'</strong><small>'+esc(s.question)+'</small></button>').join("");
  }
  function evidenceCard(){
   const score=getEvidence?.()||{};
@@ -192,38 +192,37 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
    '<p>This notebook starts with your own hypothesis, method and evidence. It does not execute COMPAS, retrieve private lab data, grade scientific claims or submit work to anyone.</p>'+
    fields.map(k=>'<label for="research-note-'+k+'">'+esc(labels[k])+'</label>'+
     '<textarea id="research-note-'+k+'" rows="'+(k==="method"||k==="evidence"?4:3)+'" data-note="'+k+'" maxlength="10000" placeholder="'+
-    esc(k==="question"?stageData().question:k==="hypothesis"?"Write what result would support or challenge your claim.":k==="inputs"?"Name every source and distinguish toy inputs from real datasets.":k==="method"?"Specify code version, seed, unit convention and controlled comparison.":k==="evidence"?"Record results, plots or links and how they were obtained.":k==="uncertainty"?"Separate sampling, measurement, model and selection uncertainties.":"What would you test next?")+'">'+esc(values[k]||"")+'</textarea>').join("")+
+    esc(k==="question"?stageData().name:k==="hypothesis"?"Write what result would support or challenge your claim.":k==="inputs"?"Name every source and distinguish toy inputs from real datasets.":k==="method"?"Specify code version, seed, unit convention and controlled comparison.":k==="evidence"?"Record results, plots or links and how they were obtained.":k==="uncertainty"?"Separate sampling, measurement, model and selection uncertainties.":"What would you test next?")+'">'+esc(values[k]||"")+'</textarea>').join("")+
    '<div class="research-notebook-actions"><span id="research-save-status" role="status">Notes stay on this device when browser storage is available.</span>'+
    '<button type="button" data-action="export">Export notes (.md) ↓</button></div></section>';
  }
  function render(){
-  const s=stageData(),prior=s.prior&&!draft.done.includes(s.prior);
-  host.innerHTML='<div class="research-experience"><header class="research-experience-hero"><span class="lesson-kicker">FIELD-TO-RESEARCH PATHWAY · PILOT</span>'+
-   '<h2>Follow one binary from its birth to a detected gravitational wave.</h2>'+
-   '<p>Six connected stages, real mapped concepts, original toy physics labs, authored derivation checks and a research notebook. This is independent self-study material, not official RAKIURA onboarding or validated scientific training.</p>'+
-   '<span>'+draft.done.length+' of 6 stages self-marked explored · You can open any stage</span></header>'+
-   '<nav class="research-stage-grid" aria-label="Six-step research pathway">'+stageCards()+'</nav>'+
-   '<section class="research-module research-stage-detail"><span class="lesson-kicker">CURRENT STAGE</span><h3>'+esc(s.name)+'</h3>'+
+  const s=stageData();
+  host.innerHTML='<div class="research-experience"><header class="research-experience-hero"><span class="lesson-kicker">RESEARCH QUESTIONS · PILOT</span>'+
+   '<h2>Choose a research question to explore.</h2>'+
+   '<p>Six connected questions, mapped concepts, toy physics labs, authored derivation checks, and a research notebook. Open any question in any order. This is independent self-study material, not official RAKIURA onboarding or validated scientific training.</p>'+
+   '<span>'+draft.done.length+' of 6 questions explored · Open any question</span></header>'+
+   '<nav class="research-stage-grid" aria-label="Choose any research question">'+stageCards()+'</nav>'+
+   (s?'<section class="research-module research-stage-detail"><span class="lesson-kicker">OPEN QUESTION</span><h3>'+esc(s.name)+'</h3>'+
     '<p class="research-stage-question">'+esc(s.question)+'</p>'+
-    (prior?'<p class="research-caveat">Suggested earlier stage: '+esc(data.stages.find(x=>x.id===s.prior).name)+'. This is guidance, not a prerequisite lock.</p>':"")+
     (s.id==="orbit"?'<p class="research-caveat">Optional study-group bridge: after listening to your group’s introductory gravitational-wave paleontology material, list three unfamiliar concepts and locate their actual prerequisites in the graph. This independent Atlas is not official onboarding.</p>':"")+
     (s.id==="population"?'<p class="research-caveat">If your research group has provided a simulation onboarding notebook, run that notebook under its own instructions separately. Compare its real version, seed, input files and provenance with this Atlas’s deliberately synthetic toy model; do not present toy results as COMPAS output.</p>':"")+
     '<div class="research-concept-chips">'+s.conceptIds.map(id=>'<button type="button" data-concept="'+esc(id)+'">'+esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div>'+
     '<p><strong>Investigation:</strong> '+esc(s.researchTask)+'</p><p><strong>Suggested artifact:</strong> '+esc(s.deliverable)+'</p>'+
     '<div class="research-stage-actions"><button type="button" data-action="practice">Open linked Practice →</button>'+
-    '<button type="button" data-action="done">'+(draft.done.includes(stage)?"Marked explored ✓ (toggle)":"Mark stage explored (self-report)")+'</button></div></section>'+
+    '<button type="button" data-action="done">'+(draft.done.includes(stage)?"Question explored ✓ (toggle)":"Mark question explored (self-report)")+'</button></div></section>'+
    '<section class="research-module"><span class="lesson-kicker">EVIDENCE FROM ACTUAL AUTHORED QUESTION RESPONSES</span><h3>What have I demonstrated so far?</h3>'+evidenceCard()+'</section>'+
    labView()+problemView()+
    '<section class="research-module research-reading"><span class="lesson-kicker">CURATED READING SEQUENCE</span><h3>Read with a purpose</h3>'+
     '<p>These are real references already listed in the Atlas. The annotations are broad reading guidance, not verified page/section claims or a list of 1,000 hand-reviewed papers.</p>'+
-    '<ol>'+sourceList(s)+'</ol></section>'+notebook()+'</div>';
+    '<ol>'+sourceList(s)+'</ol></section>'+notebook():"")+'</div>';
  }
  function updateModel(){
   const output=host.querySelector("#research-lab-output");if(output)output.innerHTML=result();
  }
  host.addEventListener("click",event=>{
   const t=event.target.closest?.("[data-stage],[data-concept],[data-action]");if(!t)return;
-  if(t.dataset.stage){stage=t.dataset.stage;lab=stageData().simulation;persist();render();}
+  if(t.dataset.stage){stage=stage===t.dataset.stage?null:t.dataset.stage;if(stage)lab=stageData().simulation;persist();render();if(stage)host.querySelector(".research-stage-detail")?.scrollIntoView?.({behavior:"smooth",block:"start"});}
   else if(t.dataset.concept){openConcept?.(t.dataset.concept);}
   else if(t.dataset.action==="practice"){openPractice?.(stageData().practiceConceptId);}
   else if(t.dataset.action==="done"){draft.done=draft.done.includes(stage)?draft.done.filter(id=>id!==stage):[...draft.done,stage];persist();render();}
