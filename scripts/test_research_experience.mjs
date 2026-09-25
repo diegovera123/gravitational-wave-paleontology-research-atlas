@@ -45,20 +45,32 @@ const saved=new Map();const storage={getItem:key=>saved.get(key)||null,setItem:(
 let selectedConcept="",openedPractice="";
 let instance=X.mount({host,data:journey,concepts:conceptData.concepts,sources:sourceData.sources,
  model:M,storage,getEvidence:()=>e,openConcept:id=>selectedConcept=id,openPractice:id=>openedPractice=id});
-assert.match(host.innerHTML,/FIELD-TO-RESEARCH PATHWAY/);
+assert.match(host.innerHTML,/Choose a research question to explore/,"No fixed first-step hero");
+assert.equal(instance.snapshot().stage,null,"No question automatically selected");
+assert.equal((host.innerHTML.match(/data-stage="/g)||[]).length,6,"All six questions are visible at once");
+assert.doesNotMatch(host.innerHTML,/class="research-stage-detail"|CURRENT STAGE|Suggested earlier stage/,"No selected detail or prerequisite nudge until the learner chooses");
+assert.doesNotMatch(host.innerHTML,/>0[1-6] · |Start with a real binary|FIELD-TO-RESEARCH PATHWAY/,"Cards are questions, not numbered stages");
+assert.ok(journey.stages.every(s=>s.name.endsWith("?")&&!Object.hasOwn(s,"prior")),"Six unnumbered, independently selectable research questions");
+// Select the LAST question first: research entry points must be truly non-linear.
+handlers.click({target:{closest:()=>({dataset:{stage:"inference"}})}});
+assert.equal(instance.snapshot().stage,"inference","Clicking a non-first card opens exactly that question");
+assert.match(host.innerHTML,/OPEN QUESTION/);
 assert.match(host.innerHTML,/INTERACTIVE PHYSICS LAB/);
-assert.ok(host.innerHTML.includes("Cosmic birth-to-merger delays"),"Seventh interactive physical model is available from the lab selector");
-assert.match(host.innerHTML,/role="img"/,"Live laboratory renders a model-dependent explanatory SVG");
+assert.ok(host.innerHTML.includes("Cosmic birth-to-merger delays"),"Seventh toy model remains selectable");
+assert.match(host.innerHTML,/role="img"/,"Selected question includes a live educational SVG");
 assert.match(host.innerHTML,/BROWSER-LOCAL RESEARCH WORKSPACE/);
 assert.match(host.innerHTML,/CURATED READING SEQUENCE/);
 assert.match(host.innerHTML,/RESEARCH REASONING/);
-assert.equal((host.innerHTML.match(/class="research-problem"/g)||[]).length,5,"Each stage shows five authored problems as separate disclosure cards");
-assert.equal((host.innerHTML.match(/class="research-problem" open/g)||[]).length,1,"Only the first authored problem starts expanded");
-assert.match(host.innerHTML,/data-concept="orbital-energy"/,"Research problems link back to their specific concept explanations");
-assert.equal(instance.snapshot().stage,"orbit");
+assert.equal((host.innerHTML.match(/class="research-problem"/g)||[]).length,5,"Five authored problems for the chosen question");
+assert.equal((host.innerHTML.match(/class="research-problem" open/g)||[]).length,1,"Only the first problem within the chosen question starts open");
+assert.match(host.innerHTML,/data-concept="detector-selection-effects"/,"Concept review matches the selected question");
+handlers.click({target:{closest:()=>({dataset:{stage:"inference"}})}});
+assert.equal(instance.snapshot().stage,null,"Clicking the open card again collapses the question");
+assert.doesNotMatch(host.innerHTML,/class="research-stage-detail"/,"Collapsing returns to only the choice cards");
 instance.selectStage("population");
 assert.equal(instance.snapshot().stage,"population");
 assert.match(host.innerHTML,/simulation onboarding notebook/);
+assert.match(host.innerHTML,/Open any question in any order/,"Question selection is never gated by prior selections");
 assert.match(host.innerHTML,/Synthetic|synthetic/);
 assert.equal(instance.snapshot().done.length,0,"No unsupported implicit mastery or completed stages");
 handlers.click({target:{closest:()=>({dataset:{action:"done"}})}});
@@ -70,9 +82,16 @@ handlers.click({target:{closest:()=>({dataset:{action:"practice"}})}});
 assert.equal(openedPractice,"detector-selection-effects");
 handlers.click({target:{closest:()=>({dataset:{concept:"cosmic-merger-rates"}})}});
 assert.equal(selectedConcept,"cosmic-merger-rates");
+// A saved previous selection must not auto-open on the next visit.
+const secondHost={innerHTML:"",addEventListener(){},querySelector:()=>null};
+const reopened=X.mount({host:secondHost,data:journey,concepts:conceptData.concepts,sources:sourceData.sources,
+ model:M,storage,getEvidence:()=>e});
+assert.equal(reopened.snapshot().stage,null,"Reloading does not automatically reopen the last question");
+assert.equal(reopened.snapshot().done.length,1,"Self-reported exploration is preserved across visits");
+assert.doesNotMatch(secondHost.innerHTML,/class="research-stage-detail"/,"Reloaded UI also starts at the six-card picker");
 const before=await fs.readFile("index.html","utf8");
 assert.ok(before.includes('id="research-experience"')&&before.indexOf('id="research-experience"')>before.indexOf('id="practice-panel"'),"Integrated pathway belongs to Practice");
 assert.equal((before.match(/data-atlas-tab=/g)||[]).length,3,"No unnecessary fourth tab");
 const graph=await fs.readFile("constellation.js","utf8");
 assert.ok(graph.includes("relationData")&&graph.includes("scientific-relations")&&graph.includes("type:\"prerequisite\""),"Graph distinguishes typed scientific relations from containment");
-console.log("Passed: six connected research stages, thirty worked reasoning problems, typed science edges, six toy models, deterministic sampling, evidence and local notebook inside Practice.");
+console.log("Passed: six non-linear research question cards, no default/remembered auto-selection, preserved progress, 30 authored problems, toy models, evidence and local notebook inside Practice.");
