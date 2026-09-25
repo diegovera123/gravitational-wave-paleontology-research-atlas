@@ -4,8 +4,8 @@
   "stages": [
     {
       "id": "orbit",
-      "name": "01 · Start with a real binary",
-      "question": "When is a binary gravitationally bound, and what makes its orbit change?",
+      "name": "When is a binary gravitationally bound, and what changes its orbit?",
+      "question": "Explore orbital energy, eccentricity, perturbations, and the conditions that shape binary motion.",
       "conceptIds": [
         "keplerian-orbits",
         "orbital-energy",
@@ -19,13 +19,12 @@
         "mandel-broekgaarden-2022"
       ],
       "researchTask": "For a bound point-mass binary, compare the orbital energies at a and 2a and explain why eccentricity affects pericentre without changing energy at fixed a.",
-      "deliverable": "A one-page orbit-energy argument, with a labeled diagram and explicit assumptions.",
-      "prior": null
+      "deliverable": "A one-page orbit-energy argument, with a labeled diagram and explicit assumptions."
     },
     {
       "id": "evolution",
-      "name": "02 · Follow the progenitor stars",
-      "question": "How can interactions between two massive stars alter the compact remnants they leave?",
+      "name": "How can two massive stars change the compact remnants they leave behind?",
+      "question": "Study stellar evolution, winds, Roche-lobe overflow, mass transfer, and common-envelope evolution.",
       "conceptIds": [
         "stellar-evolution",
         "metallicity",
@@ -41,13 +40,12 @@
         "han-2020"
       ],
       "researchTask": "Compare two toy mass-transfer histories and list what is needed to infer final separation. Distinguish a mass ledger from an orbital-angular-momentum budget.",
-      "deliverable": "A two-column comparison of evolutionary mechanisms and stated model limitations.",
-      "prior": "orbit"
+      "deliverable": "A two-column comparison of evolutionary mechanisms and stated model limitations."
     },
     {
       "id": "remnants",
-      "name": "03 · Test compact-binary survival",
-      "question": "Can a supernova turn the same initial binary into a survivor or an unbound pair?",
+      "name": "Can a supernova leave a binary bound, or break it apart?",
+      "question": "Examine core collapse, compact-remnant formation, natal kicks, and post-supernova survival.",
       "conceptIds": [
         "core-collapse-supernovae",
         "compact-remnants",
@@ -61,13 +59,12 @@
         "han-2020"
       ],
       "researchTask": "For fixed separation and post-explosion masses, vary kick orientation and compute specific orbital energy to classify whether a surviving binary is bound.",
-      "deliverable": "A table of toy post-supernova orbital energies with reasoning about kick direction.",
-      "prior": "evolution"
+      "deliverable": "A table of toy post-supernova orbital energies with reasoning about kick direction."
     },
     {
       "id": "signals",
-      "name": "04 · Connect the merger to its waveform",
-      "question": "Why does the emitted wave chirp, and what does its phase reveal?",
+      "name": "How does a compact binary become a gravitational-wave signal?",
+      "question": "Trace inspiral, chirp mass, waveform evolution, and detector response from source to signal.",
       "conceptIds": [
         "compact-binary-inspiral",
         "chirp-mass",
@@ -81,13 +78,12 @@
         "mandel-broekgaarden-2022"
       ],
       "researchTask": "Derive the equal-mass chirp-mass expression and connect an increasing orbital frequency to the increasing dominant GW frequency.",
-      "deliverable": "A worked derivation that distinguishes observed detector-frame masses from source-frame masses.",
-      "prior": "remnants"
+      "deliverable": "A worked derivation that distinguishes observed detector-frame masses from source-frame masses."
     },
     {
       "id": "population",
-      "name": "05 · Model a population, not one anecdote",
-      "question": "How do sampled initial binaries become a distribution of merger candidates?",
+      "name": "How do many simulated binaries become a population prediction?",
+      "question": "Learn how Monte Carlo sampling, population synthesis, weights, and delay times produce merger populations.",
       "conceptIds": [
         "monte-carlo-methods",
         "binary-population-synthesis",
@@ -104,13 +100,12 @@
         "mandel-broekgaarden-2022"
       ],
       "researchTask": "Generate a transparent toy sample, count distinct systems rather than event rows, record the seed and normalize a selected yield by the stated sample denominator.",
-      "deliverable": "A reproducible toy-data analysis with sampling assumptions and an uncertainty paragraph.",
-      "prior": "signals"
+      "deliverable": "A reproducible toy-data analysis with sampling assumptions and an uncertainty paragraph."
     },
     {
       "id": "inference",
-      "name": "06 · Confront a detected population",
-      "question": "Which progenitor assumptions are constrained by detections after selection effects and cosmic delays?",
+      "name": "How do we connect cosmic populations to detected events?",
+      "question": "Explore cosmic star formation, metallicity, selection effects, and population inference.",
       "conceptIds": [
         "cosmic-star-formation",
         "cosmic-metallicity",
@@ -127,8 +122,7 @@
         "compas-demos"
       ],
       "researchTask": "Compare a two-class intrinsic population with its expected detected catalog, showing how detection efficiency changes apparent class fractions.",
-      "deliverable": "A brief research memo distinguishing formation, merger, detection and inference assumptions.",
-      "prior": "population"
+      "deliverable": "A brief research memo distinguishing formation, merger, detection and inference assumptions."
     }
   ],
   "problems": [
