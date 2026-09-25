@@ -105,10 +105,14 @@ const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
 assert.equal(run('TAB_NAMES.length'),3,"Home, Knowledge Graph, and Practice are the three main destinations");
-assert.match(elements.get("#research-experience").innerHTML,/six-stage research pathway|FIELD-TO-RESEARCH PATHWAY|Follow one binary/i,"Integrated research pathway mounts inside Practice");
-assert.match(elements.get("#research-experience").innerHTML,/INTERACTIVE PHYSICS LAB/,"Research pathway contains an operational toy physics laboratory");
-assert.match(elements.get("#research-experience").innerHTML,/RESEARCH WORKSPACE/,"Research notebook is part of the same Practice experience");
-assert.equal(run("researchController.snapshot().stage"),"orbit","The research pathway starts with orbital foundations");
+assert.match(elements.get("#research-experience").innerHTML,/Choose a research question to explore/,"Research question chooser mounts inside Practice");
+assert.doesNotMatch(elements.get("#research-experience").innerHTML,/INTERACTIVE PHYSICS LAB/,"No question contents or lab are automatically opened");
+assert.doesNotMatch(elements.get("#research-experience").innerHTML,/RESEARCH WORKSPACE/,"Notebook opens only after a research question is chosen");
+assert.equal(run("researchController.snapshot().stage"),null,"Research questions are initially unselected");
+run('researchController.selectStage("population")');
+assert.equal(run("researchController.snapshot().stage"),"population","Any research question can be opened directly");
+assert.match(elements.get("#research-experience").innerHTML,/INTERACTIVE PHYSICS LAB/,"Chosen question contains an operational toy lab");
+assert.match(elements.get("#research-experience").innerHTML,/RESEARCH WORKSPACE/,"Chosen question contains the research notebook");
 assert.ok(elements.get("#home-panel").classList.contains("focus-ready"),"Existing curriculum controller stays available for deep links");
 assert.equal(elements.get("#focus-domains").children.length,5,"All research sections remain in the existing curriculum");
 assert.equal(elements.get("#constellation-research-questions").children.length,questions.questions.length,"Research questions move inside Knowledge Graph");
