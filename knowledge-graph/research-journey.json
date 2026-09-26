@@ -794,5 +794,187 @@
       "kind": "prerequisite",
       "why": "Selection-aware normalization is required when inferring intrinsic properties from a detected catalog."
     }
+  ],
+  "inquiries": [
+    {
+      "id": "orbit-boundary",
+      "stageId": "orbit",
+      "conceptId": "orbital-energy",
+      "lab": "kick",
+      "question": "How much instantaneous mass loss can an initially circular binary survive without a natal kick?",
+      "hypothesis": "In the specified symmetric instantaneous model, losing at least half the total gravitational mass makes the post-event orbit non-bound.",
+      "method": "Hold pre-event r and v fixed, set the kick to zero, vary the fraction of gravitational mass lost and calculate ε=v²/2−GM_after/r. Identify the negative-, zero- and positive-energy regimes.",
+      "limits": "Applies to an initially circular isolated Newtonian binary with symmetric instantaneous mass loss; eccentric phase, finite-duration loss and kicks can change the threshold."
+    },
+    {
+      "id": "orbit-shape",
+      "stageId": "orbit",
+      "conceptId": "orbital-eccentricity",
+      "lab": "kick",
+      "question": "Can two binaries have the same orbital energy but different eccentricities?",
+      "hypothesis": "At fixed component masses and semi-major axis, changing specific angular momentum changes eccentricity without changing Keplerian orbital energy.",
+      "method": "Compare two post-impulse relative-velocity vectors with equal speed at the same separation but different radial/tangential components. Calculate ε, h=|r×v| and e²=1+2εh²/(GM)².",
+      "limits": "This is an isolated point-mass snapshot; actual kicks also change center-of-mass motion and subsequent hydrodynamic interactions."
+    },
+    {
+      "id": "orbit-direction",
+      "stageId": "orbit",
+      "conceptId": "orbital-perturbations",
+      "lab": "kick",
+      "question": "Why can two natal kicks with the same speed produce opposite survival outcomes?",
+      "hypothesis": "Adding equal-magnitude kicks along and against the instantaneous orbital motion gives different post-event relative speeds and orbital energies.",
+      "method": "Set mass loss to zero, choose one kick magnitude, compare angles of 0° and 180°, then calculate ε and classify the resulting orbit. Repeat at one nonzero mass-loss fraction.",
+      "limits": "The toy lab defines angles relative to tangential orbital velocity; realistic 3D kick directions and initial eccentricity require a more complete orbit model."
+    },
+    {
+      "id": "evolution-geometry",
+      "stageId": "evolution",
+      "conceptId": "roche-lobe",
+      "lab": "roche",
+      "question": "When does an expanding star first fill its Roche-lobe boundary?",
+      "hypothesis": "For fixed mass ratio and separation, exceeding the approximate volume-equivalent Roche radius indicates geometrical overflow onset.",
+      "method": "Hold donor/accretor masses and a constant; vary the donor radius around the calculated Eggleton R_L and document the first radius flagged as overfilling.",
+      "limits": "Roche-lobe contact does not predict a transfer rate or stability; the approximation assumes a circular synchronized configuration."
+    },
+    {
+      "id": "evolution-energy",
+      "stageId": "evolution",
+      "conceptId": "common-envelope",
+      "lab": "envelope",
+      "question": "When is released orbital energy insufficient to meet a common-envelope binding-energy budget?",
+      "hypothesis": "Within a specified α-energy ledger, ejection cannot be energetically supported by the modeled orbital source when αΔE_orb<E_bind.",
+      "method": "Vary efficiency and released energy against a fixed envelope binding requirement; find the equality boundary and explain why a satisfied inequality is not proof of actual ejection.",
+      "limits": "The α formalism omits hydrodynamics, detailed stellar structure and alternative energy sources; do not interpret the toy inequality as a survival prediction."
+    },
+    {
+      "id": "evolution-winds",
+      "stageId": "evolution",
+      "conceptId": "stellar-winds",
+      "lab": "roche",
+      "question": "Can different wind histories change whether a binary undergoes Roche-lobe overflow?",
+      "hypothesis": "Prescribed mass loss may alter stellar radius and orbital separation, changing the later ratio R_d/R_L; the direction cannot be inferred from the wind rate alone.",
+      "method": "Construct two explicit hypothetical end-state mass/radius/separation snapshots and compute each approximate Roche-lobe radius. State what an evolutionary model must supply between snapshots.",
+      "limits": "The Roche lab only evaluates supplied snapshots. It does not evolve wind mass loss, orbital angular momentum, stellar structure or metallicity dependence."
+    },
+    {
+      "id": "remnants-loss",
+      "stageId": "remnants",
+      "conceptId": "supernova-kicks",
+      "lab": "kick",
+      "question": "Does the familiar half-mass disruption rule survive when an explosion has a natal kick?",
+      "hypothesis": "The symmetric half-mass boundary is modified because a directional kick changes the post-event relative kinetic energy.",
+      "method": "Hold a mass-loss fraction near one half, then vary kick magnitude and direction. Compare post-event ε with the no-kick case and report marginal states separately.",
+      "limits": "The rule assumes an initially circular binary and instantaneous point-mass impulse. It does not determine remnant identity or actual supernova kick distributions."
+    },
+    {
+      "id": "remnants-eccentricity",
+      "stageId": "remnants",
+      "conceptId": "compact-binary-formation",
+      "lab": "kick",
+      "question": "Can a binary remain bound yet acquire a highly eccentric post-supernova orbit?",
+      "hypothesis": "A post-event orbit can have negative specific energy but large eccentricity when kick magnitude and direction alter angular momentum.",
+      "method": "Search the kick lab for two settings with ε<0 and different e, recording the relative-velocity vectors, ε and inferred semi-major axes.",
+      "limits": "The computed eccentricity describes an ideal Newtonian post-impulse orbit; collision, tides and strong-field effects are not included."
+    },
+    {
+      "id": "remnants-degeneracy",
+      "stageId": "remnants",
+      "conceptId": "compact-remnants",
+      "lab": "kick",
+      "question": "Can post-supernova orbital measurements uniquely determine the natal kick?",
+      "hypothesis": "Different kick magnitude, direction and mass-loss combinations can lead to similar post-event orbital energies.",
+      "method": "Try two contrasting kick/mass-loss combinations and compare ε, e and a. Record which observables would be needed beyond the toy output to narrow the history.",
+      "limits": "Similar computed orbital elements are not a validated astrophysical inverse degeneracy; systemic velocity, 3D orientation and progenitor priors matter."
+    },
+    {
+      "id": "signal-chirpmass",
+      "stageId": "signals",
+      "conceptId": "chirp-mass",
+      "lab": "chirp",
+      "question": "At the same orbital frequency, how does chirp mass change the rate at which a binary chirps?",
+      "hypothesis": "In a leading quasi-circular point-mass model, doubling chirp mass at fixed frequency increases ḟ by a factor 2^(5/3).",
+      "method": "Choose equal component masses, double both masses while fixing orbital frequency, and compare ḟ. Derive the expected power-law ratio before reading the output.",
+      "limits": "Valid only for a leading-order point-mass source-frame inspiral at appropriate frequencies; spin, eccentricity and redshift modify inference."
+    },
+    {
+      "id": "signal-frequency",
+      "stageId": "signals",
+      "conceptId": "compact-binary-inspiral",
+      "lab": "chirp",
+      "question": "Why does doubling gravitational-wave frequency dramatically shorten the remaining inspiral time?",
+      "hypothesis": "At fixed chirp mass, the leading-order formal inspiral time scales as f_GW^(−8/3).",
+      "method": "Keep component masses fixed and double the orbital frequency, which also doubles dominant f_GW. Compare the times and derive the expected ratio 2^(−8/3).",
+      "limits": "The displayed time extrapolates a weak-field approximation to formal coalescence, not an exact numerical-relativity merger time."
+    },
+    {
+      "id": "signal-redshift",
+      "stageId": "signals",
+      "conceptId": "gravitational-waveforms",
+      "lab": "chirp",
+      "question": "Why can the detector-frame mass differ from the compact binary's source-frame mass?",
+      "hypothesis": "Cosmological redshift stretches observed time scales, so a redshifted chirp mass enters the detected waveform rather than the bare source-frame value.",
+      "method": "Compute the source-frame chirp mass for a chosen binary. At a hypothetical redshift z=1, calculate M_c,det=(1+z)M_c,source on paper and state which quantity the toy lab reports.",
+      "limits": "The toy chirp lab explicitly assumes negligible redshift; it does not infer luminosity distance, cosmology or detector-frame masses."
+    },
+    {
+      "id": "population-repro",
+      "stageId": "population",
+      "conceptId": "monte-carlo-methods",
+      "lab": "population",
+      "question": "Does using the same random seed twice provide an independent uncertainty estimate?",
+      "hypothesis": "A repeated seed reproduces the same pseudo-random draws, while different seeds probe Monte Carlo variability under unchanged model assumptions.",
+      "method": "Fix N and every toy prescription, run the same seed twice, then compare multiple different seeds and record how the toy candidate fraction varies.",
+      "limits": "Seed variation does not measure stellar-evolution model uncertainty, detector selection uncertainty or physical merger rates."
+    },
+    {
+      "id": "population-size",
+      "stageId": "population",
+      "conceptId": "binary-population-synthesis",
+      "lab": "population",
+      "question": "How does the sample size affect the sampling noise of a toy binary population?",
+      "hypothesis": "For independent Bernoulli outcomes under a fixed distribution, the plug-in standard error scales approximately as 1/√N.",
+      "method": "Compare synthetic populations with N=100 and N=400, keeping the seed and prescriptions documented. Record p̂ and sqrt[p̂(1−p̂)/N], then repeat with several independent seeds.",
+      "limits": "The toy model generates arbitrary initial conditions. The binomial expression is not a general uncertainty formula for importance-weighted or correlated population synthesis."
+    },
+    {
+      "id": "population-normalization",
+      "stageId": "population",
+      "conceptId": "formation-efficiency",
+      "lab": "population",
+      "question": "Why is a toy candidate fraction not yet a physical compact-merger formation efficiency?",
+      "hypothesis": "An event fraction based on sampled systems lacks a formed-stellar-mass denominator and a well-defined eventual merger criterion.",
+      "method": "Export the distinct toy-system CSV, identify the number of candidates and define an independent hypothetical represented birth-mass normalization. Write the units of the resulting ratio and identify the missing inspiral-time and population-weight information.",
+      "limits": "The toy candidate cut is solely bound and a≤2; it does not identify gravitational-wave mergers within a physical time horizon."
+    },
+    {
+      "id": "inference-bias",
+      "stageId": "inference",
+      "conceptId": "detector-selection-effects",
+      "lab": "selection",
+      "question": "Can the detected majority be the intrinsic minority?",
+      "hypothesis": "A less abundant but easier-to-detect source class can dominate the observed catalog.",
+      "method": "Set the intrinsic A fraction below 50%, then vary p_det,A and p_det,B until the expected detected fraction of A exceeds 50%. Calculate both fractions explicitly.",
+      "limits": "Uses two constant toy detection probabilities and expected counts, not calibrated GW injections or a real population likelihood."
+    },
+    {
+      "id": "inference-delays",
+      "stageId": "inference",
+      "conceptId": "cosmic-merger-rates",
+      "lab": "delays",
+      "question": "Can two stellar birth epochs contribute mergers at the same later cosmic time?",
+      "hypothesis": "Different progenitor birth epochs can contribute to one merger epoch when their formation-to-merger delays differ.",
+      "method": "Use the toy delay model separately for two birth cohorts with distinct specified delays. Compare their merger epochs and describe what a distribution of delays would change.",
+      "limits": "The current lab has one shared fixed delay per run; use two runs to represent different delay assumptions. No cosmological rate density or detector selection is modeled."
+    },
+    {
+      "id": "inference-rate",
+      "stageId": "inference",
+      "conceptId": "population-inference",
+      "lab": "selection",
+      "question": "What information is missing when converting expected detections into an intrinsic astrophysical rate?",
+      "hypothesis": "Expected detected class counts alone do not specify intrinsic merger-rate density without observing exposure and a population-dependent selection calculation.",
+      "method": "Use the two-class selection lab to compute expected observed fractions, then outline the additional spacetime-volume, observer/source-time and parameter-measurement information required for a rate likelihood.",
+      "limits": "This is a methodological audit, not a numerical detector-rate estimator; the lab supplies no calibrated sensitive volume or empirical selection function."
+    }
   ]
 }
