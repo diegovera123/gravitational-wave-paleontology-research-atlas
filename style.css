@@ -1553,3 +1553,28 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
  padding:9px 12px;font:600 11px/1.5 var(--font-body);margin:0 0 10px;}
 .research-problem-concept:focus-visible,.research-problem-summary:focus-visible{outline:2px solid #c4d7ff;outline-offset:2px;}
 .research-problem-solution{background:rgba(16,29,48,.6);padding:14px!important;}
+
+/* Optional depth under each independent research question: choose, then see a
+   scientific test plan; do not overwhelm the six-card question picker. */
+.research-inquiry-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:19px 0;}
+.research-inquiry-card{display:flex;flex-direction:column;gap:10px;min-height:132px;text-align:left;cursor:pointer;
+ padding:17px;border-radius:13px;border:1px solid rgba(152,180,222,.32);
+ background:rgba(25,39,64,.75);color:#edf3ff;}
+.research-inquiry-card>span{font:600 10px/1.45 var(--font-body);letter-spacing:.04em;color:#a6c8e5;}
+.research-inquiry-card>strong{font:600 13px/1.65 var(--font-display);color:#e5efff;}
+.research-inquiry-card:hover,.research-inquiry-card.is-current{background:rgba(57,66,109,.65);border-color:#bec9fa;}
+.research-inquiry-card:focus-visible,.research-inquiry-actions button:focus-visible{outline:2px solid #c5d8ff;outline-offset:2px;}
+.research-inquiry-detail{margin:17px 0 3px;padding:clamp(18px,2.8vw,26px);border-radius:14px;
+ border:1px solid rgba(175,195,235,.42);background:linear-gradient(135deg,rgba(36,48,77,.82),rgba(25,42,64,.72));}
+.research-inquiry-detail h4{font:600 clamp(17px,2vw,20px)/1.42 var(--font-display);color:#f1f5ff;margin:12px 0 17px;}
+.research-inquiry-detail p{margin:13px 0;max-width:85ch;line-height:1.8;}
+.research-inquiry-detail p>strong{color:#e9f0ff;}
+.research-inquiry-actions{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 5px;}
+.research-inquiry-actions button{padding:10px 13px;cursor:pointer;border:1px solid rgba(155,182,229,.43);
+ border-radius:9px;color:#e0edff;background:rgba(53,71,108,.76);font:600 11px/1.55 var(--font-body);}
+.research-inquiry-actions button:hover{border-color:#cfddff;background:rgba(72,86,130,.85);}
+.research-inquiry-status{min-height:1.3em;color:#b6dbd3!important;font-size:11px!important;}
+@media(max-width:850px){.research-inquiry-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:560px){.research-inquiry-grid{grid-template-columns:minmax(0,1fr);}
+ .research-inquiry-card{min-height:0;}.research-inquiry-detail{padding:17px 14px;}}
+@media(prefers-reduced-motion:reduce){.research-inquiries{scroll-behavior:auto;}}
