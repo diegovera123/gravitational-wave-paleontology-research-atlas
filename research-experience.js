@@ -18,13 +18,23 @@ const configs={
 const defaultLab=Object.fromEntries(Object.entries(configs).map(([k,v])=>[k,Object.fromEntries(v.map(c=>[c[0],c[5]]))]));
 const fmt=v=>v==null?"Not determined":typeof v==="boolean"?(v?"Yes":"No"):Number.isFinite(v)?(Math.abs(v)>9999||Math.abs(v)<.001&&v!==0?v.toExponential(3):Number(v.toPrecision(5)).toString()):esc(v);
 function validate(data,concepts,sources){
- if(data?.schemaVersion!==1||data.stages?.length!==6||data.problems?.length<6||!Array.isArray(data.relationships))throw Error("Unsupported integrated research pathway.");
+ if(data?.schemaVersion!==1||data.stages?.length!==6||data.problems?.length<6||!Array.isArray(data.relationships)||!Array.isArray(data.inquiries))throw Error("Unsupported integrated research pathway.");
  const known=new Set(concepts.map(c=>c.id)),refs=new Map(sources.map(s=>[s.id,s]));
  const ids=new Set();
  for(const s of data.stages){
   if(!s.id||ids.has(s.id)||s.conceptIds.length<3||s.conceptIds.some(id=>!known.has(id))||!known.has(s.practiceConceptId)||!labNames[s.simulation]||s.readingIds.some(id=>!refs.has(id)||!safe(refs.get(id).url))||!s.deliverable)throw Error("Invalid research stage "+s.id);
   ids.add(s.id);
  }
+ const inquiryIds=new Set();
+ for(const q of data.inquiries){
+  const parent=data.stages.find(s=>s.id===q.stageId);
+  if(!q.id||inquiryIds.has(q.id)||!parent||!parent.conceptIds.includes(q.conceptId)||!labNames[q.lab]||
+   !q.question?.endsWith("?")||q.hypothesis?.length<30||q.method?.length<85||q.limits?.length<70)
+     throw Error("Incomplete or unmapped research inquiry "+q.id);
+  inquiryIds.add(q.id);
+ }
+ if(data.stages.some(s=>data.inquiries.filter(q=>q.stageId===s.id).length!==3))
+  throw Error("Each freely selectable question needs three authored focused investigations.");
  for(const p of data.problems)if(!known.has(p.conceptId)||p.steps?.length<3||!p.rubric?.length)throw Error("Incomplete authored research problem "+p.id);
  for(const e of data.relationships)if(!known.has(e.from)||!known.has(e.to)||!["causal","application","prerequisite"].includes(e.kind)||!e.why)throw Error("Unverified relation data "+e.from);
  return true;
@@ -43,7 +53,7 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   }
  }}catch{/* Browser storage may be blocked. Session still works. */}
  // Do not reopen a previous question automatically; keep saved notes and explored flags.
- let stage=null,lab=draft.lab;
+ let stage=null,lab=draft.lab,selectedInquiry=null;
  const persist=()=>{try{storage?.setItem?.(KEY,JSON.stringify({
   done:draft.done,notes:draft.notes,stage,lab,params:draft.params}));return true;}catch{return false;}};
  const stageData=()=>data.stages.find(s=>s.id===stage);
@@ -59,6 +69,25 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   return data.stages.map(s=>'<button type="button" data-stage="'+esc(s.id)+'" class="research-stage-card'+(stage===s.id?" is-current":"")+'" aria-pressed="'+(stage===s.id)+'">'+
    '<span class="research-stage-number">'+(draft.done.includes(s.id)?"Explored ✓":"Research question")+'</span>'+
    '<strong>'+esc(s.name)+'</strong><small>'+esc(s.question)+'</small></button>').join("");
+ }
+ function inquiryView(){
+  const options=data.inquiries.filter(q=>q.stageId===stage);
+  const active=options.find(q=>q.id===selectedInquiry);
+  return '<section class="research-module research-inquiries"><span class="lesson-kicker">CHOOSE A MORE SPECIFIC QUESTION</span>'+
+   '<h3>What would you like to investigate?</h3><p>Pick any question. An outline of a possible toy test appears only after you choose it.</p>'+
+   '<div class="research-inquiry-grid">'+options.map(q=>
+     '<button type="button" data-inquiry="'+esc(q.id)+'" class="research-inquiry-card'+(selectedInquiry===q.id?" is-current":"")+
+     '" aria-pressed="'+(selectedInquiry===q.id)+'"><span>'+esc(byConcept.get(q.conceptId).title)+'</span>'+
+     '<strong>'+esc(q.question)+'</strong></button>').join("")+'</div>'+
+   (active?'<article class="research-inquiry-detail" id="research-inquiry-detail" aria-label="Selected investigation">'+
+    '<span class="lesson-kicker">QUESTION TO INVESTIGATE</span><h4>'+esc(active.question)+'</h4>'+
+    '<p><strong>Testable expectation in the stated toy model:</strong> '+esc(active.hypothesis)+'</p>'+
+    '<p><strong>One possible method:</strong> '+esc(active.method)+'</p>'+
+    '<p class="research-caveat"><strong>Where this test stops:</strong> '+esc(active.limits)+'</p>'+
+    '<div class="research-inquiry-actions"><button type="button" data-concept="'+esc(active.conceptId)+'">Read related concept ↗</button>'+
+    '<button type="button" data-action="inquiry-lab">Open related toy lab ↓</button>'+
+    '<button type="button" data-action="use-inquiry">Use this as my notebook question ↓</button></div>'+
+    '<p class="research-inquiry-status" id="research-inquiry-status" role="status"></p></article>':"")+'</section>';
  }
  function evidenceCard(){
   const score=getEvidence?.()||{};
@@ -211,6 +240,7 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
     '<p><strong>Investigation:</strong> '+esc(s.researchTask)+'</p><p><strong>Suggested artifact:</strong> '+esc(s.deliverable)+'</p>'+
     '<div class="research-stage-actions"><button type="button" data-action="practice">Open linked Practice →</button>'+
     '<button type="button" data-action="done">'+(draft.done.includes(stage)?"Question explored ✓ (toggle)":"Mark question explored (self-report)")+'</button></div></section>'+
+   inquiryView()+
    '<section class="research-module"><span class="lesson-kicker">EVIDENCE FROM ACTUAL AUTHORED QUESTION RESPONSES</span><h3>What have I demonstrated so far?</h3>'+evidenceCard()+'</section>'+
    labView()+problemView()+
    '<section class="research-module research-reading"><span class="lesson-kicker">CURATED READING SEQUENCE</span><h3>Read with a purpose</h3>'+
@@ -221,10 +251,36 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   const output=host.querySelector("#research-lab-output");if(output)output.innerHTML=result();
  }
  host.addEventListener("click",event=>{
-  const t=event.target.closest?.("[data-stage],[data-concept],[data-action]");if(!t)return;
-  if(t.dataset.stage){stage=stage===t.dataset.stage?null:t.dataset.stage;if(stage)lab=stageData().simulation;persist();render();if(stage)host.querySelector(".research-stage-detail")?.scrollIntoView?.({behavior:"smooth",block:"start"});}
+  const t=event.target.closest?.("[data-stage],[data-inquiry],[data-concept],[data-action]");if(!t)return;
+  if(t.dataset.stage){stage=stage===t.dataset.stage?null:t.dataset.stage;selectedInquiry=null;if(stage)lab=stageData().simulation;persist();render();if(stage)host.querySelector(".research-stage-detail")?.scrollIntoView?.({behavior:"smooth",block:"start"});}
+  else if(t.dataset.inquiry){
+   const id=t.dataset.inquiry;
+   if(!data.inquiries.some(q=>q.id===id&&q.stageId===stage))return;
+   selectedInquiry=selectedInquiry===id?null:id;
+   render();
+   if(selectedInquiry)host.querySelector("#research-inquiry-detail")?.scrollIntoView?.({behavior:"smooth",block:"nearest"});
+  }
   else if(t.dataset.concept){openConcept?.(t.dataset.concept);}
   else if(t.dataset.action==="practice"){openPractice?.(stageData().practiceConceptId);}
+  else if(t.dataset.action==="inquiry-lab"&&selectedInquiry){
+   const chosen=data.inquiries.find(q=>q.id===selectedInquiry&&q.stageId===stage);
+   if(!chosen)return;
+   lab=chosen.lab;persist();render();
+   host.querySelector(".research-lab")?.scrollIntoView?.({behavior:"smooth",block:"start"});
+  }
+  else if(t.dataset.action==="use-inquiry"&&selectedInquiry){
+   const chosen=data.inquiries.find(q=>q.id===selectedInquiry&&q.stageId===stage);
+   if(!chosen)return;
+   const notes=draft.notes[stage]??={},status=host.querySelector("#research-inquiry-status");
+   if(String(notes.question||"").trim()){
+    if(status)status.textContent="Your existing notebook question is preserved. Clear it first if you want to replace it.";
+   }else{
+    notes.question=chosen.question;
+    const saved=persist(),field=host.querySelector("#research-note-question");
+    if(field)field.value=chosen.question;
+    if(status)status.textContent=saved?"Question added to your local notebook.":"Question added for this session; browser storage is unavailable.";
+   }
+  }
   else if(t.dataset.action==="done"){draft.done=draft.done.includes(stage)?draft.done.filter(id=>id!==stage):[...draft.done,stage];persist();render();}
   else if(t.dataset.action==="export-toy"&&lab==="population"){
    const m=model.population(draft.params.population);
@@ -258,7 +314,7 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
   }
  });
  render();
- return {selectStage:id=>{if(data.stages.some(s=>s.id===id)){stage=id;lab=stageData().simulation;persist();render();}},refresh:render,snapshot:()=>({stage,lab,done:[...draft.done],notes:draft.notes})};
+ return {selectStage:id=>{if(data.stages.some(s=>s.id===id)){stage=id;selectedInquiry=null;lab=stageData().simulation;persist();render();}},refresh:render,snapshot:()=>({stage,selectedInquiry,lab,done:[...draft.done],notes:draft.notes})};
 }
 root.AtlasResearchExperience={mount,validate,configs,labNames};
 })(typeof window!=="undefined"?window:globalThis);
