@@ -1578,3 +1578,38 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
 @media(max-width:560px){.research-inquiry-grid{grid-template-columns:minmax(0,1fr);}
  .research-inquiry-card{min-height:0;}.research-inquiry-detail{padding:17px 14px;}}
 @media(prefers-reduced-motion:reduce){.research-inquiries{scroll-behavior:auto;}}
+
+
+/* September 2026 declutter: Practice is for exercises; the richer research-question
+   explorer lives behind an explicit Home action instead of sitting above every drill. */
+.home-research-workspace{margin:22px 0 8px;}
+.home-research-toolbar{display:flex;align-items:center;margin:0 0 10px;}
+.home-research-toolbar .focus-text-button{padding:8px 2px;}
+.practice-hero-compact{padding-bottom:18px!important;margin-bottom:18px!important;}
+.practice-hero-compact h2{margin-bottom:9px;}
+.practice-hero-compact>p:not(.practice-catalog-summary){max-width:760px;color:#9fb0ca;font-size:12px;line-height:1.7;}
+.practice-library{margin-top:0!important;}
+.practice-secondary{border:1px solid rgba(144,170,214,.25);border-radius:12px;
+ background:rgba(19,31,51,.48);margin:15px 0;overflow:hidden;}
+.practice-secondary>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;
+ padding:14px 16px;color:#d6e4fb;font:600 12px/1.55 var(--font-body);}
+.practice-secondary>summary::-webkit-details-marker{display:none;}
+.practice-secondary>summary::after{content:"+";margin-left:auto;color:#9eb7d8;font-size:16px;font-weight:400;}
+.practice-secondary[open]>summary::after{content:"−";}
+.practice-secondary>summary small{margin-left:auto;color:#8fa5c3;font:400 10px/1.5 var(--font-body);}
+.practice-secondary[open]>summary{border-bottom:1px solid rgba(144,170,214,.2);background:rgba(39,54,84,.27);}
+.practice-any-concept .practice-all-concepts{margin:0;border:0;border-radius:0;background:transparent;}
+.practice-reviews #due-practice{padding:14px 16px;}
+.practice-extensions{margin-top:18px;}
+.practice-extensions>.practice-guided-prompts,
+.practice-extensions>.practice-case-studies{margin:0;padding:18px 16px;border:0;border-bottom:1px solid rgba(144,170,214,.16);border-radius:0;background:transparent;}
+.practice-extensions>#practice-literature{margin:0;padding:18px 16px;border:0;border-radius:0;background:transparent;}
+.practice-active>#adaptive-panel{margin-top:18px;}
+@media(max-width:620px){
+ .practice-secondary>summary{align-items:flex-start;flex-direction:column;gap:4px;}
+ .practice-secondary>summary small{margin-left:0;}
+ .practice-secondary>summary::after{position:absolute;right:16px;}
+}
+
+#home-research-workspace[hidden]{display:none!important;}
+.practice-secondary.practice-reviews{padding:0;}

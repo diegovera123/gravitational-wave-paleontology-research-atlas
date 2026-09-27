@@ -110,8 +110,10 @@ assert.equal(reopened.snapshot().selectedInquiry,null,"A visit never auto-select
 assert.equal(reopened.snapshot().done.length,1,"Self-reported exploration is preserved across visits");
 assert.doesNotMatch(secondHost.innerHTML,/class="research-stage-detail"/,"Reloaded UI also starts at the six-card picker");
 const before=await fs.readFile("index.html","utf8");
-assert.ok(before.includes('id="research-experience"')&&before.indexOf('id="research-experience"')>before.indexOf('id="practice-panel"'),"Integrated pathway belongs to Practice");
+assert.ok(before.includes('id="research-experience"')&&before.indexOf('id="research-experience"')<before.indexOf('id="practice-panel"'),"Research explorer belongs to Home before the separate Practice panel");
+const practiceMarkup=before.slice(before.indexOf('<section id="practice-panel"'),before.indexOf('<section id="learn-panel"'));
+assert.doesNotMatch(practiceMarkup,/id="research-experience"|INTERACTIVE PHYSICS LAB|BROWSER-LOCAL RESEARCH WORKSPACE/,"Practice is not crowded with research explorer tools");
 assert.equal((before.match(/data-atlas-tab=/g)||[]).length,3,"No unnecessary fourth tab");
 const graph=await fs.readFile("constellation.js","utf8");
 assert.ok(graph.includes("relationData")&&graph.includes("scientific-relations")&&graph.includes("type:\"prerequisite\""),"Graph distinguishes typed scientific relations from containment");
-console.log("Passed: six independently selectable research questions, 18 specific inquiries, optional concept/lab/notebook handoff with no silent overwrite, preserved progress and existing Practice tools.");
+console.log("Passed: six independently selectable research questions on Home, 18 specific inquiries, optional lab/notebook handoff, and a separate uncluttered Practice workspace.");

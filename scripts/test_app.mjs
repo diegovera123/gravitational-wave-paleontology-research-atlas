@@ -14,6 +14,7 @@ const extendedPractice = JSON.parse(await fs.readFile("knowledge-graph/practice-
 const deepExplanations = JSON.parse(await fs.readFile("knowledge-graph/deep-explanations.json","utf8"));
 const journeyData = JSON.parse(await fs.readFile("knowledge-graph/research-journey.json","utf8"));
 const diagnosticBank = JSON.parse(await fs.readFile("knowledge-graph/diagnostic-questions.json","utf8"));
+const indexHtml = await fs.readFile("index.html","utf8");
 
 class ElementStub {
   constructor() {
@@ -44,13 +45,13 @@ const selectors=[
   "#otto-guide","#legacy-home","#otto-coach-title","#otto-coach-line","#brand-home",
   "#focus-home","#focus-domains","#focus-concepts","#focus-detail","#focus-quiz","#focus-graph-toggle","#focus-concept-title","#focus-domain-description","#focus-show-more","#focus-open-region","#focus-change-goal","#focus-full-map","#focus-research","#focus-all-practice","#focus-library",
   "#focus-big-picture","#focus-back-chapters","#focus-concept-section","#focus-topics",
-  "#simple-home","#simple-home-graph","#simple-home-diagnostic","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
+  "#simple-home","#simple-home-graph","#simple-home-research","#simple-home-diagnostic","#home-research-workspace","#home-research-close","#otto-helper-message","#otto-helper-text","#otto-helper-button","#otto-helper-close","#constellation-research","#constellation-research-questions",
   "#constellation-shell","#constellation-canvas","#constellation-fallback","#constellation-location","#constellation-prompt","#constellation-choices","#constellation-detail","#constellation-detail-shade","#constellation-home","#constellation-back","#constellation-reset",
   "#tab-home","#tab-paths","#tab-explore","#tab-practice","#practice-panel","#practice-active","#practice-unit-cards","#practice-selected-title","#practice-return-graph","#tab-learn","#tab-library","#learn-hub","#learn-hub-cards","#due-practice",
   "#research-experience","#practice-summary","#practice-area-filter","#practice-search","#practice-concept-picker","#practice-open-concept","#practice-objectives","#practice-case-studies","#practice-guided-prompts","#practice-literature","#practice-due-summary","#adaptive-panel","#practice-start","#practice-next","#practice-again","#practice-review","#practice-back"
 ];
 const elements=new Map(selectors.map(s=>[s,new ElementStub()]));
-for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel"])elements.get(id).hidden=true;
+for(const id of ["#learning-studio","#diagnostic-panel","#explore-panel","#practice-panel","#practice-active","#constellation-shell","#constellation-research","#paths-panel","#library-panel","#learn-panel","#home-research-workspace"])elements.get(id).hidden=true;
 const document={
   activeElement:null,body:new ElementStub(),
   querySelector:selector=>elements.get(selector)||new ElementStub(),
@@ -105,7 +106,9 @@ const run=expression=>vm.runInContext(expression,context);
 
 assert.equal(scene,null,"Graph is lazy and does not render while the main Learn page is open");
 assert.equal(run('TAB_NAMES.length'),3,"Home, Knowledge Graph, and Practice are the three main destinations");
-assert.match(elements.get("#research-experience").innerHTML,/Choose a research question to explore/,"Research question chooser mounts inside Practice");
+assert.match(elements.get("#research-experience").innerHTML,/Choose a research question to explore/,"Research question explorer still mounts, but outside Practice");
+assert.ok(indexHtml.indexOf('id="research-experience"')<indexHtml.indexOf('id="practice-panel"'),"Research explorer is physically outside the Practice panel");
+assert.equal(elements.get("#home-research-workspace").hidden,true,"Research questions are hidden behind an explicit Home action");
 assert.doesNotMatch(elements.get("#research-experience").innerHTML,/INTERACTIVE PHYSICS LAB/,"No question contents or lab are automatically opened");
 assert.doesNotMatch(elements.get("#research-experience").innerHTML,/RESEARCH WORKSPACE/,"Notebook opens only after a research question is chosen");
 assert.equal(run("researchController.snapshot().stage"),null,"Research questions are initially unselected");
@@ -118,6 +121,17 @@ assert.equal(elements.get("#focus-domains").children.length,5,"All research sect
 assert.equal(elements.get("#constellation-research-questions").children.length,questions.questions.length,"Research questions move inside Knowledge Graph");
 assert.equal(elements.get("#simple-home").hidden,false,"Simple Home is visible on entry");
 assert.equal(elements.get("#focus-home").hidden,true,"Old crowded homepage is retired");
+elements.get("#simple-home-research").handlers.click();
+assert.equal(elements.get("#simple-home").hidden,true,"Research Questions replaces the simple overview only when explicitly opened");
+assert.equal(elements.get("#home-research-workspace").hidden,false,"Research explorer opens on Home, not Practice");
+elements.get("#home-research-close").handlers.click();
+assert.equal(elements.get("#home-research-workspace").hidden,true,"Research explorer can return to the clean overview");
+assert.equal(elements.get("#simple-home").hidden,false,"Home overview returns after closing research questions");
+const practiceMarkup=indexHtml.slice(indexHtml.indexOf('<section id="practice-panel"'),indexHtml.indexOf('<section id="learn-panel"'));
+assert.doesNotMatch(practiceMarkup,/id="research-experience"/,"Practice contains no research-question dashboard, labs or notebook");
+assert.match(practiceMarkup,/practice-secondary practice-any-concept/,"Long 100-prompt concept route is collapsed by default");
+assert.match(practiceMarkup,/practice-secondary practice-reviews/,"Review queue is collapsed by default");
+assert.ok(practiceMarkup.indexOf('id="adaptive-panel"')<practiceMarkup.indexOf('id="practice-guided-prompts"'),"Authored question practice appears before optional 100-prompt extensions");
 // Exercise the first-run router independently of the module-unavailable fallback used by this mock.
 stored.delete("research-atlas-onboarding-seen-v1");
 run('diagnosticController={hasCompleted:()=>false,hasRatings:()=>false,open:()=>setActiveView("diagnostic",{scroll:false}),status:()=>"unassessed",labelFor:()=>"Unassessed",snapshot:()=>({ratings:{},checks:{}})};firstRunLanding()');
