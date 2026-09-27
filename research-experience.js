@@ -43,19 +43,20 @@ function mount({host,data,concepts,sources,model,openConcept,openPractice,getEvi
  validate(data,concepts,sources);
  if(!host)return null;
  const byConcept=new Map(concepts.map(c=>[c.id,c])),bySource=new Map(sources.map(s=>[s.id,s]));
- const KEY="research-atlas-research-workspace-v1",draft={done:[],notes:{},lab:"kick",params:defaultLab};
+ const KEY="research-atlas-research-workspace-v1",draft={done:[],notes:{},runs:{},lab:"kick",params:defaultLab};
  try{const p=JSON.parse(storage?.getItem?.(KEY)||"null");if(p&&typeof p==="object"){
   draft.done=Array.isArray(p.done)?p.done.filter(id=>data.stages.some(s=>s.id===id)):[];
   draft.notes=p.notes&&typeof p.notes==="object"?p.notes:{};
+  draft.runs=p.runs&&typeof p.runs==="object"?p.runs:{};
   draft.lab=labNames[p.lab]?p.lab:data.stages[0].simulation;
   if(p.params&&typeof p.params==="object")for(const key of Object.keys(defaultLab)){
     draft.params[key]={...defaultLab[key],...(p.params[key]||{})};
   }
  }}catch{/* Browser storage may be blocked. Session still works. */}
  // Do not reopen a previous question automatically; keep saved notes and explored flags.
- let stage=null,lab=draft.lab,selectedInquiry=null;
+ let stage=null,lab=draft.lab,selectedInquiry=null,compareRunIds=[];
  const persist=()=>{try{storage?.setItem?.(KEY,JSON.stringify({
-  done:draft.done,notes:draft.notes,stage,lab,params:draft.params}));return true;}catch{return false;}};
+  done:draft.done,notes:draft.notes,runs:draft.runs,stage,lab,params:draft.params}));return true;}catch{return false;}};
  const stageData=()=>data.stages.find(s=>s.id===stage);
  function sourceList(s){
   return s.readingIds.map((id,i)=>{const src=bySource.get(id),url=safe(src.url);
