@@ -69,9 +69,14 @@
         <p>Discover how the lives of stars become gravitational-wave signals. Open the knowledge graph to follow its connections, read the scientific explanations, explore sources, and practise inside each concept.</p>
         <div class="simple-home-actions">
           <button id="simple-home-graph" type="button" class="focus-primary">Explore the knowledge graph →</button>
+          <button id="simple-home-research" type="button" class="focus-secondary">Explore research questions</button>
           <button id="simple-home-diagnostic" type="button" class="focus-secondary">Find my starting point</button>
         </div>
-        <p class="simple-home-note">The diagnostic is optional. Your learning units, resources, research questions and exercises all live in the graph.</p>
+        <p class="simple-home-note">Use the graph to learn concepts, Research Questions to investigate ideas, and Practice when you want exercises.</p>
+      </section>
+      <section id="home-research-workspace" class="home-research-workspace" aria-label="Research question explorer" hidden>
+        <div class="home-research-toolbar"><button id="home-research-close" type="button" class="focus-text-button">← Back to overview</button></div>
+        <section id="research-experience" aria-label="Choose a research question"><p>Preparing research questions…</p></section>
       </section>
       <div id="otto-guide" class="otto-guide" hidden aria-live="polite"></div>
       <section id="focus-home" class="focus-home gw-focus" aria-label="Learn gravitational-wave paleontology">
@@ -269,32 +274,37 @@
       </div>
     </section>
     <section id="practice-panel" class="atlas-tab-panel practice-workspace" role="tabpanel" aria-labelledby="tab-practice" hidden>
-      <header class="practice-hero">
-        <span class="focus-eyebrow">YOUR PRACTICE WORKSPACE</span>
-        <h2>Put your understanding to the test.</h2>
-        <p>Work through connected concepts, calculations, physical mechanisms and model critique across the entire gravitational-wave paleontology research pipeline.</p>
-        <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading research practice tracks…</p>
+      <header class="practice-hero practice-hero-compact">
+        <span class="focus-eyebrow">PRACTICE</span>
+        <h2>Choose something to work on.</h2>
+        <p>Pick a practice track or a concept. Research questions, simulations and notebooks now live on Home so this space stays focused on exercises.</p>
+        <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading practice tracks…</p>
       </header>
-      <section id="research-experience" aria-label="Connected research learning pathway"><p>Preparing the six-stage research pathway…</p></section>
       <section class="practice-library" aria-labelledby="practice-library-title">
         <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice track</h3><span>Concepts · calculations · causal reasoning · model critique</span></div>
         <div class="practice-filters"><label for="practice-area-filter">Research area</label><select id="practice-area-filter"><option value="all">All areas</option></select><label for="practice-search">Find a track</label><input id="practice-search" type="search" placeholder="e.g. cosmic rates, orbits, selection"></div>
         <div id="practice-unit-cards" class="practice-unit-cards"></div>
-        <div class="practice-all-concepts"><div><span class="lesson-kicker">PRACTISE ANY GRAPH CONCEPT</span><p>Every concept has a 100-step guided, self-checked progression. Additional authored multiple-choice sets appear in the tracks above.</p></div><label for="practice-concept-picker">Select a concept</label><select id="practice-concept-picker"><option value="">Choose a concept…</option></select><button type="button" id="practice-open-concept" class="lesson-submit">Open 100 guided prompts →</button></div>
+        <details class="practice-secondary practice-any-concept">
+          <summary>Practice any other graph concept</summary>
+          <div class="practice-all-concepts"><div><span class="lesson-kicker">GUIDED CONCEPT PRACTICE</span><p>Every concept has a 100-step self-checked progression. Open it only when you want the longer guided sequence.</p></div><label for="practice-concept-picker">Select a concept</label><select id="practice-concept-picker"><option value="">Choose a concept…</option></select><button type="button" id="practice-open-concept" class="lesson-submit">Open guided prompts →</button></div>
+        </details>
       </section>
-      <section class="practice-reviews" aria-labelledby="practice-reviews-title">
-        <div class="practice-section-heading"><h3 id="practice-reviews-title">Ready for review</h3><span>Based on your answers in this browser</span></div>
+      <details class="practice-secondary practice-reviews">
+        <summary><span>Ready for review</span><small>Based on your answers in this browser</small></summary>
         <div id="due-practice" class="due-practice" aria-live="polite"></div>
-      </section>
+      </details>
       <section id="practice-active" class="practice-active" aria-labelledby="practice-selected-title" hidden>
         <div class="practice-active-header"><div><span class="focus-eyebrow">SELECTED PRACTICE SET</span>
           <h3 id="practice-selected-title">Choose a concept</h3></div>
           <button id="practice-return-graph" class="constellation-quiet" type="button">View in Knowledge Graph ↗</button></div>
         <div id="practice-objectives" class="practice-component-guide" aria-live="polite"></div>
-        <section id="practice-guided-prompts" class="practice-guided-prompts" aria-label="One hundred progressive guided research prompts"></section>
-        <section id="practice-literature" class="practice-guided-prompts" aria-label="Search related scientific papers"></section>
         <div id="adaptive-panel" class="lesson-assessment" aria-live="polite"></div>
-        <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research cases" hidden></section>
+        <details class="practice-secondary practice-extensions">
+          <summary><span>More practice</span><small>Guided prompts · research cases · related papers</small></summary>
+          <section id="practice-guided-prompts" class="practice-guided-prompts" aria-label="One hundred progressive guided research prompts"></section>
+          <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research cases" hidden></section>
+          <section id="practice-literature" class="practice-guided-prompts" aria-label="Search related scientific papers"></section>
+        </details>
       </section>
       <p class="practice-scope">Questions and research cases are original educational exercises, not lab data or a calibrated proficiency exam. Revealed case solutions are self-checked, not automatically graded. Browser-local quiz history only; the graph retains additional ungraded exercises on other concepts.</p>
     </section>
