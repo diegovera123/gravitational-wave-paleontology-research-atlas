@@ -1610,3 +1610,6 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
  .practice-secondary>summary small{margin-left:0;}
  .practice-secondary>summary::after{position:absolute;right:16px;}
 }
+
+#home-research-workspace[hidden]{display:none!important;}
+.practice-secondary.practice-reviews{padding:0;}
