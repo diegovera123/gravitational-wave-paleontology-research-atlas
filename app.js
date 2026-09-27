@@ -257,6 +257,7 @@ function setActiveView(view,options={}){
   if(view==="practice"&&practiceUnits.size)renderPracticeHub();
   $("#diagnostic-panel").hidden=view!=="home"||!homeDiagnosticVisible;
   $("#simple-home").hidden=view!=="home"||homeDiagnosticVisible;
+  $("#home-research-workspace").hidden=true;
   $("#focus-home").hidden=true;
   $("#constellation-shell").hidden=view!=="explore"||!$("#learning-studio").hidden;
   $("#constellation-research").hidden=view!=="explore"||!$("#learning-studio").hidden;
@@ -1135,6 +1136,16 @@ $("#home-learn").addEventListener("click",()=>setActiveView("learn"));
 $("#home-research").addEventListener("click",()=>setActiveView("paths"));
 $("#brand-home").addEventListener("click",event=>{event.preventDefault();setActiveView("home");});
 $("#simple-home-graph").addEventListener("click",()=>{constellation?.openOverview();setActiveView("explore");});
+$("#simple-home-research").addEventListener("click",()=>{
+  $("#simple-home").hidden=true;
+  $("#home-research-workspace").hidden=false;
+  $("#home-research-workspace").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+});
+$("#home-research-close").addEventListener("click",()=>{
+  $("#home-research-workspace").hidden=true;
+  $("#simple-home").hidden=false;
+  $("#simple-home").scrollIntoView?.({behavior:lowerMotion()?"auto":"smooth",block:"start"});
+});
 $("#simple-home-diagnostic").addEventListener("click",()=>diagnosticController?.open());
 $("#otto-helper-button").addEventListener("click",()=>{
  const visible=$("#otto-helper-message").hidden;
