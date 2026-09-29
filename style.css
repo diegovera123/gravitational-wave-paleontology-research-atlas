@@ -1589,7 +1589,6 @@ body.mission-home:not(.onboarding-first) #atlas-tabs{display:flex!important;}
 .practice-extensions{margin-top:18px;}
 .practice-extensions>.practice-guided-prompts,
 .practice-extensions>.practice-case-studies{margin:0;padding:18px 16px;border:0;border-bottom:1px solid rgba(144,170,214,.16);border-radius:0;background:transparent;}
-.practice-extensions>#practice-literature{margin:0;padding:18px 16px;border:0;border-radius:0;background:transparent;}
 .practice-active>#adaptive-panel{margin-top:18px;}
 @media(max-width:620px){
  .practice-secondary>summary{align-items:flex-start;flex-direction:column;gap:4px;}
