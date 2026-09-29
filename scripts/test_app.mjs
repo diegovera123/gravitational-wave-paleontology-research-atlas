@@ -187,7 +187,8 @@ for(let i=1;i<5;i++){
   run('answerAdaptiveQuiz(quizSessions.get("derivatives").current.correctIndex)');
 }
 run('advanceAdaptiveQuiz();renderAdaptivePanel()');
-assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Five-question quiz ends with session-level formative evidence");
+assert.match(elements.get("#adaptive-panel").innerHTML,/DONE/,"Five-question quiz ends with an overall question-set result");
+assert.doesNotMatch(elements.get("#adaptive-panel").innerHTML,/component|objective|difficulty/i,"Question-set result keeps internal routing categories hidden");
 run('openPracticeUnit("cosmic-history")');
 assert.equal(elements.get("#practice-selected-title").textContent,"Cosmic star formation, delay times and merger rates");
 assert.match(elements.get("#practice-case-studies").innerHTML,/Births and delays/,"Applied research cases render independently of graded multiple-choice questions");
