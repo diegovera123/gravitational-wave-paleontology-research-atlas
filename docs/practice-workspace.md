@@ -1,3 +1,10 @@
+# Questions-only Practice workspace (September 2026)
+
+Practice now deliberately exposes only **question sets, questions, answer choices, hints, feedback, review questions and an overall session result**. The authored component taxonomy (conceptual / quantitative / causal / model-critique), objective IDs and difficulty labels remain in the underlying JSON/adaptive router so question selection can stay balanced, but they are not presented as learner-facing categories, scores or a knowledge profile.
+
+The default flow is: choose a question set → answer questions → read feedback → continue. Question-set cards show topic, question count and previous-answer count only. The active question view does not display component name, objective title or authored difficulty. Completion reports only total correct for that session. Review routing can still use due objective metadata internally, but the UI simply offers **Review questions**.
+
+Longer guided prompts and applied worked questions remain under **More questions**. Live paper search and public reading links were removed from Practice because sources and literature discovery belong in the Knowledge Graph / research-question explorer. The 168 authored scored questions, internal objective mappings, 24 applied cases and 100 guided prompts per concept are otherwise preserved. The internal component metadata continues to be tested in `scripts/test_practice_catalog.mjs`; `scripts/test_app.mjs` checks that the Practice UI does not expose it.
 # Deep scientific Practice workspace (September 2026)
 
 The app has three primary destinations: Home (optional diagnostic and Otto), Knowledge Graph (progressive 3D concept hierarchy and actual authored full learning units), and standalone Practice. The **three original complete lessons** still reside within the Knowledge Graph. Additional practice sets are independent assessment resources; no corresponding full lessons or graded written responses are claimed where none are authored.

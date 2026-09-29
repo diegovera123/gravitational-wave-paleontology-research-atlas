@@ -276,37 +276,35 @@
     <section id="practice-panel" class="atlas-tab-panel practice-workspace" role="tabpanel" aria-labelledby="tab-practice" hidden>
       <header class="practice-hero practice-hero-compact">
         <span class="focus-eyebrow">PRACTICE</span>
-        <h2>Choose something to work on.</h2>
-        <p>Pick a practice track or a concept. Research questions, simulations and notebooks now live on Home so this space stays focused on exercises.</p>
-        <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading practice tracks…</p>
+        <h2>Answer questions.</h2>
+        <p>Choose a question set and start. The Atlas uses hidden question categories internally to keep the set balanced, but Practice only shows you the questions.</p>
+        <p id="practice-summary" class="practice-catalog-summary" aria-live="polite">Loading questions…</p>
       </header>
       <section class="practice-library" aria-labelledby="practice-library-title">
-        <div class="practice-section-heading"><h3 id="practice-library-title">Choose a practice track</h3><span>Concepts · calculations · causal reasoning · model critique</span></div>
+        <div class="practice-section-heading"><h3 id="practice-library-title">Choose a question set</h3><span>Pick a topic and begin</span></div>
         <div class="practice-filters"><label for="practice-area-filter">Research area</label><select id="practice-area-filter"><option value="all">All areas</option></select><label for="practice-search">Find a track</label><input id="practice-search" type="search" placeholder="e.g. cosmic rates, orbits, selection"></div>
         <div id="practice-unit-cards" class="practice-unit-cards"></div>
         <details class="practice-secondary practice-any-concept">
-          <summary>Practice any other graph concept</summary>
-          <div class="practice-all-concepts"><div><span class="lesson-kicker">GUIDED CONCEPT PRACTICE</span><p>Every concept has a 100-step self-checked progression. Open it only when you want the longer guided sequence.</p></div><label for="practice-concept-picker">Select a concept</label><select id="practice-concept-picker"><option value="">Choose a concept…</option></select><button type="button" id="practice-open-concept" class="lesson-submit">Open guided prompts →</button></div>
+          <summary>More questions from any graph concept</summary>
+          <div class="practice-all-concepts"><div><span class="lesson-kicker">GUIDED QUESTIONS</span><p>Choose any concept to open its longer self-checked question sequence.</p></div><label for="practice-concept-picker">Select a concept</label><select id="practice-concept-picker"><option value="">Choose a concept…</option></select><button type="button" id="practice-open-concept" class="lesson-submit">Open questions →</button></div>
         </details>
       </section>
       <details class="practice-secondary practice-reviews">
-        <summary><span>Ready for review</span><small>Based on your answers in this browser</small></summary>
+        <summary><span>Review questions</span><small>Based on your previous answers</small></summary>
         <div id="due-practice" class="due-practice" aria-live="polite"></div>
       </details>
       <section id="practice-active" class="practice-active" aria-labelledby="practice-selected-title" hidden>
         <div class="practice-active-header"><div><span class="focus-eyebrow">SELECTED PRACTICE SET</span>
           <h3 id="practice-selected-title">Choose a concept</h3></div>
           <button id="practice-return-graph" class="constellation-quiet" type="button">View in Knowledge Graph ↗</button></div>
-        <div id="practice-objectives" class="practice-component-guide" aria-live="polite"></div>
         <div id="adaptive-panel" class="lesson-assessment" aria-live="polite"></div>
         <details class="practice-secondary practice-extensions">
-          <summary><span>More practice</span><small>Guided prompts · research cases · related papers</small></summary>
-          <section id="practice-guided-prompts" class="practice-guided-prompts" aria-label="One hundred progressive guided research prompts"></section>
-          <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research cases" hidden></section>
-          <section id="practice-literature" class="practice-guided-prompts" aria-label="Search related scientific papers"></section>
+          <summary><span>More questions</span><small>Guided questions · applied questions</small></summary>
+          <section id="practice-guided-prompts" class="practice-guided-prompts" aria-label="Progressive guided questions"></section>
+          <section id="practice-case-studies" class="practice-case-studies" aria-label="Applied research questions" hidden></section>
         </details>
       </section>
-      <p class="practice-scope">Questions and research cases are original educational exercises, not lab data or a calibrated proficiency exam. Revealed case solutions are self-checked, not automatically graded. Browser-local quiz history only; the graph retains additional ungraded exercises on other concepts.</p>
+      <p class="practice-scope">Questions are original educational exercises, not a calibrated proficiency exam. Question selection can use hidden topic and reasoning metadata internally; those categories are not presented as learner scores. Browser-local answer history only.</p>
     </section>
     <section id="learn-panel" hidden aria-hidden="true">
       <div id="learn-hub" hidden><div id="learn-hub-cards"></div></div>

@@ -173,9 +173,10 @@ assert.equal(elements.get("#explore-panel").hidden,true,"Knowledge Graph is hidd
 assert.equal(elements.get("#learning-studio").hidden,true,"Practice does not overlay the graph learning studio");
 assert.equal(elements.get("#practice-unit-cards").children.length,15,"Practice shows three pilot units plus twelve detailed science tracks");
 assert.match(elements.get("#practice-guided-prompts").innerHTML,/100 PROGRESSIVE GUIDED RESEARCH PROMPTS/,"Every opened practice track has 100 self-checked progressive prompts");
-assert.match(elements.get("#practice-literature").innerHTML,/OpenAlex/,"Every practice track offers live related scholarly metadata search");
-assert.match(elements.get("#practice-summary").textContent,/168 authored questions/,"Research practice lists the full authored question bank");
-assert.match(elements.get("#adaptive-panel").innerHTML,/Start adaptive practice/,"Adaptive practice offers a clear entry point in Practice");
+assert.match(elements.get("#practice-summary").textContent,/15 question sets · 168 authored questions/,"Practice summarizes question sets without exposing hidden component counts");
+assert.doesNotMatch(elements.get("#practice-unit-cards").children.map?.(x=>x.innerHTML).join(" ")||"",/learning components|model critique|causal reasoning/i,"Question-set cards do not expose internal knowledge-component taxonomy");
+assert.match(elements.get("#adaptive-panel").innerHTML,/Start questions/,"Practice offers a direct question-first entry point");
+assert.doesNotMatch(elements.get("#adaptive-panel").innerHTML,/KNOWLEDGE COMPONENTS|component check|cross-component|authored difficulty|learning objective/i,"Question interface hides internal routing metadata");
 run('startAdaptiveQuiz()');
 assert.match(elements.get("#adaptive-panel").innerHTML,/1 \/ 5/,"Adaptive quiz starts with an accessible item");
 run('answerAdaptiveQuiz(quizSessions.get("derivatives").current.correctIndex)');
@@ -186,16 +187,14 @@ for(let i=1;i<5;i++){
   run('answerAdaptiveQuiz(quizSessions.get("derivatives").current.correctIndex)');
 }
 run('advanceAdaptiveQuiz();renderAdaptivePanel()');
-assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Five-question quiz ends with session-level formative evidence");
+assert.match(elements.get("#adaptive-panel").innerHTML,/DONE/,"Five-question quiz ends with an overall question-set result");
+assert.doesNotMatch(elements.get("#adaptive-panel").innerHTML,/component|objective|difficulty/i,"Question-set result keeps internal routing categories hidden");
 run('openPracticeUnit("cosmic-history")');
 assert.equal(elements.get("#practice-selected-title").textContent,"Cosmic star formation, delay times and merger rates");
 assert.match(elements.get("#practice-case-studies").innerHTML,/Births and delays/,"Applied research cases render independently of graded multiple-choice questions");
-assert.match(elements.get("#practice-objectives").innerHTML,/knowledge components|KNOWLEDGE COMPONENTS/i,"Four research knowledge components are visible");
-run('startAdaptiveQuiz("component","cosmic-arithmetic")');
-assert.equal(run('quizSessions.get("cosmic-history").targetLength'),3,"Focused assessment samples exactly three items");
-assert.equal(run('quizSessions.get("cosmic-history").current.objectiveId'),"cosmic-arithmetic","Focused assessment only tests the selected component");
+assert.doesNotMatch(indexHtml,/id="practice-objectives"|KNOWLEDGE COMPONENTS|learning components/,"Practice markup does not surface objective/component controls");
 run('openPracticeUnit("detection-selection","practice")');
-assert.equal(run('quizSessions.get("detection-selection").targetLength'),12,"Extended cross-component session tests twelve distinct questions");
+assert.equal(run('quizSessions.get("detection-selection").targetLength'),12,"Extended set still routes twelve distinct questions internally");
 const seen=new Set();
 for(let i=0;i<12;i++){
  const id=run('quizSessions.get("detection-selection").current.id');
@@ -205,13 +204,14 @@ for(let i=0;i<12;i++){
  run('advanceAdaptiveQuiz();renderAdaptivePanel()');
 }
 assert.equal(seen.size,12,"Full practice set spans twelve authored questions");
-assert.match(elements.get("#adaptive-panel").innerHTML,/SESSION COMPLETE/,"Deep session completes with a component-by-component summary");
+assert.match(elements.get("#adaptive-panel").innerHTML,/DONE/,"Question set ends with only an overall result");
+assert.doesNotMatch(elements.get("#adaptive-panel").innerHTML,/component|objective|difficulty/i,"Completion screen does not expose hidden knowledge-component metadata");
 assert.ok(stored.get("research-atlas-adaptive-evidence-v1").includes("detection-selection"),"Cross-field practice evidence is persisted under the same browser-local history key");
 run('openConceptPractice("linearized-gravity")');
 assert.equal(elements.get("#practice-panel").hidden,false,"A graph concept without a graded bank opens Practice");
 assert.equal(elements.get("#practice-selected-title").textContent,"Linearized Gravity");
 assert.match(elements.get("#practice-guided-prompts").innerHTML,/100 PROGRESSIVE GUIDED RESEARCH PROMPTS/,"Guided work is actually available in Practice for every concept");
-assert.match(elements.get("#adaptive-panel").innerHTML,/has not been added/,"No invented scored item bank is advertised");
+assert.match(elements.get("#adaptive-panel").innerHTML,/No scored question set has been authored/,"No invented scored item bank is advertised");
 assert.equal(elements.get("#practice-case-studies").hidden,true,"Ungraded concept route does not show irrelevant authored cases");
 run('closePracticeUnit()');
 
