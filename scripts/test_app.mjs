@@ -211,7 +211,7 @@ run('openConceptPractice("linearized-gravity")');
 assert.equal(elements.get("#practice-panel").hidden,false,"A graph concept without a graded bank opens Practice");
 assert.equal(elements.get("#practice-selected-title").textContent,"Linearized Gravity");
 assert.match(elements.get("#practice-guided-prompts").innerHTML,/100 PROGRESSIVE GUIDED RESEARCH PROMPTS/,"Guided work is actually available in Practice for every concept");
-assert.match(elements.get("#adaptive-panel").innerHTML,/has not been added/,"No invented scored item bank is advertised");
+assert.match(elements.get("#adaptive-panel").innerHTML,/No scored question set has been authored/,"No invented scored item bank is advertised");
 assert.equal(elements.get("#practice-case-studies").hidden,true,"Ungraded concept route does not show irrelevant authored cases");
 run('closePracticeUnit()');
 
