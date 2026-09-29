@@ -1,3 +1,6 @@
+# Interface note: research exploration is separate from Practice
+
+As of the September 2026 simplification, the six research questions, focused investigations, toy labs, reading sequences and browser-local notebook are opened from **Home → Explore research questions**. Practice is a questions-only surface. Any component/evidence summaries described below document an earlier iteration; component metadata is now internal routing structure rather than learner-facing UI.
 # Integrated research-learning pilot
 
 ## Navigation and intended outcome
