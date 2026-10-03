@@ -42,7 +42,7 @@
    masteryAssessment:"Explain "+label+" in one concrete gravitational-wave paleontology example and state one assumption or limitation that matters.",
    researchApplication,resource:RESOURCES[section.macroId]||"https://www.ligo.org/science/",
    researchReferences:[],scale:"micro",whyItMatters:researchApplication,parentId:null,
-   tags:["gw-core","coverage-orientation"],aliases:[label]
+   tags:["gw-core","coverage-orientation",label],aliases:[label]
   };
  }
  function expand(manifest,baseConcepts,navigation){
@@ -57,7 +57,7 @@
     const concept=byId.get(mapped),aliases=new Set(concept.aliases||[]);
     if(!aliases.has(label)){aliases.add(label);aliasesAdded++;}
     concept.aliases=[...aliases];
-    concept.tags=[...new Set([...(concept.tags||[]),"gw-core"])];
+    concept.tags=[...new Set([...(concept.tags||[]),"gw-core",label])];
     return;
    }
    const id=conceptId(label);
