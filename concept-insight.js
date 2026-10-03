@@ -1,3 +1,48 @@
+/* Load the exact GW-paleontology coverage manifest before app.js consumes the
+   curriculum. This keeps the authored base file stable while making every requested
+   concept navigable in the live graph. */
+(function(root){
+"use strict";
+if(typeof root.fetch!=="function"||!root.document?.head)return;
+const nativeFetch=root.fetch.bind(root);
+let modulePromise=null,expansionPromise=null;
+const pathOf=input=>typeof input==="string"?input:(input?.url||"");
+const target=url=>url.includes("knowledge-graph/concepts.json")?"concepts":
+ url.includes("knowledge-graph/navigation.json")?"navigation":null;
+function ensureModule(){
+ if(root.AtlasCoreCoverage)return Promise.resolve(root.AtlasCoreCoverage);
+ if(modulePromise)return modulePromise;
+ modulePromise=new Promise((resolve,reject)=>{
+  const script=root.document.createElement("script");
+  script.src="gw-core-coverage.js";script.async=true;
+  script.onload=()=>root.AtlasCoreCoverage?resolve(root.AtlasCoreCoverage):reject(Error("GW core coverage module did not initialize."));
+  script.onerror=()=>reject(Error("GW core coverage module failed to load."));
+  root.document.head.appendChild(script);
+ });
+ return modulePromise;
+}
+function expansion(){
+ if(expansionPromise)return expansionPromise;
+ expansionPromise=Promise.all([
+  ensureModule(),
+  nativeFetch("knowledge-graph/gw-core-concepts.json"),
+  nativeFetch("knowledge-graph/concepts.json"),
+  nativeFetch("knowledge-graph/navigation.json")
+ ]).then(async([core,manifestResponse,conceptResponse,navigationResponse])=>{
+  if(!manifestResponse.ok||!conceptResponse.ok||!navigationResponse.ok)throw Error("GW core coverage files failed to load.");
+  const [manifest,curriculum,navigation]=await Promise.all([manifestResponse.json(),conceptResponse.json(),navigationResponse.json()]);
+  const expanded=core.expand(manifest,curriculum.concepts,navigation);
+  return {curriculum:{...curriculum,concepts:expanded.concepts},navigation:expanded.navigation,coverage:expanded.coverage};
+ });
+ return expansionPromise;
+}
+root.fetch=(input,init)=>{
+ const kind=target(pathOf(input));
+ if(!kind)return nativeFetch(input,init);
+ return expansion().then(expanded=>({ok:true,json:async()=>kind==="concepts"?expanded.curriculum:expanded.navigation}));
+};
+})(typeof window!=="undefined"?window:globalThis);
+
 /* Concise intuition first; diagrams are explanatory schematics, not simulated data. */
 (function(root){
 "use strict";
