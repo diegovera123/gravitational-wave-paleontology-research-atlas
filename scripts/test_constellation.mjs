@@ -17,7 +17,7 @@ class Stub{
  get clientWidth(){return 1100;}get clientHeight(){return 580;}
  addEventListener(type,handler){this.handlers[type]=handler;}
  appendChild(child){this.children.push(child);this.childNodes.push(child);child.parentNode=this;return child;}
- replaceChildren(...items){this.children=items;this.childNodes=items;}
+ replaceChildren(...items){this.children=[...items];this.childNodes=[...items];}
  setAttribute(name,value){this[name]=value;}
  querySelector(selector){return element(selector);}
  querySelectorAll(){return [];}
