@@ -1,303 +1,147 @@
-/* The public Knowledge Graph: one immersive constellation.
-   5 research clusters → actual macro regions → topics → individual concepts.
-   Grouping edges show containment, NEVER necessary prerequisites or inferred mastery. */
+/* Semantic Knowledge Graph v2
+   Progressive hierarchy -> focused concept neighbourhood -> full reader.
+   The learner travels through complexity instead of decoding the whole network at once. */
 (function(root){
 "use strict";
 const CHAPTERS=[
- {id:"stellar-origins",name:"Lives of stars",macros:["stellar-astrophysics","binary-stellar-evolution"],color:"#d59bbf"},
- {id:"compact-signals",name:"Compact objects & waves",macros:["classical-mechanics","general-relativity","gravitational-wave-science"],color:"#9cacf7"},
- {id:"model-populations",name:"Model stellar populations",macros:["scientific-computing","binary-population-synthesis"],color:"#71d8ca"},
- {id:"cosmic-record",name:"Reconstruct cosmic history",macros:["gravitational-wave-paleontology"],color:"#e0bd80"},
- {id:"research-tools",name:"Foundations & research tools",macros:["calculus","research-practice"],color:"#b49bf0"}
+ {id:"stellar-origins",name:"Lives of stars",desc:"How massive stars form, evolve, interact and leave remnants.",macros:["stellar-astrophysics","binary-stellar-evolution"],color:"#d59bbf"},
+ {id:"compact-signals",name:"Compact objects & waves",desc:"Orbits, relativity, waveforms, detectors and compact-object signals.",macros:["classical-mechanics","general-relativity","gravitational-wave-science"],color:"#9cacf7"},
+ {id:"model-populations",name:"Model stellar populations",desc:"Computation, synthetic populations and forward modeling.",macros:["scientific-computing","binary-population-synthesis"],color:"#71d8ca"},
+ {id:"cosmic-record",name:"Reconstruct cosmic history",desc:"Selection-aware population inference and cosmic reconstruction.",macros:["gravitational-wave-paleontology"],color:"#e0bd80"},
+ {id:"research-tools",name:"Foundations & research tools",desc:"Mathematical and research foundations used across the Atlas.",macros:["calculus","research-practice"],color:"#b49bf0"}
 ];
 const esc=value=>String(value??"").replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
+const normalize=value=>String(value||"").normalize?.("NFKD").replace?.(/[\u0300-\u036f]/g,"").toLowerCase()||String(value||"").toLowerCase();
+const RELATION_LABELS={containment:"Grouping",prerequisite:"Prerequisite",causal:"Physical influence",application:"Application",useful:"Useful context"};
+const RELATION_COLORS={containment:"rgba(151,180,229,.32)",prerequisite:"#b3bbff",causal:"#dcb1d2",application:"#83d6c5",useful:"#e0bd80"};
+const STYLE=`
+.constellation-v2-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 17px;padding:12px;border:1px solid rgba(145,168,215,.18);border-radius:14px;background:rgba(16,25,44,.58)}
+.constellation-v2-search{position:relative;flex:1 1 280px}.constellation-v2-search input{width:100%;box-sizing:border-box;border:1px solid rgba(149,174,220,.30);border-radius:11px;background:#121d31;color:#eef4ff;padding:11px 42px 11px 14px;font:500 12px var(--font-body)}
+.constellation-v2-search input:focus{outline:2px solid #adcbff;outline-offset:1px}.constellation-v2-search kbd{position:absolute;right:12px;top:10px;color:#879bbd;font:600 10px var(--font-body);border:1px solid rgba(150,170,210,.25);border-radius:5px;padding:2px 5px}
+.constellation-v2-results{position:absolute;z-index:30;top:calc(100% + 6px);left:0;right:0;max-height:340px;overflow:auto;padding:7px;background:#111c30;border:1px solid rgba(157,181,227,.35);border-radius:12px;box-shadow:0 18px 55px rgba(0,0,0,.45)}
+.constellation-v2-results[hidden]{display:none!important}.constellation-v2-result{display:flex;width:100%;box-sizing:border-box;text-align:left;border:0;background:transparent;color:#e9f1ff;padding:10px;border-radius:8px;cursor:pointer;flex-direction:column;gap:3px}.constellation-v2-result:hover,.constellation-v2-result:focus-visible{background:rgba(94,112,170,.20);outline:0}.constellation-v2-result small{color:#91a7c7;font-size:10px}
+.constellation-breadcrumbs-v2{display:flex;gap:5px;align-items:center;overflow-x:auto;white-space:nowrap;padding:0 2px 15px;scrollbar-width:none}.constellation-breadcrumbs-v2::-webkit-scrollbar{display:none}.constellation-crumb{border:0;background:transparent;color:#98accb;padding:4px 3px;cursor:pointer;font:500 11px var(--font-body)}.constellation-crumb:not(:disabled):hover{color:#eef4ff}.constellation-crumb:disabled{color:#e2ebff;cursor:default}.constellation-crumb-sep{color:#52637e;font-size:10px}
+.constellation-filterbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.constellation-filterbar>span{color:#8296b6;font:600 9px var(--font-body);letter-spacing:.08em;text-transform:uppercase;margin-right:2px}.constellation-filter{border:1px solid rgba(139,164,209,.23);border-radius:999px;background:transparent;color:#94a9c8;padding:7px 9px;cursor:pointer;font:600 9px var(--font-body)}.constellation-filter[aria-pressed="true"]{color:#eef4ff;background:rgba(58,76,116,.58);border-color:var(--edge-color,#8da6d1)}
+.constellation-stage-v2{display:grid;grid-template-columns:minmax(0,1fr) 0;transition:grid-template-columns .22s ease}.constellation-stage-v2.has-context{grid-template-columns:minmax(0,1fr) minmax(270px,340px)}.constellation-stage-main{min-width:0;position:relative}.constellation-context-v2{min-width:0;border-left:1px solid rgba(147,171,215,.22);background:linear-gradient(160deg,rgba(20,30,51,.96),rgba(10,17,30,.98));overflow:hidden}.constellation-context-v2[hidden]{display:none!important}.constellation-context-inner{padding:24px 20px;height:100%;box-sizing:border-box;overflow:auto}.constellation-context-top{display:flex;justify-content:space-between;gap:12px}.constellation-context-v2 h3{font:600 23px/1.25 var(--font-display);color:#f1f5ff;margin:9px 0 10px}.constellation-context-v2 p{font:400 12px/1.72 var(--font-body);color:#afc0dc}.constellation-context-v2 .context-path{color:#8fa7c8;font:500 10px/1.55 var(--font-body)}.context-metrics{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.context-metrics span{border:1px solid rgba(147,171,214,.22);border-radius:999px;padding:6px 8px;color:#b8cae8;font:600 9px var(--font-body)}.context-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:17px 0}.context-actions button{border:1px solid rgba(151,177,219,.35);background:rgba(43,59,94,.68);color:#e4efff;border-radius:9px;padding:10px;cursor:pointer;font:600 10px var(--font-body)}.context-actions .context-learn{grid-column:1/-1;background:#cbb7f2;color:#151a2a;border-color:transparent}.context-connections{display:grid;gap:7px;margin-top:12px}.context-connection{display:flex;align-items:flex-start;gap:8px;text-align:left;border:0;background:rgba(31,47,76,.48);border-radius:8px;padding:9px;color:#d7e5fb;cursor:pointer}.context-connection i{width:8px;height:8px;border-radius:50%;margin-top:4px;flex:0 0 auto;background:var(--edge-color)}.context-connection span{display:flex;flex-direction:column;gap:2px;font:500 10px/1.4 var(--font-body)}.context-connection small{color:#879fbe;font-size:9px}.context-empty{color:#8499b7!important;font-size:10px!important}
+.constellation-v2-controls{position:absolute;right:14px;top:72px;z-index:6;display:flex;flex-direction:column;gap:6px}.constellation-v2-controls button{width:36px;height:36px;border:1px solid rgba(150,174,218,.25);border-radius:10px;background:rgba(12,19,34,.86);color:#cddbf2;cursor:pointer;font:600 13px var(--font-body)}.constellation-v2-controls button:hover{border-color:#adc5ef}.constellation-v2-controls button:disabled{opacity:.32;cursor:default}
+.constellation-minimap-v2{position:absolute;z-index:5;right:14px;bottom:41px;width:132px;min-height:82px;border:1px solid rgba(144,168,210,.20);border-radius:12px;background:rgba(8,14,27,.78);backdrop-filter:blur(8px);padding:9px;box-sizing:border-box}.constellation-minimap-v2 strong{display:block;color:#91a8c8;font:600 8px var(--font-body);letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}.constellation-mini-nodes{display:flex;gap:5px;flex-wrap:wrap}.constellation-mini-node{width:11px;height:11px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:var(--mini-color);cursor:pointer;opacity:.65}.constellation-mini-node.is-selected{box-shadow:0 0 0 2px rgba(255,255,255,.58);opacity:1}.constellation-mini-node:hover{opacity:1;transform:scale(1.15)}
+.constellation-choices.is-landmarks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.constellation-choices.is-landmarks .constellation-choice{max-width:none;min-height:116px;border-radius:15px;align-items:flex-start;flex-direction:column;justify-content:flex-start;padding:15px}.constellation-choice-title{display:flex;align-items:center;gap:8px;color:#edf3ff;font:600 13px/1.35 var(--font-display)}.constellation-choice-desc{color:#8fa5c4;font:400 10px/1.55 var(--font-body)}.constellation-choice-meta{margin-top:auto;color:#7890b0;font:600 9px var(--font-body);letter-spacing:.04em}.constellation-choice.is-current{border-color:var(--node-color,#aabbff);background:rgba(73,86,132,.25)}
+.constellation-focus-note{display:flex;align-items:center;gap:7px;color:#9eb3d1;font:400 10px/1.55 var(--font-body);margin:6px 0 0}.constellation-focus-note i{width:7px;height:7px;border-radius:50%;background:#cbb7f2;box-shadow:0 0 12px rgba(203,183,242,.6)}
+@media(max-width:980px){.constellation-stage-v2.has-context{grid-template-columns:1fr}.constellation-context-v2{border-left:0;border-top:1px solid rgba(147,171,215,.22)}.constellation-choices.is-landmarks{grid-template-columns:repeat(2,minmax(0,1fr))}.constellation-minimap-v2{display:none}}
+@media(max-width:560px){.constellation-v2-toolbar{padding:9px}.constellation-filterbar{display:none}.constellation-choices.is-landmarks{grid-template-columns:1fr}.constellation-v2-controls{top:68px;right:8px}.constellation-context-inner{padding:18px 15px}.context-actions{grid-template-columns:1fr}.context-actions .context-learn{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){.constellation-stage-v2{transition:none}}
+`;
 function mount({host,macros,topics,concepts,locationByConcept,researchSources=[],researchQuestions=[],diagnosticQuestions=[],relationData=[],onConceptSelected=()=>{},forceGraph,openConcept,openLesson,startDrill,hasLesson,hasPractice=()=>false,startPractice=()=>{}}){
  if(!host)throw Error("3D constellation mount missing");
  const $=sel=>host.querySelector(sel);
- const canvas=$("#constellation-canvas"),detail=$("#constellation-detail"),shade=$("#constellation-detail-shade"),choices=$("#constellation-choices");
- const byMacro=new Map(macros.map(m=>[m.id,m]));
- const byTopic=new Map(topics.map(t=>[t.id,t]));
- const byConcept=new Map(concepts.map(c=>[c.id,c]));
+ let byMacro=new Map(macros.map(m=>[m.id,m]));
+ let byTopic=new Map(topics.map(t=>[t.id,t]));
+ let byConcept=new Map(concepts.map(c=>[c.id,c]));
  const sourcesById=new Map(researchSources.map(source=>[source.id,source]));
- function safeUrl(value){
-   try{const url=new URL(value,root.location?.href||"https://example.org/");
-     return ["https:","http:"].includes(url.protocol)?url.href:null;
-   }catch{return null;}
- }
-
  const macroGroup=new Map(CHAPTERS.flatMap(g=>g.macros.map(id=>[id,g])));
  const colorForMacro=id=>macroGroup.get(id)?.color||"#a2b8f0";
- let stage="overview",chapterId=null,macroId=null,topicId=null,selectedId=null,graph=null,renderToken=0,previousFocus=null;
- function position(id,name,type,color,index,total,radius,center=false){
-   const theta=2*Math.PI*index/Math.max(1,total)-Math.PI/2;
-   const phi=Math.sin(index*1.65)*.36;
-   const x=center?0:Math.cos(theta)*radius;
-   const y=center?0:Math.sin(theta)*radius*.8;
-   const z=center?0:Math.sin(phi)*radius*.45;
-   return {id,name,type,color,x,y,z,fx:x,fy:y,fz:z};
+ const filters={containment:true,prerequisite:true,causal:true,application:true,useful:true};
+ let stage="overview",chapterId=null,macroId=null,topicId=null,selectedId=null,graph=null,renderToken=0,previousFocus=null,selectedLessonId=null;
+ function safeUrl(value){try{const url=new URL(value,root.location?.href||"https://example.org/");return ["https:","http:"].includes(url.protocol)?url.href:null;}catch{return null;}}
+ function ensureStyles(){if(typeof document==="undefined"||!document.head||document.getElementById?.("constellation-v2-styles"))return;const style=document.createElement("style");style.id="constellation-v2-styles";style.textContent=STYLE;document.head.appendChild(style);}
+ function ensureNode(id,tag="div",parent){let node=$("#"+id);if(node)return node;if(typeof document==="undefined")return null;node=document.createElement(tag);node.id=id;(parent||host).appendChild(node);return node;}
+ function ensureEnhancements(){
+  ensureStyles();
+  const header=$(".constellation-header"),stageBox=$(".constellation-stage"),nav=$(".constellation-navigation");
+  const toolbar=ensureNode("constellation-v2-toolbar","div",header);if(toolbar){toolbar.className="constellation-v2-toolbar";toolbar.innerHTML='<div class="constellation-v2-search"><input id="constellation-search" type="search" autocomplete="off" placeholder="Find any concept…" aria-label="Search the knowledge graph"><kbd>/</kbd><div id="constellation-search-results" class="constellation-v2-results" role="listbox" hidden></div></div><div class="constellation-filterbar" aria-label="Relationship filters"><span>Show links</span><button id="constellation-filter-prerequisite" class="constellation-filter" type="button" style="--edge-color:#b3bbff" aria-pressed="true">Prerequisite</button><button id="constellation-filter-causal" class="constellation-filter" type="button" style="--edge-color:#dcb1d2" aria-pressed="true">Physical influence</button><button id="constellation-filter-application" class="constellation-filter" type="button" style="--edge-color:#83d6c5" aria-pressed="true">Application</button><button id="constellation-filter-useful" class="constellation-filter" type="button" style="--edge-color:#e0bd80" aria-pressed="true">Useful context</button></div>'}
+  const crumbs=ensureNode("constellation-breadcrumbs-v2","nav",host);if(crumbs){crumbs.className="constellation-breadcrumbs-v2";crumbs.setAttribute?.("aria-label","Current position in the knowledge graph");if(stageBox&&crumbs.parentNode!==host){} }
+  // Real DOM: place breadcrumbs immediately before the graph stage.
+  if(stageBox&&crumbs&&stageBox.parentNode&&crumbs.parentNode!==stageBox.parentNode)stageBox.parentNode.insertBefore?.(crumbs,stageBox);
+  if(stageBox){stageBox.classList?.add("constellation-stage-v2");let main=ensureNode("constellation-stage-main","div",stageBox);if(main&&main.parentNode===stageBox&&main.childNodes?.length===0){main.className="constellation-stage-main";const children=[...stageBox.childNodes].filter(x=>x!==main);for(const child of children)main.appendChild(child);}const context=ensureNode("constellation-context-v2","aside",stageBox);if(context){context.className="constellation-context-v2";context.hidden=true;}}
+  const stageMain=$("#constellation-stage-main")||stageBox;
+  const controls=ensureNode("constellation-v2-controls","div",stageMain);if(controls){controls.className="constellation-v2-controls";controls.innerHTML='<button id="constellation-zoom-in" type="button" aria-label="Zoom in">+</button><button id="constellation-zoom-out" type="button" aria-label="Zoom out">−</button><button id="constellation-fit" type="button" aria-label="Fit current graph">⌗</button><button id="constellation-center-selected" type="button" aria-label="Center selected concept" disabled>◎</button>'}
+  const mini=ensureNode("constellation-minimap-v2","div",stageMain);if(mini)mini.className="constellation-minimap-v2";
+  if(nav)nav.setAttribute?.("aria-label","Current level choices");
  }
+ ensureEnhancements();
+ const canvas=$("#constellation-canvas"),detail=$("#constellation-detail"),shade=$("#constellation-detail-shade"),choices=$("#constellation-choices"),contextPanel=$("#constellation-context-v2"),stageBox=$(".constellation-stage");
+ function chapterForMacro(id){return macroGroup.get(id)||CHAPTERS.find(c=>c.macros.includes(id));}
+ function position(id,name,type,color,index,total,radius,center=false,meta={}){const theta=2*Math.PI*index/Math.max(1,total)-Math.PI/2;const phi=Math.sin(index*1.65)*.36;const x=center?0:Math.cos(theta)*radius;const y=center?0:Math.sin(theta)*radius*.8;const z=center?0:Math.sin(phi)*radius*.42;return {id,name,type,color,x,y,z,fx:x,fy:y,fz:z,...meta};}
  function clusterItems(){
-   if(stage==="overview")return CHAPTERS.map(c=>({id:c.id,name:c.name,type:"chapter",color:c.color}));
-   if(stage==="chapter"){const chapter=CHAPTERS.find(c=>c.id===chapterId);
-     return (chapter?.macros||[]).map(id=>({id,name:byMacro.get(id)?.title||id,type:"macro",color:colorForMacro(id)}));}
-   if(stage==="macro")return topics.filter(t=>t.macroId===macroId).map(t=>({id:t.id,name:t.title,type:"topic",color:colorForMacro(macroId)}));
-   const t=byTopic.get(topicId);
-   return (t?.conceptIds||[]).map(id=>({id,name:byConcept.get(id)?.title||id,type:"concept",color:colorForMacro(macroId)}));
+  if(stage==="overview")return CHAPTERS.map(c=>({id:c.id,name:c.name,desc:c.desc,type:"chapter",color:c.color,meta:(c.macros||[]).length+" areas"}));
+  if(stage==="chapter"){const chapter=CHAPTERS.find(c=>c.id===chapterId);return (chapter?.macros||[]).filter(id=>byMacro.has(id)).map(id=>({id,name:byMacro.get(id)?.title||id,desc:byMacro.get(id)?.whyItMatters||"Open this scientific region.",type:"macro",color:colorForMacro(id),meta:topics.filter(t=>t.macroId===id).length+" topics"}));}
+  if(stage==="macro")return topics.filter(t=>t.macroId===macroId).map(t=>({id:t.id,name:t.title,desc:"Explore the concepts collected in this scientific topic.",type:"topic",color:colorForMacro(macroId),meta:(t.conceptIds||[]).length+" concepts"}));
+  const t=byTopic.get(topicId);return (t?.conceptIds||[]).filter(id=>byConcept.has(id)).map(id=>({id,name:byConcept.get(id)?.title||id,desc:byConcept.get(id)?.whyItMatters||byConcept.get(id)?.researchApplication||"Open this concept.",type:"concept",color:colorForMacro(macroId),meta:(byConcept.get(id)?.tags||[]).includes("coverage-orientation")?"orientation":"concept"}));
  }
- function sceneData(){
-   const items=clusterItems(),centerName=stage==="overview"?"Gravitational-Wave Paleontology":
-     stage==="chapter"?CHAPTERS.find(c=>c.id===chapterId)?.name:
-     stage==="macro"?byMacro.get(macroId)?.title:byTopic.get(topicId)?.title;
-   const centerId="atlas-center",color=stage==="overview"?"#c8d3ff":colorForMacro(macroId||CHAPTERS.find(c=>c.id===chapterId)?.macros[0]);
-   const radius=items.length>7?158:items.length>4?132:106;
-   const nodes=[position(centerId,centerName,"center",color,0,1,0,true),
-     ...items.map((item,i)=>position(item.id,item.name,item.type,item.color,i,items.length,radius))];
-   const links=items.map(item=>({source:centerId,target:item.id,type:"containment"}));
-   if(stage==="topic"){
-     const visible=new Set(items.map(item=>item.id)),mapped=new Set();
-     // Containment edges are never described as prerequisite or causal relationships.
-     for(const relation of relationData){
-       if(visible.has(relation.from)&&visible.has(relation.to)){
-         links.push({source:relation.from,target:relation.to,type:relation.kind,explanation:relation.why});
-         mapped.add(relation.from+"|"+relation.to);
-       }
-     }
-     for(const concept of concepts){
-       if(!visible.has(concept.id))continue;
-       for(const e of concept.prerequisites||[]){
-         const id=e.id+"|"+concept.id;
-         if(e.kind==="necessary"&&visible.has(e.id)&&!mapped.has(id)){
-           links.push({source:e.id,target:concept.id,type:"prerequisite",explanation:"This concept is listed as necessary background for "+concept.title+"."});
-         }
-       }
-     }
-   }
-   return {nodes,links,items};
+ function relationEdgesFor(id){
+  const out=[],seen=new Set(),concept=byConcept.get(id);if(!concept)return out;
+  const add=(source,target,type,why)=>{const key=source+"|"+target+"|"+type;if(source===target||seen.has(key)||!byConcept.has(source)||!byConcept.has(target))return;seen.add(key);out.push({source,target,type,explanation:why||"Scientific relationship mapped in the Atlas."});};
+  for(const rel of relationData){if(rel.from===id||rel.to===id)add(rel.from,rel.to,rel.kind,rel.why);}
+  for(const e of concept.prerequisites||[]){if(byConcept.has(e.id))add(e.id,id,e.kind==="necessary"?"prerequisite":"useful",e.kind==="necessary"?"Necessary background for "+concept.title+".":"Useful context for "+concept.title+".");}
+  for(const other of concepts){for(const e of other.prerequisites||[]){if(e.id===id&&byConcept.has(other.id))add(id,other.id,e.kind==="necessary"?"prerequisite":"useful",concept.title+" supports "+other.title+".");}}
+  return out;
  }
- function description(){
-   if(stage==="overview")return "The entire research field";
-   if(stage==="chapter")return CHAPTERS.find(c=>c.id===chapterId)?.name||"Research cluster";
-   if(stage==="macro")return byMacro.get(macroId)?.title||"Knowledge region";
-   return byTopic.get(topicId)?.title||"Scientific topic";
+ function focusSceneData(){
+  const concept=byConcept.get(selectedId),edges=relationEdgesFor(selectedId).filter(e=>filters[e.type]!==false);if(!concept)return null;
+  const prioritized=[...edges].sort((a,b)=>({causal:0,prerequisite:1,application:2,useful:3}[a.type]??4)-({causal:0,prerequisite:1,application:2,useful:3}[b.type]??4)).slice(0,12);
+  const neighborIds=[...new Set(prioritized.flatMap(e=>[e.source,e.target]).filter(id=>id!==selectedId))];
+  const color=colorForMacro(macroId),nodes=[position(selectedId,concept.title,"selected",color,0,1,0,true,{selected:true})];
+  const buckets={prerequisite:[],causal:[],application:[],useful:[]};
+  for(const id of neighborIds){const rel=prioritized.find(e=>(e.source===id||e.target===id));(buckets[rel?.type]||buckets.useful).push({id,rel});}
+  const anchors={prerequisite:Math.PI,causal:-Math.PI/2,application:0,useful:Math.PI/2};let index=0;
+  for(const type of ["prerequisite","causal","application","useful"]){const arr=buckets[type];arr.forEach((entry,i)=>{const base=anchors[type],spread=Math.min(1.25,.34*Math.max(1,arr.length-1)),angle=base+(arr.length===1?0:(i/(arr.length-1)-.5)*spread);const radius=150+(i%2)*27,id=entry.id,c=byConcept.get(id);nodes.push({id,name:c.title,type:"concept",color:RELATION_COLORS[type],x:Math.cos(angle)*radius,y:Math.sin(angle)*radius*.72,z:Math.sin(i*1.7)*28,fx:Math.cos(angle)*radius,fy:Math.sin(angle)*radius*.72,fz:Math.sin(i*1.7)*28,relationType:type});index++;});}
+  return {nodes,links:prioritized,items:nodes.slice(1).map(n=>({id:n.id,name:n.name,type:"concept",color:n.color,relationType:n.relationType,desc:RELATION_LABELS[n.relationType]})),focus:true};
  }
- function navigate(node){
-   if(node.type==="center"){
-     if(stage==="overview")showConcept("gravitational-wave-paleontology");
-     else if(stage==="chapter" && CHAPTERS.find(c=>c.id===chapterId)?.macros.length===1)openMacro(CHAPTERS.find(c=>c.id===chapterId).macros[0]);
-     else if(stage==="macro")showConcept(macroId);
-     return;
-   }
-   if(node.type==="chapter")openChapter(node.id);
-   else if(node.type==="macro")openMacro(node.id);
-   else if(node.type==="topic")openTopic(node.id);
-   else if(node.type==="concept")showConcept(node.id);
+ function hierarchySceneData(){
+  const items=clusterItems(),centerName=stage==="overview"?"Gravitational-Wave Paleontology":stage==="chapter"?CHAPTERS.find(c=>c.id===chapterId)?.name:stage==="macro"?byMacro.get(macroId)?.title:byTopic.get(topicId)?.title;
+  const centerId="atlas-center",color=stage==="overview"?"#c8d3ff":colorForMacro(macroId||CHAPTERS.find(c=>c.id===chapterId)?.macros[0]);const radius=items.length>12?190:items.length>7?160:items.length>4?132:108;
+  const nodes=[position(centerId,centerName,"center",color,0,1,0,true),...items.map((item,i)=>position(item.id,item.name,item.type,item.color,i,items.length,radius,false,{desc:item.desc,meta:item.meta}))];
+  const links=filters.containment===false?[]:items.map(item=>({source:centerId,target:item.id,type:"containment"}));
+  if(stage==="topic"){const visible=new Set(items.map(item=>item.id)),mapped=new Set();for(const relation of relationData){if(visible.has(relation.from)&&visible.has(relation.to)&&filters[relation.kind]!==false){links.push({source:relation.from,target:relation.to,type:relation.kind,explanation:relation.why});mapped.add(relation.from+"|"+relation.to);}}for(const concept of concepts){if(!visible.has(concept.id))continue;for(const e of concept.prerequisites||[]){const key=e.id+"|"+concept.id,type=e.kind==="necessary"?"prerequisite":"useful";if(visible.has(e.id)&&!mapped.has(key)&&filters[type]!==false)links.push({source:e.id,target:concept.id,type,explanation:(e.kind==="necessary"?"Necessary background for ":"Useful context for ")+concept.title+"."});}}}
+  return {nodes,links,items,focus:false};
  }
- function render(){
-   selectedId=null;detail.hidden=true;shade.hidden=true;detail.classList.remove("is-expanded");$("#constellation-location").textContent=description();
-   $("#constellation-home").disabled=stage==="overview";
-   $("#constellation-back").disabled=stage==="overview";
-   const {nodes,links,items}=sceneData();
-   $("#constellation-prompt").textContent=
-     stage==="overview"?"Open a research cluster":stage==="chapter"?"Open an area of science":
-     stage==="macro"?"Open a topic":"Explore a concept";
-   choices.replaceChildren();
-   for(const item of items){
-     const b=document.createElement("button");b.type="button";b.className="constellation-choice";
-     b.style.setProperty("--node-color",item.color);
-     b.innerHTML='<span class="constellation-choice-dot" aria-hidden="true"></span>'+
-       '<span>'+esc(item.name)+'</span><span class="constellation-choice-arrow" aria-hidden="true">↗</span>';
-     b.addEventListener("click",()=>navigate(item));
-     choices.appendChild(b);
-   }
-   if(graph){
-     graph.graphData({nodes,links});
-     const token=++renderToken;
-     setTimeout(()=>{if(token===renderToken && graph && !$("#constellation-shell").closest?.("[hidden]")){
-       graph.zoomToFit(root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?0:550,92);
-     }},130);
-   }
+ function sceneData(){return selectedId?focusSceneData():hierarchySceneData();}
+ function description(){if(selectedId)return "Focused on "+(byConcept.get(selectedId)?.title||"concept");if(stage==="overview")return "The entire research field";if(stage==="chapter")return CHAPTERS.find(c=>c.id===chapterId)?.name||"Research cluster";if(stage==="macro")return byMacro.get(macroId)?.title||"Knowledge region";return byTopic.get(topicId)?.title||"Scientific topic";}
+ function breadcrumbItems(){const out=[{type:"overview",id:null,label:"Atlas"}];if(stage!=="overview"||selectedId){const chapter=CHAPTERS.find(c=>c.id===chapterId);if(chapter)out.push({type:"chapter",id:chapter.id,label:chapter.name});}if(macroId&&byMacro.has(macroId))out.push({type:"macro",id:macroId,label:byMacro.get(macroId).title});if(topicId&&byTopic.has(topicId))out.push({type:"topic",id:topicId,label:byTopic.get(topicId).title});if(selectedId&&byConcept.has(selectedId))out.push({type:"concept",id:selectedId,label:byConcept.get(selectedId).title});return out;}
+ function navigateBreadcrumb(item){if(item.type==="overview")openOverview();else if(item.type==="chapter")openChapter(item.id);else if(item.type==="macro")openMacro(item.id);else if(item.type==="topic")openTopic(item.id);else if(item.type==="concept")focusConcept(item.id);}
+ function renderBreadcrumbs(){const hostCrumbs=$("#constellation-breadcrumbs-v2");if(!hostCrumbs)return;hostCrumbs.replaceChildren();const rows=breadcrumbItems();rows.forEach((row,i)=>{const b=document.createElement("button");b.type="button";b.className="constellation-crumb";b.textContent=row.label;b.disabled=i===rows.length-1;b.addEventListener("click",()=>navigateBreadcrumb(row));hostCrumbs.appendChild(b);if(i<rows.length-1){const s=document.createElement("span");s.className="constellation-crumb-sep";s.textContent="/";hostCrumbs.appendChild(s);}});}
+ function renderChoices(data){if(!choices)return;choices.replaceChildren();choices.className="constellation-choices"+(stage==="overview"&&!selectedId?" is-landmarks":"");for(const item of data.items||[]){const b=document.createElement("button");b.type="button";b.className="constellation-choice"+(item.id===selectedId?" is-current":"");b.style.setProperty("--node-color",item.color);const label='<span class="constellation-choice-title"><span class="constellation-choice-dot" aria-hidden="true"></span><span>'+esc(item.name)+'</span></span>';b.innerHTML=stage==="overview"&&!selectedId?label+'<span class="constellation-choice-desc">'+esc(item.desc||"")+'</span><span class="constellation-choice-meta">'+esc(item.meta||"")+' · Open →</span>':label+(item.relationType?'<span class="constellation-choice-desc">'+esc(RELATION_LABELS[item.relationType])+'</span>':'')+'<span class="constellation-choice-arrow" aria-hidden="true">↗</span>';b.addEventListener("click",()=>navigate(item));choices.appendChild(b);}}
+ function renderMinimap(data){const mini=$("#constellation-minimap-v2");if(!mini)return;mini.innerHTML='<strong>'+esc(selectedId?"Focused neighbourhood":"Current level")+'</strong><div class="constellation-mini-nodes"></div>';const list=mini.querySelector?.(".constellation-mini-nodes");if(!list)return;for(const item of (data.items||[]).slice(0,24)){const b=document.createElement("button");b.type="button";b.className="constellation-mini-node"+(item.id===selectedId?" is-selected":"");b.style.setProperty("--mini-color",item.color||"#a2b8f0");b.title=item.name;b.setAttribute?.("aria-label","Open "+item.name);b.addEventListener("click",()=>navigate(item));list.appendChild(b);}}
+ function renderContext(){if(!contextPanel||!stageBox)return;if(!selectedId||!byConcept.has(selectedId)){contextPanel.hidden=true;stageBox.classList?.remove("has-context");$("#constellation-center-selected")&&( $("#constellation-center-selected").disabled=true );return;}const concept=byConcept.get(selectedId),loc=locationByConcept.get(selectedId),edges=relationEdgesFor(selectedId).filter(e=>filters[e.type]!==false);const necessary=edges.filter(e=>e.target===selectedId&&e.type==="prerequisite").length,downstream=edges.filter(e=>e.source===selectedId&&e.type==="prerequisite").length,typed=edges.filter(e=>["causal","application"].includes(e.type)).length;const path=[loc?.macroId&&byMacro.get(loc.macroId)?.title,loc?.topicId&&byTopic.get(loc.topicId)?.title].filter(Boolean).join(" · ");contextPanel.hidden=false;stageBox.classList?.add("has-context");const centerBtn=$("#constellation-center-selected");if(centerBtn)centerBtn.disabled=false;contextPanel.innerHTML='<div class="constellation-context-inner"><div class="constellation-context-top"><div><span class="focus-eyebrow">FOCUSED CONCEPT</span><h3>'+esc(concept.title)+'</h3></div><button type="button" id="constellation-context-close" class="constellation-quiet" aria-label="Close focused concept">✕</button></div><div class="context-path">'+esc(path||concept.unit||"Research Atlas")+'</div><p>'+esc(concept.whyItMatters||concept.researchApplication||"Explore how this concept fits into gravitational-wave paleontology.")+'</p><div class="context-metrics"><span>'+necessary+' prerequisites</span><span>'+downstream+' builds on this</span><span>'+typed+' typed links</span></div><div class="context-actions"><button class="context-learn" id="constellation-context-learn" type="button">Learn this concept →</button><button id="constellation-context-practice" type="button">Practice ↗</button><button id="constellation-context-topic" type="button">Open full topic</button></div><h4>Immediate connections</h4><div class="context-connections">'+(edges.length?edges.slice(0,9).map(e=>{const other=e.source===selectedId?e.target:e.source,c=byConcept.get(other);return '<button type="button" class="context-connection" data-context-related="'+esc(other)+'" style="--edge-color:'+esc(RELATION_COLORS[e.type]||"#9eb5d5")+'"><i></i><span>'+esc(c?.title||other)+'<small>'+esc(RELATION_LABELS[e.type]||e.type)+(e.source===selectedId?" · downstream":" · upstream")+'</small></span></button>';}).join(""):'<p class="context-empty">No direct typed relationships have been authored yet. Open the topic to explore nearby concepts.</p>')+'</div></div>';
+  contextPanel.querySelector?.("#constellation-context-close")?.addEventListener("click",clearFocus);contextPanel.querySelector?.("#constellation-context-learn")?.addEventListener("click",()=>openReader(selectedId));contextPanel.querySelector?.("#constellation-context-practice")?.addEventListener("click",()=>startPractice(selectedId));contextPanel.querySelector?.("#constellation-context-topic")?.addEventListener("click",()=>{const t=topicId;clearFocus();if(t)openTopic(t);});contextPanel.querySelectorAll?.("[data-context-related]").forEach(b=>b.addEventListener("click",()=>focusConcept(b.dataset.contextRelated)));
  }
- function openOverview(){stage="overview";chapterId=null;macroId=null;topicId=null;render();}
- function openChapter(id){if(!CHAPTERS.some(c=>c.id===id))return;
-   stage="chapter";chapterId=id;macroId=null;topicId=null;render();}
- function openMacro(id){const c=macroGroup.get(id);if(!c || !byMacro.has(id))return;
-   stage="macro";chapterId=c.id;macroId=id;topicId=null;render();}
- function openTopic(id){const t=byTopic.get(id);if(!t)return;
-   stage="topic";macroId=t.macroId;chapterId=macroGroup.get(macroId)?.id||null;topicId=id;render();}
- function closeDetail(){
-   detail.hidden=true;shade.hidden=true;detail.classList.remove("is-expanded");
-   selectedId=null;onConceptSelected(null);
-   previousFocus?.focus?.();previousFocus=null;
- }
- function showDialog(){
-   if(!previousFocus||!detail.contains?.(document.activeElement))previousFocus=document.activeElement||previousFocus;
-   detail.hidden=false;shade.hidden=false;
-   detail.classList.remove("is-expanded");
-   detail.querySelector(".concept-dialog-body")?.scrollTo?.({top:0});
-   updateReadingProgress();
-   detail.focus?.();
- }
- function updateReadingProgress(){
-   const body=detail.querySelector(".concept-dialog-body"),bar=detail.querySelector("#concept-read-progress");
-   if(!body||!bar)return;
-   const total=Math.max(0,(body.scrollHeight||0)-(body.clientHeight||0));
-   const percent=total?Math.min(100,Math.max(0,Math.round((body.scrollTop||0)*100/total))):100;
-   bar.style?.setProperty?.("--reading-progress",percent+"%");
-   bar.setAttribute?.("aria-valuenow",String(percent));
-   detail.querySelector("#concept-read-label").textContent=percent===100?"End of unit":percent+"% of unit";
- }
- function wireDialog(){
-   detail.querySelector("#constellation-close-detail")?.addEventListener("click",closeDetail);
-   detail.querySelector(".concept-dialog-body")?.addEventListener("scroll",updateReadingProgress,{passive:true});
-   detail.querySelector("#concept-back-top")?.addEventListener("click",()=>{
-     const body=detail.querySelector(".concept-dialog-body");
-     body?.scrollTo?.({top:0,behavior:root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});
-     updateReadingProgress();
-   });
-   detail.querySelector("#constellation-expand-detail")?.addEventListener("click",event=>{
-     const expanded=detail.classList.toggle("is-expanded");
-     event.currentTarget?.setAttribute?.("aria-pressed",String(expanded));
-     event.currentTarget.textContent=expanded?"Exit expanded view ↙":"Expand view ↗";
-   });
-   detail.querySelectorAll("[data-related]").forEach(button=>
-     button.addEventListener("click",()=>showConcept(button.dataset.related)));
-   detail.querySelector("#constellation-lesson")?.addEventListener("click",()=>{
-     closeDetail();openLesson(selectedLessonId);
-   });
- }
- let selectedLessonId=null;
- function back(){if(!detail.hidden){closeDetail();return;}
-   if(stage==="topic")openMacro(macroId);
-   else if(stage==="macro")openChapter(chapterId);
-   else openOverview();}
- function showConcept(id){
-   const concept=byConcept.get(id);if(!concept)return;
-   const loc=locationByConcept.get(id);
-   if(loc && (loc.macroId!==macroId||loc.topicId!==topicId)){
-     if(loc.topicId)openTopic(loc.topicId);else openMacro(loc.macroId);
-   }
-   selectedId=id;selectedLessonId=id;
-   const necessary=(concept.prerequisites||[]).filter(e=>e.kind==="necessary"&&byConcept.has(e.id));
-   const useful=(concept.prerequisites||[]).filter(e=>e.kind==="useful"&&byConcept.has(e.id));
-   const downstream=concepts.filter(other=>(other.prerequisites||[]).some(e=>e.id===id&&e.kind==="necessary")).slice(0,5);
-   const references=[...new Set((concept.researchReferences||[]).map(ref=>sourcesById.get(ref)).filter(x=>x&&safeUrl(x.url)))];
-   const direct=safeUrl(concept.resource);
-   const links=edges=>edges.map(edge=>
-     '<button type="button" class="constellation-related" data-related="'+esc(edge.id)+'">'+
-     esc(byConcept.get(edge.id).title)+' ↗</button>').join("");
-   const relatedSection=(title,edges)=>edges.length?
-     '<section class="concept-connection-group"><h4>'+title+'</h4><div class="constellation-related-list">'+links(edges)+'</div></section>':"";
-   const scientific=relationData.filter(e=>e.from===id||e.to===id).map(e=>
-     '<div class="scientific-relation"><span class="scientific-relation-kind">'+esc(e.kind)+'</span>'+
-     '<button type="button" class="constellation-related" data-related="'+esc(e.from===id?e.to:e.from)+'">'+
-     esc(byConcept.get(e.from).title)+" → "+esc(byConcept.get(e.to).title)+' ↗</button><p>'+esc(e.why)+'</p></div>').join("");
-   const referenceList=references.map(ref=>
-     '<a href="'+esc(safeUrl(ref.url))+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title||ref.citation)+' ↗</a>').join("")+
-     (direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Open '+esc(concept.title)+' reference ↗</a>':"");
-   detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">LEARNING UNIT · '+esc(concept.unit||"RESEARCH ATLAS")+'</span>'+
-      '<h3 id="concept-dialog-heading">'+esc(concept.title)+'</h3>'+
-      '<p class="concept-dialog-context">One continuous learning unit · Follow the physical reasoning, then explore connected research.</p></div>'+
-      '<div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button>'+
-      '<button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept dialog">Close ✕</button></div></div>'+
-      '<div class="concept-reading-track" id="concept-read-progress" role="progressbar" aria-label="Reading position within this unit" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="concept-reading-fill"></span><span class="concept-reading-label" id="concept-read-label">Start of unit</span></div>'+
-      '<div class="concept-dialog-body concept-single-unit">'+
-      '<section class="concept-unit-section concept-learning-goals" aria-labelledby="concept-learning-goals-title">'+
-      '<h4 id="concept-learning-goals-title">Learning objectives</h4><ol class="constellation-objectives">'+(concept.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol></section>'+
-      '<section class="concept-unit-section concept-explanation" aria-labelledby="concept-explanation-title">'+
-      '<h4 id="concept-explanation-title">Understand the idea</h4>'+
-      (root.AtlasConceptInsight?.render(concept)||'<p>Explore what this idea represents, how it works and which scientific assumptions it needs.</p>')+
-      (hasLesson(id)?'<button type="button" id="constellation-lesson" class="focus-secondary">Read the full authored lesson →</button>':'')+
-      '</section>'+
-      '<section class="concept-unit-section concept-unit-connections" aria-labelledby="concept-connections-title">'+
-      '<h4 id="concept-connections-title">Build on this understanding</h4>'+
-      relatedSection("Necessary background",necessary)+
-      relatedSection("Useful context",useful)+
-      relatedSection("What this helps you learn next",downstream.map(x=>({id:x.id})))+
-      (scientific?'<h4>Why these scientific relationships matter</h4><div class="scientific-relations">'+scientific+'</div>':"")+
-      (!necessary.length&&!useful.length&&!downstream.length?'<p>No other concept connections have been mapped here yet.</p>':"")+
-      '</section>'+
-      '<section class="concept-unit-section concept-unit-resources" aria-labelledby="concept-resources-title">'+
-      '<h4 id="concept-resources-title">Research resources</h4>'+
-      (referenceList?'<div class="constellation-resource-list">'+referenceList+'</div>':
-      '<p>No individual public references have been mapped to this concept yet.</p>')+
-      '<h4>Discover related papers</h4><div id="constellation-literature"></div></section></div>'+
-      '<div class="concept-dialog-footer"><button type="button" id="concept-back-top" class="concept-back-top">↑ Back to top</button>'+
-      '<span>Work through problems in the dedicated Practice section.</span>'+
-      '<button type="button" id="constellation-open-practice" class="focus-primary">Open practice for this concept →</button></div>';
-   wireDialog();
-   detail.querySelector("#constellation-open-practice")?.addEventListener("click",()=>{closeDetail();startPractice(id);});
-   const resourceHost=detail.querySelector("#constellation-literature");
-   root.AtlasLiterature?.mount({host:resourceHost,concept});
-   showDialog();onConceptSelected(id);
- }
- function showQuestion(question){
-   if(!question)return;
-   openOverview();onConceptSelected(null);
-   detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">RESEARCH QUESTION</span>'+
-      '<h3>'+esc(question.title)+'</h3><p>'+esc(question.summary||"")+'</p></div>'+
-      '<div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button>'+
-      '<button type="button" id="constellation-close-detail" class="constellation-quiet">Close ✕</button></div></div>'+
-      '<div class="concept-dialog-body"><p>Investigate: '+esc(question.activity||"")+'</p>'+
-      '<h4>Explore related concepts</h4><div class="constellation-related-list">'+
-      (question.conceptIds||[]).filter(id=>byConcept.has(id)).map(id=>
-        '<button type="button" class="constellation-related" data-related="'+esc(id)+'">'+
-        esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div></div>';
-   wireDialog();showDialog();
- }
- function ensureVisible(){
-   if(!graph)return;
-   const w=canvas.clientWidth,h=canvas.clientHeight;
-   if(w&&h){graph.width(w).height(h);const token=++renderToken;setTimeout(()=>{
-     if(graph&&token===renderToken)graph.zoomToFit(350,92);
-   },100);}
- }
- function initialize(){
-   if(graph)return;
-   if(typeof forceGraph!=="function"){
-     canvas.hidden=true;const fallback=$("#constellation-fallback");fallback.hidden=false;
-     fallback.textContent="3D is unavailable in this browser. Choose any cluster below to explore the same concepts.";
-     return;
-   }
-   try{
-     const graphFactory=forceGraph();
-     canvas.replaceChildren();
-     graph=graphFactory(canvas)
-       .width(canvas.clientWidth||900).height(canvas.clientHeight||530)
-       .backgroundColor("rgba(0,0,0,0)")
-       .nodeColor(n=>n.color)
-       .nodeVal(n=>n.type==="center"?95:n.type==="chapter"?56:n.type==="macro"?45:n.type==="topic"?32:17)
-       .nodeLabel(n=>n.name)
-       .linkColor(l=>l.type==="causal"?"#dcb1d2":l.type==="prerequisite"?"#b3bbff":l.type==="application"?"#83d6c5":"rgba(151,180,229,.38)")
-       .linkWidth(l=>l.type==="containment"?1.3:2.25)
-       .linkDirectionalParticles(l=>l.type==="causal"?2:0).linkDirectionalParticleWidth(1.2)
-       .linkDirectionalParticleSpeed(.0019)
-       .onNodeClick(n=>navigate(n))
-       .onNodeHover(n=>{canvas.style.cursor=n?"pointer":"grab";});
-     graph.d3Force?.("charge")?.strength?.(0);
-     render();ensureVisible();
-   }catch(error){
-     console.warn("[Research Atlas] 3D constellation unavailable; accessible cluster navigation remains.",error);
-     graph=null;canvas.hidden=true;const fallback=$("#constellation-fallback");fallback.hidden=false;
-     fallback.textContent="3D rendering is unavailable. Use the cluster buttons below to follow the same research hierarchy.";
-   }
- }
- shade.addEventListener("click",closeDetail);
- detail.addEventListener("keydown",event=>{
-   if(event.key==="Escape"){event.preventDefault();closeDetail();}
-   if(event.key==="Tab"){
-     const focusable=[...detail.querySelectorAll("button:not([disabled]), a[href], [tabindex=\"0\"]")].filter(el=>!el.closest?.("[hidden]"));
-     if(!focusable.length)return;
-     if(event.shiftKey&&document.activeElement===focusable[0]){event.preventDefault();focusable[focusable.length-1].focus();}
-     else if(!event.shiftKey&&document.activeElement===focusable[focusable.length-1]){event.preventDefault();focusable[0].focus();}
-   }
- });
- $("#constellation-home").addEventListener("click",openOverview);
- $("#constellation-back").addEventListener("click",back);
- $("#constellation-reset").addEventListener("click",()=>{if(graph)graph.zoomToFit(450,92);});
- render();
- return {initialize,ensureVisible,openOverview,openChapter,openMacro,openTopic,showConcept,showQuestion,back,
-   snapshot:()=>({stage,chapterId,macroId,topicId,selectedId,has3D:!!graph}),
-   scene:()=>sceneData()};
+ function updateFiltersUI(){for(const type of ["prerequisite","causal","application","useful"]){$("#constellation-filter-"+type)?.setAttribute?.("aria-pressed",String(filters[type]!==false));}}
+ function render(){detail.hidden=true;shade.hidden=true;detail.classList.remove("is-expanded");const location=$("#constellation-location");if(location)location.textContent=description();$("#constellation-home")&&($("#constellation-home").disabled=stage==="overview"&&!selectedId);$("#constellation-back")&&($("#constellation-back").disabled=stage==="overview"&&!selectedId);const data=sceneData()||{nodes:[],links:[],items:[]};const prompt=$("#constellation-prompt");if(prompt)prompt.textContent=selectedId?"Explore the immediate scientific neighbourhood":stage==="overview"?"Choose a research region":stage==="chapter"?"Choose an area of science":stage==="macro"?"Choose a topic":"Choose a concept";renderBreadcrumbs();renderChoices(data);renderMinimap(data);renderContext();updateFiltersUI();if(graph){graph.graphData({nodes:data.nodes,links:data.links});const token=++renderToken;setTimeout(()=>{if(token===renderToken&&graph&&!$("#constellation-shell")?.closest?.("[hidden]"))fitScene(0);},90);}}
+ function openOverview(){stage="overview";chapterId=null;macroId=null;topicId=null;selectedId=null;onConceptSelected(null);render();}
+ function openChapter(id){if(!CHAPTERS.some(c=>c.id===id))return;stage="chapter";chapterId=id;macroId=null;topicId=null;selectedId=null;onConceptSelected(null);render();}
+ function openMacro(id){const c=chapterForMacro(id);if(!c||!byMacro.has(id))return;stage="macro";chapterId=c.id;macroId=id;topicId=null;selectedId=null;onConceptSelected(null);render();}
+ function openTopic(id){const t=byTopic.get(id);if(!t)return;stage="topic";macroId=t.macroId;chapterId=chapterForMacro(macroId)?.id||null;topicId=id;selectedId=null;onConceptSelected(null);render();}
+ function clearFocus(){if(!selectedId)return;selectedId=null;onConceptSelected(null);render();}
+ function focusConcept(id){const concept=byConcept.get(id);if(!concept)return;const loc=locationByConcept.get(id);if(loc?.macroId){macroId=loc.macroId;chapterId=chapterForMacro(macroId)?.id||null;if(loc.topicId){topicId=loc.topicId;stage="topic";}else{topicId=null;stage="macro";}}selectedId=id;selectedLessonId=id;render();onConceptSelected(id);}
+ function navigate(node){if(node.type==="selected"){openReader(node.id);return;}if(node.type==="center"){if(stage==="overview")focusConcept("gravitational-wave-paleontology");else if(stage==="chapter"&&CHAPTERS.find(c=>c.id===chapterId)?.macros.length===1)openMacro(CHAPTERS.find(c=>c.id===chapterId).macros[0]);else if(stage==="macro")focusConcept(macroId);return;}if(node.type==="chapter")openChapter(node.id);else if(node.type==="macro")openMacro(node.id);else if(node.type==="topic")openTopic(node.id);else if(node.type==="concept")focusConcept(node.id);}
+ function closeDetail(){detail.hidden=true;shade.hidden=true;detail.classList.remove("is-expanded");previousFocus?.focus?.();previousFocus=null;}
+ function showDialog(){if(!previousFocus||!detail.contains?.(document.activeElement))previousFocus=document.activeElement||previousFocus;detail.hidden=false;shade.hidden=false;detail.classList.remove("is-expanded");detail.querySelector(".concept-dialog-body")?.scrollTo?.({top:0});updateReadingProgress();detail.focus?.();}
+ function updateReadingProgress(){const body=detail.querySelector(".concept-dialog-body"),bar=detail.querySelector("#concept-read-progress");if(!body||!bar)return;const total=Math.max(0,(body.scrollHeight||0)-(body.clientHeight||0));const percent=total?Math.min(100,Math.max(0,Math.round((body.scrollTop||0)*100/total))):100;bar.style?.setProperty?.("--reading-progress",percent+"%");bar.setAttribute?.("aria-valuenow",String(percent));const label=detail.querySelector("#concept-read-label");if(label)label.textContent=percent===100?"End of unit":percent+"% of unit";}
+ function wireDialog(){detail.querySelector("#constellation-close-detail")?.addEventListener("click",closeDetail);detail.querySelector(".concept-dialog-body")?.addEventListener("scroll",updateReadingProgress,{passive:true});detail.querySelector("#concept-back-top")?.addEventListener("click",()=>{const body=detail.querySelector(".concept-dialog-body");body?.scrollTo?.({top:0,behavior:root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});updateReadingProgress();});detail.querySelector("#constellation-expand-detail")?.addEventListener("click",event=>{const expanded=detail.classList.toggle("is-expanded");event.currentTarget?.setAttribute?.("aria-pressed",String(expanded));event.currentTarget.textContent=expanded?"Exit expanded view ↙":"Expand view ↗";});detail.querySelectorAll("[data-related]").forEach(button=>button.addEventListener("click",()=>{closeDetail();focusConcept(button.dataset.related);}));detail.querySelector("#constellation-lesson")?.addEventListener("click",()=>{closeDetail();openLesson(selectedLessonId);});}
+ function openReader(id){const concept=byConcept.get(id);if(!concept)return;selectedLessonId=id;const necessary=(concept.prerequisites||[]).filter(e=>e.kind==="necessary"&&byConcept.has(e.id)),useful=(concept.prerequisites||[]).filter(e=>e.kind==="useful"&&byConcept.has(e.id)),downstream=concepts.filter(other=>(other.prerequisites||[]).some(e=>e.id===id&&e.kind==="necessary")).slice(0,5),references=[...new Set((concept.researchReferences||[]).map(ref=>sourcesById.get(ref)).filter(x=>x&&safeUrl(x.url)))],direct=safeUrl(concept.resource);const links=edges=>edges.map(edge=>'<button type="button" class="constellation-related" data-related="'+esc(edge.id)+'">'+esc(byConcept.get(edge.id).title)+' ↗</button>').join("");const relatedSection=(title,edges)=>edges.length?'<section class="concept-connection-group"><h4>'+title+'</h4><div class="constellation-related-list">'+links(edges)+'</div></section>':"";const scientific=relationData.filter(e=>e.from===id||e.to===id).map(e=>'<div class="scientific-relation"><span class="scientific-relation-kind">'+esc(e.kind)+'</span><button type="button" class="constellation-related" data-related="'+esc(e.from===id?e.to:e.from)+'">'+esc(byConcept.get(e.from)?.title||e.from)+" → "+esc(byConcept.get(e.to)?.title||e.to)+' ↗</button><p>'+esc(e.why)+'</p></div>').join("");const referenceList=references.map(ref=>'<a href="'+esc(safeUrl(ref.url))+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title||ref.citation)+' ↗</a>').join("")+(direct?'<a href="'+esc(direct)+'" target="_blank" rel="noopener noreferrer">Open '+esc(concept.title)+' reference ↗</a>':"");
+  detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">LEARNING UNIT · '+esc(concept.unit||"RESEARCH ATLAS")+'</span><h3 id="concept-dialog-heading">'+esc(concept.title)+'</h3><p class="concept-dialog-context">One continuous learning unit · Follow the physical reasoning, then explore connected research.</p></div><div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button><button type="button" id="constellation-close-detail" class="constellation-quiet" aria-label="Close concept dialog">Close ✕</button></div></div><div class="concept-reading-track" id="concept-read-progress" role="progressbar" aria-label="Reading position within this unit" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="concept-reading-fill"></span><span class="concept-reading-label" id="concept-read-label">Start of unit</span></div><div class="concept-dialog-body concept-single-unit"><section class="concept-unit-section concept-learning-goals"><h4>Learning objectives</h4><ol class="constellation-objectives">'+(concept.learningObjectives||[]).map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol></section><section class="concept-unit-section concept-explanation"><h4>Understand the idea</h4>'+(root.AtlasConceptInsight?.render(concept)||'<p>Explore what this idea represents, how it works and which scientific assumptions it needs.</p>')+(hasLesson(id)?'<button type="button" id="constellation-lesson" class="focus-secondary">Read the full authored lesson →</button>':'')+'</section><section class="concept-unit-section concept-unit-connections"><h4>Build on this understanding</h4>'+relatedSection("Necessary background",necessary)+relatedSection("Useful context",useful)+relatedSection("What this helps you learn next",downstream)+(scientific?'<h4>Why these scientific relationships matter</h4><div class="scientific-relations">'+scientific+'</div>':"")+'</section><section class="concept-unit-section concept-unit-resources"><h4>Research resources</h4>'+(referenceList?'<div class="constellation-resource-list">'+referenceList+'</div>':'<p>No individual public references have been mapped to this concept yet.</p>')+'<h4>Discover related papers</h4><div id="constellation-literature"></div></section></div><div class="concept-dialog-footer"><button type="button" id="concept-back-top" class="concept-back-top">↑ Back to top</button><span>Work through problems in the dedicated Practice section.</span><button type="button" id="constellation-open-practice" class="focus-primary">Open practice for this concept →</button></div>';
+  wireDialog();detail.querySelector("#constellation-open-practice")?.addEventListener("click",()=>{closeDetail();startPractice(id);});root.AtlasLiterature?.mount({host:detail.querySelector("#constellation-literature"),concept});showDialog();}
+ function showConcept(id){focusConcept(id);}
+ function showQuestion(question){if(!question)return;openOverview();detail.innerHTML='<div class="concept-dialog-header"><div><span class="focus-eyebrow">RESEARCH QUESTION</span><h3>'+esc(question.title)+'</h3><p>'+esc(question.summary||"")+'</p></div><div class="concept-dialog-actions"><button type="button" id="constellation-expand-detail" class="constellation-quiet" aria-pressed="false">Expand view ↗</button><button type="button" id="constellation-close-detail" class="constellation-quiet">Close ✕</button></div></div><div class="concept-dialog-body"><p>Investigate: '+esc(question.activity||"")+'</p><h4>Explore related concepts</h4><div class="constellation-related-list">'+(question.conceptIds||[]).filter(id=>byConcept.has(id)).map(id=>'<button type="button" class="constellation-related" data-related="'+esc(id)+'">'+esc(byConcept.get(id).title)+' ↗</button>').join("")+'</div></div>';wireDialog();showDialog();}
+ function back(){if(!detail.hidden){closeDetail();return;}if(selectedId){clearFocus();return;}if(stage==="topic")openMacro(macroId);else if(stage==="macro")openChapter(chapterId);else if(stage==="chapter")openOverview();}
+ function fitScene(duration){if(graph)graph.zoomToFit(root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?0:(duration??360),selectedId?108:92);}
+ function cameraScale(multiplier){if(!graph?.cameraPosition)return;try{const pos=graph.cameraPosition();if(!pos||typeof pos.x!=="number")return;graph.cameraPosition({x:pos.x*multiplier,y:pos.y*multiplier,z:pos.z*multiplier},{x:0,y:0,z:0},root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?0:240);}catch{fitScene(0);}}
+ function centerSelected(){if(!graph)return;if(selectedId&&graph.cameraPosition){graph.cameraPosition({x:0,y:0,z:220},{x:0,y:0,z:0},root.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?0:350);}else fitScene(300);}
+ function renderSearch(query){const box=$("#constellation-search-results");if(!box)return;const q=normalize(query).trim();if(!q){box.hidden=true;box.replaceChildren?.();return;}const scored=concepts.map(c=>{const hay=[c.title,c.id,c.unit,...(c.aliases||[]),...(c.tags||[])].map(normalize);let score=0;for(const x of hay){if(x===q)score=Math.max(score,100);else if(x.startsWith(q))score=Math.max(score,70);else if(x.includes(q))score=Math.max(score,40);}return {c,score};}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.c.title.localeCompare(b.c.title)).slice(0,10);box.replaceChildren();for(const row of scored){const b=document.createElement("button");b.type="button";b.className="constellation-v2-result";const loc=locationByConcept.get(row.c.id);b.innerHTML='<strong>'+esc(row.c.title)+'</strong><small>'+esc([loc?.macroId&&byMacro.get(loc.macroId)?.title,loc?.topicId&&byTopic.get(loc.topicId)?.title].filter(Boolean).join(" · ")||row.c.unit||"Research Atlas")+'</small>';b.addEventListener("click",()=>{const input=$("#constellation-search");if(input)input.value="";box.hidden=true;focusConcept(row.c.id);});box.appendChild(b);}if(!scored.length){const p=document.createElement("p");p.className="context-empty";p.textContent="No matching concepts.";box.appendChild(p);}box.hidden=false;}
+ function toggleFilter(type){filters[type]=!filters[type];render();}
+ function ensureVisible(){if(!graph)return;const w=canvas.clientWidth,h=canvas.clientHeight;if(w&&h){graph.width(w).height(h);const token=++renderToken;setTimeout(()=>{if(graph&&token===renderToken)fitScene(0);},90);}}
+ function initialize(){if(graph)return;if(typeof forceGraph!=="function"){canvas.hidden=true;const fallback=$("#constellation-fallback");fallback.hidden=false;fallback.textContent="3D is unavailable in this browser. Use the hierarchy and search controls to explore the same concepts.";return;}try{const graphFactory=forceGraph();canvas.replaceChildren();graph=graphFactory(canvas).width(canvas.clientWidth||900).height(canvas.clientHeight||580).backgroundColor("rgba(0,0,0,0)").nodeColor(n=>n.color).nodeVal(n=>n.type==="selected"?105:n.type==="center"?82:n.type==="chapter"?52:n.type==="macro"?42:n.type==="topic"?30:16).nodeLabel(n=>n.name+(n.relationType?" · "+RELATION_LABELS[n.relationType]:"")).linkColor(l=>RELATION_COLORS[l.type]||RELATION_COLORS.containment).linkWidth(l=>l.type==="containment"?1.1:l.type==="causal"?2.5:2).linkDirectionalParticles(l=>l.type==="causal"?2:l.type==="application"?1:0).linkDirectionalParticleWidth(1.2).linkDirectionalParticleSpeed(.0018).onNodeClick(n=>navigate(n)).onNodeHover(n=>{canvas.style.cursor=n?"pointer":"grab";});graph.d3Force?.("charge")?.strength?.(0);render();ensureVisible();}catch(error){console.warn("[Research Atlas] 3D constellation unavailable; hierarchy navigation remains.",error);graph=null;canvas.hidden=true;const fallback=$("#constellation-fallback");fallback.hidden=false;fallback.textContent="3D rendering is unavailable. Use search, breadcrumbs and the hierarchy below.";}}
+ // Progressive enhancement for the exact 171-concept manifest. This mutates the live
+ // arrays so the public graph actually includes requested concepts, rather than testing an unused expansion only.
+ async function expandRequestedCoverage(){if(typeof fetch!=="function"||concepts.some(c=>(c.tags||[]).includes("coverage-orientation")))return;try{const response=await fetch("knowledge-graph/gw-core-concepts.json");if(!response?.ok)return;const manifest=await response.json();if(!manifest?.labels?.length)return;const sectionFor=n=>manifest.sections?.find(s=>n>=s.start&&n<=s.end);const clean=value=>normalize(value).replace(/χ_eff/g,"chi-eff").replace(/χ/g,"chi").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");const topicBuckets=new Map();manifest.labels.forEach((label,index)=>{const mapped=manifest.existingConceptMap?.[label];if(mapped&&byConcept.has(mapped)){const c=byConcept.get(mapped);c.aliases=[...new Set([...(c.aliases||[]),label])];c.tags=[...new Set([...(c.tags||[]),"gw-core"])];return;}const id="core-"+clean(label);if(byConcept.has(id))return;const section=sectionFor(index+1),macro=byConcept.get(section?.macroId);if(!section||!macro)return;const researchApplication="Use "+label+" when tracing how source physics, observations, populations, or cosmic history contribute to gravitational-wave paleontology.";const c={id,title:label,domain:macro.domain,unit:section.title,prerequisites:[],learningObjectives:["Define "+label+" and distinguish it from closely related gravitational-wave paleontology concepts.","Explain where "+label+" enters a source, detector, population, or reconstruction workflow."],masteryAssessment:"Explain "+label+" in one concrete gravitational-wave paleontology example and state one assumption or limitation that matters.",researchApplication,resource:"https://www.ligo.org/science/",researchReferences:[],scale:"micro",whyItMatters:researchApplication,parentId:null,tags:["gw-core","coverage-orientation"],aliases:[label]};concepts.push(c);byConcept.set(id,c);const key=section.macroId+"|"+section.title;if(!topicBuckets.has(key))topicBuckets.set(key,{section,ids:[]});topicBuckets.get(key).ids.push(id);});for(const {section,ids} of topicBuckets.values()){if(!ids.length)continue;const tid="topic-core-"+clean(section.macroId)+"-"+clean(section.title);let t=byTopic.get(tid);if(!t){t={id:tid,macroId:section.macroId,title:section.title,order:topics.filter(x=>x.macroId===section.macroId).length,conceptIds:[]};topics.push(t);byTopic.set(tid,t);}for(const id of ids){if(!t.conceptIds.includes(id))t.conceptIds.push(id);locationByConcept.set(id,{macroId:section.macroId,topicId:tid});}}render();}catch(error){console.warn("[Research Atlas] Core coverage manifest could not be expanded in the live graph.",error);}}
+ shade.addEventListener("click",closeDetail);detail.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();closeDetail();}if(event.key==="Tab"){const focusable=[...detail.querySelectorAll("button:not([disabled]), a[href], [tabindex=\"0\"]")].filter(el=>!el.closest?.("[hidden]"));if(!focusable.length)return;if(event.shiftKey&&document.activeElement===focusable[0]){event.preventDefault();focusable[focusable.length-1].focus();}else if(!event.shiftKey&&document.activeElement===focusable[focusable.length-1]){event.preventDefault();focusable[0].focus();}}});
+ $("#constellation-home")?.addEventListener("click",openOverview);$("#constellation-back")?.addEventListener("click",back);$("#constellation-reset")?.addEventListener("click",()=>fitScene(360));$("#constellation-fit")?.addEventListener("click",()=>fitScene(360));$("#constellation-center-selected")?.addEventListener("click",centerSelected);$("#constellation-zoom-in")?.addEventListener("click",()=>cameraScale(.78));$("#constellation-zoom-out")?.addEventListener("click",()=>cameraScale(1.28));
+ for(const type of ["prerequisite","causal","application","useful"])$("#constellation-filter-"+type)?.addEventListener("click",()=>toggleFilter(type));
+ const search=$("#constellation-search");search?.addEventListener("input",e=>renderSearch(e.target.value));search?.addEventListener("keydown",e=>{if(e.key==="Escape"){e.target.value="";renderSearch("");}if(e.key==="Enter")$("#constellation-search-results")?.querySelector?.("button")?.click?.();});
+ if(typeof document!=="undefined")document.addEventListener?.("keydown",event=>{if(event.key==="/"&&!event.metaKey&&!event.ctrlKey&&!event.altKey&&!$("#constellation-shell")?.closest?.("[hidden]")&&document.activeElement!==search){event.preventDefault();search?.focus?.();}});
+ render();expandRequestedCoverage();
+ return {initialize,ensureVisible,openOverview,openChapter,openMacro,openTopic,showConcept,focusConcept,openReader,showQuestion,back,clearFocus,toggleFilter,search:renderSearch,
+  snapshot:()=>({stage,chapterId,macroId,topicId,selectedId,has3D:!!graph,filters:{...filters},breadcrumbs:breadcrumbItems().map(x=>x.label)}),scene:()=>sceneData()};
 }
 root.AtlasConstellation={mount,CHAPTERS};
 })(typeof window!=="undefined"?window:globalThis);
